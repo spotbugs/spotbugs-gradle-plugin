@@ -1,0 +1,19 @@
+apply plugin: "jacoco"
+
+jacoco {
+  toolVersion = "0.7.9"
+}
+
+jacocoTestReport {
+  reports {
+    html.enabled = true
+  }
+}
+
+test {
+  jacoco {
+    enabled = System.getProperty("java.specification.version") != "9"
+    append = true
+    includeNoLocationClasses = true
+  }
+}
