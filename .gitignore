@@ -1,3 +1,7 @@
 src/main/resources/spotbugs-gradle-plugin.properties
 build
 .gradle
+.project
+.classpath
+.settings
+/bin/
