@@ -186,7 +186,7 @@ public class SpotBugsSpecBuilder {
             args.add("-auxclasspath");
 
             // Filter unexisting files as SpotBugs can't handle them.
-            args.add(classpath.filter((File element) -> element.exists()).getAsPath());
+            args.add(classpath.filter(File::exists).getAsPath());
         }
 
         if (has(effort)) {
