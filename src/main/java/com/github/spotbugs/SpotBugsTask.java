@@ -64,6 +64,8 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
 
     private boolean ignoreFailures;
 
+    private boolean showProgress;
+
     private String effort;
 
     private String reportLevel;
@@ -239,6 +241,7 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
                 .withPluginsList(getPluginClasspath())
                 .withSources(getSource())
                 .withClasspath(getClasspath())
+                .withShowProgress(getShowProgress())
                 .withDebugging(getLogger().isDebugEnabled())
                 .withEffort(getEffort())
                 .withReportLevel(getReportLevel())
@@ -390,6 +393,20 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
     @Override
     public void setIgnoreFailures(boolean ignoreFailures) {
         this.ignoreFailures = ignoreFailures;
+    }
+
+    /**
+     * Indicates whether analysis progress should be rendered on standard output. Defaults to false.
+     *
+     */
+    @Input
+    @Optional
+    public boolean getShowProgress() {
+        return showProgress;
+    }
+
+    public void setShowProgress(boolean showProgress) {
+        this.showProgress = showProgress;
     }
 
     /**

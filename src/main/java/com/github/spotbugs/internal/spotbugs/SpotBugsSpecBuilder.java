@@ -36,6 +36,7 @@ public class SpotBugsSpecBuilder {
     private File includeFilter;
     private File excludeBugsFilter;
     private Collection<String> extraArgs;
+    private boolean showProgress;
     private boolean debugEnabled;
 
     public SpotBugsSpecBuilder(FileCollection classes) {
@@ -133,6 +134,11 @@ public class SpotBugsSpecBuilder {
         return this;
     }
 
+    public SpotBugsSpecBuilder withShowProgress(boolean showProgress){
+        this.showProgress = showProgress;
+        return this;
+    }
+
     public SpotBugsSpecBuilder withDebugging(boolean debugEnabled){
         this.debugEnabled = debugEnabled;
         return this;
@@ -144,7 +150,10 @@ public class SpotBugsSpecBuilder {
         args.add(pluginsList==null ? "" : pluginsList.getAsPath());
         args.add("-sortByClass");
         args.add("-timestampNow");
-        args.add("-progress");
+
+        if (showProgress) {
+            args.add("-progress");
+        }
 
         if (reports != null && !reports.getEnabled().isEmpty()) {
             if (reports.getEnabled().size() == 1) {
