@@ -6,6 +6,8 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2017-??-??
 
+* Fixed "loud output" [#506](https://github.com/spotbugs/spotbugs/issues/506) by adding an option to show progress and disabling it by default, matching the behaviour of the FindBugs Gradle Plugin
+
 ## 1.6.0 - 2017-10-25
 
 * Use SpotBugs 3.1.0
