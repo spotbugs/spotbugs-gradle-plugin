@@ -142,9 +142,9 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
     }
 
     private void configureDefaultDependencies(Configuration configuration) {
-        configuration.defaultDependencies((DependencySet dependencies) -> {
-            dependencies.add(project.getDependencies().create("com.github.spotbugs:spotbugs:" + extension.getToolVersion()));
-        });
+        configuration.defaultDependencies((DependencySet dependencies) ->
+            dependencies.add(project.getDependencies().create("com.github.spotbugs:spotbugs:" + extension.getToolVersion()))
+        );
     }
 
     private void configureTaskConventionMapping(Configuration configuration, SpotBugsTask task) {
