@@ -10,7 +10,7 @@ apply from: "$rootDir/gradle/jacoco.gradle"
 apply from: "$rootDir/gradle/java.gradle"
 apply from: "$rootDir/gradle/sonar.gradle"
 
-version = "1.6.1"
+version = "1.6.2-SNAPSHOT"
 group = "com.github.spotbugs"
 def spotBugsVersion = '3.1.2'
 sourceCompatibility = 1.8
