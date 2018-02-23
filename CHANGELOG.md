@@ -4,8 +4,11 @@ This is the changelog for SpotBugs Gradle Plugin. This follows [Keep a Changelog
 
 Currently the versioning policy of this project follows [Semantic Versioning](http://semver.org/) from version 1.6.0.
 
-## Unreleased - 2017-??-??
+## Unreleased - 2018-??-??
 
+## 1.6.1 - 2018-02-24
+
+* Use SpotBugs 3.1.1
 * Fixed "loud output" [#506](https://github.com/spotbugs/spotbugs/issues/506) by adding an option to show progress and disabling it by default, matching the behaviour of the FindBugs Gradle Plugin
 
 ## 1.6.0 - 2017-10-25
