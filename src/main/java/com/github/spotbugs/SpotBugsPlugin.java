@@ -214,6 +214,13 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
                 return extension.getExtraArgs();
             }
         });
+
+        taskMapping.map("showProgress", new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+                return extension.isShowProgress();
+            }
+        });
     }
 
     private void configureReportsConventionMapping(SpotBugsTask task, final String baseName) {

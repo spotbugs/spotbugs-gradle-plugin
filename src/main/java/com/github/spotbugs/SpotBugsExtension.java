@@ -31,6 +31,7 @@ import org.gradle.api.resources.TextResource;
  *         includeFilter = file("$rootProject.projectDir/config/spotbugs/includeFilter.xml")
  *         excludeFilter = file("$rootProject.projectDir/config/spotbugs/excludeFilter.xml")
  *         excludeBugsFilter = file("$rootProject.projectDir/config/spotbugs/excludeBugsFilter.xml")
+ *         showProgress = true
  *     }
  *
  * @see SpotBugsPlugin
@@ -47,6 +48,7 @@ public class SpotBugsExtension extends CodeQualityExtension {
     private TextResource excludeFilterConfig;
     private TextResource excludeBugsFilterConfig;
     private Collection<String> extraArgs;
+    private boolean showProgress;
 
     public SpotBugsExtension(Project project) {
         this.project = project;
@@ -280,5 +282,22 @@ public class SpotBugsExtension extends CodeQualityExtension {
      */
     public void setExtraArgs(Collection<String> extraArgs) {
         this.extraArgs = extraArgs;
+    }
+
+    /**
+     * Indicates whether analysis progress should be rendered on standard output. Defaults to false.
+     *
+     * @return {@code true} if analysis progress should be rendered on standard output.
+     */
+    public boolean isShowProgress() {
+        return showProgress;
+    }
+
+    /**
+     * Indicates whether analysis progress should be rendered on standard output.
+     *
+     */
+    public void setShowProgress(boolean showProgress) {
+        this.showProgress = showProgress;
     }
 }
