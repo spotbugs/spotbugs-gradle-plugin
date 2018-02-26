@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.file.FileCollection;
@@ -249,8 +249,8 @@ public class SpotBugsSpecBuilder {
         return fileCollection != null && !fileCollection.isEmpty();
     }
 
-    private static final Set<String> createImmutableSet(String... strings) {
-        Set<String> set = Arrays.asList(strings).stream().collect(Collectors.toSet());
+    private static Set<String> createImmutableSet(String... strings) {
+        Set<String> set = new HashSet<>(Arrays.asList(strings));
         return Collections.unmodifiableSet(set);
     }
 }
