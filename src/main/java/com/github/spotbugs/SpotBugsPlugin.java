@@ -19,6 +19,8 @@ import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.plugins.quality.CodeQualityExtension;
 import org.gradle.api.plugins.quality.internal.AbstractCodeQualityPlugin;
 import org.gradle.api.reporting.SingleFileReport;
+import org.gradle.api.resources.TextResource;
+import org.gradle.api.resources.TextResourceFactory;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.util.GradleVersion;
 
@@ -141,6 +143,7 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
         configureDefaultDependencies(configuration);
         configureTaskConventionMapping(configuration, task);
         configureReportsConventionMapping(task, baseName);
+        configureDefaultFilterFiles();
     }
 
     protected void configureConfiguration(Configuration configuration) {
@@ -177,6 +180,25 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
             reportMapping.map("enabled", () -> report.getName().equals("xml"));
             reportMapping.map("destination", () -> new File(extension.getReportsDir(), baseName + "." + report.getName()));
         });
+    }
+
+    private void configureDefaultFilterFiles() {
+        TextResourceFactory factory = project.getResources().getText();
+
+        File excludeFilter = project.file("config/spotbugs/excludeFilter.xml");
+        if (excludeFilter.exists()) {
+            extension.setExcludeFilterConfig(factory.fromFile(excludeFilter));
+        }
+
+        File includeFilter = project.file("config/spotbugs/includeFilter.xml");
+        if (includeFilter.exists()) {
+            extension.setIncludeFilterConfig(factory.fromFile(includeFilter));
+        }
+
+        File bugsFilter = project.file("config/spotbugs/excludeBugsFilter.xml");
+        if (bugsFilter.exists()) {
+            extension.setExcludeBugsFilterConfig(factory.fromFile(bugsFilter));
+        }
     }
 
     @Override
