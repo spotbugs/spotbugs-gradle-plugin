@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 import java.util.stream.StreamSupport;
 
 import org.gradle.api.InvalidUserDataException;
@@ -13,6 +14,7 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.DependencySet;
 import org.gradle.api.file.ConfigurableFileTree;
+import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.plugins.quality.CodeQualityExtension;
 import org.gradle.api.plugins.quality.internal.AbstractCodeQualityPlugin;
@@ -182,16 +184,22 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
         task.setDescription("Run SpotBugs analysis for " + sourceSet.getName() + " classes");
         task.setSource(sourceSet.getAllJava());
         ConventionMapping taskMapping = task.getConventionMapping();
-        taskMapping.map("classes", () -> {
-            ConfigurableFileTree fileTree = StreamSupport.stream(sourceSet.getOutput().getClassesDirs().spliterator(), false)
-                .map(project::fileTree)
-                .reduce((lhs, rhs) -> {
-                    lhs.plus(rhs);
-                    return lhs;
-                }).orElseThrow(() ->
-                    new InvalidUserDataException("No classes dir configured for source set " + sourceSet.getName())
-                );
-            return fileTree.builtBy(sourceSet.getClassesTaskName());
+        taskMapping.map("classes", (Callable<FileCollection>) () -> {
+            /*
+             * As a result of the changes made in gradle 4.0.
+             * See https://docs.gradle.org/4.0/release-notes.html - Location of classes in the build directory
+             * Compile no longer bundles all classes in one directory build-gradle/classes/main
+             * but instead separates classes into build-gradle/classes/{language}/main.
+             *
+             * We must therefor retrieve all output directories. Filter away the once that don't exist. Add each
+             * existing file tree dependency to specified task. And then return the complete fileCollection, contain
+             * all .class files available for analysis.
+             */
+            FileCollection presentClassDirs = sourceSet.getOutput().getClassesDirs().filter(File::exists);
+            StreamSupport.stream(presentClassDirs.spliterator(), false)
+                    .map(project::fileTree)
+                    .forEach(tree -> tree.builtBy(sourceSet.getClassesTaskName()));
+            return presentClassDirs;
         });
         taskMapping.map("classpath", sourceSet::getCompileClasspath);
     }
