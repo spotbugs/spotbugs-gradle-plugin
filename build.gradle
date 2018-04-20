@@ -12,7 +12,7 @@ apply from: "$rootDir/gradle/sonar.gradle"
 
 version = "1.6.2-SNAPSHOT"
 group = "com.github.spotbugs"
-def spotBugsVersion = '3.1.2'
+def spotBugsVersion = '3.1.3'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
