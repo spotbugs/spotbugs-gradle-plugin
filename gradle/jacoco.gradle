@@ -13,6 +13,5 @@ jacocoTestReport {
 test {
   jacoco {
     append = true
-    includeNoLocationClasses = true
   }
 }
