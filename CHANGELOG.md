@@ -6,7 +6,7 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2018-??-??
 
-* Use SpotBugs 3.1.2
+* Use SpotBugs 3.1.3
 * Add `showProgress` option to task mapping.
 
 ## 1.6.1 - 2018-02-25
