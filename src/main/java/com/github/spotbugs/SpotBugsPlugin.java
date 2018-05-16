@@ -146,6 +146,8 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
         configureReportsConventionMapping(task, baseName);
     }
 
+    protected void configureConfiguration(Configuration configuration) {}
+
     private void configureDefaultDependencies(Configuration configuration) {
         configuration.defaultDependencies(new Action<DependencySet>() {
             @Override
