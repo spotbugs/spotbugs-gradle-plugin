@@ -7,6 +7,9 @@ jdk:
   - oraclejdk9
 
 env:
+  matrix:
+    - GRADLE_VERSION=default
+    - GRADLE_VERSION=4.8-rc-1
   global:
     - SONAR_HOST_URL="https://sonarcloud.io"
 
@@ -27,6 +30,9 @@ addons:
     packages:
       - oracle-java8-installer
       - oracle-java8-set-default
+
+install:
+  - if [[ $GRADLE_VERSION != "default" ]]; then ./gradlew wrapper --gradle-version $GRADLE_VERSION; fi
 
 script:
   - jdk_switcher use oraclejdk8
