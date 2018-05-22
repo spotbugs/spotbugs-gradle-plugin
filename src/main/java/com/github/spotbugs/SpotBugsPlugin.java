@@ -146,7 +146,10 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
         configureReportsConventionMapping(task, baseName);
     }
 
-    protected void configureConfiguration(Configuration configuration) {}
+    protected void configureConfiguration(Configuration configuration) {
+        // For an abstract method that was newly defined from v4.8, we need an empty method at here
+        // https://github.com/spotbugs/spotbugs-gradle-plugin/issues/22
+    }
 
     private void configureDefaultDependencies(Configuration configuration) {
         configuration.defaultDependencies(new Action<DependencySet>() {
