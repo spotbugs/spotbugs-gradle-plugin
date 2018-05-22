@@ -397,7 +397,7 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
 
     /**
      * Indicates whether analysis progress should be rendered on standard output. Defaults to false.
-     *
+     * @return true iff progress report is enabled
      */
     @Input
     @Optional
