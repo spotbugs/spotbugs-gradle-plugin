@@ -2,7 +2,7 @@
 apply plugin: 'checkstyle'
 
 checkstyle {
-  toolVersion '7.3'
+  toolVersion '8.10'
   ignoreFailures false
   configFile file("$rootDir/gradle/checkstyle.xml")
 }
