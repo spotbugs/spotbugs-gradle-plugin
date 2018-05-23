@@ -4,7 +4,7 @@ This is the changelog for SpotBugs Gradle Plugin. This follows [Keep a Changelog
 
 Currently the versioning policy of this project follows [Semantic Versioning](http://semver.org/) from version 1.6.0.
 
-## Unreleased - 2018-??-??
+## 1.6.2 - 2018-05-23
 
 * Use SpotBugs 3.1.3
 * Add `showProgress` option to task mapping.
