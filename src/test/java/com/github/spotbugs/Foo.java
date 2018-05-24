@@ -6,4 +6,8 @@ public class Foo {
     System.out.println("hello!");
   }
 
+  public boolean simpleMethod () {
+    return true;
+  }
+
 }
