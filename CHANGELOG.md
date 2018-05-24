@@ -8,6 +8,7 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 * Use SpotBugs 3.1.3
 * Add `showProgress` option to task mapping.
+* Support Gradle 4.8 [#22](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/22)
 
 ## 1.6.1 - 2018-02-25
 
