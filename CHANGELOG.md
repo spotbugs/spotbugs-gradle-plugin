@@ -8,6 +8,7 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 * Use SpotBugs 3.1.3
 * Add `showProgress` option to task mapping.
+* Added a minor fix to handle multiple output source directories. With the release of gradle 4.0 the default location of classes changed from "build/classes/main" -> "build/{java, groovy, scala}/main". This caused a bug where the plugin would ignore any classes compiled which were not located within "build/classes/" or for clean groovy/scala projects the plugin would outright fail to perform an analysis due to NO-SOURCE.([#12](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/12))
 * Support Gradle 4.8 [#22](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/22)
 
 ## 1.6.1 - 2018-02-25
