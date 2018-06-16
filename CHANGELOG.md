@@ -6,6 +6,8 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2018-??-??
 
+* Add default filter locations "config/spotbugs/{includeFilter,excludeFilter,excludeBugsFilter}.xml" [#5](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/5)
+
 ## 1.6.2 - 2018-05-23
 
 * Use SpotBugs 3.1.3
