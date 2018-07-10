@@ -23,6 +23,7 @@ public class SpotBugsWorkerManager {
       JavaExecHandleBuilder javaCommand = builder.getJavaCommand();
       javaCommand.setWorkingDir(workingDir);
       javaCommand.setMaxHeapSize(spec.getMaxHeapSize());
+      javaCommand.jvmArgs(spec.getJvmArgs());
       return builder.build();
   }
 }

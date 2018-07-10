@@ -1,6 +1,7 @@
 package com.github.spotbugs.internal.spotbugs;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -10,11 +11,13 @@ public class SpotBugsSpec implements Serializable {
   private List<String> arguments;
   private String maxHeapSize;
   private boolean debugEnabled;
+  private Collection<String> jvmArgs;
 
-  public SpotBugsSpec(List<String> arguments, String maxHeapSize, boolean debugEnabled) {
+  public SpotBugsSpec(List<String> arguments, String maxHeapSize, boolean debugEnabled, Collection<String> jvmArgs) {
       this.debugEnabled = debugEnabled;
       this.maxHeapSize = maxHeapSize;
       this.arguments = arguments;
+      this.jvmArgs = jvmArgs;
   }
 
   public List<String> getArguments() {
@@ -29,7 +32,11 @@ public class SpotBugsSpec implements Serializable {
       return debugEnabled;
   }
 
-  @Override
+  public Collection<String> getJvmArgs() {
+      return jvmArgs;
+  }
+
+    @Override
 public String toString() {
       return new ToStringBuilder(this).append("arguments", arguments).append("debugEnabled", debugEnabled).toString();
   }

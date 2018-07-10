@@ -16,6 +16,8 @@ import org.gradle.util.CollectionUtils;
 import com.github.spotbugs.SpotBugsReports;
 import com.github.spotbugs.internal.SpotBugsReportsImpl;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
+
 public class SpotBugsSpecBuilder {
     private static final Set<String> VALID_EFFORTS = createImmutableSet("min", "default", "max");
     private static final Set<String> VALID_REPORT_LEVELS = createImmutableSet("experimental", "low", "medium", "high");
@@ -35,6 +37,7 @@ public class SpotBugsSpecBuilder {
     private File includeFilter;
     private File excludeBugsFilter;
     private Collection<String> extraArgs;
+    private Collection<String> jvmArgs;
     private boolean showProgress;
     private boolean debugEnabled;
 
@@ -143,6 +146,11 @@ public class SpotBugsSpecBuilder {
         return this;
     }
 
+    public SpotBugsSpecBuilder withJvmArgs(@Nullable Collection<String> jvmArgs) {
+        this.jvmArgs = jvmArgs;
+        return this;
+    }
+
     public SpotBugsSpec build() {
         ArrayList<String> args = new ArrayList<>();
         args.add("-pluginList");
@@ -230,7 +238,7 @@ public class SpotBugsSpecBuilder {
             args.add(classFile.getAbsolutePath());
         }
 
-        return new SpotBugsSpec(args, maxHeapSize, debugEnabled);
+        return new SpotBugsSpec(args, maxHeapSize, debugEnabled, (Collection)(this.jvmArgs == null ? Collections.emptyList() : this.jvmArgs));
     }
 
     private boolean has(String str) {
