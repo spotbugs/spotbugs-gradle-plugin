@@ -48,6 +48,7 @@ public class SpotBugsExtension extends CodeQualityExtension {
     private TextResource excludeFilterConfig;
     private TextResource excludeBugsFilterConfig;
     private Collection<String> extraArgs;
+    private Collection<String> jvmArgs;
     private boolean showProgress;
 
     public SpotBugsExtension(Project project) {
@@ -282,6 +283,14 @@ public class SpotBugsExtension extends CodeQualityExtension {
      */
     public void setExtraArgs(Collection<String> extraArgs) {
         this.extraArgs = extraArgs;
+    }
+
+    public Collection<String> getJvmArgs() {
+        return jvmArgs;
+    }
+
+    public void setJvmArgs(Collection<String> jvmArgs) {
+        this.jvmArgs = jvmArgs;
     }
 
     /**

@@ -84,6 +84,8 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
 
     private Collection<String> extraArgs = new ArrayList<>();
 
+    private Collection<String> jvmArgs = new ArrayList<>();
+
     @Nested
     private final SpotBugsReportsInternal reports;
 
@@ -252,6 +254,7 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
                 .withIncludeFilter(getIncludeFilter())
                 .withExcludeBugsFilter(getExcludeBugsFilter())
                 .withExtraArgs(getExtraArgs())
+                .withJvmArgs(getJvmArgs())
                 .configureReports(getReports());
 
         return specBuilder.build();
@@ -294,6 +297,19 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
 
     public SpotBugsTask extraArgs(String... arguments) {
         extraArgs.addAll(Arrays.asList(arguments));
+        return this;
+    }
+
+    public SpotBugsTask jvmArgs(Iterable<String> arguments) {
+        for (String argument : arguments) {
+            jvmArgs.add(argument);
+        }
+
+        return this;
+    }
+
+    public SpotBugsTask jvmArgs(String... arguments) {
+        jvmArgs.addAll(Arrays.asList(arguments));
         return this;
     }
 
@@ -604,4 +620,13 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
         this.extraArgs = extraArgs;
     }
 
+    @Input
+    @Optional
+    public Collection<String> getJvmArgs() {
+        return jvmArgs;
+    }
+
+    public void setJvmArgs(Collection<String> jvmArgs) {
+        this.jvmArgs = jvmArgs;
+    }
 }
