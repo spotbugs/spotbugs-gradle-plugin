@@ -197,7 +197,7 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
              */
             FileCollection presentClassDirs = sourceSet.getOutput().getClassesDirs().filter(File::exists);
             StreamSupport.stream(presentClassDirs.spliterator(), false)
-                    .map(project::fileTree)
+                    .map(file -> project.fileTree(file))
                     .forEach(tree -> tree.builtBy(sourceSet.getClassesTaskName()));
             return presentClassDirs;
         });
