@@ -6,6 +6,7 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2018-??-??
 
+* Use SpotBugs 3.1.6
 * Added support for passing JVM arguments to the JavaExecHandleBuilder when creating a SpotBugsTask.
 
 ## 1.6.2 - 2018-05-23
