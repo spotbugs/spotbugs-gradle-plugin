@@ -9,6 +9,7 @@ apply from: "$rootDir/gradle/checkstyle.gradle"
 apply from: "$rootDir/gradle/jacoco.gradle"
 apply from: "$rootDir/gradle/java.gradle"
 apply from: "$rootDir/gradle/sonar.gradle"
+apply from: "$rootDir/gradle/deploy.gradle"
 
 version = "1.6.3-SNAPSHOT"
 group = "com.github.spotbugs"
