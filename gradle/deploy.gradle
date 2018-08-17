@@ -1,0 +1,50 @@
+// see https://central.sonatype.org/pages/gradle.html
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      def username = project.hasProperty('ossrhUsername') ? ossrhUsername : "Unknown user"
+      def password = project.hasProperty('ossrhPassword') ? ossrhPassword : "Unknown password"
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: username, password: password)
+      }
+
+      pom.project {
+        packaging 'jar'
+        description 'A Gradle plugin for SpotBugs'
+        url 'https://github.com/spotbugs/spotbugs-gradle-plugin/'
+
+        scm {
+          connection 'scm:git:git@github.com:spotbugs/spotbugs-gradle-plugin.git'
+          developerConnection 'scm:git:git@github.com:spotbugs/spotbugs-gradle-plugin.git'
+          url 'https://github.com/spotbugs/spotbugs-gradle-plugin/'
+        }
+
+        licenses {
+          license {
+            name 'The Apache License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
+      }
+    }
+  }
+}
