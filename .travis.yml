@@ -9,7 +9,8 @@ jdk:
 env:
   matrix:
     - GRADLE_VERSION=default
-    - GRADLE_VERSION=4.8-rc-1
+    - GRADLE_VERSION=4.10-rc-2
+    - GRADLE_VERSION=4.11-20180820000011+0000
   global:
     - SONAR_HOST_URL="https://sonarcloud.io"
 
