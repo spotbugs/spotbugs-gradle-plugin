@@ -28,6 +28,7 @@ env:
 
 addons:
   apt:
+    update: true
     packages:
       - oracle-java8-installer
       - oracle-java8-set-default
