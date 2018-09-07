@@ -4,10 +4,11 @@ This is the changelog for SpotBugs Gradle Plugin. This follows [Keep a Changelog
 
 Currently the versioning policy of this project follows [Semantic Versioning](http://semver.org/) from version 1.6.0.
 
-## Unreleased - 2018-??-??
+## 1.6.3 - 2018-09-08
 
 * Use SpotBugs 3.1.6
 * Added support for passing JVM arguments to the JavaExecHandleBuilder when creating a SpotBugsTask.
+* Support Gradle 4.10 that cause problem with problematic method reference. ([#40](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/40))
 
 ## 1.6.2 - 2018-05-23
 
