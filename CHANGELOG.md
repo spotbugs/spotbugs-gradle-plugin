@@ -6,6 +6,10 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2018-??-??
 
+### Changed
+
+* Upgrade Gradle to 4.10
+
 ## 1.6.3 - 2018-09-08
 
 * Use SpotBugs 3.1.6
