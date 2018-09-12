@@ -15,7 +15,6 @@ import org.gradle.api.Incubating;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
-import org.gradle.api.internal.ClosureBackedAction;
 import org.gradle.api.logging.LogLevel;
 import org.gradle.api.reporting.Reporting;
 import org.gradle.api.reporting.SingleFileReport;
@@ -36,6 +35,7 @@ import org.gradle.api.tasks.VerificationTask;
 import org.gradle.internal.logging.ConsoleRenderer;
 import org.gradle.internal.reflect.Instantiator;
 import org.gradle.process.internal.worker.WorkerProcessFactory;
+import org.gradle.util.ConfigureUtil;
 
 import com.github.spotbugs.internal.SpotBugsReportsImpl;
 import com.github.spotbugs.internal.SpotBugsReportsInternal;
@@ -133,7 +133,7 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
      */
     @Override
     public SpotBugsReports reports(Closure closure) {
-        return reports(new ClosureBackedAction<SpotBugsReports>(closure));
+        return reports(ConfigureUtil.configureUsing(closure));
     }
 
     /**
