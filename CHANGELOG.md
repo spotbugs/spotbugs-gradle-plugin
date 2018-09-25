@@ -9,6 +9,7 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 ### Changed
 
 * Use SpotBugs 3.1.7 by default
+* Replace usage of internal class ClosureBackedAction [#51](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/51)
 
 ## 1.6.3 - 2018-09-08
 
