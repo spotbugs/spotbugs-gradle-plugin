@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,11 +39,12 @@ public class SpotBugsSpecBuilder {
     private File excludeBugsFilter;
     private Collection<String> extraArgs;
     private Collection<String> jvmArgs;
+    private Map<String, Object> systemProperties;
     private boolean showProgress;
     private boolean debugEnabled;
 
     public SpotBugsSpecBuilder(FileCollection classes) {
-        if(classes == null || classes.isEmpty()){
+        if (classes == null || classes.isEmpty()) {
             throw new InvalidUserDataException("No classes configured for SpotBugs analysis.");
         }
         this.classes = classes;
@@ -136,12 +138,12 @@ public class SpotBugsSpecBuilder {
         return this;
     }
 
-    public SpotBugsSpecBuilder withShowProgress(boolean showProgress){
+    public SpotBugsSpecBuilder withShowProgress(boolean showProgress) {
         this.showProgress = showProgress;
         return this;
     }
 
-    public SpotBugsSpecBuilder withDebugging(boolean debugEnabled){
+    public SpotBugsSpecBuilder withDebugging(boolean debugEnabled) {
         this.debugEnabled = debugEnabled;
         return this;
     }
@@ -151,10 +153,15 @@ public class SpotBugsSpecBuilder {
         return this;
     }
 
+    public SpotBugsSpecBuilder withSystemProperties(@Nullable Map<String, Object> systemProperties) {
+        this.systemProperties = systemProperties;
+        return this;
+    }
+
     public SpotBugsSpec build() {
         ArrayList<String> args = new ArrayList<>();
         args.add("-pluginList");
-        args.add(pluginsList==null ? "" : pluginsList.getAsPath());
+        args.add(pluginsList == null ? "" : pluginsList.getAsPath());
         args.add("-sortByClass");
         args.add("-timestampNow");
 
@@ -238,7 +245,9 @@ public class SpotBugsSpecBuilder {
             args.add(classFile.getAbsolutePath());
         }
 
-        return new SpotBugsSpec(args, maxHeapSize, debugEnabled, (Collection)(this.jvmArgs == null ? Collections.emptyList() : this.jvmArgs));
+        return new SpotBugsSpec(args, maxHeapSize, debugEnabled,
+                (this.jvmArgs == null ? Collections.emptyList() : this.jvmArgs),
+                (this.systemProperties == null ? Collections.emptyMap() : this.systemProperties));
     }
 
     private boolean has(String str) {
