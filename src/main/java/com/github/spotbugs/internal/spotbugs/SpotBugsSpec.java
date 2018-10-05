@@ -3,6 +3,7 @@ package com.github.spotbugs.internal.spotbugs;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -12,12 +13,14 @@ public class SpotBugsSpec implements Serializable {
   private String maxHeapSize;
   private boolean debugEnabled;
   private Collection<String> jvmArgs;
+  private final Map<String, Object> systemProperties;
 
-  public SpotBugsSpec(List<String> arguments, String maxHeapSize, boolean debugEnabled, Collection<String> jvmArgs) {
+  public SpotBugsSpec(List<String> arguments, String maxHeapSize, boolean debugEnabled, Collection<String> jvmArgs, Map<String, Object> systemProperties) {
       this.debugEnabled = debugEnabled;
       this.maxHeapSize = maxHeapSize;
       this.arguments = arguments;
       this.jvmArgs = jvmArgs;
+      this.systemProperties = systemProperties;
   }
 
   public List<String> getArguments() {
@@ -34,6 +37,10 @@ public class SpotBugsSpec implements Serializable {
 
   public Collection<String> getJvmArgs() {
       return jvmArgs;
+  }
+
+  public Map<String, Object> getSystemProperties() {
+      return systemProperties;
   }
 
     @Override
