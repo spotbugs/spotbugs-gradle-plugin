@@ -27,6 +27,8 @@ public class SpotBugsPluginTest extends Assert{
   @Rule
   public TemporaryFolder folder= new TemporaryFolder();
 
+  private File sourceDir;
+
   @Before
   public void createProject() throws IOException {
     String buildScript = "plugins {\n" +
@@ -37,11 +39,12 @@ public class SpotBugsPluginTest extends Assert{
       "repositories {\n" +
       "  mavenCentral()\n" +
       "  mavenLocal()\n" +
-      "}";
+      "}\n" +
+      "if(project.hasProperty('ignoreFailures')) { spotbugs.ignoreFailures = true }";
     File buildFile = folder.newFile("build.gradle");
     Files.write(buildFile.toPath(), buildScript.getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);
 
-    File sourceDir = folder.newFolder("src", "main", "java");
+    sourceDir = folder.newFolder("src", "main", "java");
     File to = new File(sourceDir, "Foo.java");
     File from = new File("src/test/java/com/github/spotbugs/Foo.java");
     Files.copy(from.toPath(), to.toPath(), StandardCopyOption.COPY_ATTRIBUTES);
@@ -63,6 +66,38 @@ public class SpotBugsPluginTest extends Assert{
     Optional<BuildTask> spotbugsMain = findTask(result, ":spotbugsMain");
     assertTrue(spotbugsMain.isPresent());
     assertThat(spotbugsMain.get().getOutcome(), is(TaskOutcome.SUCCESS));
+  }
+
+  @Test
+  public void testSpotBugsTaskCanFailTheBuild() throws IOException {
+    addClassWithBug();
+
+    BuildResult result = GradleRunner.create()
+        .withProjectDir(folder.getRoot())
+        .withArguments(Arrays.asList("compileJava", "spotbugsMain"))
+        .withPluginClasspath()
+        .buildAndFail(); //Bar.java's bug _should_ fail the build
+
+    Optional<BuildTask> spotbugsMain = findTask(result, ":spotbugsMain");
+    assertTrue(spotbugsMain.isPresent());
+    assertThat(spotbugsMain.get().getOutcome(), is(TaskOutcome.FAILED));
+    assertTrue(result.getOutput().contains("SpotBugs rule violations were found."));
+  }
+
+  @Test
+  public void testSpotBugsTaskWarnsWhenIgnoringFailures() throws IOException {
+    addClassWithBug();
+
+    BuildResult result = GradleRunner.create()
+        .withProjectDir(folder.getRoot())
+        .withArguments(Arrays.asList("compileJava", "spotbugsMain", "-PignoreFailures=true"))
+        .withPluginClasspath()
+        .build(); //Bar.java's bug _should_ fail the build, but logs a warning in this case since we set ignoreFailures = true
+
+    Optional<BuildTask> spotbugsMain = findTask(result, ":spotbugsMain");
+    assertTrue(spotbugsMain.isPresent());
+    assertThat(spotbugsMain.get().getOutcome(), is(TaskOutcome.SUCCESS));
+    assertTrue(result.getOutput().contains("SpotBugs rule violations were found."));
   }
 
   @Test
@@ -90,6 +125,16 @@ public class SpotBugsPluginTest extends Assert{
     return result.getTasks().stream()
           .filter(task -> task.getPath().equals(taskName))
           .findAny();
+  }
+
+  private void addClassWithBug() {
+    try {
+      File to = new File(sourceDir, "Bar.java");
+      File from = new File(getClass().getClassLoader().getResource("com/github/spotbugs/Bar.java").getFile());
+      Files.copy(from.toPath(), to.toPath(), StandardCopyOption.COPY_ATTRIBUTES);
+    } catch (IOException e) {
+      throw new RuntimeException("Error adding Bar.java", e);
+    }
   }
 
   @Test

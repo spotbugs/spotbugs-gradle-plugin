@@ -9,11 +9,9 @@ import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.stream.StreamSupport;
 
-import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.DependencySet;
-import org.gradle.api.file.ConfigurableFileTree;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.internal.ConventionMapping;
 import org.gradle.api.plugins.quality.CodeQualityExtension;
