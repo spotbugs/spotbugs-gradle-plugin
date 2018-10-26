@@ -228,6 +228,12 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
                 getSpotbugsClasspath().getFiles().stream().map(File::getName).collect(Collectors.toSet()));
         SpotBugsSpec spec = generateSpec();
 
+        //workaround for https://github.com/spotbugs/spotbugs-gradle-plugin/issues/61
+        if(reports.getEnabledReports().isEmpty()) {
+            getProject().getLogger().lifecycle("WARNING: No SpotBugs report(s) were configured; aborting execution of {}", getPath());
+            return;
+        }
+
         workerExecutor.submit(SpotBugsRunner.class, config -> {
             config.params(spec, getIgnoreFailures(), reports.getFirstEnabled().getDestination());
             config.setClasspath(getSpotbugsClasspath());
