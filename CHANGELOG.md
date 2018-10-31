@@ -6,6 +6,10 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2018-??-??
 
+### Fixed
+
+* Analyze runtime classpath instead of compile classpath. [#62](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/62)
+
 ## 1.6.5 - 2018-10-17
 
 ### Changed
@@ -23,7 +27,7 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 * Use SpotBugs 3.1.6
 * Added support for passing JVM arguments to the JavaExecHandleBuilder when creating a SpotBugsTask.
-* Support Gradle 4.10 that cause problem with problematic method reference. ([#40](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/40))
+* Support Gradle 4.10 that cause problem with problematic method reference. ([#40](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/40))lee
 
 ## 1.6.2 - 2018-05-23
 

@@ -199,6 +199,6 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
                     .forEach(tree -> tree.builtBy(sourceSet.getClassesTaskName()));
             return presentClassDirs;
         });
-        taskMapping.map("classpath", sourceSet::getCompileClasspath);
+        taskMapping.map("classpath", sourceSet::getRuntimeClasspath);
     }
 }
