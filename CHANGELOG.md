@@ -6,6 +6,14 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased
 
+### Changed
+
+* Keep track of top-level source set folders [#59](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/59)
+
+### Fixed
+
+* Analyze runtime classpath instead of compile classpath. [#62](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/62)
+
 ## 1.6.6 - 2018-12-08
 
 ## Fixed
@@ -17,8 +25,6 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 ### Changed
 
 * Replace usage of internal Gradle APIs with supported [Worker API](https://guides.gradle.org/using-the-worker-api/). [#58](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/58)
-
-* Keep track of top-level source set folders [#59](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/59)
 
 ## 1.6.4 - 2018-09-26
 
