@@ -6,6 +6,8 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2018-??-??
 
+* Prevent NPE in unexpected situations where no reports are enabled, despite xml being set by default using convention mapping (See [#61](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/61), [#68](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/68))
+
 ## 1.6.5 - 2018-10-17
 
 ### Changed
