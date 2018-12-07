@@ -12,6 +12,7 @@ import org.gradle.api.Incubating;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
+import org.gradle.api.internal.CollectionCallbackActionDecorator;
 import org.gradle.api.reporting.Reporting;
 import org.gradle.api.resources.TextResource;
 import org.gradle.api.tasks.CacheableTask;
@@ -84,14 +85,14 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
     private final SpotBugsReportsInternal reports;
 
     @Inject
-    public SpotBugsTask(WorkerExecutor workerExecutor) {
+    public SpotBugsTask(WorkerExecutor workerExecutor, CollectionCallbackActionDecorator collectionCallbackActionDecorator) {
         super();
         this.workerExecutor = workerExecutor;
         if(GradleVersion.current().compareTo(GRADLE_42()) < 0) {
-            reports = new SpotBugsReportsImpl(this);
+            reports = new SpotBugsReportsImpl(this, collectionCallbackActionDecorator);
         } else {
             //ObjectFactory#newInstance was introduced in Gradle 4.2
-            reports = getProject().getObjects().newInstance(SpotBugsReportsImpl.class, this);
+            reports = getProject().getObjects().newInstance(SpotBugsReportsImpl.class, this, collectionCallbackActionDecorator);
         }
     }
 
