@@ -4,7 +4,9 @@ This is the changelog for SpotBugs Gradle Plugin. This follows [Keep a Changelog
 
 Currently the versioning policy of this project follows [Semantic Versioning](http://semver.org/) from version 1.6.0.
 
-## Unreleased - 2018-??-??
+## 1.6.6 - 2018-12-08
+
+## Fixed
 
 * Prevent NPE in unexpected situations where no reports are enabled, despite xml being set by default using convention mapping (See [#61](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/61), [#68](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/68))
 
