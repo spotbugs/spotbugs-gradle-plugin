@@ -4,7 +4,7 @@ When you release fixed version of SpotBugs Gradle Plugin, please follow these pr
 
 ## Update version info
 
-Create a commit to hadnle following changes:
+Create a commit to handle following changes:
 
 * Remove `-SNAPSHOT` from `version` in `build.gradle`
 * Replace `Unreleased` with actual version number in `CHANGELOG.md`
