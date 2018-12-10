@@ -41,8 +41,6 @@ script:
   - jdk_switcher use $TRAVIS_JDK_VERSION
   - ./gradlew -v --no-daemon
   - ./gradlew check -S --no-daemon
-  - jdk_switcher use oraclejdk8
-  - if [[ $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then ./gradlew sonarqube -S; fi
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -52,6 +50,11 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+
+jobs:
+  include:
+    - stage: analyze
+      script: ./gradlew sonarqube -S
 
 deploy:
   - provider: script
