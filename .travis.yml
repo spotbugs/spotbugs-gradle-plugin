@@ -4,7 +4,7 @@ dist: trusty
 
 jdk:
   - oraclejdk8
-  - oraclejdk9
+  - oraclejdk11
 
 env:
   matrix:
@@ -38,7 +38,7 @@ install:
 script:
   - jdk_switcher use oraclejdk8
   - ./gradlew classes testClasses -S
-  - jdk_switcher use $TRAVIS_JDK_VERSION
+  - if [[ $TRAVIS_JDK_VERSION == "oraclejdk11" ]]; then export JAVA_HOME=$HOME/oraclejdk11; fi
   - ./gradlew -v --no-daemon
   - ./gradlew check -S --no-daemon
 
