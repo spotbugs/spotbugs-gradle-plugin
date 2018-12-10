@@ -55,17 +55,16 @@ jobs:
   include:
     - stage: analyze
       script: ./gradlew sonarqube -S
-
-deploy:
-  - provider: script
-    skip_cleanup: true
-    script: ./gradlew publishPlugins -Pgradle.publish.key="$GRADLE_PUBLISH_KEY" -Pgradle.publish.secret="$GRADLE_PUBLISH_SECRET"
-    on:
-      tags: true
-      jdk: oraclejdk8
-  - provider: script
-    skip_cleanup: true
-    script: ./gradlew uploadArchives -PossrhUsername="$SONATYPE_USERNAME" -PossrhPassword="$SONATYPE_PASSWORD"
-    on:
-      branch: master
-      jdk: oraclejdk8
+    - stage: deploy
+      name: Deploy to Gradle Plugin Portal
+      script: skip
+      if: tag IS present
+      deploy:
+        - provider: script
+          script: ./gradlew publishPlugins -Pgradle.publish.key="$GRADLE_PUBLISH_KEY" -Pgradle.publish.secret="$GRADLE_PUBLISH_SECRET"
+    - name: Deploy to Sonatype Snapshot Repository
+      script: skip
+      if: branch = master
+      deploy:
+        - provider: script
+          script: ./gradlew uploadArchives -PossrhUsername="$SONATYPE_USERNAME" -PossrhPassword="$SONATYPE_PASSWORD"
