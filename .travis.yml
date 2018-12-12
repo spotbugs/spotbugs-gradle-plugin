@@ -1,16 +1,14 @@
 language: java
-sudo: false
 dist: trusty
 
 jdk:
   - oraclejdk8
-  - oraclejdk9
+  - oraclejdk11
 
 env:
   matrix:
     - GRADLE_VERSION=default
-    - GRADLE_VERSION=4.10.2
-    - GRADLE_VERSION=5.0-milestone-1
+    - GRADLE_VERSION=5.0
   global:
     - SONAR_HOST_URL="https://sonarcloud.io"
 
@@ -39,11 +37,9 @@ install:
 script:
   - jdk_switcher use oraclejdk8
   - ./gradlew classes testClasses -S
-  - jdk_switcher use $TRAVIS_JDK_VERSION
+  - if [[ $TRAVIS_JDK_VERSION == "oraclejdk11" ]]; then export JAVA_HOME=$HOME/oraclejdk11; fi
   - ./gradlew -v --no-daemon
   - ./gradlew check -S --no-daemon
-  - jdk_switcher use oraclejdk8
-  - if [[ $TRAVIS_JDK_VERSION == "oraclejdk8" ]]; then ./gradlew sonarqube -S; fi
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -54,16 +50,20 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-deploy:
-  - provider: script
-    skip_cleanup: true
-    script: ./gradlew publishPlugins -Pgradle.publish.key="$GRADLE_PUBLISH_KEY" -Pgradle.publish.secret="$GRADLE_PUBLISH_SECRET"
-    on:
-      tags: true
-      jdk: oraclejdk8
-  - provider: script
-    skip_cleanup: true
-    script: ./gradlew uploadArchives -PossrhUsername="$SONATYPE_USERNAME" -PossrhPassword="$SONATYPE_PASSWORD"
-    on:
-      branch: master
-      jdk: oraclejdk8
+jobs:
+  include:
+    - stage: analyze
+      script: ./gradlew sonarqube -S
+    - stage: deploy
+      name: Deploy to Gradle Plugin Portal
+      script: skip
+      if: tag IS present
+      deploy:
+        - provider: script
+          script: ./gradlew publishPlugins -Pgradle.publish.key="$GRADLE_PUBLISH_KEY" -Pgradle.publish.secret="$GRADLE_PUBLISH_SECRET"
+    - name: Deploy to Sonatype Snapshot Repository
+      script: skip
+      if: (branch = master) AND (type = push)
+      deploy:
+        - provider: script
+          script: ./gradlew uploadArchives -PossrhUsername="$SONATYPE_USERNAME" -PossrhPassword="$SONATYPE_PASSWORD"
