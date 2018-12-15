@@ -6,6 +6,8 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2018-??-??
 
+* Keep track of top-level source set folders [#59](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/59)
+
 ## 1.6.4 - 2018-09-26
 
 ### Changed
