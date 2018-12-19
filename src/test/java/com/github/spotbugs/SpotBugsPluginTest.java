@@ -155,21 +155,39 @@ public class SpotBugsPluginTest extends Assert{
         plugin.verifyGradleVersion(GradleVersion.version("3.0"));
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testVersionVerifyForGradleVersion4() {
         SpotBugsPlugin plugin = new SpotBugsPlugin();
         plugin.verifyGradleVersion(GradleVersion.version("4.0"));
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testVersionVerifyForGradleVersion41() {
         SpotBugsPlugin plugin = new SpotBugsPlugin();
         plugin.verifyGradleVersion(GradleVersion.version("4.1"));
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testVersionVerifyForGradleVersion42() {
         SpotBugsPlugin plugin = new SpotBugsPlugin();
         plugin.verifyGradleVersion(GradleVersion.version("4.2"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testVersionVerifyForGradleVersion50() {
+        SpotBugsPlugin plugin = new SpotBugsPlugin();
+        plugin.verifyGradleVersion(GradleVersion.version("5.0"));
+    }
+
+    @Test
+    public void testVersionVerifyForGradleVersion51rc1() {
+        SpotBugsPlugin plugin = new SpotBugsPlugin();
+        plugin.verifyGradleVersion(GradleVersion.version("5.1-rc-1"));
+    }
+
+    @Test
+    public void testVersionVerifyForGradleVersion51() {
+        SpotBugsPlugin plugin = new SpotBugsPlugin();
+        plugin.verifyGradleVersion(GradleVersion.version("5.1"));
     }
 }
