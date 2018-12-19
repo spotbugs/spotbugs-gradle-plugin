@@ -1,10 +1,10 @@
 package com.github.spotbugs.internal.spotbugs;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class SpotBugsSpec implements Serializable {
   private static final long serialVersionUID = 1L;

@@ -1,11 +1,15 @@
 package com.github.spotbugs;
 
-import com.github.spotbugs.internal.SpotBugsReportsImpl;
-import com.github.spotbugs.internal.SpotBugsReportsInternal;
-import com.github.spotbugs.internal.spotbugs.SpotBugsClasspathValidator;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
 import com.github.spotbugs.internal.spotbugs.SpotBugsRunner;
-import com.github.spotbugs.internal.spotbugs.SpotBugsSpec;
-import com.github.spotbugs.internal.spotbugs.SpotBugsSpecBuilder;
 import groovy.lang.Closure;
 import org.gradle.api.Action;
 import org.gradle.api.Incubating;
@@ -25,6 +29,7 @@ import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SkipWhenEmpty;
+import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.VerificationTask;
@@ -34,12 +39,11 @@ import org.gradle.workers.ForkMode;
 import org.gradle.workers.IsolationMode;
 import org.gradle.workers.WorkerExecutor;
 
-import javax.inject.Inject;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import com.github.spotbugs.internal.SpotBugsReportsImpl;
+import com.github.spotbugs.internal.SpotBugsReportsInternal;
+import com.github.spotbugs.internal.spotbugs.SpotBugsClasspathValidator;
+import com.github.spotbugs.internal.spotbugs.SpotBugsSpec;
+import com.github.spotbugs.internal.spotbugs.SpotBugsSpecBuilder;
 
 
 /**
@@ -52,6 +56,8 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
     private FileCollection classes;
 
     private FileCollection classpath;
+
+    private Set<File> sourceDirs;
 
     private FileCollection spotbugsClasspath;
 
@@ -251,7 +257,7 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
     SpotBugsSpec generateSpec() {
         SpotBugsSpecBuilder specBuilder = new SpotBugsSpecBuilder(getClasses())
                 .withPluginsList(getPluginClasspath())
-                .withSources(getSource())
+                .withSources(getAllSource())
                 .withClasspath(getClasspath())
                 .withShowProgress(getShowProgress())
                 .withDebugging(getLogger().isDebugEnabled())
@@ -296,6 +302,12 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
         return this;
     }
 
+    SpotBugsTask setSourceSet(SourceSet sourceSet) {
+        this.sourceDirs = sourceSet.getAllJava().getSrcDirs();
+        setSource(sourceDirs);
+        return this;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -303,6 +315,12 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
     @PathSensitive(PathSensitivity.RELATIVE)
     public FileTree getSource() {
         return super.getSource();
+    }
+
+    @Input
+    @PathSensitive(PathSensitivity.RELATIVE)
+    FileCollection getAllSource() {
+        return getProject().files(sourceDirs).plus(getSource());
     }
 
     /**

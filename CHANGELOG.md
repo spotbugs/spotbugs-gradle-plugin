@@ -8,6 +8,16 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 * Gradle 5.1 compatibility - This is a breaking change and 2.x works only for Gradle 5.1+. (See [#74](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/74))
 
+## 1.6.7 - 2018-12-18
+
+### Changed
+
+* Keep track of top-level source set folders [#59](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/59)
+
+### Fixed
+
+* Analyze runtime classpath instead of compile classpath. [#62](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/62)
+
 ## 1.6.6 - 2018-12-08
 
 ## Fixed
