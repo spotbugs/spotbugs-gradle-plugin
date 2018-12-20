@@ -14,6 +14,7 @@ import groovy.lang.Closure;
 import org.gradle.api.Action;
 import org.gradle.api.Incubating;
 import org.gradle.api.JavaVersion;
+import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.reporting.Reporting;
@@ -33,6 +34,7 @@ import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.VerificationTask;
 import org.gradle.util.ConfigureUtil;
+import org.gradle.util.DeprecationLogger;
 import org.gradle.util.GradleVersion;
 import org.gradle.workers.ForkMode;
 import org.gradle.workers.IsolationMode;
@@ -93,12 +95,18 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
     public SpotBugsTask(WorkerExecutor workerExecutor) {
         super();
         this.workerExecutor = workerExecutor;
-        if(GradleVersion.current().compareTo(GRADLE_42()) < 0) {
-            reports = new SpotBugsReportsImpl(this);
-        } else {
-            //ObjectFactory#newInstance was introduced in Gradle 4.2
-            reports = getProject().getObjects().newInstance(SpotBugsReportsImpl.class, this);
-        }
+        reports = createReports(this);
+    }
+
+    private SpotBugsReportsInternal createReports(Task task) {
+        return DeprecationLogger.whileDisabled(() -> {
+            if (GradleVersion.current().compareTo(GRADLE_42()) < 0) {
+                return new SpotBugsReportsImpl(task);
+            } else {
+                //ObjectFactory#newInstance was introduced in Gradle 4.2
+                return getProject().getObjects().newInstance(SpotBugsReportsImpl.class, task);
+            }
+        });
     }
 
     private final WorkerExecutor workerExecutor;
