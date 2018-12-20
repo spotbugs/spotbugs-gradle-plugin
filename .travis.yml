@@ -9,6 +9,7 @@ env:
   matrix:
     - GRADLE_VERSION=default
     - GRADLE_VERSION=5.0
+    - GRADLE_VERSION=5.1-20181220000026+0000
   global:
     - SONAR_HOST_URL="https://sonarcloud.io"
 
