@@ -13,7 +13,7 @@ apply from: "$rootDir/gradle/deploy.gradle"
 
 version = '1.6.8-SNAPSHOT'
 group = "com.github.spotbugs"
-def spotBugsVersion = '3.1.9'
+def spotBugsVersion = '3.1.10'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
