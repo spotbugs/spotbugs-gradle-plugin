@@ -6,6 +6,10 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased
 
+### Fixed
+
+* `classes` filtering that was broken at 1.6.2 ([#54](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/54))
+
 ## 1.6.8 - 2018-12-21
 
 ### Changed
