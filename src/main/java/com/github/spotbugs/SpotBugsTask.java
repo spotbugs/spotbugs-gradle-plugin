@@ -324,7 +324,7 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
         return super.getSource();
     }
 
-    @Input
+    @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
     FileCollection getAllSource() {
         return getProject().files(sourceDirs).plus(getSource());
