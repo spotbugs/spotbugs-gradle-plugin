@@ -1,11 +1,14 @@
 package com.github.spotbugs;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -18,10 +21,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 public class SourceAnalysisPropertyTest {
 
     @Rule
@@ -29,27 +28,8 @@ public class SourceAnalysisPropertyTest {
 
     @Before
     public void createProject() throws IOException {
-        String buildScript =
-                "plugins {\n" +
-                        "  id 'java'\n" +
-                        "  id 'com.github.spotbugs'\n" +
-                        "}\n" +
-                        "version = 1.0\n" +
-                        "repositories {\n" +
-                        "  mavenCentral()\n" +
-                        "  mavenLocal()\n" +
-                        "}\n" +
-                        "sourceSets {\n" +
-                        "  main {\n" +
-                        "    java.srcDirs = ['src/main/java']\n" +
-                        "  }\n" +
-                        "}\n" +
-                        "tasks.withType(com.github.spotbugs.SpotBugsTask) {\n" +
-                        "  jvmArgs = ['-Dfindbugs.sf.comment=true']\n" +
-                        "}\n";
-
-        File buildFile = folder.newFile("build.gradle");
-        Files.write(buildFile.toPath(), buildScript.getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);
+        Files.copy(Paths.get("src/test/resources/SourceAnalysisProperty.gradle"), folder.getRoot().toPath().resolve("build.gradle"),
+                StandardCopyOption.COPY_ATTRIBUTES);
 
         File sourceDir = folder.newFolder("src", "main", "java", "com", "github", "spotbugs");
         File destinationFile = new File(sourceDir, "SourceAnalysisProperty.java");

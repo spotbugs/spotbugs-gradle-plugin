@@ -1,0 +1,16 @@
+plugins {
+  id 'java'
+  id 'com.github.spotbugs'
+}
+version = 1.0
+repositories {
+  mavenCentral()
+}
+sourceSets {
+  main {
+    java.srcDirs = ['src/main/java']
+  }
+}
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+  jvmArgs = ['-Dfindbugs.sf.comment=true']
+}
