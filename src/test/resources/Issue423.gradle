@@ -1,0 +1,14 @@
+plugins {
+  id 'java'
+  id 'com.github.spotbugs'
+}
+version = 1.0
+repositories {
+  mavenCentral()
+}
+task spotbugs(type: com.github.spotbugs.SpotBugsTask) {
+  reports {
+    xml.enabled true
+    xml.destination ((java.io.File) null)
+  }
+}
