@@ -1,11 +1,13 @@
 package com.github.spotbugs;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
 import org.gradle.internal.impldep.org.apache.commons.io.FileUtils;
@@ -17,9 +19,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 /**
  * Test's behaviour of the spotbugs plugin when operating with multiple code languages.
  * <p>
@@ -30,7 +29,7 @@ import static org.junit.Assert.assertThat;
 public class MultipleBuildOutputSourceDirsTest {
 
     @Rule
-    public TemporaryFolder folder= new TemporaryFolder();
+    public TemporaryFolder folder = new TemporaryFolder();
 
     @Before
     public void cleanUpProjectFolder() {
@@ -93,53 +92,18 @@ public class MultipleBuildOutputSourceDirsTest {
     // =========================== Helper methods =====================================================================
 
     private void createProjectScala() throws IOException {
-      String buildScript = "plugins {\n"
-        + "    id 'java'\n"
-        + "    id 'scala'\n"
-        + "    id 'com.github.spotbugs' version '1.6.1'\n"
-        + "}\n"
-        + "version = 1.0\n"
-        + "repositories {\n"
-        + "    mavenCentral()\n"
-        + "    mavenLocal()\n"
-        + "}\n"
-
-        + "apply plugin: 'java'\n"
-        + "apply plugin: 'scala'\n"
-
-        + "sourceSets.main.scala.srcDirs = ['src/main/java', 'src/main/scala']\n"
-        + "sourceSets.main.java.srcDirs = []\n"
-
-        + "ext.scalaFullVersion = '2.10.3'\n"
-        + "dependencies {\n"
-            + "compile 'org.scala-lang:scala-library:2.10.7'\n"
-        + "}\n";
-      File buildFile = folder.newFile("build.gradle");
-      Files.write(buildFile.toPath(), buildScript.getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);
+      Files.copy(Paths.get("src/test/resources/MultipleBuildOutputSourceDirsScala.gradle"), folder.getRoot().toPath().resolve("build.gradle"),
+              StandardCopyOption.COPY_ATTRIBUTES);
 
       File javaSourceDir = folder.newFolder("src", "main", "java");
-      File scalaSourceDir = folder.newFolder("src", "main", "scala");
       File to = new File(javaSourceDir, "Foo.java");
       File from = new File("src/test/java/com/github/spotbugs/Foo.java");
       Files.copy(from.toPath(), to.toPath(), StandardCopyOption.COPY_ATTRIBUTES);
     }
 
     private void createProjectGroovy() throws IOException {
-        String buildScript = "plugins {\n" +
-                "  id 'java'\n" +
-                "  id 'groovy'\n" +
-                "  id 'com.github.spotbugs' version '1.6.1'\n" +
-                "}\n" +
-                "version = 1.0\n" +
-                "repositories {\n" +
-                "  mavenCentral()\n" +
-                "  mavenLocal()\n" +
-                "}\n" +
-                "dependencies {\n" +
-                "    compile 'org.codehaus.groovy:groovy-all:2.4.14'\n" +
-                "}\n";
-        File buildFile = folder.newFile("build.gradle");
-        Files.write(buildFile.toPath(), buildScript.getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);
+        Files.copy(Paths.get("src/test/resources/MultipleBuildOutputSourceDirsGroovy.gradle"), folder.getRoot().toPath().resolve("build.gradle"),
+                StandardCopyOption.COPY_ATTRIBUTES);
 
         File sourceDir = folder.newFolder("src", "main", "groovy");
         File to = new File(sourceDir, "Bar.groovy");
@@ -148,24 +112,10 @@ public class MultipleBuildOutputSourceDirsTest {
     }
 
     private void createProjectGroovyTest() throws IOException {
-        String buildScript = "plugins {\n" +
-                "  id 'java'\n" +
-                "  id 'groovy'\n" +
-                "  id 'com.github.spotbugs' version '1.6.1'\n" +
-                "}\n" +
-                "version = 1.0\n" +
-                "repositories {\n" +
-                "  mavenCentral()\n" +
-                "  mavenLocal()\n" +
-                "}\n" +
-                "dependencies {\n" +
-                "    compile 'org.codehaus.groovy:groovy-all:2.4.14'\n" +
-                "}\n";
-        File buildFile = folder.newFile("build.gradle");
-        Files.write(buildFile.toPath(), buildScript.getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);
+        Files.copy(Paths.get("src/test/resources/MultipleBuildOutputSourceDirsGroovy.gradle"), folder.getRoot().toPath().resolve("build.gradle"),
+                StandardCopyOption.COPY_ATTRIBUTES);
 
         File sourceDirJava = folder.newFolder("src", "main", "java");
-        File sourceDirGroovy = folder.newFolder("src", "main", "groovy");
         File sourceDirGroovyTest = folder.newFolder("src", "test", "groovy");
         File to = new File(sourceDirJava, "Foo.java");
         File from = new File("src/test/java/com/github/spotbugs/Foo.java");
