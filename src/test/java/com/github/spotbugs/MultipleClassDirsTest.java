@@ -23,10 +23,9 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
 import org.gradle.testkit.runner.BuildResult;
@@ -39,22 +38,12 @@ import org.junit.rules.TemporaryFolder;
 
 public class MultipleClassDirsTest {
     @Rule
-    public TemporaryFolder folder= new TemporaryFolder();
+    public TemporaryFolder folder = new TemporaryFolder();
 
     @Before
     public void createProject() throws IOException {
-      String buildScript = "plugins {\n" +
-        "  id 'java'\n" +
-        "  id 'com.github.spotbugs'\n" +
-        "}\n" +
-        "version = 1.0\n" +
-        "repositories {\n" +
-        "  mavenCentral()\n" +
-        "  mavenLocal()\n" +
-        "}\n" +
-        "sourceSets.main.output.addClassesDir { -> file('build/classes/java/second') }\n";
-      File buildFile = folder.newFile("build.gradle");
-      Files.write(buildFile.toPath(), buildScript.getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);
+      Files.copy(Paths.get("src/test/resources/MultipleClassDirs.gradle"), folder.getRoot().toPath().resolve("build.gradle"),
+              StandardCopyOption.COPY_ATTRIBUTES);
 
       File sourceDir = folder.newFolder("src", "main", "java");
       File to = new File(sourceDir, "Foo.java");

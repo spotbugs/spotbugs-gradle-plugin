@@ -1,0 +1,9 @@
+plugins {
+  id 'java'
+  id 'com.github.spotbugs'
+}
+version = 1.0
+repositories {
+  mavenCentral()
+}
+sourceSets.main.output.addClassesDir { -> file('build/classes/java/second') }
