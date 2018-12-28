@@ -1,5 +1,17 @@
 package com.github.spotbugs;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.Optional;
+
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.BuildTask;
 import org.gradle.testkit.runner.GradleRunner;
@@ -10,19 +22,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
-import java.util.Optional;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
-
 public class KotlinBuildScriptTest {
 
     @Rule
@@ -32,18 +31,8 @@ public class KotlinBuildScriptTest {
 
     @Before
     public void createKotlinDslProject() throws IOException {
-        String buildScript = "plugins {\n" +
-                "  java\n" +
-                "  id(\"com.github.spotbugs\")\n" +
-                "}\n" +
-                "version = 1.0\n" +
-                "repositories {\n" +
-                "  mavenCentral()\n" +
-                "  mavenLocal()\n" +
-                "}\n" +
-                "if(project.hasProperty(\"ignoreFailures\")) { spotbugs.setIgnoreFailures(true) }";
-        File buildFile = folder.newFile("build.gradle.kts");
-        Files.write(buildFile.toPath(), buildScript.getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);
+        Files.copy(Paths.get("src/test/resources/KotlinBuildScript.gradle.kts"), folder.getRoot().toPath().resolve("build.gradle.kts"),
+                StandardCopyOption.COPY_ATTRIBUTES);
 
         sourceDir = folder.newFolder("src", "main", "java");
         File to = new File(sourceDir, "Foo.java");
