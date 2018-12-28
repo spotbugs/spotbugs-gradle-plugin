@@ -5,10 +5,9 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -25,24 +24,14 @@ import org.junit.rules.TemporaryFolder;
 
 public class SpotBugsPluginTest extends Assert{
   @Rule
-  public TemporaryFolder folder= new TemporaryFolder();
+  public TemporaryFolder folder = new TemporaryFolder();
 
   private File sourceDir;
 
   @Before
   public void createProject() throws IOException {
-    String buildScript = "plugins {\n" +
-      "  id 'java'\n" +
-      "  id 'com.github.spotbugs'\n" +
-      "}\n" +
-      "version = 1.0\n" +
-      "repositories {\n" +
-      "  mavenCentral()\n" +
-      "  mavenLocal()\n" +
-      "}\n" +
-      "if(project.hasProperty('ignoreFailures')) { spotbugs.ignoreFailures = true }";
-    File buildFile = folder.newFile("build.gradle");
-    Files.write(buildFile.toPath(), buildScript.getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE);
+    Files.copy(Paths.get("src/test/resources/SpotBugsPlugin.gradle"), folder.getRoot().toPath().resolve("build.gradle"),
+            StandardCopyOption.COPY_ATTRIBUTES);
 
     sourceDir = folder.newFolder("src", "main", "java");
     File to = new File(sourceDir, "Foo.java");
