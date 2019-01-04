@@ -16,7 +16,7 @@ This commit will be tagged with version number. Refer [db979662](https://github.
 Create a commit to handle following changes:
 
 * change `version` in `build.gradle` to SNAPSHOT version
-* add `Unreleased - 2018-??-??` into `CHANGELOG.md`
+* add `Unreleased - 2019-??-??` into `CHANGELOG.md`
 
 Refer [ef63f198](https://github.com/spotbugs/spotbugs-gradle-plugin/commit/ef63f1980d75a1999af00b3505667f3932c8c0fa) as example.
 
