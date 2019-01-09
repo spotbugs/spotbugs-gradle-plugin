@@ -1,6 +1,5 @@
 package com.github.spotbugs.internal;
 
-import javax.inject.Inject;
 import org.gradle.api.Task;
 import org.gradle.api.reporting.SingleFileReport;
 import org.gradle.api.reporting.internal.CustomizableHtmlReportImpl;
@@ -12,7 +11,6 @@ import com.github.spotbugs.internal.spotbugs.SpotBugsXmlReportImpl;
 
 public class SpotBugsReportsImpl extends TaskReportContainer<SingleFileReport> implements SpotBugsReportsInternal {
 
-  @Inject
   public SpotBugsReportsImpl(Task task) {
       super(SingleFileReport.class, task);
 
