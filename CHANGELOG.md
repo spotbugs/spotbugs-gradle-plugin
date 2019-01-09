@@ -6,6 +6,15 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2019-??-??
 
+### Fixed
+
+* "Trying to add already registered factory" problem reported as [a spotbugs issue](https://github.com/spotbugs/spotbugs/issues/819)
+
+### Removed
+
+* Usage of worker API introduced at [#57](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/57)
+* Drop support for Gradle 4, that causes [SLF4J related problem](https://github.com/gradle/gradle/issues/2657)
+
 ## 1.6.9 - 2019-01-04
 
 ### Fixed
