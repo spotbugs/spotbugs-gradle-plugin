@@ -305,6 +305,7 @@ public class SpotBugsExtension extends CodeQualityExtension {
     /**
      * Indicates whether analysis progress should be rendered on standard output.
      *
+     * @param showProgress Whether progress should be rendered on standard output.
      */
     public void setShowProgress(boolean showProgress) {
         this.showProgress = showProgress;
