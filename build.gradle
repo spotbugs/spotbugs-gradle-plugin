@@ -13,7 +13,7 @@ apply from: "$rootDir/gradle/deploy.gradle"
 
 version = '1.6.10-SNAPSHOT'
 group = "com.github.spotbugs"
-def spotBugsVersion = '3.1.10'
+def spotBugsVersion = '3.1.11'
 def slf4jVersion = '1.8.0-beta2'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
