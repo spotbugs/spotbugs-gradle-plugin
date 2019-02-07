@@ -9,6 +9,7 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 ### Fixed
 
 * Result caching works across checkouts. Previously it was using absolute paths and therefore didn't work. ([#96](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/96))
+* Restore compatiblity with Gradle 4.0~4.6 ([#101](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/101))
 
 ### Changed
 
