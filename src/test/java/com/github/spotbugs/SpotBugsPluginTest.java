@@ -58,6 +58,19 @@ public class SpotBugsPluginTest extends Assert{
   }
 
   @Test
+  public void testSpotBugsTaskCanRunWithMinimumSupportedVersion() throws Exception {
+    BuildResult result = GradleRunner.create()
+            .withProjectDir(folder.getRoot())
+            .withArguments(Arrays.asList("compileJava", "spotbugsMain"))
+            .withPluginClasspath()
+            .withGradleVersion(SpotBugsPlugin.SUPPORTED_VERSION.getVersion())
+            .build();
+    Optional<BuildTask> spotbugsMain = findTask(result, ":spotbugsMain");
+    assertTrue(spotbugsMain.isPresent());
+    assertThat(spotbugsMain.get().getOutcome(), is(TaskOutcome.SUCCESS));
+  }
+
+  @Test
   public void testSpotBugsTaskCanFailTheBuild() throws IOException {
     addClassWithBug();
 

@@ -39,8 +39,10 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
     /**
      * Supported Gradle version described at <a href="http://spotbugs.readthedocs.io/en/latest/gradle.html">official
      * manual site</a>.
+     *
+     * Package-protected access is for testing purposes
      */
-    private static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("4.0");
+    static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("4.0");
 
     private SpotBugsExtension extension;
 
