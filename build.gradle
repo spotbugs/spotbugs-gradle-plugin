@@ -1,0 +1,48 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'jacoco'
+    id 'com.gradle.plugin-publish' version '0.10.1'
+    id 'com.diffplug.gradle.spotless' version '3.17.0'
+    id 'net.ltgt.errorprone' version '0.7'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.7'
+    id 'com.github.ben-manes.versions' version '0.20.0'
+    id 'com.github.hierynomus.license' version '0.15.0'
+}
+
+version = '2.0.0-SNAPSHOT'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+apply from: "$rootDir/gradle/jacoco.gradle"
+apply from: "$rootDir/gradle/license.gradle"
+apply from: "$rootDir/gradle/spotless.gradle"
+apply from: "$rootDir/gradle/errorprone.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
+
+repositories { mavenCentral() }
+
+ext {
+    junitVersion = '5.3.2'
+    errorproneVersion = '2.3.2'
+    errorproneJavacVersion = '9+181-r4173-1'
+    spotBugsVersion = '3.1.11'
+}
+
+dependencies {
+    errorprone "com.google.errorprone:error_prone_core:${errorproneVersion}"
+    errorproneJavac "com.google.errorprone:javac:${errorproneJavacVersion}"
+    compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+}
+
+test { useJUnitPlatform() }
+
+task processVersionFile(type: WriteProperties) {
+    outputFile file('src/main/resources/spotbugs-gradle-plugin.properties')
+
+    property 'spotbugs-version', spotBugsVersion
+}
+tasks.processResources.dependsOn processVersionFile
+
+defaultTasks 'spotlessApply', 'licenseFormat', 'build'
