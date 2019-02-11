@@ -10,6 +10,7 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 * "Trying to add already registered factory" problem reported as [a spotbugs issue](https://github.com/spotbugs/spotbugs/issues/819)
 * Result caching works across checkouts. Previously it was using absolute paths and therefore didn't work. ([#96](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/96))
+* Support text type bug report ([#31](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/31))
 
 ### Removed
 
