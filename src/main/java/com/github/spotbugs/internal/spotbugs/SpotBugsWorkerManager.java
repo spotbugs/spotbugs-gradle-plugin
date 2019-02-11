@@ -16,7 +16,7 @@ public class SpotBugsWorkerManager {
   }
 
   private SpotBugsWorker createWorkerProcess(File workingDir, WorkerProcessFactory workerFactory, FileCollection findBugsClasspath, SpotBugsSpec spec) {
-      SingleRequestWorkerProcessBuilder<SpotBugsWorker> builder = workerFactory.singleRequestWorker(SpotBugsWorker.class, SpotBugsExecuter.class);
+      SingleRequestWorkerProcessBuilder<SpotBugsWorker> builder = workerFactory.singleRequestWorker(SpotBugsWorker.class, SpotBugsExecutor.class);
       builder.setBaseName("Gradle SpotBugs Worker");
       builder.applicationClasspath(findBugsClasspath);
       builder.sharedPackages(Arrays.asList("edu.umd.cs.findbugs"));

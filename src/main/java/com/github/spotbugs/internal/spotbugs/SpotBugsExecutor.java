@@ -8,7 +8,7 @@ import edu.umd.cs.findbugs.FindBugs2;
 import edu.umd.cs.findbugs.IFindBugsEngine;
 import edu.umd.cs.findbugs.TextUICommandLine;
 
-public class SpotBugsExecuter implements SpotBugsWorker {
+public class SpotBugsExecutor implements SpotBugsWorker {
   @Override
   public SpotBugsResult runSpotbugs(SpotBugsSpec spec) throws IOException, InterruptedException {
       final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
