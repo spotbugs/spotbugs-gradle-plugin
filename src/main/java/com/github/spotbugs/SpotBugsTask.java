@@ -108,10 +108,6 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
         throw new UnsupportedOperationException();
     }
 
-    private GradleVersion GRADLE_47() {
-        return GradleVersion.version("4.7");
-    }
-
     /**
      * <p>Compatibility layer for API-safe call to {@link org.gradle.api.reporting.ReportContainer#getEnabledReports()},
      * introduced in Gradle 4.7
@@ -121,11 +117,9 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
      * @return true if any reports are enabled, otherwise logs a warning and returns false
      */
     private boolean hasEnabledReports() {
-        boolean hasEnabledReports = GradleVersion.current().compareTo(GRADLE_47()) >= 0
-                ? !reports.getEnabledReports().isEmpty()
-                : !reports.getEnabled().getAsMap().isEmpty();
+        boolean hasEnabledReports = !reports.getEnabledReports().isEmpty();
 
-        if(!hasEnabledReports) {
+        if (!hasEnabledReports) {
             getProject().getLogger().lifecycle("WARNING: No SpotBugs report(s) were configured; aborting execution of {}", getPath());
         }
         return hasEnabledReports;
