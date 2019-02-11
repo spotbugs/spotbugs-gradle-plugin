@@ -178,7 +178,11 @@ public class SpotBugsSpecBuilder {
                         outputArg += ':' + r.getStylesheet().asFile().getAbsolutePath();
                     }
                 }
-                args.add(outputArg);
+                if ("-text".equals(outputArg)) {
+                  // text mode is default behaviour of SpotBugs, then no need to add argument
+                } else {
+                  args.add(outputArg);
+                }
                 args.add("-outputFile");
                 args.add(reportsImpl.getFirstEnabled().getDestination().getAbsolutePath());
             } else {
