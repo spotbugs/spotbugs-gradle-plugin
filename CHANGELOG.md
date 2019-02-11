@@ -8,8 +8,14 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ### Fixed
 
+* "Trying to add already registered factory" problem reported as [a spotbugs issue](https://github.com/spotbugs/spotbugs/issues/819)
 * Result caching works across checkouts. Previously it was using absolute paths and therefore didn't work. ([#96](https://github.com/spotbugs/spotbugs-gradle-plugin/pull/96))
 * Restore compatiblity with Gradle 4.0~4.6 ([#101](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/101))
+
+### Removed
+
+* Usage of worker API introduced at [#57](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/57)
+* Drop support for Gradle 4, that causes [SLF4J related problem](https://github.com/gradle/gradle/issues/2657)
 
 ### Changed
 

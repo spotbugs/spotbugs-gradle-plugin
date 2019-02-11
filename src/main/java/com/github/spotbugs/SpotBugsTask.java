@@ -1,6 +1,7 @@
 package com.github.spotbugs;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -9,15 +10,15 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import com.github.spotbugs.internal.spotbugs.SpotBugsRunner;
-import groovy.lang.Closure;
 import org.gradle.api.Action;
+import org.gradle.api.GradleException;
 import org.gradle.api.Incubating;
 import org.gradle.api.JavaVersion;
-import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
+import org.gradle.api.logging.LogLevel;
 import org.gradle.api.reporting.Reporting;
+import org.gradle.api.reporting.SingleFileReport;
 import org.gradle.api.resources.TextResource;
 import org.gradle.api.tasks.CacheableTask;
 import org.gradle.api.tasks.Classpath;
@@ -33,19 +34,21 @@ import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.VerificationTask;
+import org.gradle.internal.logging.ConsoleRenderer;
+import org.gradle.internal.reflect.Instantiator;
+import org.gradle.process.internal.worker.WorkerProcessFactory;
 import org.gradle.util.ConfigureUtil;
-import org.gradle.util.DeprecationLogger;
 import org.gradle.util.GradleVersion;
-import org.gradle.workers.ForkMode;
-import org.gradle.workers.IsolationMode;
-import org.gradle.workers.WorkerExecutor;
 
 import com.github.spotbugs.internal.SpotBugsReportsImpl;
 import com.github.spotbugs.internal.SpotBugsReportsInternal;
 import com.github.spotbugs.internal.spotbugs.SpotBugsClasspathValidator;
+import com.github.spotbugs.internal.spotbugs.SpotBugsResult;
 import com.github.spotbugs.internal.spotbugs.SpotBugsSpec;
 import com.github.spotbugs.internal.spotbugs.SpotBugsSpecBuilder;
+import com.github.spotbugs.internal.spotbugs.SpotBugsWorkerManager;
 
+import groovy.lang.Closure;
 
 /**
  * Analyzes code with <a href="https://spotbugs.github.io/">SpotBugs</a>. See the
@@ -91,32 +94,18 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
     @Nested
     private final SpotBugsReportsInternal reports;
 
+    public SpotBugsTask() {
+        reports = getInstantiator().newInstance(SpotBugsReportsImpl.class, this);
+    }
+
     @Inject
-    public SpotBugsTask(WorkerExecutor workerExecutor) {
-        super();
-        this.workerExecutor = workerExecutor;
-        reports = createReports(this);
+    public Instantiator getInstantiator() {
+        throw new UnsupportedOperationException();
     }
 
-    private SpotBugsReportsInternal createReports(Task task) {
-        return DeprecationLogger.whileDisabled(() -> {
-            if (GradleVersion.current().compareTo(GRADLE_42()) < 0) {
-                return new SpotBugsReportsImpl(task);
-            } else {
-                //ObjectFactory#newInstance was introduced in Gradle 4.2
-                return getProject().getObjects().newInstance(SpotBugsReportsImpl.class, task);
-            }
-        });
-    }
-
-    private final WorkerExecutor workerExecutor;
-
-    private GradleVersion GRADLE_42() {
-        return GradleVersion.version("4.2");
-    }
-
-    private GradleVersion GRADLE_47() {
-        return GradleVersion.version("4.7");
+    @Inject
+    public WorkerProcessFactory getWorkerProcessBuilderFactory() {
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -128,11 +117,9 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
      * @return true if any reports are enabled, otherwise logs a warning and returns false
      */
     private boolean hasEnabledReports() {
-        boolean hasEnabledReports = GradleVersion.current().compareTo(GRADLE_47()) >= 0
-                ? !reports.getEnabledReports().isEmpty()
-                : !reports.getEnabled().getAsMap().isEmpty();
+        boolean hasEnabledReports = !reports.getEnabledReports().isEmpty();
 
-        if(!hasEnabledReports) {
+        if (!hasEnabledReports) {
             getProject().getLogger().lifecycle("WARNING: No SpotBugs report(s) were configured; aborting execution of {}", getPath());
         }
         return hasEnabledReports;
@@ -260,27 +247,22 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
     }
 
     @TaskAction
-    public void run() {
+    public void run() throws IOException, InterruptedException {
         new SpotBugsClasspathValidator(JavaVersion.current()).validateClasspath(
                 getSpotbugsClasspath().getFiles().stream().map(File::getName).collect(Collectors.toSet()));
         SpotBugsSpec spec = generateSpec();
+        SpotBugsWorkerManager manager = new SpotBugsWorkerManager();
+
+        getLogging().captureStandardOutput(LogLevel.DEBUG);
+        getLogging().captureStandardError(LogLevel.DEBUG);
 
         //workaround for https://github.com/spotbugs/spotbugs-gradle-plugin/issues/61
         if(!hasEnabledReports()) {
             return;
         }
 
-        workerExecutor.submit(SpotBugsRunner.class, config -> {
-            config.params(spec, getIgnoreFailures(), reports.getFirstEnabled().getDestination());
-            config.setClasspath(getSpotbugsClasspath());
-            config.setForkMode(ForkMode.ALWAYS);
-            config.forkOptions( options -> {
-                options.setDebug(spec.isDebugEnabled());
-                options.setJvmArgs(spec.getJvmArgs());
-                options.setMaxHeapSize(spec.getMaxHeapSize());
-            });
-            config.setIsolationMode(IsolationMode.PROCESS);
-        });
+        SpotBugsResult result = manager.runWorker(getProject().getProjectDir(), getWorkerProcessBuilderFactory(), getSpotbugsClasspath(), spec);
+        evaluateResult(result);
     }
 
     SpotBugsSpec generateSpec() {
@@ -303,6 +285,33 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
                 .configureReports(getReports());
 
         return specBuilder.build();
+    }
+
+    void evaluateResult(SpotBugsResult result) {
+        if (result.getException() != null) {
+            throw new GradleException("SpotBugs encountered an error. Run with --debug to get more information.", result.getException());
+        }
+
+        if (result.getErrorCount() > 0) {
+            throw new GradleException("SpotBugs encountered an error. Run with --debug to get more information.");
+        }
+
+        if (result.getBugCount() > 0) {
+            String message = "SpotBugs rule violations were found.";
+            SingleFileReport report = reports.getFirstEnabled();
+            if (report != null) {
+                String reportUrl = new ConsoleRenderer().asClickableFileUrl(report.getDestination());
+                message += " See the report at: " + reportUrl;
+            }
+
+            if (getIgnoreFailures()) {
+                getLogger().warn(message);
+            } else {
+                throw new GradleException(message);
+            }
+
+        }
+
     }
 
     public SpotBugsTask extraArgs(Iterable<String> arguments) {

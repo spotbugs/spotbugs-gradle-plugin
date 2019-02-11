@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.stream.StreamSupport;
@@ -42,7 +44,7 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
      *
      * Package-protected access is for testing purposes
      */
-    static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("4.0");
+    static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("5.0");
 
     private SpotBugsExtension extension;
 
@@ -124,11 +126,19 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
     }
 
     String loadToolVersion() {
+        return loadVersion("spotbugs-version");
+    }
+
+    String loadSlf4jVersion() {
+        return loadVersion("slf4j-version");
+    }
+
+    private String loadVersion(String name) {
         URL url = SpotBugsPlugin.class.getClassLoader().getResource("spotbugs-gradle-plugin.properties");
         try (InputStream input = url.openStream()) {
             Properties prop = new Properties();
             prop.load(input);
-            return prop.getProperty("spotbugs-version");
+            return prop.getProperty(name);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -148,10 +158,37 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
         // https://github.com/spotbugs/spotbugs-gradle-plugin/issues/22
     }
 
+    /**
+     * Overriding this method, to include SLF4J into {@code spotbugsClasspath}. SLF4J is necessary in worker process.
+     */
+    @Override
+    protected void createConfigurations() {
+        Configuration configuration = project.getConfigurations().create(getConfigurationName());
+        configuration.setVisible(false);
+        configuration.setTransitive(true);
+        configuration.setDescription("The " + getToolName() + " libraries to be used for this project.");
+        // Don't need these things, they're provided by the runtime
+        configuration.exclude(excludeProperties("ant", "ant"));
+        configuration.exclude(excludeProperties("org.apache.ant", "ant"));
+        configuration.exclude(excludeProperties("org.apache.ant", "ant-launcher"));
+        configuration.exclude(excludeProperties("org.slf4j", "jcl-over-slf4j"));
+        configuration.exclude(excludeProperties("org.slf4j", "log4j-over-slf4j"));
+        configuration.exclude(excludeProperties("commons-logging", "commons-logging"));
+        configuration.exclude(excludeProperties("log4j", "log4j"));
+        configureConfiguration(configuration);
+    }
+
+    private Map<String, String> excludeProperties(String group, String module) {
+        Map<String, String> map = new HashMap<>();
+        map.put("group", group);
+        map.put("module", module);
+        return map;
+    }
     private void configureDefaultDependencies(Configuration configuration) {
-        configuration.defaultDependencies((DependencySet dependencies) ->
-            dependencies.add(project.getDependencies().create("com.github.spotbugs:spotbugs:" + extension.getToolVersion()))
-        );
+        configuration.defaultDependencies((DependencySet dependencies) -> {
+            dependencies.add(project.getDependencies().create("org.slf4j:slf4j-simple:" + loadSlf4jVersion()));
+            dependencies.add(project.getDependencies().create("com.github.spotbugs:spotbugs:" + extension.getToolVersion()));
+        });
     }
 
     private void configureTaskConventionMapping(Configuration configuration, SpotBugsTask task) {
