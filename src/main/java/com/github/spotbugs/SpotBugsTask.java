@@ -38,6 +38,7 @@ import org.gradle.internal.logging.ConsoleRenderer;
 import org.gradle.internal.reflect.Instantiator;
 import org.gradle.process.internal.worker.WorkerProcessFactory;
 import org.gradle.util.ConfigureUtil;
+import org.gradle.util.GradleVersion;
 
 import com.github.spotbugs.internal.SpotBugsReportsImpl;
 import com.github.spotbugs.internal.SpotBugsReportsInternal;
@@ -105,6 +106,29 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
     @Inject
     public WorkerProcessFactory getWorkerProcessBuilderFactory() {
         throw new UnsupportedOperationException();
+    }
+
+    private GradleVersion GRADLE_47() {
+        return GradleVersion.version("4.7");
+    }
+
+    /**
+     * <p>Compatibility layer for API-safe call to {@link org.gradle.api.reporting.ReportContainer#getEnabledReports()},
+     * introduced in Gradle 4.7
+     *
+     * <p>This method assists the workaround for https://github.com/spotbugs/spotbugs-gradle-plugin/issues/61
+     *
+     * @return true if any reports are enabled, otherwise logs a warning and returns false
+     */
+    private boolean hasEnabledReports() {
+        boolean hasEnabledReports = GradleVersion.current().compareTo(GRADLE_47()) >= 0
+                ? !reports.getEnabledReports().isEmpty()
+                : !reports.getEnabled().getAsMap().isEmpty();
+
+        if(!hasEnabledReports) {
+            getProject().getLogger().lifecycle("WARNING: No SpotBugs report(s) were configured; aborting execution of {}", getPath());
+        }
+        return hasEnabledReports;
     }
 
     /**
@@ -237,6 +261,11 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
 
         getLogging().captureStandardOutput(LogLevel.DEBUG);
         getLogging().captureStandardError(LogLevel.DEBUG);
+
+        //workaround for https://github.com/spotbugs/spotbugs-gradle-plugin/issues/61
+        if(!hasEnabledReports()) {
+            return;
+        }
 
         SpotBugsResult result = manager.runWorker(getProject().getProjectDir(), getWorkerProcessBuilderFactory(), getSpotbugsClasspath(), spec);
         evaluateResult(result);

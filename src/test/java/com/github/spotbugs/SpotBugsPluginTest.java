@@ -16,7 +16,9 @@ import org.gradle.testkit.runner.BuildTask;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
 import org.gradle.util.GradleVersion;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,6 +52,27 @@ public class SpotBugsPluginTest extends Assert{
             .withProjectDir(folder.getRoot())
             .withArguments(Arrays.asList("compileJava", "spotbugsMain"))
             .withPluginClasspath().build();
+    Optional<BuildTask> spotbugsMain = findTask(result, ":spotbugsMain");
+    assertTrue(spotbugsMain.isPresent());
+    assertThat(spotbugsMain.get().getOutcome(), is(TaskOutcome.SUCCESS));
+  }
+
+  /**
+   * Only run this test under JDK 8.
+   *
+   * Skip this test on Java 11 - it simulates a lower Gradle version,
+   * whose {@link org.gradle.api.JavaVersion} enum may not recognize Java 11 at runtime
+   * and will fail.
+   */
+  @Test
+  public void testSpotBugsTaskCanRunWithMinimumSupportedVersion() throws Exception {
+    Assume.assumeThat(System.getProperty("java.version"), CoreMatchers.startsWith("1.8"));
+    BuildResult result = GradleRunner.create()
+            .withProjectDir(folder.getRoot())
+            .withArguments(Arrays.asList("compileJava", "spotbugsMain"))
+            .withPluginClasspath()
+            .withGradleVersion(SpotBugsPlugin.SUPPORTED_VERSION.getVersion())
+            .build();
     Optional<BuildTask> spotbugsMain = findTask(result, ":spotbugsMain");
     assertTrue(spotbugsMain.isPresent());
     assertThat(spotbugsMain.get().getOutcome(), is(TaskOutcome.SUCCESS));
