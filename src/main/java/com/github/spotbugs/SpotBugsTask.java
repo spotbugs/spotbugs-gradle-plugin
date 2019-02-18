@@ -38,7 +38,6 @@ import org.gradle.internal.logging.ConsoleRenderer;
 import org.gradle.internal.reflect.Instantiator;
 import org.gradle.process.internal.worker.WorkerProcessFactory;
 import org.gradle.util.ConfigureUtil;
-import org.gradle.util.GradleVersion;
 
 import com.github.spotbugs.internal.SpotBugsReportsImpl;
 import com.github.spotbugs.internal.SpotBugsReportsInternal;
