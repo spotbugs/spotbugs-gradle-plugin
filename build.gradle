@@ -3,6 +3,7 @@ plugins{
   id 'java-gradle-plugin'
   id "com.gradle.plugin-publish" version "0.9.7"
   id 'org.sonarqube' version '2.6.2'
+  id 'com.diffplug.gradle.spotless' version '3.18.0'
 }
 
 apply from: "$rootDir/gradle/checkstyle.gradle"
@@ -10,6 +11,7 @@ apply from: "$rootDir/gradle/jacoco.gradle"
 apply from: "$rootDir/gradle/java.gradle"
 apply from: "$rootDir/gradle/sonar.gradle"
 apply from: "$rootDir/gradle/deploy.gradle"
+apply from: "$rootDir/gradle/spotless.gradle"
 
 version = '1.6.11-SNAPSHOT'
 group = "com.github.spotbugs"
