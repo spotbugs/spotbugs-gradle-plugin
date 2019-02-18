@@ -18,9 +18,6 @@
  */
 package com.github.spotbugs;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +28,6 @@ import java.util.Arrays;
 
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
-import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
