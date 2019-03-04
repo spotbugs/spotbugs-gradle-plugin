@@ -30,6 +30,8 @@ addons:
     packages:
       - oracle-java8-installer
       - oracle-java8-set-default
+  sonarcloud:
+    organization: "spotbugs"
 
 install:
   - if [[ $GRADLE_VERSION != "default" ]]; then ./gradlew wrapper --gradle-version $GRADLE_VERSION; fi
