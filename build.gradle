@@ -2,7 +2,7 @@ plugins{
   id 'groovy'
   id 'java-gradle-plugin'
   id "com.gradle.plugin-publish" version "0.9.7"
-  id 'org.sonarqube' version '2.6.2'
+  id 'org.sonarqube' version '2.7'
   id 'com.diffplug.gradle.spotless' version '3.18.0'
 }
 
