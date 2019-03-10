@@ -9,6 +9,7 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 ### Changed
 
 * Use SpotBugs 3.1.12 by default
+* Upgrade SLF4J to 1.8.0-beta4
 
 ## 1.6.10 - 2019-02-18
 
