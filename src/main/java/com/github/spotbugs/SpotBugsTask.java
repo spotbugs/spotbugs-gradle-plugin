@@ -90,6 +90,8 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
 
     private Collection<String> jvmArgs = new ArrayList<>();
 
+    private String release;
+
     @Nested
     private final SpotBugsReportsInternal reports;
 
@@ -279,6 +281,7 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
                 .withExcludeFilter(getExcludeFilter())
                 .withIncludeFilter(getIncludeFilter())
                 .withExcludeBugsFilter(getExcludeBugsFilter())
+                .withRelease(getRelease())
                 .withExtraArgs(getExtraArgs())
                 .withJvmArgs(getJvmArgs())
                 .configureReports(getReports());
@@ -666,5 +669,16 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
 
     public void setJvmArgs(Collection<String> jvmArgs) {
         this.jvmArgs = jvmArgs;
+    }
+
+    public String getRelease() {
+        if (release == null) {
+            return String.valueOf(getProject().getVersion());
+        }
+        return release;
+    }
+
+    public void setRelease(String release) {
+        this.release = release;
     }
 }
