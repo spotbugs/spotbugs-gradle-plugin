@@ -16,9 +16,9 @@ import org.gradle.api.tasks.Input;
 
 public class SpotBugsHtmlReportImpl extends CustomizableHtmlReportImpl {
     private static final long serialVersionUID = 6474874842199703745L;
-    private transient final ResourceHandler handler;
-    private transient final Configuration configuration;
-    private transient final Logger logger;
+    private final transient ResourceHandler handler;
+    private final transient Configuration configuration;
+    private final transient Logger logger;
 
     /**
      * Null-able string representing relative file path of XSL packaged in spotbugs.jar.
