@@ -2,8 +2,6 @@ plugins {
   id 'java'
   id 'com.github.spotbugs'
 }
-configurations { spotbugsStylesheets { transitive false } }
-dependencies { spotbugsStylesheets 'com.github.spotbugs:spotbugs:3.1.10' }
 version = '1.2.3'
 repositories {
   mavenCentral()
@@ -13,7 +11,7 @@ spotbugsMain {
         xml.enabled false
         html {
             enabled true
-            stylesheet resources.text.fromArchiveEntry(configurations.spotbugsStylesheets, 'fancy-hist.xsl')
+            stylesheet 'fancy-hist.xsl'
         }
     }
 }
