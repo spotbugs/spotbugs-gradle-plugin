@@ -31,6 +31,7 @@ public class HtmlReportTest {
       File to = new File(sourceDir, "Foo.java");
       File from = new File("src/test/java/com/github/spotbugs/Foo.java");
       Files.copy(from.toPath(), to.toPath(), StandardCopyOption.COPY_ATTRIBUTES);
+      Files.write(folder.newFile("settings.gradle").toPath(), "rootProject.name = 'my project name'".getBytes());
     }
 
     @Test
@@ -38,8 +39,17 @@ public class HtmlReportTest {
         GradleRunner.create().withProjectDir(folder.getRoot())
                 .withArguments(Arrays.asList("spotbugsMain")).withPluginClasspath().build();
         Path report = folder.getRoot().toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.html");
-        String html = Files.readAllLines(report).stream().collect(Collectors.joining());
+        String html = Files.readAllLines(report).stream().collect(Collectors.joining("\n"));
         assertThat(html, containsString("\"1.2.3\""));
+    }
+
+    @Test
+    public void testReportContainsProjectName() throws Exception {
+        GradleRunner.create().withProjectDir(folder.getRoot())
+                .withArguments(Arrays.asList("spotbugsMain")).withPluginClasspath().build();
+        Path report = folder.getRoot().toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.html");
+        String html = Files.readAllLines(report).stream().collect(Collectors.joining("\n"));
+        assertThat(html, containsString("'my project name' (main)"));
     }
 
 }
