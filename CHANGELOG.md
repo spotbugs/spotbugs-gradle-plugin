@@ -4,7 +4,8 @@ This is the changelog for SpotBugs Gradle Plugin. This follows [Keep a Changelog
 
 Currently the versioning policy of this project follows [Semantic Versioning](http://semver.org/) from version 1.6.0.
 
-## Unreleased - 2019-??-??
+## 1.7.1 - 2019-03-14
+
 ### Fixed
 
 * Treat `projectName` and `release` as task input ([#131](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/131))
