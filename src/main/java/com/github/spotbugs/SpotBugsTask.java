@@ -678,6 +678,8 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
         this.jvmArgs = jvmArgs;
     }
 
+    @Input
+    @Optional
     @NonNull
     public String getRelease() {
         if (release != null) {
@@ -690,6 +692,8 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
         this.release = release;
     }
 
+    @Input
+    @Optional
     @NonNull
     public String getProjectName() {
         if (projectName != null) {
