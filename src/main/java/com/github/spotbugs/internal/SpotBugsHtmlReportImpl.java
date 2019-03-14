@@ -50,7 +50,7 @@ public class SpotBugsHtmlReportImpl extends CustomizableHtmlReportImpl {
             logger.debug("Specified stylesheet ({}) found in spotbugs configuration: {}", stylesheet, jar.getAbsolutePath());
             return factory.fromArchiveEntry(jar, stylesheet);
         } else {
-            throw new InvalidUserDataException("Specified stylesheet (" + stylesheet + ") does not found in spotbugs configuration");
+            throw new InvalidUserDataException("Specified stylesheet (" + stylesheet + ") was not found in spotbugs configuration");
         }
     }
 
