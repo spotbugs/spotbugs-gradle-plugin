@@ -1,6 +1,7 @@
 package com.github.spotbugs.internal;
 
 import org.gradle.api.Task;
+import org.gradle.api.internal.CollectionCallbackActionDecorator;
 import org.gradle.api.reporting.SingleFileReport;
 import org.gradle.api.reporting.internal.TaskGeneratedSingleFileReport;
 import org.gradle.api.reporting.internal.TaskReportContainer;
@@ -11,7 +12,7 @@ import com.github.spotbugs.internal.spotbugs.SpotBugsXmlReportImpl;
 public class SpotBugsReportsImpl extends TaskReportContainer<SingleFileReport> implements SpotBugsReportsInternal {
 
 public SpotBugsReportsImpl(Task task) {
-      super(SingleFileReport.class, task);
+      super(SingleFileReport.class, task, CollectionCallbackActionDecorator.NOOP);
 
       add(SpotBugsXmlReportImpl.class, "xml", task);
       add(SpotBugsHtmlReportImpl.class, "html", task);
