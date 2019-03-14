@@ -40,6 +40,8 @@ public class SpotBugsSpecBuilder {
     private Collection<String> jvmArgs;
     private boolean showProgress;
     private boolean debugEnabled;
+    private String release;
+    private String projectName;
 
     public SpotBugsSpecBuilder(FileCollection classes) {
         if (classes == null || classes.isEmpty()) {
@@ -151,6 +153,16 @@ public class SpotBugsSpecBuilder {
         return this;
     }
 
+    public SpotBugsSpecBuilder withRelease(@Nullable String release) {
+        this.release = release;
+        return this;
+    }
+
+    public SpotBugsSpecBuilder withProjectName(@Nullable String projectName) {
+        this.projectName = projectName;
+        return this;
+    }
+
     public SpotBugsSpec build() {
         ArrayList<String> args = new ArrayList<>();
         args.add("-pluginList");
@@ -232,6 +244,16 @@ public class SpotBugsSpecBuilder {
         if (has(excludeBugsFilter)) {
             args.add("-excludeBugs");
             args.add(excludeBugsFilter.getPath());
+        }
+
+        if (has(release)) {
+            args.add("-release");
+            args.add(release);
+        }
+
+        if (has(projectName)) {
+            args.add("-projectName");
+            args.add(projectName);
         }
 
         if (has(extraArgs)) {

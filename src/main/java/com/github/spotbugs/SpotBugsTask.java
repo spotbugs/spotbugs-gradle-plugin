@@ -47,6 +47,7 @@ import com.github.spotbugs.internal.spotbugs.SpotBugsSpec;
 import com.github.spotbugs.internal.spotbugs.SpotBugsSpecBuilder;
 import com.github.spotbugs.internal.spotbugs.SpotBugsWorkerManager;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import groovy.lang.Closure;
 
 /**
@@ -89,6 +90,12 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
     private Collection<String> extraArgs = new ArrayList<>();
 
     private Collection<String> jvmArgs = new ArrayList<>();
+
+    private String release;
+
+    private String projectName;
+
+    private SourceSet sourceSet;
 
     @Nested
     private final SpotBugsReportsInternal reports;
@@ -279,6 +286,8 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
                 .withExcludeFilter(getExcludeFilter())
                 .withIncludeFilter(getIncludeFilter())
                 .withExcludeBugsFilter(getExcludeBugsFilter())
+                .withRelease(getRelease())
+                .withProjectName(getProjectName())
                 .withExtraArgs(getExtraArgs())
                 .withJvmArgs(getJvmArgs())
                 .configureReports(getReports());
@@ -341,6 +350,7 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
 
     SpotBugsTask setSourceSet(SourceSet sourceSet) {
         this.sourceDirs = sourceSet.getAllJava().getSrcDirs();
+        this.sourceSet = sourceSet;
         setSource(sourceDirs);
         return this;
     }
@@ -666,5 +676,33 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
 
     public void setJvmArgs(Collection<String> jvmArgs) {
         this.jvmArgs = jvmArgs;
+    }
+
+    @NonNull
+    public String getRelease() {
+        if (release != null) {
+            return release;
+        }
+        return String.valueOf(getProject().getVersion());
+    }
+
+    public void setRelease(String release) {
+        this.release = release;
+    }
+
+    @NonNull
+    public String getProjectName() {
+        if (projectName != null) {
+            return projectName;
+        }
+        if (sourceSet == null) {
+            return String.valueOf(getProject().getDisplayName());
+        } else {
+            return String.format("%s (%s)", getProject().getDisplayName(), sourceSet.getName());
+        }
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }

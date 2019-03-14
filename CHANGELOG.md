@@ -6,6 +6,12 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2019-??-??
 
+### Added
+
+* Add `-projectName` option ([#111](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/111))
+* Add `-release` option ([#111](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/111))
+* Add `setStylesheet(String)` that accepts relative path from the root of `spotbugs.jar` ([#107](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/107))
+
 ## 1.6.11 - 2019-03-10
 
 ### Changed
