@@ -141,7 +141,7 @@ public class SpotBugsPluginTest extends Assert{
         plugin.verifyGradleVersion(GradleVersion.version("4.2"));
     }
 
-        @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testVersionVerifyForGradleVersion5() {
         SpotBugsPlugin plugin = new SpotBugsPlugin();
         plugin.verifyGradleVersion(GradleVersion.version("5.0"));
