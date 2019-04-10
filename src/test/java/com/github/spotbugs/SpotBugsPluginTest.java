@@ -158,7 +158,7 @@ public class SpotBugsPluginTest extends Assert{
         SpotBugsPlugin plugin = new SpotBugsPlugin();
         plugin.verifyGradleVersion(GradleVersion.version("5.2"));
     }
-    
+
     @Test
     public void testVersionVerifyForGradleVersion53() {
         SpotBugsPlugin plugin = new SpotBugsPlugin();
