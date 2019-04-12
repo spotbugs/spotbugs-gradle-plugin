@@ -13,11 +13,6 @@ env:
   global:
     - SONAR_HOST_URL="https://sonarcloud.io"
 
-    # SONAR_LOGIN value
-    # please note this value is available for pull requests from the same repository only
-    # see https://docs.travis-ci.com/user/pull-requests/#Pull-Requests-and-Security-Restrictions
-    - secure: "QBQB+KOAl5yD9UXyKGnrQkZ5MmFyMGs5kCk1YQBAb/mi1tUMw5WaDkn65gqHBi2PEvrtdv9CbqXa6HW357bfQEv3k3vPrTG9jTGTopSzlboJPHd6DlpzepNHIBvG1uYmwpPGU0WTP9EhSpSCh6Vk8VmYWz4t13u6aQsW1Ae4rUkVJRNqwbao15u2e/tNyE7LEYfg7lL+mgCOsTfY8Z8R5rpKNMZfNoHvBmLh8luHeOm7isuWc5CVC+7KdV28ubG+JRUTdG3Wc6R1P6wVMkwpGMX6lYvJAQZCuRa7UjOLQ6vrFkSr+X55D08a2V1TqgPyvQVAqorSVnSPB1M7WGIqdJgehaMlQ+pOIsk/cx0BScX2EainwBcsj7I2nOvj1aDLC9hqTkBhPh/JOU7SxLFF+Xms6kd8CtdO9Dog0idhXx81fno/d0BYbXNs4rq798QEM0MLhoqx7Nu3sPTOxxNnvcOY2bnzTuvIt5+Z1kp4jOVJBaUVJZUPtveJnx2tpkcMObX433TjZPQiDyVbgGqfQpO8WZhm/gI9yE8CPooHBSrGmD8D5j923IZIHjKxe+4IpHskISWCkIy6CTGnAP442g7L576wO8kvp43DAlVUmTA/fvTK9wCZFpRi5Q3Ri1up89K5bT6tHKpMDvLPc0NrNWAI/6r1lbRhQwIETs+bU2I="
-
     # GITHUB_TOKEN value to push changes to GitHub; Currently it is ued to update gh-pages branch of spotbugs/eclipse-latest etc.
     - secure: "IPHrqDG+j+hV9arSOwcu0YrUY+2SPODwLOFUI8SYGyvgO/y861G96UcqFy+v0DjhLQ7dnA1MFznP6rhqbdDYnSLwnO/0gbgMs+YAQFAG/u94aaIM5S8MrYJtqkZATrjLUn4sL2dXT3Vp6Ii3WWgdZ4EMFrDGCzB+f36KwR+AcoSqi296lwUEpSb4k52OWs0cmEj82rz0ZzMNMGQKKlBsHdJJ++XQuWfcECuc4Ck0bvNIg8wA4HYq+qbZoVAwZZKblLQkoqj2aZJgsXpECCSAdTOYtauA/iZE2g9uHYvd7aUIfXEfi9jZQEk+lpNLsMDESobAW5f8mOtHhGgExw+ONrfFzXqZ9eabIC04wj+mBQZvvl+QjsP1wUwGQKIlCN8lMBai9he7yBp1P2CB9TB3N1OBEhZv26Z+HO5eLX68EnsiEm+L6te0YwRettNdwXzyR23sGE4tFX/VNmuaXhOZL4Glh33yIIK8CXH7y9GSgHq9mxKDy3qwqQvGuiQ/Pnhe2gmEYeK5gDPxvdGRNERTS2yJKhYgGOn+cH5xST4lUNX6A6UPCMLAMwHLDDNRGQSOqhOp36o7uS+7omBP79LhA+fKD43AhlkH8j/cUfy3ZeqcZh4FeSbi+2nKjwaDKeClecvQ/SudnbuyqVKSNpgxj+TfoObbqg3Zhp8xHr9NfPA="
     # GRADLE_PUBLISH_KEY value
@@ -57,6 +52,7 @@ jobs:
   include:
     - stage: analyze
       script: ./gradlew sonarqube -S
+      if: env(SONAR_LOGIN) IS present
     - stage: deploy
       name: Deploy to Gradle Plugin Portal
       script: skip
