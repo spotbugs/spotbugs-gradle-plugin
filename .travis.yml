@@ -56,7 +56,7 @@ jobs:
   include:
     - stage: analyze
       script: ./gradlew sonarqube -S
-      if: env(SONAR_LOGIN) IF present
+      if: env(SONAR_LOGIN) IS present
     - stage: deploy
       name: Deploy to Gradle Plugin Portal
       script: skip
