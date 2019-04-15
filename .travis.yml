@@ -51,7 +51,7 @@ jobs:
   include:
     - stage: analyze
       script: ./gradlew sonarqube -S
-      if: env(SONAR_LOGIN) IS present
+      if: env(TRAVIS_SECURE_ENV_VARS) IS true
     - stage: deploy
       name: Deploy to Gradle Plugin Portal
       script: skip
@@ -69,3 +69,4 @@ jobs:
           script: ./gradlew uploadArchives -PossrhUsername="$SONATYPE_USERNAME" -PossrhPassword="$SONATYPE_PASSWORD"
           on:
             branch: master
+
