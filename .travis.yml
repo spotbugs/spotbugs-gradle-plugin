@@ -32,6 +32,7 @@ install:
   - if [[ $GRADLE_VERSION != "default" ]]; then ./gradlew wrapper --gradle-version $GRADLE_VERSION; fi
 
 script:
+  - printenv
   - jdk_switcher use oraclejdk8
   - ./gradlew classes testClasses -S
   - if [[ $TRAVIS_JDK_VERSION == "oraclejdk11" ]]; then export JAVA_HOME=$HOME/oraclejdk11; fi
