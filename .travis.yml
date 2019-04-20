@@ -51,7 +51,7 @@ jobs:
   include:
     - stage: analyze
       script: ./gradlew sonarqube -S
-      if: env(TRAVIS_SECURE_ENV_VARS) IS true
+      if: fork == false
     - stage: deploy
       name: Deploy to Gradle Plugin Portal
       script: skip
