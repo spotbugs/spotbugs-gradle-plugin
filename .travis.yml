@@ -2,8 +2,8 @@ language: java
 dist: trusty
 
 jdk:
-  - oraclejdk8
-  - oraclejdk11
+  - openjdk8
+  - openjdk11
 
 env:
   matrix:
@@ -21,11 +21,6 @@ env:
     - secure: "jvxgv7af11mQj0gquhMkFB3ITD3PPvkO67ORHosqUgUF/hhtDx8UcED2MLOsSI1FV0C8li85h0hccQrxQeh2V+b+eq1tgRDd28xwyarNNkHTxIS7i1Yox4zDSwvDrvE4CC01n0fgpXvSwNFrmtdrVIUXhM2/CilwbRCHXyI6XARD2jbR89oViapimMcfVe62g/0olWUW+qtQ4nJAE0XWGlSBoKNNhw2TerLncgNDoDGot2D6vBvr8Knu5atO5DDOP1VlLZcM11CHEANFivIN412D2pPfvwKgrsNMnFsInw+ZgNhVX1jKsB2dBL94n/64s2k3Ni8yl1k+1DMlS03EfaKXCoo2DiAScTc6D+dgMHvN3vvauMQDa/6bW6QxS00OmHcEyzwOOtUEpsu7qLm4qW47hzjDWP/NILQwsbtFWA1FjydnCcxsj9lV9nkDFK6rWml/V/z5NI0zkTqTbucLyKITp7pxZ0cLwjxUv7bQeT+yTZKFrBrvGa+Gk9BFolckIjQQGOlO40gATfsmdsq6Fx3LB8aJ32UstS1RLCmVn4BpeK/Mqg/23ivqko2nbxY7x1dDCxAMlPrjAe7swzKVdQlXMQ6Sf+fU8Ql1lBf6EZ2OzDZEiSwgcPzIFV7gqcrE/3Uq/vMFG46zTXymIDPtzMugp5HrhxjbqP8IGYZZ5lQ="
 
 addons:
-  apt:
-    update: true
-    packages:
-      - oracle-java8-installer
-      - oracle-java8-set-default
   sonarcloud:
     organization: "spotbugs"
 
@@ -33,9 +28,9 @@ install:
   - if [[ $GRADLE_VERSION != "default" ]]; then ./gradlew wrapper --gradle-version $GRADLE_VERSION; fi
 
 script:
-  - jdk_switcher use oraclejdk8
+  - jdk_switcher use openjdk8
   - ./gradlew classes testClasses -S
-  - if [[ $TRAVIS_JDK_VERSION == "oraclejdk11" ]]; then export JAVA_HOME=$HOME/oraclejdk11; fi
+  - if [[ $TRAVIS_JDK_VERSION == "openjdk11" ]]; then export JAVA_HOME=$HOME/openjdk11; fi
   - ./gradlew -v --no-daemon
   - ./gradlew check -S --no-daemon
 
@@ -52,7 +47,7 @@ jobs:
   include:
     - stage: analyze
       script: ./gradlew sonarqube -S
-      if: env(SONAR_LOGIN) IS present
+      if: fork == false
     - stage: deploy
       name: Deploy to Gradle Plugin Portal
       script: skip
