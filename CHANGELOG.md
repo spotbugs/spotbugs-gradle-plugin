@@ -6,6 +6,10 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2019-??-??
 
+### Removed
+
+* Gradle 5.0 support
+
 ## 1.7.1 - 2019-03-14
 
 ### Fixed
