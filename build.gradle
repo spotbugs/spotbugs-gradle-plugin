@@ -13,7 +13,7 @@ apply from: "$rootDir/gradle/sonar.gradle"
 apply from: "$rootDir/gradle/deploy.gradle"
 apply from: "$rootDir/gradle/spotless.gradle"
 
-version = '2.0.0-SNAPSHOT'
+version = '2.0.0'
 group = "com.github.spotbugs"
 def spotBugsVersion = '3.1.12'
 def slf4jVersion = '1.8.0-beta4'
