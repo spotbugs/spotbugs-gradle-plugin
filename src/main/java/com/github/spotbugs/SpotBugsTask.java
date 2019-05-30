@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -61,7 +62,8 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
 
     private FileCollection classpath;
 
-    private Set<File> sourceDirs;
+    //Initialize it to an empty set to allow projects without a Sourceset to use this task.
+    private Set<File> sourceDirs = Collections.emptySet();
 
     private FileCollection spotbugsClasspath;
 
