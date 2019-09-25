@@ -8,7 +8,6 @@ jdk:
 env:
   matrix:
     - GRADLE_VERSION=default
-    - GRADLE_VERSION=5.0
     - GRADLE_VERSION=5.1
     - GRADLE_VERSION=5.2
     - GRADLE_VERSION=5.3
