@@ -464,7 +464,6 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
      * @return true iff progress report is enabled
      */
     @Input
-    @Optional
     public boolean getShowProgress() {
         return showProgress;
     }
