@@ -3,7 +3,7 @@ plugins{
   id 'java-gradle-plugin'
   id "com.gradle.plugin-publish" version "0.10.1"
   id 'org.sonarqube' version '2.7.1'
-  id 'com.diffplug.gradle.spotless' version '3.24.1'
+  id 'com.diffplug.gradle.spotless' version '3.24.2'
 }
 
 apply from: "$rootDir/gradle/checkstyle.gradle"
@@ -25,12 +25,12 @@ repositories {
 }
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
+    implementation gradleApi()
+    implementation localGroovy()
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
 
-    testCompile gradleTestKit()
-    testCompile 'junit:junit:4.12'//, 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testImplementation gradleTestKit()
+    testImplementation 'junit:junit:4.12'//, 'org.spockframework:spock-core:1.0-groovy-2.4'
 }
 
 test {
