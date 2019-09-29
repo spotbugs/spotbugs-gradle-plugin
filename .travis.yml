@@ -65,6 +65,6 @@ jobs:
       if: (branch = master) AND (type = push)
       deploy:
         - provider: script
-          script: ./gradlew uploadArchives -PossrhUsername="$SONATYPE_USERNAME" -PossrhPassword="$SONATYPE_PASSWORD"
+          script: ./gradlew publish -PossrhUsername="$SONATYPE_USERNAME" -PossrhPassword="$SONATYPE_PASSWORD"
           on:
             branch: master
