@@ -193,16 +193,16 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
 
     private void verify(SpotBugsReportsInternal reports) {
         if (reports.getText() != null && reports.getText().getDestination() == null) {
-            throw new InvalidUserDataException("No destination for TEXT report. Set reports.text.destination to this task.");
+            throw new InvalidUserDataException("No destination found for TEXT report. Set reports.text.destination to this task.");
         }
         if (reports.getXml() != null && reports.getXml().getDestination() == null) {
-            throw new InvalidUserDataException("No destination for XML report. Set reports.xml.destination to this task.");
+            throw new InvalidUserDataException("No destination found for XML report. Set reports.xml.destination to this task.");
         }
         if (reports.getHtml() != null && reports.getHtml().getDestination() == null) {
-            throw new InvalidUserDataException("No destination for HTML report. Set reports.html.destination to this task.");
+            throw new InvalidUserDataException("No destination found for HTML report. Set reports.html.destination to this task.");
         }
         if (reports.getEmacs() != null && reports.getEmacs().getDestination() == null) {
-            throw new InvalidUserDataException("No destination for EMACS report. Set reports.emacs.destination to this task.");
+            throw new InvalidUserDataException("No destination found for EMACS report. Set reports.emacs.destination to this task.");
         }
     }
 
