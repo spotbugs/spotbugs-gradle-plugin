@@ -60,6 +60,6 @@ public class Issue423Test {
                 .withArguments(Arrays.asList("classes", "spotbugs")).withPluginClasspath().buildAndFail();
         assertThat(result.getOutput(),
                 containsString(
-                        "Task 'spotbugs' has no destination for XML report. Set reports.xml.destination to this task."));
+                        "No destination found for XML report. Set reports.xml.destination to this task."));
     }
 }
