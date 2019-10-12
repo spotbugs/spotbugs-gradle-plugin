@@ -10,10 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.gradle.api.Action;
-import org.gradle.api.GradleException;
-import org.gradle.api.Incubating;
-import org.gradle.api.JavaVersion;
+import org.gradle.api.*;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
 import org.gradle.api.logging.LogLevel;
@@ -186,7 +183,23 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
     @Override
     public SpotBugsReports reports(Action<? super SpotBugsReports> configureAction) {
         configureAction.execute(reports);
+        verify(reports);
         return reports;
+    }
+
+    private void verify(SpotBugsReportsInternal reports) {
+        if (reports.getText() != null && reports.getText().getDestination() == null) {
+            throw new InvalidUserDataException("No destination for TEXT report. Set reports.text.destination to this task.");
+        }
+        if (reports.getXml() != null && reports.getXml().getDestination() == null) {
+            throw new InvalidUserDataException("No destination for XML report. Set reports.xml.destination to this task.");
+        }
+        if (reports.getHtml() != null && reports.getHtml().getDestination() == null) {
+            throw new InvalidUserDataException("No destination for HTML report. Set reports.html.destination to this task.");
+        }
+        if (reports.getEmacs() != null && reports.getEmacs().getDestination() == null) {
+            throw new InvalidUserDataException("No destination for EMACS report. Set reports.emacs.destination to this task.");
+        }
     }
 
     /**

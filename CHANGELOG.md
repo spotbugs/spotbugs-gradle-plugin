@@ -1,3 +1,4 @@
+
 # Changelog
 
 This is the changelog for SpotBugs Gradle Plugin. This follows [Keep a Changelog v1.0.0](http://keepachangelog.com/en/1.0.0/).
@@ -5,6 +6,10 @@ This is the changelog for SpotBugs Gradle Plugin. This follows [Keep a Changelog
 Currently the versioning policy of this project follows [Semantic Versioning](http://semver.org/) from version 1.6.0.
 
 ## Unreleased - 2019-??-??
+
+### Fixed
+
+* Avoid needless task creation (#165)
 
 ## 2.0.0 - 2019-05-13
 
