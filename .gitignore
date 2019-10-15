@@ -7,3 +7,4 @@ build
 /bin/
 .idea/
 *.iml
+node_modules

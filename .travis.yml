@@ -52,15 +52,7 @@ jobs:
       script: ./gradlew sonarqube -S
       if: fork == false
     - stage: deploy
-      name: Deploy to Gradle Plugin Portal
-      script: skip
-      if: tag IS present
-      deploy:
-        - provider: script
-          script: ./gradlew publishPlugins -Pgradle.publish.key="$GRADLE_PUBLISH_KEY" -Pgradle.publish.secret="$GRADLE_PUBLISH_SECRET"
-          on:
-            tags: true
-    - name: Deploy to Sonatype Snapshot Repository
+      name: Deploy to Sonatype Snapshot Repository
       script: skip
       if: (branch = master) AND (type = push)
       deploy:
@@ -68,3 +60,5 @@ jobs:
           script: ./gradlew publish -PossrhUsername="$SONATYPE_USERNAME" -PossrhPassword="$SONATYPE_PASSWORD"
           on:
             branch: master
+    - name: Deploy to Gradle Plugin Portal
+      script: nvm install && yarn && yarn semantic-release
