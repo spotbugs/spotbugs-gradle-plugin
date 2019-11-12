@@ -14,7 +14,7 @@ import org.gradle.api.resources.TextResource;
 import org.gradle.api.resources.TextResourceFactory;
 import org.gradle.api.tasks.Input;
 
-public class SpotBugsHtmlReportImpl extends CustomizableHtmlReportImpl {
+public abstract class SpotBugsHtmlReportImpl extends CustomizableHtmlReportImpl {
     private static final long serialVersionUID = 6474874842199703745L;
     private final transient ResourceHandler handler;
     private final transient Configuration configuration;

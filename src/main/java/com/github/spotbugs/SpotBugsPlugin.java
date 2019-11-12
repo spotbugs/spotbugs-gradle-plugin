@@ -42,7 +42,7 @@ public class SpotBugsPlugin extends AbstractCodeQualityPlugin<SpotBugsTask> {
      *
      * Package-protected access is for testing purposes
      */
-    static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("5.1");
+    static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("5.2");
 
     private SpotBugsExtension extension;
 
