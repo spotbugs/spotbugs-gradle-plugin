@@ -5,7 +5,7 @@ import org.gradle.api.reporting.internal.TaskGeneratedSingleFileReport;
 
 import com.github.spotbugs.SpotBugsXmlReport;
 
-public class SpotBugsXmlReportImpl extends TaskGeneratedSingleFileReport implements SpotBugsXmlReport {
+public abstract class SpotBugsXmlReportImpl extends TaskGeneratedSingleFileReport implements SpotBugsXmlReport {
   private static final long serialVersionUID = 1L;
   private boolean withMessages;
 
