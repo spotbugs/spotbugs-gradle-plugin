@@ -12,7 +12,6 @@ import org.gradle.api.reporting.internal.CustomizableHtmlReportImpl;
 import org.gradle.api.resources.ResourceHandler;
 import org.gradle.api.resources.TextResource;
 import org.gradle.api.resources.TextResourceFactory;
-import org.gradle.api.tasks.Input;
 
 public abstract class SpotBugsHtmlReportImpl extends CustomizableHtmlReportImpl {
     private static final long serialVersionUID = 6474874842199703745L;
@@ -32,11 +31,10 @@ public abstract class SpotBugsHtmlReportImpl extends CustomizableHtmlReportImpl 
         logger = task.getLogger();
     }
 
-    @Input
     public void setStylesheet(String fileName) {
       this.stylesheet = fileName;
     }
-
+    
     @Override
     public TextResource getStylesheet() {
         if (stylesheet == null) {
