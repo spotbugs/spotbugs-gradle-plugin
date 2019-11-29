@@ -34,7 +34,7 @@ public abstract class SpotBugsHtmlReportImpl extends CustomizableHtmlReportImpl 
     public void setStylesheet(String fileName) {
       this.stylesheet = fileName;
     }
-    
+
     @Override
     public TextResource getStylesheet() {
         if (stylesheet == null) {
