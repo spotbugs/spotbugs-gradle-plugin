@@ -7,6 +7,10 @@ Currently the versioning policy of this project follows [Semantic Versioning](ht
 
 ## Unreleased - 2019-??-??
 
+### Fixed
+
+* Deprecation warning in Gradle 6 ([#171](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/171))
+
 ## 3.0.0 - 2019-11-14
 
 ### Added
