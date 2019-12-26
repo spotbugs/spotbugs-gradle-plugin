@@ -23,7 +23,7 @@ repositories { mavenCentral() }
 
 ext {
     junitVersion = '5.5.2'
-    errorproneVersion = '2.3.2'
+    errorproneVersion = '2.3.4'
     spotBugsVersion = '3.1.11'
 }
 
