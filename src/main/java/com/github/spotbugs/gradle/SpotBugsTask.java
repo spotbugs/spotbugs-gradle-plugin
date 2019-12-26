@@ -16,6 +16,7 @@ package com.github.spotbugs.gradle;
 import groovy.lang.Closure;
 import org.gradle.api.Action;
 import org.gradle.api.reporting.Reporting;
+import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.SourceTask;
 import org.gradle.util.ConfigureUtil;
 
@@ -24,6 +25,7 @@ public class SpotBugsTask extends SourceTask implements Reporting<SpotBugsReport
   private SpotBugsReports reports;
 
   @Override
+  @Input
   public SpotBugsReports getReports() {
     return reports;
   }
