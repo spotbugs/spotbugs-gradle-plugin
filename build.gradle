@@ -43,4 +43,4 @@ task processVersionFile(type: WriteProperties) {
 }
 tasks.processResources.dependsOn processVersionFile
 
-defaultTasks 'spotlessApply', 'licenseFormat', 'build'
+defaultTasks 'licenseFormatMain', 'licenseFormatTest', 'spotlessApply', 'build'
