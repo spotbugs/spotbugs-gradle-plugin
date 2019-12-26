@@ -24,13 +24,11 @@ repositories { mavenCentral() }
 ext {
     junitVersion = '5.3.2'
     errorproneVersion = '2.3.2'
-    errorproneJavacVersion = '9+181-r4173-1'
     spotBugsVersion = '3.1.11'
 }
 
 dependencies {
     errorprone "com.google.errorprone:error_prone_core:${errorproneVersion}"
-    errorproneJavac "com.google.errorprone:javac:${errorproneJavacVersion}"
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
