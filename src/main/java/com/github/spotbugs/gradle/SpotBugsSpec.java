@@ -16,6 +16,7 @@ package com.github.spotbugs.gradle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.gradle.api.tasks.JavaExec;
 import org.immutables.value.Value;
@@ -25,13 +26,19 @@ abstract class SpotBugsSpec {
   /**
    * @return The {@code maxHeapSize} for the JVM process. Configured by {@link SpotBugsExtension}.
    */
-  abstract String maxHeapSize();
+  abstract Optional<String> maxHeapSize();
 
   /** @return The SpotBugs .jar file and its dependencies. Configured by Gradle Configuration. */
   abstract List<File> spotbugsJar();
 
   /** @return The plugin files. Configured by Gradle Configuration. */
   abstract List<File> plugins();
+
+  /**
+   * @return The flag to ignore exit code of SpotBugs execution. Configured by {@link
+   *     SpotBugsExtension}.
+   */
+  abstract boolean isIgnoreFailures();
 
   /** @return The name of the generated task. */
   abstract String name();
@@ -50,7 +57,7 @@ abstract class SpotBugsSpec {
     javaExec.classpath(spotbugsJar());
     javaExec.setArgs(generateArguments());
     javaExec.setJvmArgs(jvmArgs());
-    javaExec.setMaxHeapSize(maxHeapSize());
+    maxHeapSize().ifPresent(javaExec::setMaxHeapSize);
   }
 
   private List<String> generateArguments() {

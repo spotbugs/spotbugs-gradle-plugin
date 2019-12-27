@@ -11,17 +11,16 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.gradle;
+plugins {
+    id 'java'
+    id 'com.github.spotbugs'
+}
 
-import org.gradle.api.reporting.ReportContainer;
-import org.gradle.api.reporting.SingleFileReport;
+version = 1.0
+repositories {
+    mavenCentral()
+}
 
-public interface SpotBugsReports extends ReportContainer<SingleFileReport> {
-  SingleFileReport getXml();
-
-  SingleFileReport getText();
-
-  SingleFileReport getHtml();
-
-  SingleFileReport getEmacs();
+dependencies {
+    spotbugs "com.github.spotbugs:spotbugs:4.0.0-beta4"
 }

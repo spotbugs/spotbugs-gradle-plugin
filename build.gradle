@@ -34,6 +34,7 @@ dependencies {
     compileOnly "org.immutables:value:${immutablesVersion}:annotations"
     annotationProcessor "org.immutables:value:${immutablesVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 }
 

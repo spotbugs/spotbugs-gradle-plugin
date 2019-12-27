@@ -15,38 +15,27 @@ package com.github.spotbugs.gradle;
 
 import java.util.Objects;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.gradle.api.Project;
 
 public class SpotBugsExtension {
-  @Nullable private String toolVersion;
-
-  private boolean ignoreFailure = false;
+  private boolean ignoreFailures = false;
 
   @Nonnull private Confidence reportLevel = Confidence.DEFAULT;
 
   @Nonnull private Effort effort = Effort.DEFAULT;
 
-  private boolean generateTask;
+  private boolean generateTask = true;
 
-  SpotBugsExtension(Project project) {
+  public SpotBugsExtension(Project project) {
     // TODO disable task generation when android plugin is activated?
   }
 
-  public String getToolVersion() {
-    return toolVersion;
+  public boolean isIgnoreFailures() {
+    return ignoreFailures;
   }
 
-  public void setToolVersion(String toolVersion) {
-    this.toolVersion = toolVersion;
-  }
-
-  public boolean isIgnoreFailure() {
-    return ignoreFailure;
-  }
-
-  public void setIgnoreFailure(boolean ignoreFailure) {
-    this.ignoreFailure = ignoreFailure;
+  public void setIgnoreFailures(boolean ignoreFailures) {
+    this.ignoreFailures = ignoreFailures;
   }
 
   public Confidence getReportLevel() {
@@ -73,7 +62,13 @@ public class SpotBugsExtension {
     this.generateTask = generateTask;
   }
 
-  SpotBugsSpec toBaseSpec() {
-    return ImmutableSpotBugsSpec.builder().build();
+  void applyTo(ImmutableSpotBugsSpec.Builder builder) {
+    builder.isIgnoreFailures(isIgnoreFailures());
+    if (getEffort() != null) {
+      builder.addExtraArguments("-effort:" + getEffort().toString().toLowerCase());
+    }
+    if (getReportLevel() != null) {
+      builder.addExtraArguments(getReportLevel().toCommandLineOption());
+    }
   }
 }

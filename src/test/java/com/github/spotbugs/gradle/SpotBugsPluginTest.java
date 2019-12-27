@@ -15,8 +15,19 @@ package com.github.spotbugs.gradle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.List;
+import org.gradle.testkit.runner.BuildResult;
+import org.gradle.testkit.runner.BuildTask;
+import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.util.GradleVersion;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class SpotBugsPluginTest {
 
@@ -33,5 +44,100 @@ class SpotBugsPluginTest {
           new SpotBugsPlugin().verifyGradleVersion(GradleVersion.version("3.9"));
         });
     new SpotBugsPlugin().verifyGradleVersion(GradleVersion.version("4.0"));
+  }
+
+  @Test
+  void defaultBehaviour(@TempDir Path tempDir) throws IOException {
+    Path javaSource =
+        Files.createDirectories(
+            tempDir
+                .resolve("src")
+                .resolve("main")
+                .resolve("java")
+                .resolve("com")
+                .resolve("github")
+                .resolve("spotbugs")
+                .resolve("gradle"));
+    Files.copy(
+        Paths.get("src/test/resources/no-config.gradle"),
+        tempDir.resolve("build.gradle"),
+        StandardCopyOption.COPY_ATTRIBUTES);
+    Files.copy(
+        Paths.get("src/test/java/com/github/spotbugs/gradle/Foo.java"),
+        javaSource.resolve("Foo.java"),
+        StandardCopyOption.COPY_ATTRIBUTES);
+
+    BuildResult result =
+        GradleRunner.create()
+            .withProjectDir(tempDir.toFile())
+            .withArguments(Arrays.asList("check"))
+            .withPluginClasspath()
+            .build();
+    List<BuildTask> tasks = result.getTasks();
+    System.out.println(tasks);
+    assertNotNull(result.task(":spotbugsMain"));
+  }
+
+  @Test
+  void toolVersion(@TempDir Path tempDir) throws IOException {
+    Path javaSource =
+        Files.createDirectories(
+            tempDir
+                .resolve("src")
+                .resolve("main")
+                .resolve("java")
+                .resolve("com")
+                .resolve("github")
+                .resolve("spotbugs")
+                .resolve("gradle"));
+    Files.copy(
+        Paths.get("src/test/resources/tool-version.gradle"),
+        tempDir.resolve("build.gradle"),
+        StandardCopyOption.COPY_ATTRIBUTES);
+    Files.copy(
+        Paths.get("src/test/java/com/github/spotbugs/gradle/Foo.java"),
+        javaSource.resolve("Foo.java"),
+        StandardCopyOption.COPY_ATTRIBUTES);
+
+    BuildResult result =
+        GradleRunner.create()
+            .withProjectDir(tempDir.toFile())
+            .withArguments(Arrays.asList("check"))
+            .withPluginClasspath()
+            .withDebug(true)
+            .withArguments("--scan")
+            .build();
+    List<BuildTask> tasks = result.getTasks();
+    // TODO confirm that the spotbugs 4.0.0-beta4 is used
+  }
+
+  @Test
+  void generateTask(@TempDir Path tempDir) throws IOException {
+    Path javaSource =
+        Files.createDirectories(
+            tempDir
+                .resolve("src")
+                .resolve("main")
+                .resolve("java")
+                .resolve("com")
+                .resolve("github")
+                .resolve("spotbugs")
+                .resolve("gradle"));
+    Files.copy(
+        Paths.get("src/test/resources/skip-generate-task.gradle"),
+        tempDir.resolve("build.gradle"),
+        StandardCopyOption.COPY_ATTRIBUTES);
+    Files.copy(
+        Paths.get("src/test/java/com/github/spotbugs/gradle/Foo.java"),
+        javaSource.resolve("Foo.java"),
+        StandardCopyOption.COPY_ATTRIBUTES);
+
+    BuildResult result =
+        GradleRunner.create()
+            .withProjectDir(tempDir.toFile())
+            .withArguments(Arrays.asList("check"))
+            .withPluginClasspath()
+            .build();
+    assertNull(result.task(":spotbugsMain"));
   }
 }

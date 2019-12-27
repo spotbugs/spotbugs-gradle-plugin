@@ -40,22 +40,23 @@ public class SpotBugsPlugin implements Plugin<Project> {
     verifyGradleVersion(GradleVersion.current());
 
     SpotBugsExtension extension = createExtension(project);
-    Configuration config = createConfiguration(project, extension);
+    Configuration config = createConfiguration(project);
     Configuration pluginConfig = createPluginConfiguration(project);
 
-    // TODO adjust the timing to generate SpotBugsSpec from extension & configurations
-    SpotBugsSpec baseSpec = createBaseSpec(extension, config, pluginConfig);
-    createTasks(project, baseSpec);
+    if (extension.isGenerateTask()) {
+      // TODO adjust the timing to generate SpotBugsSpec from extension & configurations
+      SpotBugsSpec baseSpec = createBaseSpec(extension, config, pluginConfig);
+      createTasks(project, baseSpec);
+    }
   }
 
   private SpotBugsExtension createExtension(Project project) {
     SpotBugsExtension extension =
         project.getExtensions().create("spotbugs", SpotBugsExtension.class, project);
-    extension.setToolVersion(loadToolVersion());
     return extension;
   }
 
-  private Configuration createConfiguration(Project project, SpotBugsExtension extension) {
+  private Configuration createConfiguration(Project project) {
     Configuration configuration =
         project
             .getConfigurations()
@@ -65,11 +66,13 @@ public class SpotBugsPlugin implements Plugin<Project> {
             .setTransitive(true);
 
     configuration.defaultDependencies(
-        (DependencySet dependencies) ->
+        (DependencySet dependencies) -> {
             dependencies.add(
                 project
                     .getDependencies()
-                    .create("com.github.spotbugs:spotbugs:" + extension.getToolVersion())));
+                    .create("com.github.spotbugs:spotbugs:" + loadToolVersion()));
+            // TODO add SLF4J
+        });
     return configuration;
   }
 
@@ -113,11 +116,12 @@ public class SpotBugsPlugin implements Plugin<Project> {
 
   private SpotBugsSpec createBaseSpec(
       SpotBugsExtension extension, Configuration config, Configuration pluginConfig) {
-    return ImmutableSpotBugsSpec.builder()
-        .from(extension.toBaseSpec())
-        .spotbugsJar(config.getFiles())
-        .addAllPlugins(pluginConfig.files())
-        .build();
+    ImmutableSpotBugsSpec.Builder builder =
+        ImmutableSpotBugsSpec.builder()
+            .spotbugsJar(config.getFiles())
+            .addAllPlugins(pluginConfig.files());
+    extension.applyTo(builder);
+    return builder.build();
   }
 
   void verifyGradleVersion(GradleVersion version) {
