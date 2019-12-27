@@ -25,11 +25,14 @@ ext {
     junitVersion = '5.5.2'
     errorproneVersion = '2.3.4'
     spotBugsVersion = '3.1.11'
+    immutablesVersion = '2.8.2'
 }
 
 dependencies {
     errorprone "com.google.errorprone:error_prone_core:${errorproneVersion}"
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
+    compileOnly "org.immutables:value:${immutablesVersion}:annotations"
+    annotationProcessor "org.immutables:value:${immutablesVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 }
