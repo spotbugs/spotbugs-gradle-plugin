@@ -35,6 +35,7 @@ public class SpotBugsTaskForJava extends SpotBugsTask {
     Set<File> sourceDirs = sourceSet.getAllJava().getSrcDirs();
     Set<File> classDirs = sourceSet.getOutput().getFiles();
     FileCollection auxClassPaths = sourceSet.getCompileClasspath();
+    dependsOn(sourceSet.getClassesTaskName());
 
     builder
         .addAllSourceDirs(sourceDirs)

@@ -26,6 +26,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
+import org.gradle.testkit.runner.TaskOutcome;
 import org.gradle.util.GradleVersion;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -72,11 +73,12 @@ class SpotBugsPluginTest {
     BuildResult result =
         GradleRunner.create()
             .withProjectDir(tempDir.toFile())
-            .withArguments(Arrays.asList("build"))
+            .withArguments(Arrays.asList(":spotbugsMain"))
             .withPluginClasspath()
             .forwardOutput()
             .build();
-    assertNotNull(result.task(":spotbugsMain"));
+    assertEquals(TaskOutcome.SUCCESS, result.task(":classes").getOutcome());
+    assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").getOutcome());
   }
 
   @Test
@@ -109,7 +111,7 @@ class SpotBugsPluginTest {
             .forwardStdOutput(writer)
             .forwardStdError(new OutputStreamWriter(System.err, StandardCharsets.UTF_8))
             .build();
-    assertNotNull(result.task(":spotbugsMain"));
+    assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").getOutcome());
     assertTrue(writer.getBuffer().toString().contains("spotbugs-4.0.0-beta4.jar"));
   }
 }
