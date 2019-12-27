@@ -16,7 +16,9 @@ package com.github.spotbugs.gradle;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +34,8 @@ class SpotBugsPluginTest {
 
   @Test
   void testLoadToolVersion() {
-    assertNotNull(new SpotBugsPlugin().loadToolVersion());
+    assertNotNull(new SpotBugsPlugin().loadProperties().getProperty("spotbugs-version"));
+    assertNotNull(new SpotBugsPlugin().loadProperties().getProperty("slf4j-version"));
   }
 
   @Test
@@ -71,6 +74,7 @@ class SpotBugsPluginTest {
             .withProjectDir(tempDir.toFile())
             .withArguments(Arrays.asList("build"))
             .withPluginClasspath()
+            .forwardOutput()
             .build();
     assertNotNull(result.task(":spotbugsMain"));
   }
@@ -103,6 +107,7 @@ class SpotBugsPluginTest {
             .withArguments(Arrays.asList("build", "--info"))
             .withPluginClasspath()
             .forwardStdOutput(writer)
+            .forwardStdError(new OutputStreamWriter(System.err, StandardCharsets.UTF_8))
             .build();
     assertNotNull(result.task(":spotbugsMain"));
     assertTrue(writer.getBuffer().toString().contains("spotbugs-4.0.0-beta4.jar"));

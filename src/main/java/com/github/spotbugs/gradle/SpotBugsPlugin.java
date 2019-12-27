@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 import org.gradle.api.Plugin;
@@ -57,12 +58,18 @@ public class SpotBugsPlugin implements Plugin<Project> {
         .configureEach(
             task -> {
               Configuration config = project.getConfigurations().getByName("spotbugs");
+              Configuration spotbugsSlf4j = project.getConfigurations().getByName("spotbugsSlf4j");
               Configuration pluginConfig = project.getConfigurations().getByName("spotbugsPlugin");
               Set<File> spotbugsJar = config.getFiles();
               log.info("SpotBugs jar file: {}", spotbugsJar);
+              Set<File> slf4jJar = spotbugsSlf4j.getFiles();
+              log.info("SLF4J provider jar file: {}", slf4jJar);
+              Set<File> jarOnClasspath = new HashSet<>();
+              jarOnClasspath.addAll(spotbugsJar);
+              jarOnClasspath.addAll(slf4jJar);
               ImmutableSpotBugsSpec.Builder builder =
                   ImmutableSpotBugsSpec.builder()
-                      .spotbugsJar(spotbugsJar)
+                      .spotbugsJar(jarOnClasspath)
                       .addAllPlugins(pluginConfig.files());
 
               SpotBugsExtension extension =
@@ -80,7 +87,9 @@ public class SpotBugsPlugin implements Plugin<Project> {
     return extension;
   }
 
-  private Configuration createConfiguration(Project project) {
+  private void createConfiguration(Project project) {
+    Properties props = loadProperties();
+
     Configuration configuration =
         project
             .getConfigurations()
@@ -88,16 +97,29 @@ public class SpotBugsPlugin implements Plugin<Project> {
             .setDescription("configuration for the SpotBugs engine")
             .setVisible(false)
             .setTransitive(true);
-
     configuration.defaultDependencies(
         (DependencySet dependencies) -> {
           dependencies.add(
               project
                   .getDependencies()
-                  .create("com.github.spotbugs:spotbugs:" + loadToolVersion()));
-          // TODO add SLF4J
+                  .create("com.github.spotbugs:spotbugs:" + props.getProperty("spotbugs-version")));
         });
-    return configuration;
+
+    Configuration spotbugsSlf4j =
+        project
+            .getConfigurations()
+            .create("spotbugsSlf4j")
+            .setDescription("configuration for the SLF4J provider to run SpotBugs")
+            .setVisible(false)
+            .setTransitive(true);
+
+    spotbugsSlf4j.defaultDependencies(
+        (DependencySet dependencies) -> {
+          dependencies.add(
+              project
+                  .getDependencies()
+                  .create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version")));
+        });
   }
 
   private Configuration createPluginConfiguration(Project project) {
@@ -126,13 +148,13 @@ public class SpotBugsPlugin implements Plugin<Project> {
     }
   }
 
-  String loadToolVersion() {
+  Properties loadProperties() {
     URL url =
         SpotBugsPlugin.class.getClassLoader().getResource("spotbugs-gradle-plugin.properties");
     try (InputStream input = url.openStream()) {
       Properties prop = new Properties();
       prop.load(input);
-      return prop.getProperty("spotbugs-version");
+      return prop;
     } catch (IOException e) {
       throw new UncheckedIOException(e);
     }
