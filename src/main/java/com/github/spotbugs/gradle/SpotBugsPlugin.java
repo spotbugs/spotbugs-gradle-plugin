@@ -17,11 +17,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Properties;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.DependencySet;
+import org.gradle.api.logging.Logger;
+import org.gradle.api.tasks.JavaExec;
 import org.gradle.util.GradleVersion;
 
 public class SpotBugsPlugin implements Plugin<Project> {
@@ -34,10 +38,14 @@ public class SpotBugsPlugin implements Plugin<Project> {
   @Override
   public void apply(Project project) {
     verifyGradleVersion(GradleVersion.current());
+
     SpotBugsExtension extension = createExtension(project);
-    createConfiguration(project, extension);
-    createPluginConfiguration(project);
-    project.afterEvaluate(this::verify);
+    Configuration config = createConfiguration(project, extension);
+    Configuration pluginConfig = createPluginConfiguration(project);
+
+    // TODO adjust the timing to generate SpotBugsSpec from extension & configurations
+    SpotBugsSpec baseSpec = createBaseSpec(extension, config, pluginConfig);
+    createTasks(project, baseSpec);
   }
 
   private SpotBugsExtension createExtension(Project project) {
@@ -52,7 +60,7 @@ public class SpotBugsPlugin implements Plugin<Project> {
         project
             .getConfigurations()
             .create("spotbugs")
-            .setDescription("")
+            .setDescription("configuration for the SpotBugs engine")
             .setVisible(false)
             .setTransitive(true);
 
@@ -70,13 +78,47 @@ public class SpotBugsPlugin implements Plugin<Project> {
         project
             .getConfigurations()
             .create("spotbugsPlugin")
-            .setDescription("")
+            .setDescription("configuration for the SpotBugs plugin")
             .setVisible(false)
             .setTransitive(true);
     return configuration;
   }
 
-  private void verify(Project project) {}
+  private void createTasks(Project project, SpotBugsSpec baseSpec) {
+    Logger logger = project.getLogger();
+    Task check = project.getTasks().getByName("check");
+
+    Arrays.asList(new SpecGeneratorForJava(baseSpec)).stream()
+        .flatMap(specGenerator -> specGenerator.generate(project).stream())
+        .map(spec -> createTask(project, spec))
+        .forEach(
+            task -> {
+              check.dependsOn(task);
+              logger.debug("Task {} is created", task.getName());
+            });
+  }
+
+  private JavaExec createTask(Project project, SpotBugsSpec spec) {
+    return project
+        .getTasks()
+        .create(
+            spec.name(),
+            JavaExec.class,
+            (JavaExec javaExec) -> {
+              javaExec.setDescription("Run SpotBugs analysis");
+              javaExec.setMain("edu.umd.cs.findbugs.FindBugs2");
+              spec.applyTo(javaExec);
+            });
+  }
+
+  private SpotBugsSpec createBaseSpec(
+      SpotBugsExtension extension, Configuration config, Configuration pluginConfig) {
+    return ImmutableSpotBugsSpec.builder()
+        .from(extension.toBaseSpec())
+        .spotbugsJar(config.getFiles())
+        .addAllPlugins(pluginConfig.files())
+        .build();
+  }
 
   void verifyGradleVersion(GradleVersion version) {
     if (version.compareTo(SUPPORTED_VERSION) < 0) {

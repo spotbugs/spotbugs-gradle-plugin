@@ -72,4 +72,8 @@ public class SpotBugsExtension {
   public void setGenerateTask(boolean generateTask) {
     this.generateTask = generateTask;
   }
+
+  SpotBugsSpec toBaseSpec() {
+    return ImmutableSpotBugsSpec.builder().build();
+  }
 }

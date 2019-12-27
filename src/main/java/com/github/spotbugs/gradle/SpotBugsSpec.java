@@ -13,16 +13,62 @@
  */
 package com.github.spotbugs.gradle;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.gradle.api.tasks.JavaExec;
 import org.immutables.value.Value;
 
 @Value.Immutable
-interface SpotBugsSpec {
-  String maxHeapSize();
+abstract class SpotBugsSpec {
+  /**
+   * @return The {@code maxHeapSize} for the JVM process. Configured by {@link SpotBugsExtension}.
+   */
+  abstract String maxHeapSize();
 
-  boolean debugEnabled();
+  /** @return The SpotBugs .jar file and its dependencies. Configured by Gradle Configuration. */
+  abstract List<File> spotbugsJar();
 
-  List<String> arguments();
+  /** @return The plugin files. Configured by Gradle Configuration. */
+  abstract List<File> plugins();
 
-  List<String> jvmArgs();
+  /** @return The name of the generated task. */
+  abstract String name();
+
+  abstract List<File> sourceDirs();
+
+  abstract List<File> classDirs();
+
+  abstract List<File> auxClassPaths();
+
+  abstract List<String> extraArguments();
+
+  abstract List<String> jvmArgs();
+
+  void applyTo(JavaExec javaExec) {
+    javaExec.classpath(spotbugsJar());
+    javaExec.setArgs(generateArguments());
+    javaExec.setJvmArgs(jvmArgs());
+    javaExec.setMaxHeapSize(maxHeapSize());
+  }
+
+  private List<String> generateArguments() {
+    List<String> args = new ArrayList<>();
+    if (!plugins().isEmpty()) {
+      args.add("-pluginList");
+      args.add(
+          plugins().stream()
+              .map(File::getAbsolutePath)
+              .collect(Collectors.joining(File.pathSeparator)));
+    }
+
+    args.add("-sortByClass");
+    args.add("-timestampNow");
+    // TODO classDirs
+    // TODO auxClassPaths
+    // TODO sourceDirs
+    args.addAll(extraArguments());
+    return args;
+  }
 }
