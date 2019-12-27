@@ -15,14 +15,19 @@ package com.github.spotbugs.gradle;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.gradle.api.tasks.JavaExec;
 import org.immutables.value.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Value.Immutable
 abstract class SpotBugsSpec {
+  private final Logger log = LoggerFactory.getLogger(SpotBugsSpec.class);
+
   /**
    * @return The {@code maxHeapSize} for the JVM process. Configured by {@link SpotBugsExtension}.
    */
@@ -39,9 +44,6 @@ abstract class SpotBugsSpec {
    *     SpotBugsExtension}.
    */
   abstract boolean isIgnoreFailures();
-
-  /** @return The name of the generated task. */
-  abstract String name();
 
   abstract List<File> sourceDirs();
 
@@ -60,22 +62,33 @@ abstract class SpotBugsSpec {
     maxHeapSize().ifPresent(javaExec::setMaxHeapSize);
   }
 
+  private String join(Collection<File> files) {
+    return files.stream()
+        .map(File::getAbsolutePath)
+        .collect(Collectors.joining(File.pathSeparator));
+  }
+
   private List<String> generateArguments() {
     List<String> args = new ArrayList<>();
     if (!plugins().isEmpty()) {
       args.add("-pluginList");
-      args.add(
-          plugins().stream()
-              .map(File::getAbsolutePath)
-              .collect(Collectors.joining(File.pathSeparator)));
+      args.add(join(plugins()));
     }
 
     args.add("-sortByClass");
     args.add("-timestampNow");
-    // TODO classDirs
-    // TODO auxClassPaths
-    // TODO sourceDirs
+    if (!auxClassPaths().isEmpty()) {
+      args.add("-auxclasspath");
+      args.add(join(auxClassPaths()));
+    }
+    if (!sourceDirs().isEmpty()) {
+      args.add("-sourcepath");
+      args.add(join(sourceDirs()));
+    }
     args.addAll(extraArguments());
+    classDirs().forEach(dir -> args.add(dir.getAbsolutePath()));
+
+    log.debug("Arguments for SpotBugs are generated: {}", args);
     return args;
   }
 }

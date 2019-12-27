@@ -14,40 +14,29 @@
 package com.github.spotbugs.gradle;
 
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPluginConvention;
-import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceSetContainer;
 
-class SpecGeneratorForJava implements SpotBugsSpecGenerator {
-  private final SpotBugsSpec baseSpec;
-
-  /** @param baseSpec the base spec generated from the {@code spotbugs} extension. */
-  SpecGeneratorForJava(SpotBugsSpec baseSpec) {
-    this.baseSpec = Objects.requireNonNull(baseSpec);
-  }
-
-  @Override
-  public Set<SpotBugsSpec> generate(Project project) {
+class SpotBugsTaskGenerator {
+  Set<SpotBugsTask> generate(Project project) {
     JavaPluginConvention convention = project.getConvention().getPlugin(JavaPluginConvention.class);
     if (convention == null) {
       return Collections.emptySet();
     }
 
     SourceSetContainer sourceSets = convention.getSourceSets();
-    return sourceSets.stream().map(this::convert).collect(Collectors.toSet());
-  }
-
-  private SpotBugsSpec convert(SourceSet sourceSet) {
-    return ImmutableSpotBugsSpec.builder()
-        .from(baseSpec)
-        .name(sourceSet.getTaskName("spotbugs", null))
-        .addAllSourceDirs(sourceSet.getAllJava().getSrcDirs())
-        .addAllClassDirs(sourceSet.getOutput().getFiles())
-        .addAllAuxClassPaths(sourceSet.getCompileClasspath())
-        .build();
+    return sourceSets.stream()
+        .map(
+            sourceSet -> {
+              String name = sourceSet.getTaskName("spotbugs", null);
+              SpotBugsTaskForJava task =
+                  project.getTasks().create(name, SpotBugsTaskForJava.class, sourceSet);
+              task.setMain("edu.umd.cs.findbugs.FindBugs2");
+              return task;
+            })
+        .collect(Collectors.toSet());
   }
 }

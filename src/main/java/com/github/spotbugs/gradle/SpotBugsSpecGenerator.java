@@ -19,6 +19,11 @@ import org.gradle.api.Project;
 
 /** An interface to generate {@link SpotBugsSpec} to generate {@code JavaExec} task. */
 interface SpotBugsSpecGenerator {
+  /**
+   * @param project
+   * @param baseSpec the base spec generated from the {@code spotbugs} extension.
+   * @return
+   */
   @NonNull
-  Set<SpotBugsSpec> generate(Project project);
+  Set<SpotBugsSpec> generate(Project project, ImmutableSpotBugsSpec.Builder baseSpec);
 }

@@ -19,8 +19,5 @@ plugins {
 version = 1.0
 
 repositories {
-    jcenter()
-}
-dependencies {
-    compile "com.github.spotbugs:spotbugs:3.1.1"
+    mavenCentral()
 }

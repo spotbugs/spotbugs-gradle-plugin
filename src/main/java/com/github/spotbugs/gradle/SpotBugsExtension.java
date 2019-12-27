@@ -24,8 +24,6 @@ public class SpotBugsExtension {
 
   @Nonnull private Effort effort = Effort.DEFAULT;
 
-  private boolean generateTask = true;
-
   public SpotBugsExtension(Project project) {
     // TODO disable task generation when android plugin is activated?
   }
@@ -52,14 +50,6 @@ public class SpotBugsExtension {
 
   public void setEffort(Effort effort) {
     this.effort = Objects.requireNonNull(effort);
-  }
-
-  public boolean isGenerateTask() {
-    return generateTask;
-  }
-
-  public void setGenerateTask(boolean generateTask) {
-    this.generateTask = generateTask;
   }
 
   void applyTo(ImmutableSpotBugsSpec.Builder builder) {

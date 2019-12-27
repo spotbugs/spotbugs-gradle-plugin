@@ -11,16 +11,10 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id 'java'
-    id 'com.github.spotbugs'
-}
+package com.github.spotbugs.gradle;
 
-version = 1.0
-repositories {
-    mavenCentral()
-}
+import org.gradle.api.tasks.JavaExec;
 
-spotbugs {
-    generateTask = false
+abstract class SpotBugsTask extends JavaExec {
+  abstract void applyTo(ImmutableSpotBugsSpec.Builder builder);
 }

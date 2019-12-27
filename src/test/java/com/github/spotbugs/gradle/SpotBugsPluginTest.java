@@ -16,14 +16,13 @@ package com.github.spotbugs.gradle;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.List;
 import org.gradle.testkit.runner.BuildResult;
-import org.gradle.testkit.runner.BuildTask;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.util.GradleVersion;
 import org.junit.jupiter.api.Test;
@@ -70,11 +69,9 @@ class SpotBugsPluginTest {
     BuildResult result =
         GradleRunner.create()
             .withProjectDir(tempDir.toFile())
-            .withArguments(Arrays.asList("check"))
+            .withArguments(Arrays.asList("build"))
             .withPluginClasspath()
             .build();
-    List<BuildTask> tasks = result.getTasks();
-    System.out.println(tasks);
     assertNotNull(result.task(":spotbugsMain"));
   }
 
@@ -99,45 +96,15 @@ class SpotBugsPluginTest {
         javaSource.resolve("Foo.java"),
         StandardCopyOption.COPY_ATTRIBUTES);
 
+    StringWriter writer = new StringWriter();
     BuildResult result =
         GradleRunner.create()
             .withProjectDir(tempDir.toFile())
-            .withArguments(Arrays.asList("check"))
+            .withArguments(Arrays.asList("build", "--info"))
             .withPluginClasspath()
-            .withDebug(true)
-            .withArguments("--scan")
+            .forwardStdOutput(writer)
             .build();
-    List<BuildTask> tasks = result.getTasks();
-    // TODO confirm that the spotbugs 4.0.0-beta4 is used
-  }
-
-  @Test
-  void generateTask(@TempDir Path tempDir) throws IOException {
-    Path javaSource =
-        Files.createDirectories(
-            tempDir
-                .resolve("src")
-                .resolve("main")
-                .resolve("java")
-                .resolve("com")
-                .resolve("github")
-                .resolve("spotbugs")
-                .resolve("gradle"));
-    Files.copy(
-        Paths.get("src/test/resources/skip-generate-task.gradle"),
-        tempDir.resolve("build.gradle"),
-        StandardCopyOption.COPY_ATTRIBUTES);
-    Files.copy(
-        Paths.get("src/test/java/com/github/spotbugs/gradle/Foo.java"),
-        javaSource.resolve("Foo.java"),
-        StandardCopyOption.COPY_ATTRIBUTES);
-
-    BuildResult result =
-        GradleRunner.create()
-            .withProjectDir(tempDir.toFile())
-            .withArguments(Arrays.asList("check"))
-            .withPluginClasspath()
-            .build();
-    assertNull(result.task(":spotbugsMain"));
+    assertNotNull(result.task(":spotbugsMain"));
+    assertTrue(writer.getBuffer().toString().contains("spotbugs-4.0.0-beta4.jar"));
   }
 }

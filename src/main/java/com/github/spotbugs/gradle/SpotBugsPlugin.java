@@ -13,22 +13,25 @@
  */
 package com.github.spotbugs.gradle;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Properties;
+import java.util.Set;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.DependencySet;
-import org.gradle.api.logging.Logger;
-import org.gradle.api.tasks.JavaExec;
 import org.gradle.util.GradleVersion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpotBugsPlugin implements Plugin<Project> {
+  private final Logger log = LoggerFactory.getLogger(SpotBugsPlugin.class);
+
   /**
    * Supported Gradle version described at <a
    * href="http://spotbugs.readthedocs.io/en/latest/gradle.html">official manual site</a>.
@@ -39,15 +42,36 @@ public class SpotBugsPlugin implements Plugin<Project> {
   public void apply(Project project) {
     verifyGradleVersion(GradleVersion.current());
 
-    SpotBugsExtension extension = createExtension(project);
-    Configuration config = createConfiguration(project);
-    Configuration pluginConfig = createPluginConfiguration(project);
+    createExtension(project);
+    createConfiguration(project);
+    createPluginConfiguration(project);
 
-    if (extension.isGenerateTask()) {
-      // TODO adjust the timing to generate SpotBugsSpec from extension & configurations
-      SpotBugsSpec baseSpec = createBaseSpec(extension, config, pluginConfig);
-      createTasks(project, baseSpec);
-    }
+    createTasks(project);
+    project.afterEvaluate(this::configureTasks);
+  }
+
+  private void configureTasks(Project project) {
+    project
+        .getTasks()
+        .withType(SpotBugsTask.class)
+        .configureEach(
+            task -> {
+              Configuration config = project.getConfigurations().getByName("spotbugs");
+              Configuration pluginConfig = project.getConfigurations().getByName("spotbugsPlugin");
+              Set<File> spotbugsJar = config.getFiles();
+              log.info("SpotBugs jar file: {}", spotbugsJar);
+              ImmutableSpotBugsSpec.Builder builder =
+                  ImmutableSpotBugsSpec.builder()
+                      .spotbugsJar(spotbugsJar)
+                      .addAllPlugins(pluginConfig.files());
+
+              SpotBugsExtension extension =
+                  project.getExtensions().findByType(SpotBugsExtension.class);
+              extension.applyTo(builder);
+
+              task.applyTo(builder);
+              builder.build().applyTo(task);
+            });
   }
 
   private SpotBugsExtension createExtension(Project project) {
@@ -67,11 +91,11 @@ public class SpotBugsPlugin implements Plugin<Project> {
 
     configuration.defaultDependencies(
         (DependencySet dependencies) -> {
-            dependencies.add(
-                project
-                    .getDependencies()
-                    .create("com.github.spotbugs:spotbugs:" + loadToolVersion()));
-            // TODO add SLF4J
+          dependencies.add(
+              project
+                  .getDependencies()
+                  .create("com.github.spotbugs:spotbugs:" + loadToolVersion()));
+          // TODO add SLF4J
         });
     return configuration;
   }
@@ -87,41 +111,9 @@ public class SpotBugsPlugin implements Plugin<Project> {
     return configuration;
   }
 
-  private void createTasks(Project project, SpotBugsSpec baseSpec) {
-    Logger logger = project.getLogger();
+  private void createTasks(Project project) {
     Task check = project.getTasks().getByName("check");
-
-    Arrays.asList(new SpecGeneratorForJava(baseSpec)).stream()
-        .flatMap(specGenerator -> specGenerator.generate(project).stream())
-        .map(spec -> createTask(project, spec))
-        .forEach(
-            task -> {
-              check.dependsOn(task);
-              logger.debug("Task {} is created", task.getName());
-            });
-  }
-
-  private JavaExec createTask(Project project, SpotBugsSpec spec) {
-    return project
-        .getTasks()
-        .create(
-            spec.name(),
-            JavaExec.class,
-            (JavaExec javaExec) -> {
-              javaExec.setDescription("Run SpotBugs analysis");
-              javaExec.setMain("edu.umd.cs.findbugs.FindBugs2");
-              spec.applyTo(javaExec);
-            });
-  }
-
-  private SpotBugsSpec createBaseSpec(
-      SpotBugsExtension extension, Configuration config, Configuration pluginConfig) {
-    ImmutableSpotBugsSpec.Builder builder =
-        ImmutableSpotBugsSpec.builder()
-            .spotbugsJar(config.getFiles())
-            .addAllPlugins(pluginConfig.files());
-    extension.applyTo(builder);
-    return builder.build();
+    new SpotBugsTaskGenerator().generate(project).forEach(check::dependsOn);
   }
 
   void verifyGradleVersion(GradleVersion version) {
