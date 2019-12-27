@@ -11,10 +11,36 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.gradle;
+package com.github.spotbugs.snom;
 
-public class Foo {
-  public static void main(String[] args) {
-    System.out.println("hello!");
-  }
+import javax.annotation.Nonnull;
+
+/** @see <a href="https://spotbugs.readthedocs.io/en/stable/running.html"></a> */
+public enum Confidence {
+  LOW {
+    @Override
+    String toCommandLineOption() {
+      return "-low";
+    }
+  },
+  MEDIUM {
+    @Override
+    String toCommandLineOption() {
+      return "-medium";
+    }
+  },
+  DEFAULT {
+    @Override
+    String toCommandLineOption() {
+      return "";
+    }
+  },
+  HIGH {
+    @Override
+    String toCommandLineOption() {
+      return "-high";
+    }
+  };
+
+  abstract @Nonnull String toCommandLineOption();
 }

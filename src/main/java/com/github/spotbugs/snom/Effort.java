@@ -11,10 +11,16 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.gradle;
+package com.github.spotbugs.snom;
 
-import org.gradle.api.tasks.JavaExec;
-
-abstract class SpotBugsTask extends JavaExec {
-  abstract void applyTo(ImmutableSpotBugsSpec.Builder builder);
+/**
+ * @see <a href="https://spotbugs.readthedocs.io/en/stable/effort.html">Official document about
+ *     effort</a>
+ */
+public enum Effort {
+  MIN,
+  LESS,
+  DEFAULT,
+  MORE,
+  MAX;
 }

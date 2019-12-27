@@ -11,7 +11,7 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.gradle;
+package com.github.spotbugs.snom;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,13 +60,13 @@ class SpotBugsPluginTest {
                 .resolve("com")
                 .resolve("github")
                 .resolve("spotbugs")
-                .resolve("gradle"));
+                .resolve("snom"));
     Files.copy(
         Paths.get("src/test/resources/no-config.gradle"),
         tempDir.resolve("build.gradle"),
         StandardCopyOption.COPY_ATTRIBUTES);
     Files.copy(
-        Paths.get("src/test/java/com/github/spotbugs/gradle/Foo.java"),
+        Paths.get("src/test/java/com/github/spotbugs/snom/Foo.java"),
         javaSource.resolve("Foo.java"),
         StandardCopyOption.COPY_ATTRIBUTES);
 
@@ -92,13 +92,13 @@ class SpotBugsPluginTest {
                 .resolve("com")
                 .resolve("github")
                 .resolve("spotbugs")
-                .resolve("gradle"));
+                .resolve("snom"));
     Files.copy(
         Paths.get("src/test/resources/tool-version.gradle"),
         tempDir.resolve("build.gradle"),
         StandardCopyOption.COPY_ATTRIBUTES);
     Files.copy(
-        Paths.get("src/test/java/com/github/spotbugs/gradle/Foo.java"),
+        Paths.get("src/test/java/com/github/spotbugs/snom/Foo.java"),
         javaSource.resolve("Foo.java"),
         StandardCopyOption.COPY_ATTRIBUTES);
 

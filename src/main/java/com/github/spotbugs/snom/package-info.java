@@ -11,16 +11,5 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.gradle;
-
-/**
- * @see <a href="https://spotbugs.readthedocs.io/en/stable/effort.html">Official document about
- *     effort</a>
- */
-public enum Effort {
-  MIN,
-  LESS,
-  DEFAULT,
-  MORE,
-  MAX;
-}
+/** SNOM stands for {@code SpotBugs Newly Organized Mechanism}. */
+package com.github.spotbugs.snom;

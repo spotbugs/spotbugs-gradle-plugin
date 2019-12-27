@@ -18,7 +18,7 @@ gradlePlugin {
             id = 'com.github.spotbugs'
             displayName = 'SpotBugs Gradle Plugin'
             description = 'A Gradle plugin that runs static bytecode analysis by SpotBugs'
-            implementationClass = 'com.github.spotbugs.gradle.SpotBugsPlugin'
+            implementationClass = 'com.github.spotbugs.snom.SpotBugsPlugin'
         }
     }
 }
