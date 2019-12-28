@@ -14,12 +14,14 @@
 package com.github.spotbugs.snom;
 
 import com.android.build.gradle.tasks.AndroidJavaCompile;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Objects;
 import javax.inject.Inject;
 import org.gradle.api.file.FileCollection;
-import org.gradle.api.file.FileTree;
 import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.tasks.CacheableTask;
 
+@CacheableTask
 public class SpotBugsTaskForAndroid extends SpotBugsTask {
   private final AndroidJavaCompile task;
 
@@ -27,17 +29,24 @@ public class SpotBugsTaskForAndroid extends SpotBugsTask {
   public SpotBugsTaskForAndroid(AndroidJavaCompile task, ObjectFactory objects) {
     super(objects);
     this.task = Objects.requireNonNull(task);
+    dependsOn(task);
   }
 
+  @NonNull
   @Override
-  void applyTo(ImmutableSpotBugsSpec.Builder builder) {
-    super.applyTo(builder);
-    // TODO consider input and output for incremental build
-    FileTree sourceDirs = task.getSource();
-    FileTree classDirs = task.getOutputDirectory().getAsFileTree();
-    FileCollection auxClassPaths = task.getClasspath();
-    dependsOn(task);
+  FileCollection getSourceDirs() {
+    return task.getSource();
+  }
 
-    builder.sourceDirs(sourceDirs).addAllClassDirs(classDirs).addAllAuxClassPaths(auxClassPaths);
+  @NonNull
+  @Override
+  FileCollection getClassDirs() {
+    return task.getOutputDirectory().getAsFileTree();
+  }
+
+  @NonNull
+  @Override
+  FileCollection getAuxClassPaths() {
+    return task.getClasspath();
   }
 }

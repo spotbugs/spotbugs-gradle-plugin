@@ -14,14 +14,14 @@
 package com.github.spotbugs.snom;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import java.io.File;
 import java.util.Objects;
-import java.util.Set;
 import javax.inject.Inject;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.tasks.CacheableTask;
 import org.gradle.api.tasks.SourceSet;
 
+@CacheableTask
 public class SpotBugsTaskForJava extends SpotBugsTask {
   @NonNull private final SourceSet sourceSet;
 
@@ -29,17 +29,24 @@ public class SpotBugsTaskForJava extends SpotBugsTask {
   public SpotBugsTaskForJava(@NonNull SourceSet sourceSet, ObjectFactory objects) {
     super(objects);
     this.sourceSet = Objects.requireNonNull(sourceSet);
+    dependsOn(sourceSet.getClassesTaskName());
   }
 
+  @NonNull
   @Override
-  void applyTo(ImmutableSpotBugsSpec.Builder builder) {
-    super.applyTo(builder);
-    // TODO consider input and output for incremental build
-    FileCollection sourceDirs = sourceSet.getAllJava();
-    Set<File> classDirs = sourceSet.getOutput().getFiles();
-    FileCollection auxClassPaths = sourceSet.getCompileClasspath();
-    dependsOn(sourceSet.getClassesTaskName());
+  FileCollection getSourceDirs() {
+    return sourceSet.getAllJava();
+  }
 
-    builder.sourceDirs(sourceDirs).addAllClassDirs(classDirs).addAllAuxClassPaths(auxClassPaths);
+  @NonNull
+  @Override
+  FileCollection getClassDirs() {
+    return sourceSet.getOutput();
+  }
+
+  @NonNull
+  @Override
+  FileCollection getAuxClassPaths() {
+    return sourceSet.getCompileClasspath();
   }
 }

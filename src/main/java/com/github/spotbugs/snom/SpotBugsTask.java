@@ -14,13 +14,12 @@
 package com.github.spotbugs.snom;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.OverrideMustInvoke;
 import java.util.stream.Collectors;
+import org.gradle.api.file.FileCollection;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.Input;
-import org.gradle.api.tasks.JavaExec;
+import org.gradle.api.tasks.*;
 
 abstract class SpotBugsTask extends JavaExec {
   @Input @NonNull final Property<Boolean> ignoreFailures;
@@ -29,6 +28,21 @@ abstract class SpotBugsTask extends JavaExec {
   @Input @NonNull final Property<Effort> effort;
   @Input @NonNull final ListProperty<String> visitors;
   @Input @NonNull final ListProperty<String> omitVisitors;
+
+  @InputFiles
+  @PathSensitive(PathSensitivity.RELATIVE)
+  @NonNull
+  abstract FileCollection getSourceDirs();
+
+  @InputFiles
+  @PathSensitive(PathSensitivity.RELATIVE)
+  @NonNull
+  abstract FileCollection getClassDirs();
+
+  @InputFiles
+  @PathSensitive(PathSensitivity.RELATIVE)
+  @NonNull
+  abstract FileCollection getAuxClassPaths();
 
   public SpotBugsTask(ObjectFactory objects) {
     ignoreFailures = objects.property(Boolean.class);
@@ -54,8 +68,7 @@ abstract class SpotBugsTask extends JavaExec {
     omitVisitors.set(extension.omitVisitors);
   }
 
-  @OverrideMustInvoke
-  void applyTo(ImmutableSpotBugsSpec.Builder builder) {
+  final void applyTo(ImmutableSpotBugsSpec.Builder builder) {
     builder.isIgnoreFailures(ignoreFailures.getOrElse(false));
     builder.isShowProgress(showProgress.getOrElse(false));
     if (effort.isPresent()) {
@@ -72,5 +85,9 @@ abstract class SpotBugsTask extends JavaExec {
       builder.addExtraArguments("-omitVisitors");
       builder.addExtraArguments(omitVisitors.get().stream().collect(Collectors.joining(",")));
     }
+    builder
+        .sourceDirs(getSourceDirs())
+        .addAllClassDirs(getClassDirs())
+        .addAllAuxClassPaths(getAuxClassPaths());
   }
 }
