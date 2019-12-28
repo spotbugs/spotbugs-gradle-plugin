@@ -113,6 +113,7 @@ abstract class SpotBugsTask extends DefaultTask // TODO consider to implements V
     getProject()
         .javaexec(
             spec -> {
+              spec.setIgnoreExitValue(ignoreFailures.getOrElse(false));
               spec.classpath(createJarOnClasspath());
               spec.setMain("edu.umd.cs.findbugs.FindBugs2");
               builder.build().applyTo(spec);
