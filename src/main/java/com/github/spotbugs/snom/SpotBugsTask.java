@@ -14,14 +14,27 @@
 package com.github.spotbugs.snom;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
+import org.gradle.api.DefaultTask;
+import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.*;
+import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputFiles;
+import org.gradle.api.tasks.PathSensitive;
+import org.gradle.api.tasks.PathSensitivity;
+import org.gradle.api.tasks.TaskAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-abstract class SpotBugsTask extends JavaExec {
+abstract class SpotBugsTask extends DefaultTask // TODO consider to implements VerificationTask
+{
+  private final Logger log = LoggerFactory.getLogger(SpotBugsTask.class);
   @Input @NonNull final Property<Boolean> ignoreFailures;
   @Input @NonNull final Property<Boolean> showProgress;
   @Input @NonNull final Property<Confidence> reportLevel;
@@ -89,5 +102,36 @@ abstract class SpotBugsTask extends JavaExec {
         .sourceDirs(getSourceDirs())
         .addAllClassDirs(getClassDirs())
         .addAllAuxClassPaths(getAuxClassPaths());
+  }
+
+  @TaskAction
+  public void run() {
+    ImmutableSpotBugsSpec.Builder builder = ImmutableSpotBugsSpec.builder();
+    applyTo(builder);
+    Configuration pluginConfig = getProject().getConfigurations().getByName("spotbugsPlugin");
+    builder.addAllPlugins(pluginConfig.getFiles());
+    getProject()
+        .javaexec(
+            spec -> {
+              spec.classpath(createJarOnClasspath());
+              spec.setMain("edu.umd.cs.findbugs.FindBugs2");
+              builder.build().applyTo(spec);
+            });
+  }
+
+  @NonNull
+  private Set<File> createJarOnClasspath() {
+    Configuration config = getProject().getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME);
+    Configuration spotbugsSlf4j = getProject().getConfigurations().getByName("spotbugsSlf4j");
+
+    Set<File> spotbugsJar = config.getFiles();
+    log.info("SpotBugs jar file: {}", spotbugsJar);
+    Set<File> slf4jJar = spotbugsSlf4j.getFiles();
+    log.info("SLF4J provider jar file: {}", slf4jJar);
+
+    Set<File> jarOnClasspath = new HashSet<>();
+    jarOnClasspath.addAll(spotbugsJar);
+    jarOnClasspath.addAll(slf4jJar);
+    return jarOnClasspath;
   }
 }

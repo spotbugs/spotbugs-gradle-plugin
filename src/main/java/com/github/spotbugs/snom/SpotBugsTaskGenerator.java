@@ -50,7 +50,6 @@ class SpotBugsTaskGenerator {
                   project
                       .getTasks()
                       .create(name, SpotBugsTaskForJava.class, sourceSet, project.getObjects());
-              task.setMain("edu.umd.cs.findbugs.FindBugs2");
               return task;
             })
         .collect(Collectors.toSet());

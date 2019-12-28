@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.gradle.api.file.FileCollection;
-import org.gradle.api.tasks.JavaExec;
+import org.gradle.process.JavaExecSpec;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +60,7 @@ abstract class SpotBugsSpec {
 
   abstract List<String> jvmArgs();
 
-  void applyTo(JavaExec javaExec) {
+  void applyTo(JavaExecSpec javaExec) {
     javaExec.classpath(spotbugsJar());
     javaExec.setArgs(generateArguments());
     javaExec.setJvmArgs(jvmArgs());

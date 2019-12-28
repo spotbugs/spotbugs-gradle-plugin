@@ -13,26 +13,20 @@
  */
 package com.github.spotbugs.snom;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.DependencySet;
 import org.gradle.util.GradleVersion;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SpotBugsPlugin implements Plugin<Project> {
-  private static final String CONFIG_NAME = "spotbugs";
-  private final Logger log = LoggerFactory.getLogger(SpotBugsPlugin.class);
+  static final String CONFIG_NAME = "spotbugs";
 
   /**
    * Supported Gradle version described at <a
@@ -49,33 +43,6 @@ public class SpotBugsPlugin implements Plugin<Project> {
     createPluginConfiguration(project);
 
     createTasks(project, extension);
-    project.afterEvaluate(this::configureTasks);
-  }
-
-  private void configureTasks(Project project) {
-    project
-        .getTasks()
-        .withType(SpotBugsTask.class)
-        .configureEach(
-            task -> {
-              Configuration config = project.getConfigurations().getByName(CONFIG_NAME);
-              Configuration spotbugsSlf4j = project.getConfigurations().getByName("spotbugsSlf4j");
-              Configuration pluginConfig = project.getConfigurations().getByName("spotbugsPlugin");
-              Set<File> spotbugsJar = config.getFiles();
-              log.info("SpotBugs jar file: {}", spotbugsJar);
-              Set<File> slf4jJar = spotbugsSlf4j.getFiles();
-              log.info("SLF4J provider jar file: {}", slf4jJar);
-              Set<File> jarOnClasspath = new HashSet<>();
-              jarOnClasspath.addAll(spotbugsJar);
-              jarOnClasspath.addAll(slf4jJar);
-              ImmutableSpotBugsSpec.Builder builder =
-                  ImmutableSpotBugsSpec.builder()
-                      .spotbugsJar(jarOnClasspath)
-                      .addAllPlugins(pluginConfig.files());
-
-              task.applyTo(builder);
-              builder.build().applyTo(task);
-            });
   }
 
   private SpotBugsExtension createExtension(Project project) {

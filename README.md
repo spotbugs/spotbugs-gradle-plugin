@@ -10,7 +10,7 @@ This is an unofficial Gradle Plugin to run SpotBugs on Java and Android project.
 This Gradle plugin is designed to solve the following problems in the official one:
 
 - [x] Remove any dependency on the Gradle's internal API
-- [ ] Solve mutability problem for the build contains multiple projects and/or sourceSet
+- [x] Solve mutability problem for the build contains multiple projects and/or sourceSet
 - [ ] Native Support for [the Parallel Build](https://guides.gradle.org/using-the-worker-api/)
 - [ ] Native Support for [the Android project](https://developer.android.com/studio/build/gradle-tips)
 - [ ] Missing user document about how to use extension and task
