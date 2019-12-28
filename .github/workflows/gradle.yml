@@ -21,6 +21,8 @@ jobs:
           ${{ runner.os }}-gradle-
     - name: Build with Gradle
       run: ./gradlew build sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/upload-artifact@3446296
       if: always()
       with:
