@@ -13,7 +13,7 @@
  */
 plugins {
     id 'java'
-    id 'com.github.spotbugs'
+    id 'jp.skypencil.spotbugs.snom'
 }
 
 version = 1.0
