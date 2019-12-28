@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SpotBugsPlugin implements Plugin<Project> {
+  private static final String CONFIG_NAME = "spotbugs";
   private final Logger log = LoggerFactory.getLogger(SpotBugsPlugin.class);
 
   /**
@@ -57,7 +58,7 @@ public class SpotBugsPlugin implements Plugin<Project> {
         .withType(SpotBugsTask.class)
         .configureEach(
             task -> {
-              Configuration config = project.getConfigurations().getByName("spotbugs");
+              Configuration config = project.getConfigurations().getByName(CONFIG_NAME);
               Configuration spotbugsSlf4j = project.getConfigurations().getByName("spotbugsSlf4j");
               Configuration pluginConfig = project.getConfigurations().getByName("spotbugsPlugin");
               Set<File> spotbugsJar = config.getFiles();
@@ -82,9 +83,7 @@ public class SpotBugsPlugin implements Plugin<Project> {
   }
 
   private SpotBugsExtension createExtension(Project project) {
-    SpotBugsExtension extension =
-        project.getExtensions().create("spotbugs", SpotBugsExtension.class, project);
-    return extension;
+    return project.getExtensions().create("spotbugs", SpotBugsExtension.class, project);
   }
 
   private void createConfiguration(Project project) {
@@ -93,17 +92,17 @@ public class SpotBugsPlugin implements Plugin<Project> {
     Configuration configuration =
         project
             .getConfigurations()
-            .create("spotbugs")
+            .create(CONFIG_NAME)
             .setDescription("configuration for the SpotBugs engine")
             .setVisible(false)
             .setTransitive(true);
     configuration.defaultDependencies(
-        (DependencySet dependencies) -> {
-          dependencies.add(
-              project
-                  .getDependencies()
-                  .create("com.github.spotbugs:spotbugs:" + props.getProperty("spotbugs-version")));
-        });
+        (DependencySet dependencies) ->
+            dependencies.add(
+                project
+                    .getDependencies()
+                    .create(
+                        "com.github.spotbugs:spotbugs:" + props.getProperty("spotbugs-version"))));
 
     Configuration spotbugsSlf4j =
         project
@@ -114,23 +113,20 @@ public class SpotBugsPlugin implements Plugin<Project> {
             .setTransitive(true);
 
     spotbugsSlf4j.defaultDependencies(
-        (DependencySet dependencies) -> {
-          dependencies.add(
-              project
-                  .getDependencies()
-                  .create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version")));
-        });
+        (DependencySet dependencies) ->
+            dependencies.add(
+                project
+                    .getDependencies()
+                    .create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version"))));
   }
 
   private Configuration createPluginConfiguration(Project project) {
-    Configuration configuration =
-        project
-            .getConfigurations()
-            .create("spotbugsPlugin")
-            .setDescription("configuration for the SpotBugs plugin")
-            .setVisible(false)
-            .setTransitive(true);
-    return configuration;
+    return project
+        .getConfigurations()
+        .create("spotbugsPlugin")
+        .setDescription("configuration for the SpotBugs plugin")
+        .setVisible(false)
+        .setTransitive(true);
   }
 
   private void createTasks(Project project) {
