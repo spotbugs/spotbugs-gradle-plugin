@@ -47,6 +47,9 @@ abstract class SpotBugsSpec {
    */
   abstract boolean isIgnoreFailures();
 
+  /** @return The flag to show progress during analysis. Configured by {@link SpotBugsExtension}. */
+  abstract boolean isShowProgress();
+
   abstract FileCollection sourceDirs();
 
   abstract List<File> classDirs();
@@ -86,6 +89,9 @@ abstract class SpotBugsSpec {
     if (!sourceDirs().isEmpty()) {
       args.add("-sourcepath");
       args.add(sourceDirs().getAsPath());
+    }
+    if (isShowProgress()) {
+      args.add("-progress");
     }
     args.addAll(extraArguments());
     classDirs().forEach(dir -> args.add(dir.getAbsolutePath()));

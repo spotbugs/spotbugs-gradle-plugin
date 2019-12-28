@@ -109,7 +109,7 @@ class SpotBugsPluginTest {
     BuildResult result =
         GradleRunner.create()
             .withProjectDir(tempDir.toFile())
-            .withArguments(Arrays.asList("build", "--info"))
+            .withArguments(Arrays.asList("build", "--info", "-x", ":spotbugsTest"))
             .withPluginClasspath()
             .forwardStdOutput(writer)
             .forwardStdError(new OutputStreamWriter(System.err, StandardCharsets.UTF_8))
