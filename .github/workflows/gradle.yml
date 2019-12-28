@@ -20,7 +20,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }}
     - uses: actions/upload-artifact@3446296
       if: always()
       with:

@@ -1,0 +1,9 @@
+sonarqube {
+    properties {
+        property "sonar.projectKey", "KengoTODA_spotbugs-gradle-plugin-v2"
+        property "sonar.organization", "kengotoda-github"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.destination
+    }
+}
+tasks.sonarqube.mustRunAfter jacocoTestReport

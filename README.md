@@ -3,6 +3,7 @@
 This is an unofficial Gradle Plugin to run SpotBugs on Java and Android project.
 
 ![](https://github.com/KengoTODA/spotbugs-gradle-plugin-v2/workflows/Java%20CI/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KengoTODA_spotbugs-gradle-plugin-v2&metric=alert_status)](https://sonarcloud.io/dashboard?id=KengoTODA_spotbugs-gradle-plugin-v2)
 
 ## Goal
 
