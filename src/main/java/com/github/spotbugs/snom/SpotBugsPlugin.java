@@ -44,11 +44,11 @@ public class SpotBugsPlugin implements Plugin<Project> {
   public void apply(Project project) {
     verifyGradleVersion(GradleVersion.current());
 
-    createExtension(project);
+    SpotBugsExtension extension = createExtension(project);
     createConfiguration(project);
     createPluginConfiguration(project);
 
-    createTasks(project);
+    createTasks(project, extension);
     project.afterEvaluate(this::configureTasks);
   }
 
@@ -73,17 +73,15 @@ public class SpotBugsPlugin implements Plugin<Project> {
                       .spotbugsJar(jarOnClasspath)
                       .addAllPlugins(pluginConfig.files());
 
-              SpotBugsExtension extension =
-                  project.getExtensions().findByType(SpotBugsExtension.class);
-              extension.applyTo(builder);
-
               task.applyTo(builder);
               builder.build().applyTo(task);
             });
   }
 
   private SpotBugsExtension createExtension(Project project) {
-    return project.getExtensions().create("spotbugs", SpotBugsExtension.class, project);
+    return project
+        .getExtensions()
+        .create("spotbugs", SpotBugsExtension.class, project.getObjects());
   }
 
   private void createConfiguration(Project project) {
@@ -129,9 +127,15 @@ public class SpotBugsPlugin implements Plugin<Project> {
         .setTransitive(true);
   }
 
-  private void createTasks(Project project) {
+  private void createTasks(Project project, SpotBugsExtension extension) {
     Task check = project.getTasks().getByName("check");
-    new SpotBugsTaskGenerator().generate(project).forEach(check::dependsOn);
+    new SpotBugsTaskGenerator()
+        .generate(project)
+        .forEach(
+            task -> {
+              check.dependsOn(task);
+              task.init(extension);
+            });
   }
 
   void verifyGradleVersion(GradleVersion version) {

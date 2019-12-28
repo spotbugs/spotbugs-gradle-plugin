@@ -18,17 +18,20 @@ import java.util.Objects;
 import javax.inject.Inject;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.file.FileTree;
+import org.gradle.api.model.ObjectFactory;
 
 public class SpotBugsTaskForAndroid extends SpotBugsTask {
   private final AndroidJavaCompile task;
 
   @Inject
-  public SpotBugsTaskForAndroid(AndroidJavaCompile task) {
+  public SpotBugsTaskForAndroid(AndroidJavaCompile task, ObjectFactory objects) {
+    super(objects);
     this.task = Objects.requireNonNull(task);
   }
 
   @Override
   void applyTo(ImmutableSpotBugsSpec.Builder builder) {
+    super.applyTo(builder);
     // TODO consider input and output for incremental build
     FileTree sourceDirs = task.getSource();
     FileTree classDirs = task.getOutputDirectory().getAsFileTree();

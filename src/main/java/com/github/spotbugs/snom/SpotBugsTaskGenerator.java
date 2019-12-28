@@ -47,7 +47,9 @@ class SpotBugsTaskGenerator {
             sourceSet -> {
               String name = sourceSet.getTaskName("spotbugs", null);
               SpotBugsTaskForJava task =
-                  project.getTasks().create(name, SpotBugsTaskForJava.class, sourceSet);
+                  project
+                      .getTasks()
+                      .create(name, SpotBugsTaskForJava.class, sourceSet, project.getObjects());
               task.setMain("edu.umd.cs.findbugs.FindBugs2");
               return task;
             })
@@ -66,7 +68,9 @@ class SpotBugsTaskGenerator {
         .map(
             task -> {
               String name = GUtil.toLowerCamelCase("spotbugs " + task.getVariantName());
-              return project.getTasks().create(name, SpotBugsTaskForAndroid.class, task);
+              return project
+                  .getTasks()
+                  .create(name, SpotBugsTaskForAndroid.class, task, project.getObjects());
             })
         .collect(Collectors.toSet());
   }

@@ -19,18 +19,21 @@ import java.util.Objects;
 import java.util.Set;
 import javax.inject.Inject;
 import org.gradle.api.file.FileCollection;
+import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.tasks.SourceSet;
 
 public class SpotBugsTaskForJava extends SpotBugsTask {
   @NonNull private final SourceSet sourceSet;
 
   @Inject
-  public SpotBugsTaskForJava(@NonNull SourceSet sourceSet) {
+  public SpotBugsTaskForJava(@NonNull SourceSet sourceSet, ObjectFactory objects) {
+    super(objects);
     this.sourceSet = Objects.requireNonNull(sourceSet);
   }
 
   @Override
   void applyTo(ImmutableSpotBugsSpec.Builder builder) {
+    super.applyTo(builder);
     // TODO consider input and output for incremental build
     FileCollection sourceDirs = sourceSet.getAllJava();
     Set<File> classDirs = sourceSet.getOutput().getFiles();

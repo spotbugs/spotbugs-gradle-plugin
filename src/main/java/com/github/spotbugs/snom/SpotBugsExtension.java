@@ -14,96 +14,26 @@
 package com.github.spotbugs.snom;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import org.gradle.api.Project;
+import javax.inject.Inject;
+import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.Input;
 
 public class SpotBugsExtension {
-  @NonNull private final Property<Boolean> ignoreFailures;
-  @NonNull private final Property<Boolean> showProgress;
-  @NonNull private Confidence reportLevel = Confidence.DEFAULT;
-  @NonNull private Effort effort = Effort.DEFAULT;
-  @NonNull private List<String> visitors = Collections.emptyList();
-  @NonNull private List<String> omitVisitors = Collections.emptyList();
+  @NonNull final Property<Boolean> ignoreFailures;
+  @NonNull final Property<Boolean> showProgress;
+  @NonNull final Property<Confidence> reportLevel;
+  @NonNull final Property<Effort> effort;
+  @NonNull final ListProperty<String> visitors;
+  @NonNull final ListProperty<String> omitVisitors;
 
-  public SpotBugsExtension(Project project) {
-    ignoreFailures = project.getObjects().property(Boolean.class);
-    showProgress = project.getObjects().property(Boolean.class);
-  }
-
-  @Input
-  public boolean isIgnoreFailures() {
-    return ignoreFailures.getOrElse(Boolean.FALSE);
-  }
-
-  public void setIgnoreFailures(boolean ignoreFailures) {
-    this.ignoreFailures.set(ignoreFailures);
-  }
-
-  @Input
-  public boolean isShowProgress() {
-    return showProgress.getOrElse(Boolean.FALSE);
-  }
-
-  public void setShowProgress(boolean showProgress) {
-    this.showProgress.set(showProgress);
-  }
-
-  @Input
-  public List<String> getVisitors() {
-    return visitors;
-  }
-
-  public void setVisitors(List<String> visitors) {
-    this.visitors = Collections.unmodifiableList(new ArrayList<>(visitors));
-  }
-
-  @Input
-  public List<String> getOmitVisitors() {
-    return omitVisitors;
-  }
-
-  public void setOmitVisitors(List<String> omitVisitors) {
-    this.omitVisitors = Collections.unmodifiableList(new ArrayList<>(omitVisitors));
-  }
-
-  public Confidence getReportLevel() {
-    return reportLevel;
-  }
-
-  public void setReportLevel(Confidence reportLevel) {
-    this.reportLevel = Objects.requireNonNull(reportLevel);
-  }
-
-  public Effort getEffort() {
-    return effort;
-  }
-
-  public void setEffort(Effort effort) {
-    this.effort = Objects.requireNonNull(effort);
-  }
-
-  void applyTo(ImmutableSpotBugsSpec.Builder builder) {
-    builder.isIgnoreFailures(isIgnoreFailures());
-    builder.isShowProgress(isShowProgress());
-    if (getEffort() != null) {
-      builder.addExtraArguments("-effort:" + getEffort().toString().toLowerCase());
-    }
-    if (getReportLevel() != null) {
-      builder.addExtraArguments(getReportLevel().toCommandLineOption());
-    }
-    if (!visitors.isEmpty()) {
-      builder.addExtraArguments("-visitors");
-      builder.addExtraArguments(visitors.stream().collect(Collectors.joining(",")));
-    }
-    if (!omitVisitors.isEmpty()) {
-      builder.addExtraArguments("-omitVisitors");
-      builder.addExtraArguments(omitVisitors.stream().collect(Collectors.joining(",")));
-    }
+  @Inject
+  public SpotBugsExtension(ObjectFactory objects) {
+    ignoreFailures = objects.property(Boolean.class);
+    showProgress = objects.property(Boolean.class);
+    reportLevel = objects.property(Confidence.class);
+    effort = objects.property(Effort.class);
+    visitors = objects.listProperty(String.class);
+    omitVisitors = objects.listProperty(String.class);
   }
 }
