@@ -19,11 +19,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.gradle.api.file.FileCollection;
 import org.gradle.api.tasks.JavaExec;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Value.Style(jdkOnly = true) // do not use Guava even though it's in CLASSPATH
 @Value.Immutable
 abstract class SpotBugsSpec {
   private final Logger log = LoggerFactory.getLogger(SpotBugsSpec.class);
@@ -45,7 +47,7 @@ abstract class SpotBugsSpec {
    */
   abstract boolean isIgnoreFailures();
 
-  abstract List<File> sourceDirs();
+  abstract FileCollection sourceDirs();
 
   abstract List<File> classDirs();
 
@@ -83,7 +85,7 @@ abstract class SpotBugsSpec {
     }
     if (!sourceDirs().isEmpty()) {
       args.add("-sourcepath");
-      args.add(join(sourceDirs()));
+      args.add(sourceDirs().getAsPath());
     }
     args.addAll(extraArguments());
     classDirs().forEach(dir -> args.add(dir.getAbsolutePath()));

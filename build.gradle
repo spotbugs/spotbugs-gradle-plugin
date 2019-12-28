@@ -12,6 +12,7 @@ plugins {
 version = '2.0.0-SNAPSHOT'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+group = 'com.github.spotbugs.snom'
 
 apply from: "$rootDir/gradle/jacoco.gradle"
 apply from: "$rootDir/gradle/license.gradle"
@@ -19,7 +20,12 @@ apply from: "$rootDir/gradle/spotless.gradle"
 apply from: "$rootDir/gradle/errorprone.gradle"
 apply from: "$rootDir/gradle/publish.gradle"
 
-repositories { mavenCentral() }
+repositories {
+    // To download the Android Gradle Plugin
+    google()
+    // To download trove4j required by the Android Gradle Plugin
+    jcenter()
+}
 
 ext {
     junitVersion = '5.5.2'
@@ -27,12 +33,14 @@ ext {
     spotBugsVersion = '3.1.11'
     slf4jVersion = '2.0.0-alpha1'
     immutablesVersion = '2.8.2'
+    androidGradlePluginVersion = '3.5.3'
 }
 
 dependencies {
     errorprone "com.google.errorprone:error_prone_core:${errorproneVersion}"
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
     compileOnly "org.immutables:value:${immutablesVersion}:annotations"
+    compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
     annotationProcessor "org.immutables:value:${immutablesVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"

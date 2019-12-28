@@ -24,9 +24,7 @@ public class SpotBugsExtension {
 
   @Nonnull private Effort effort = Effort.DEFAULT;
 
-  public SpotBugsExtension(Project project) {
-    // TODO disable task generation when android plugin is activated?
-  }
+  public SpotBugsExtension(Project project) {}
 
   public boolean isIgnoreFailures() {
     return ignoreFailures;

@@ -15,6 +15,7 @@ package com.github.spotbugs.snom;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
@@ -24,10 +25,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
 import org.gradle.util.GradleVersion;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -113,5 +116,48 @@ class SpotBugsPluginTest {
             .build();
     assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").getOutcome());
     assertTrue(writer.getBuffer().toString().contains("spotbugs-4.0.0-beta4.jar"));
+  }
+
+  @Test
+  @Disabled("need to install Android SDK, and configure plugin classpath via a file")
+  void android(@TempDir Path tempDir) throws IOException {
+    Path javaSource =
+        Files.createDirectories(
+            tempDir
+                .resolve("src")
+                .resolve("main")
+                .resolve("java")
+                .resolve("com")
+                .resolve("github")
+                .resolve("spotbugs")
+                .resolve("snom"));
+    Files.copy(
+        Paths.get("src/test/resources/android.gradle"),
+        tempDir.resolve("build.gradle"),
+        StandardCopyOption.COPY_ATTRIBUTES);
+    Files.copy(
+        Paths.get("src/test/java/com/github/spotbugs/snom/Foo.java"),
+        javaSource.resolve("Foo.java"),
+        StandardCopyOption.COPY_ATTRIBUTES);
+
+    GradleRunner runner =
+        GradleRunner.create()
+            .withProjectDir(tempDir.toFile())
+            .withArguments(
+                Arrays.asList(
+                    "tasks")) // TODO find proper task to run, still need some configuration in
+            // build.gradle
+            .withPluginClasspath()
+            .forwardOutput();
+    // we use `buildscript {}` in build.gradle,
+    // so need to provide the PluginClasspath via a file
+    Files.writeString(
+        tempDir.resolve("plugin-classpath.txt"),
+        runner.getPluginClasspath().stream()
+            .map(File::getAbsolutePath)
+            .collect(Collectors.joining("\n")),
+        StandardCharsets.UTF_8);
+    BuildResult result = runner.build();
+    assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").getOutcome());
   }
 }
