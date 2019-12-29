@@ -15,13 +15,6 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 group = 'com.github.spotbugs.snom'
 
-apply from: "$rootDir/gradle/jacoco.gradle"
-apply from: "$rootDir/gradle/license.gradle"
-apply from: "$rootDir/gradle/spotless.gradle"
-apply from: "$rootDir/gradle/errorprone.gradle"
-apply from: "$rootDir/gradle/publish.gradle"
-apply from: "$rootDir/gradle/sonarcloud.gradle"
-
 repositories {
     // To download the Android Gradle Plugin
     google()
@@ -59,5 +52,13 @@ task processVersionFile(type: WriteProperties) {
     property 'spotbugs-version', spotBugsVersion
 }
 tasks.processResources.dependsOn processVersionFile
+
+apply from: "$rootDir/gradle/functional-test.gradle"
+apply from: "$rootDir/gradle/jacoco.gradle"
+apply from: "$rootDir/gradle/license.gradle"
+apply from: "$rootDir/gradle/spotless.gradle"
+apply from: "$rootDir/gradle/errorprone.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
+apply from: "$rootDir/gradle/sonarcloud.gradle"
 
 defaultTasks 'licenseFormatMain', 'licenseFormatTest', 'spotlessApply', 'build'

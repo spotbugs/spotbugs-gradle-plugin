@@ -6,6 +6,11 @@ spotless {
         removeUnusedImports()
         googleJavaFormat()
     }
+    groovy {
+        target '**/*.groovy'
+        greclipse()
+        indentWithSpaces()
+    }
     groovyGradle {
         target '**/*.gradle'
         greclipse()
