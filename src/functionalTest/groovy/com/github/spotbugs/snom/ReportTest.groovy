@@ -11,6 +11,7 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.github.spotbugs.snom
 import org.gradle.internal.impldep.com.google.common.io.Files
 import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification

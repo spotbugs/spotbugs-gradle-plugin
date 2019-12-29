@@ -3,10 +3,12 @@
 
 spotless {
     java {
+        licenseHeaderFile 'gradle/HEADER.txt'
         removeUnusedImports()
         googleJavaFormat()
     }
     groovy {
+        licenseHeaderFile 'gradle/HEADER.txt'
         target '**/*.groovy'
         greclipse()
         indentWithSpaces()
