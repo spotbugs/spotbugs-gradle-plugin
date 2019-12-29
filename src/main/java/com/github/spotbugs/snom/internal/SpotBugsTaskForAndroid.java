@@ -11,10 +11,10 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.snom;
+package com.github.spotbugs.snom.internal;
 
 import com.android.build.gradle.tasks.AndroidJavaCompile;
-import edu.umd.cs.findbugs.annotations.NonNull;
+import com.github.spotbugs.snom.SpotBugsTask;
 import java.util.Objects;
 import javax.inject.Inject;
 import org.gradle.api.file.FileCollection;
@@ -32,21 +32,18 @@ public class SpotBugsTaskForAndroid extends SpotBugsTask {
     dependsOn(task);
   }
 
-  @NonNull
   @Override
-  FileCollection getSourceDirs() {
+  public FileCollection getSourceDirs() {
     return task.getSource();
   }
 
-  @NonNull
   @Override
-  FileCollection getClassDirs() {
+  public FileCollection getClassDirs() {
     return task.getOutputDirectory().getAsFileTree();
   }
 
-  @NonNull
   @Override
-  FileCollection getAuxClassPaths() {
+  public FileCollection getAuxClassPaths() {
     return task.getClasspath();
   }
 }

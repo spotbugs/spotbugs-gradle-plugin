@@ -11,8 +11,10 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.snom;
+package com.github.spotbugs.snom.internal;
 
+import com.github.spotbugs.snom.SpotBugsExtension;
+import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
 import java.util.Objects;
@@ -37,24 +39,21 @@ public class SpotBugsTaskForJava extends SpotBugsTask {
   protected void init(SpotBugsExtension extension) {
     super.init(extension);
     // the default reportsDir is "$buildDir/reports/spotbugs/${sourceSetName}"
-    reportsDir.set(extension.reportsDir.map(dir -> new File(dir, sourceSet.getName())));
+    setReportsDir(extension.getReportsDir().map(dir -> new File(dir, sourceSet.getName())));
   }
 
-  @NonNull
   @Override
-  FileCollection getSourceDirs() {
+  public FileCollection getSourceDirs() {
     return sourceSet.getAllJava();
   }
 
-  @NonNull
   @Override
-  FileCollection getClassDirs() {
+  public FileCollection getClassDirs() {
     return sourceSet.getOutput();
   }
 
-  @NonNull
   @Override
-  FileCollection getAuxClassPaths() {
+  public FileCollection getAuxClassPaths() {
     return sourceSet.getCompileClasspath();
   }
 }

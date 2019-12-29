@@ -14,6 +14,8 @@
 package com.github.spotbugs.snom;
 
 import com.android.build.gradle.tasks.AndroidJavaCompile;
+import com.github.spotbugs.snom.internal.SpotBugsTaskForAndroid;
+import com.github.spotbugs.snom.internal.SpotBugsTaskForJava;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

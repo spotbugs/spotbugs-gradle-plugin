@@ -28,6 +28,7 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFiles;
 import org.gradle.api.tasks.Internal;
@@ -56,17 +57,17 @@ public abstract class SpotBugsTask extends DefaultTask
   @InputFiles
   @PathSensitive(PathSensitivity.RELATIVE)
   @NonNull
-  abstract FileCollection getSourceDirs();
+  public abstract FileCollection getSourceDirs();
 
   @InputFiles
   @PathSensitive(PathSensitivity.RELATIVE)
   @NonNull
-  abstract FileCollection getClassDirs();
+  public abstract FileCollection getClassDirs();
 
   @InputFiles
   @PathSensitive(PathSensitivity.RELATIVE)
   @NonNull
-  abstract FileCollection getAuxClassPaths();
+  public abstract FileCollection getAuxClassPaths();
 
   @Input
   @Optional
@@ -112,6 +113,10 @@ public abstract class SpotBugsTask extends DefaultTask
   @Internal
   public Property<File> getReportsDir() {
     return reportsDir;
+  }
+
+  public void setReportsDir(Provider<File> provider) {
+    reportsDir.set(provider);
   }
 
   public SpotBugsTask(ObjectFactory objects) {
