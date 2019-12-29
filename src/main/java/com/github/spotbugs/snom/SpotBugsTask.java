@@ -13,34 +13,38 @@
  */
 package com.github.spotbugs.snom;
 
+import com.github.spotbugs.snom.internal.DefaultSpotBugsReportsContainer;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.OverrideMustInvoke;
+import groovy.lang.Closure;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.gradle.api.Action;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.Input;
-import org.gradle.api.tasks.InputFiles;
-import org.gradle.api.tasks.PathSensitive;
-import org.gradle.api.tasks.PathSensitivity;
-import org.gradle.api.tasks.TaskAction;
+import org.gradle.api.tasks.*;
+import org.gradle.util.ClosureBackedAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-abstract class SpotBugsTask extends DefaultTask // TODO consider to implements VerificationTask
+public abstract class SpotBugsTask extends DefaultTask
+// TODO consider to implements VerificationTask
 {
   private final Logger log = LoggerFactory.getLogger(SpotBugsTask.class);
-  @Input @NonNull final Property<Boolean> ignoreFailures;
-  @Input @NonNull final Property<Boolean> showProgress;
-  @Input @NonNull final Property<Confidence> reportLevel;
-  @Input @NonNull final Property<Effort> effort;
-  @Input @NonNull final ListProperty<String> visitors;
-  @Input @NonNull final ListProperty<String> omitVisitors;
+  @NonNull final Property<Boolean> ignoreFailures;
+  @NonNull final Property<Boolean> showProgress;
+  @NonNull final Property<Confidence> reportLevel;
+  @NonNull final Property<Effort> effort;
+  @NonNull final ListProperty<String> visitors;
+  @NonNull final ListProperty<String> omitVisitors;
+  @NonNull final Property<File> reportsDir;
+  @NonNull final SpotBugsReportsContainer reports;
 
   @InputFiles
   @PathSensitive(PathSensitivity.RELATIVE)
@@ -57,6 +61,52 @@ abstract class SpotBugsTask extends DefaultTask // TODO consider to implements V
   @NonNull
   abstract FileCollection getAuxClassPaths();
 
+  @Input
+  @Optional
+  @NonNull
+  public Property<Boolean> getIgnoreFailures() {
+    return ignoreFailures;
+  }
+
+  @Input
+  @Optional
+  @NonNull
+  public Property<Boolean> getShowProgress() {
+    return showProgress;
+  }
+
+  @Input
+  @Optional
+  @NonNull
+  public Property<Confidence> getReportLevel() {
+    return reportLevel;
+  }
+
+  @Input
+  @Optional
+  @NonNull
+  public Property<Effort> getEffort() {
+    return effort;
+  }
+
+  @Input
+  @NonNull
+  public ListProperty<String> getVisitors() {
+    return visitors;
+  }
+
+  @Input
+  @NonNull
+  public ListProperty<String> getOmitVisitors() {
+    return omitVisitors;
+  }
+
+  @NonNull
+  @Internal
+  public Property<File> getReportsDir() {
+    return reportsDir;
+  }
+
   public SpotBugsTask(ObjectFactory objects) {
     ignoreFailures = objects.property(Boolean.class);
     showProgress = objects.property(Boolean.class);
@@ -64,6 +114,8 @@ abstract class SpotBugsTask extends DefaultTask // TODO consider to implements V
     effort = objects.property(Effort.class);
     visitors = objects.listProperty(String.class);
     omitVisitors = objects.listProperty(String.class);
+    reportsDir = objects.property(File.class);
+    reports = new DefaultSpotBugsReportsContainer(this);
   }
 
   /**
@@ -72,18 +124,30 @@ abstract class SpotBugsTask extends DefaultTask // TODO consider to implements V
    *
    * @param extension the source extension to copy the properties.
    */
-  final void init(SpotBugsExtension extension) {
+  @OverrideMustInvoke
+  protected void init(SpotBugsExtension extension) {
     ignoreFailures.set(extension.ignoreFailures);
     showProgress.set(extension.showProgress);
     reportLevel.set(extension.reportLevel);
     effort.set(extension.effort);
     visitors.set(extension.visitors);
     omitVisitors.set(extension.omitVisitors);
+    // the default reportsDir is "$buildDir/reports/spotbugs/${taskName}"
+    reportsDir.set(extension.reportsDir.map(dir -> new File(dir, getName())));
   }
 
   final void applyTo(ImmutableSpotBugsSpec.Builder builder) {
     builder.isIgnoreFailures(ignoreFailures.getOrElse(false));
     builder.isShowProgress(showProgress.getOrElse(false));
+    getReports()
+        .getFirstEnabled()
+        .ifPresent(
+            report -> {
+              File dir = report.getDestination().getParentFile();
+              dir.mkdirs();
+              builder.addExtraArguments(report.toCommandLineOption());
+              builder.addExtraArguments("-outputFile", report.getDestination().getAbsolutePath());
+            });
     if (effort.isPresent()) {
       builder.addExtraArguments("-effort:" + effort.get().toString().toLowerCase());
     }
@@ -118,6 +182,21 @@ abstract class SpotBugsTask extends DefaultTask // TODO consider to implements V
               spec.setMain("edu.umd.cs.findbugs.FindBugs2");
               builder.build().applyTo(spec);
             });
+  }
+
+  @Nested
+  public final SpotBugsReportsContainer getReports() {
+    return reports;
+  }
+
+  public final SpotBugsReportsContainer reports(Closure<? super SpotBugsReportsContainer> closure) {
+    return reports(new ClosureBackedAction<SpotBugsReportsContainer>(closure));
+  }
+
+  public final SpotBugsReportsContainer reports(
+      Action<? super SpotBugsReportsContainer> configureAction) {
+    configureAction.execute(reports);
+    return reports;
   }
 
   @NonNull

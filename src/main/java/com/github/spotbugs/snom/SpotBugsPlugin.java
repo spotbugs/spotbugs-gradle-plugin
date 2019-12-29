@@ -48,7 +48,7 @@ public class SpotBugsPlugin implements Plugin<Project> {
   private SpotBugsExtension createExtension(Project project) {
     return project
         .getExtensions()
-        .create("spotbugs", SpotBugsExtension.class, project.getObjects());
+        .create("spotbugs", SpotBugsExtension.class, project, project.getObjects());
   }
 
   private void createConfiguration(Project project) {

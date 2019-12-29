@@ -16,6 +16,5 @@ package com.github.spotbugs.snom;
 public enum ReportType {
   TEXT,
   XML,
-  HTML,
-  EMACS;
+  HTML;
 }

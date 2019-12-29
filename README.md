@@ -40,6 +40,9 @@ spotbugs {
     reportLevel = 'default'
     visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
     omitVisitors = [ 'FindNonShortCircuit' ]
+    reports {
+        
+    }
 }
 ```
 

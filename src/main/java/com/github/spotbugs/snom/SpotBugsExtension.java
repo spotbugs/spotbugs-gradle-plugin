@@ -14,7 +14,10 @@
 package com.github.spotbugs.snom;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import java.io.File;
+import java.nio.file.Paths;
 import javax.inject.Inject;
+import org.gradle.api.Project;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
@@ -26,14 +29,19 @@ public class SpotBugsExtension {
   @NonNull final Property<Effort> effort;
   @NonNull final ListProperty<String> visitors;
   @NonNull final ListProperty<String> omitVisitors;
+  @NonNull final Property<File> reportsDir;
 
   @Inject
-  public SpotBugsExtension(ObjectFactory objects) {
+  public SpotBugsExtension(Project project, ObjectFactory objects) {
     ignoreFailures = objects.property(Boolean.class);
     showProgress = objects.property(Boolean.class);
     reportLevel = objects.property(Confidence.class);
     effort = objects.property(Effort.class);
     visitors = objects.listProperty(String.class);
     omitVisitors = objects.listProperty(String.class);
+    reportsDir = objects.property(File.class);
+    // the default reportsDir is "$buildDir/reports/spotbugs"
+    reportsDir.set(
+        project.getBuildDir().toPath().resolve(Paths.get("reports", "spotbugs")).toFile());
   }
 }

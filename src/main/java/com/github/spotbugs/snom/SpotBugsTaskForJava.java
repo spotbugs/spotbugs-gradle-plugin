@@ -14,6 +14,7 @@
 package com.github.spotbugs.snom;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import java.io.File;
 import java.util.Objects;
 import javax.inject.Inject;
 import org.gradle.api.file.FileCollection;
@@ -30,6 +31,13 @@ public class SpotBugsTaskForJava extends SpotBugsTask {
     super(objects);
     this.sourceSet = Objects.requireNonNull(sourceSet);
     dependsOn(sourceSet.getClassesTaskName());
+  }
+
+  @Override
+  protected void init(SpotBugsExtension extension) {
+    super.init(extension);
+    // the default reportsDir is "$buildDir/reports/spotbugs/${sourceSetName}"
+    reportsDir.set(extension.reportsDir.map(dir -> new File(dir, sourceSet.getName())));
   }
 
   @NonNull
