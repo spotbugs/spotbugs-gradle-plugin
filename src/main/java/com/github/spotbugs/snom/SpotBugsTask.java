@@ -152,7 +152,7 @@ public abstract class SpotBugsTask extends DefaultTask
             report -> {
               File dir = report.getDestination().getParentFile();
               dir.mkdirs();
-              builder.addExtraArguments(report.toCommandLineOption());
+              report.toCommandLineOption().ifPresent(builder::addExtraArguments);
               builder.addExtraArguments("-outputFile", report.getDestination().getAbsolutePath());
             });
     if (effort.isPresent()) {

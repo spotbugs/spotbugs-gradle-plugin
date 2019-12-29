@@ -18,6 +18,7 @@ import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.File;
+import java.util.Optional;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
@@ -36,13 +37,13 @@ public class SpotBugsHtmlReport extends AbstractSingleFileReport implements Cust
 
   @NonNull
   @Override
-  public String toCommandLineOption() {
+  public Optional<String> toCommandLineOption() {
     @Nullable TextResource stylesheet = getStylesheet();
 
     if (stylesheet == null) {
-      return "-html";
+      return Optional.of("-html");
     } else {
-      return "-html:" + stylesheet.asFile().getAbsolutePath();
+      return Optional.of("-html:" + stylesheet.asFile().getAbsolutePath());
     }
   }
 

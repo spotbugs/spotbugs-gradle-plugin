@@ -17,6 +17,7 @@ import com.github.spotbugs.snom.ReportType;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
+import java.util.Optional;
 import org.gradle.api.model.ObjectFactory;
 
 public class SpotBugsTextReport extends AbstractSingleFileReport {
@@ -28,8 +29,8 @@ public class SpotBugsTextReport extends AbstractSingleFileReport {
 
   @NonNull
   @Override
-  public String toCommandLineOption() {
-    return "-text";
+  public Optional<String> toCommandLineOption() {
+    return Optional.empty();
   }
 
   @Override

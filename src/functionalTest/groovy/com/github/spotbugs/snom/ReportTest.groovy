@@ -21,6 +21,7 @@ import org.gradle.testkit.runner.GradleRunner
 import java.nio.file.Paths
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertTrue
 
 class ReportTest extends Specification {
@@ -55,9 +56,43 @@ public class Foo {
 """
     }
 
+    def "do not generate reports by default"() {
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        File reportsDir = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").toFile()
+        assertFalse(reportsDir.isDirectory())
+    }
+
+    def "can generate spotbugs.txt"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        text.enabled = true
+    }
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.txt").toFile()
+        assertTrue(report.isFile())
+    }
+
     def "can generate spotbugs.html"() {
         buildFile << """
-tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
+spotbugsMain {
     reports {
         html.enabled = true
     }
@@ -77,7 +112,7 @@ tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
 
     def "can generate spotbugs.xml"() {
         buildFile << """
-tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
+spotbugsMain {
     reports {
         xml.enabled = true
     }
@@ -92,6 +127,32 @@ tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.xml").toFile()
+        assertTrue(report.isFile())
+    }
+
+    def "can generate a report in specified reportsDir"() {
+        buildFile << """
+spotbugs {
+    reportsDir = file("\$buildDir/spotbugs")
+}
+spotbugsMain {
+    reports {
+        text.enabled = true
+    }
+}
+"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        File reportsDir = rootDir.toPath().resolve("build").resolve("spotbugs").toFile();
+        assertTrue(reportsDir.isDirectory())
+        File report = reportsDir.toPath().resolve("main").resolve("spotbugs.txt").toFile()
         assertTrue(report.isFile())
     }
 }

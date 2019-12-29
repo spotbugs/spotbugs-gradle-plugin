@@ -17,6 +17,7 @@ import com.github.spotbugs.snom.ReportType;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
+import java.util.Optional;
 import org.gradle.api.model.ObjectFactory;
 
 public class SpotBugsXmlReport extends AbstractSingleFileReport {
@@ -28,8 +29,8 @@ public class SpotBugsXmlReport extends AbstractSingleFileReport {
 
   @NonNull
   @Override
-  public String toCommandLineOption() {
-    return "-xml:withMessages";
+  public Optional<String> toCommandLineOption() {
+    return Optional.of("-xml:withMessages");
   }
 
   @Override

@@ -44,4 +44,12 @@ public class SpotBugsExtension {
     reportsDir.set(
         project.getBuildDir().toPath().resolve(Paths.get("reports", "spotbugs")).toFile());
   }
+
+  public void setReportsDir(Property<File> file) {
+    reportsDir.set(file);
+  }
+
+  public void setReportsDir(File file) {
+    reportsDir.set(file);
+  }
 }

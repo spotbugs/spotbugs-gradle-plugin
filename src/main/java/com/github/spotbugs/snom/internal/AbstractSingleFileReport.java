@@ -17,6 +17,7 @@ import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import groovy.lang.Closure;
 import java.io.File;
+import java.util.Optional;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
@@ -35,7 +36,7 @@ public abstract class AbstractSingleFileReport implements SingleFileReport {
   }
 
   @NonNull
-  public abstract String toCommandLineOption();
+  public abstract Optional<String> toCommandLineOption();
 
   @Override
   public File getDestination() {
