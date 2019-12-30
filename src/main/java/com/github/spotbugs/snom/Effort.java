@@ -14,13 +14,41 @@
 package com.github.spotbugs.snom;
 
 /**
- * @see <a href="https://spotbugs.readthedocs.io/en/stable/effort.html">Official document about
- *     effort</a>
+ * The {@code Effort} is configuration to adjust SpotBugs detectors. Use lower effort to reduce
+ * computation cost.
+ *
+ * <p><strong>Usage:</strong>
+ *
+ * <p>Set via the {@code spotbugs} extension to configure all tasks in your project: <div><code>
+ * spotbugs {<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;effort = 'less'<br>
+ * }</code></div>
+ *
+ * <p>Or via {@code SpotBugsTask} to configure the specific task in your project:<div><code>
+ * spotbugsMain { // or name of another task<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;effort = 'max'<br>
+ * }</code></div>
+ *
+ * @see <a href="https://spotbugs.readthedocs.io/en/stable/effort.html">SpotBugs Manual</a>
  */
 public enum Effort {
+  /**
+   * The effort level to minimize the computation cost. SpotBugs will try to conserve space at the
+   * expense of precision.
+   */
   MIN,
+  /** The effort level to reduce the computation cost. */
   LESS,
+  /** The default level that provides the same feature with {@link MORE}. */
   DEFAULT,
+  /**
+   * The effort level that uses more computation cost. SpotBugs will try to detect more problems by
+   * Interprocedural Analysis and Null Pointer Analysis.
+   */
   MORE,
+  /**
+   * The effort level that maximize the computation cost. SpotBugs will run Interprocedural Analysis
+   * of Referenced Classes.
+   */
   MAX;
 }

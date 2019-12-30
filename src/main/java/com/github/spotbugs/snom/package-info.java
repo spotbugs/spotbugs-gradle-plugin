@@ -11,5 +11,11 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/** SNOM stands for {@code SpotBugs Newly Organized Mechanism}. */
+/**
+ * This package provides public classes/interfaces for users. All published
+ * classes/interfaces/methods in this package (not including sub-packages) are treated as public and
+ * keep compatible.
+ *
+ * <p>The {@code SNOM} stands for {@code SpotBugs Newly Organized Mechanism}.
+ */
 package com.github.spotbugs.snom;

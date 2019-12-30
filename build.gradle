@@ -43,6 +43,10 @@ dependencies {
 
 test { useJUnitPlatform() }
 
+javadoc {
+    options.addBooleanOption('html5', true)
+}
+
 task processVersionFile(type: WriteProperties) {
     outputFile file('src/main/resources/spotbugs-gradle-plugin.properties')
 
