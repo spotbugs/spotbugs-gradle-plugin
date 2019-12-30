@@ -8,6 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Fetch origin/master for SonarQube analysis
+      uses: actions/checkout@722adc6
+      with:
+        ref: master
     - uses: actions/checkout@722adc6
       with:
         fetch-depth: 0
