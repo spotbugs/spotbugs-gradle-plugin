@@ -13,7 +13,6 @@
  */
 package com.github.spotbugs.snom.internal;
 
-import com.github.spotbugs.snom.ReportType;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
@@ -35,7 +34,7 @@ public class SpotBugsXmlReport extends AbstractSingleFileReport {
 
   @Override
   public String getName() {
-    return ReportType.XML.name();
+    return "XML";
   }
 
   @Override

@@ -13,7 +13,6 @@
  */
 package com.github.spotbugs.snom.internal;
 
-import com.github.spotbugs.snom.ReportType;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -49,7 +48,7 @@ public class SpotBugsHtmlReport extends AbstractSingleFileReport implements Cust
 
   @Override
   public String getName() {
-    return ReportType.HTML.name();
+    return "HTML";
   }
 
   @Nullable
