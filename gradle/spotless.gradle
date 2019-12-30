@@ -18,6 +18,4 @@ spotless {
         greclipse()
         indentWithSpaces()
     }
-    freshmark {
-    }
 }

@@ -15,14 +15,35 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Set up Node.js 12
+      uses: actions/setup-node@8de2f9f
+      with:
+        node-version: 12
     - uses: actions/cache@cffae95
       with:
         path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
+    - name: Get yarn cache
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - uses: actions/cache@cffae95
+      with:
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
     - name: Build with Gradle
       run: ./gradlew build sonarqube -Dsonar.login=${{ secrets.SONAR_LOGIN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run Semantic Release
+      run: |
+        echo "gradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY }}" > ~/.gradle/gradle.properties
+        echo "gradle.publish.secret=${{ secrets.GRADLE_PUBLISH_SECRET }}" >> ~/.gradle/gradle.properties
+        yarn
+        yarn semantic-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/upload-artifact@3446296

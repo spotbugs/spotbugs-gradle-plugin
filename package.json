@@ -1,0 +1,53 @@
+{
+  "devDependencies": {
+    "@semantic-release/changelog": "3.0.6",
+    "@semantic-release/commit-analyzer": "6.3.3",
+    "@semantic-release/git": "7.0.18",
+    "@semantic-release/github": "5.5.5",
+    "commitlint": "^8.2.0",
+    "conventional-changelog-conventionalcommits": "^4.2.3",
+    "gradle-semantic-release-plugin": "1.2.1",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.4.3",
+    "prettier": "^1.19.1",
+    "semantic-release": "15.13.31"
+  },
+  "scripts": {
+    "semantic-release": "semantic-release"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "./gradlew spotlessApply",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{md,json}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{gradle,java}": [
+      "git add"
+    ]
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/github",
+      "gradle-semantic-release-plugin",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "gradle.properties"
+          ]
+        }
+      ]
+    ]
+  },
+  "engines": {
+    "node": "^12.12.0"
+  }
+}
