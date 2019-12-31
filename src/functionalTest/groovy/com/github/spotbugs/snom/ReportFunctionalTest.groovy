@@ -134,7 +134,6 @@ spotbugsMain {
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
-        System.out.println(Arrays.toString(report.parentFile.list()))
         assertTrue(report.isFile())
     }
 
