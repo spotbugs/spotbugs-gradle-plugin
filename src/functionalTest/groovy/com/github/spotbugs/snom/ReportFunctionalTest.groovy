@@ -20,6 +20,7 @@ import org.gradle.testkit.runner.GradleRunner
 
 import java.nio.file.Paths
 
+import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -181,5 +182,24 @@ spotbugsMain {
         assertTrue(reportsDir.isDirectory())
         File report = reportsDir.toPath().resolve("main").resolve("spotbugs.txt").toFile()
         assertTrue(report.isFile())
+    }
+
+    def "reports error when set unknown report type"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        unknown.enabled = true
+    }
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .buildAndFail()
+
+        then:
+        assertTrue(result.getTasks().isEmpty())
+        assertTrue(result.getOutput().contains("unknown is invalid as the report name"))
     }
 }
