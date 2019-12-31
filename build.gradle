@@ -41,7 +41,10 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 }
 
-test { useJUnitPlatform() }
+test {
+    useJUnitPlatform()
+    maxParallelForks = Runtime.runtime.availableProcessors()
+}
 
 javadoc {
     title = 'SpotBugs Gradle Plugin'
