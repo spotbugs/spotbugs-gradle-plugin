@@ -13,7 +13,7 @@
  */
 package com.github.spotbugs.snom.internal;
 
-import com.github.spotbugs.snom.ReportType;
+import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -21,11 +21,9 @@ import java.io.File;
 import java.util.Optional;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
-import org.gradle.api.provider.Provider;
-import org.gradle.api.reporting.CustomizableHtmlReport;
 import org.gradle.api.resources.TextResource;
 
-public class SpotBugsHtmlReport extends AbstractSingleFileReport implements CustomizableHtmlReport {
+public class SpotBugsHtmlReport extends SpotBugsReport {
   private final Property<TextResource> stylesheet;
 
   public SpotBugsHtmlReport(ObjectFactory objects, SpotBugsTask task) {
@@ -49,10 +47,9 @@ public class SpotBugsHtmlReport extends AbstractSingleFileReport implements Cust
 
   @Override
   public String getName() {
-    return ReportType.HTML.name();
+    return "HTML";
   }
 
-  @Nullable
   @Override
   public TextResource getStylesheet() {
     return stylesheet.getOrNull();
@@ -60,10 +57,6 @@ public class SpotBugsHtmlReport extends AbstractSingleFileReport implements Cust
 
   @Override
   public void setStylesheet(@Nullable TextResource textResource) {
-    stylesheet.set(textResource);
-  }
-
-  public void setStylesheet(@NonNull Provider<TextResource> textResource) {
     stylesheet.set(textResource);
   }
 }

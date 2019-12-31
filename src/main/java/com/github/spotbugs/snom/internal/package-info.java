@@ -11,10 +11,9 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.snom;
-
-public enum ReportType {
-  TEXT,
-  XML,
-  HTML;
-}
+/**
+ * This package provides internal classes/interfaces. All published classes/interfaces/methods in
+ * this package are NOT treated as public, so it will not keep backward compatibility. It is
+ * strongly recommended to stop depending on them in your build script.
+ */
+package com.github.spotbugs.snom.internal;

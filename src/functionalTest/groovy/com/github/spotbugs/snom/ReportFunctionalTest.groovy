@@ -20,11 +20,12 @@ import org.gradle.testkit.runner.GradleRunner
 
 import java.nio.file.Paths
 
+import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertTrue
 
-class ReportTest extends Specification {
+class ReportFunctionalTest extends Specification {
     File rootDir
     File buildFile
 
@@ -110,6 +111,33 @@ spotbugsMain {
         assertTrue(report.isFile())
     }
 
+    def "can generate spotbugs.html with stylesheet"() {
+        buildFile << """
+// https://github.com/spotbugs/spotbugs-gradle-plugin/issues/107#issue-408724750
+configurations { spotbugsStylesheets { transitive false } }
+dependencies { spotbugsStylesheets 'com.github.spotbugs:spotbugs:3.1.10' }
+
+spotbugsMain {
+    reports {
+        html {
+            enabled = true
+            stylesheet = resources.text.fromArchiveEntry(configurations.spotbugsStylesheets, 'fancy-hist.xsl')
+        }
+    }
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', "--stacktrace")
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
+        assertTrue(report.isFile())
+    }
+
     def "can generate spotbugs.xml"() {
         buildFile << """
 spotbugsMain {
@@ -154,5 +182,24 @@ spotbugsMain {
         assertTrue(reportsDir.isDirectory())
         File report = reportsDir.toPath().resolve("main").resolve("spotbugs.txt").toFile()
         assertTrue(report.isFile())
+    }
+
+    def "reports error when set unknown report type"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        unknown.enabled = true
+    }
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .buildAndFail()
+
+        then:
+        assertTrue(result.getTasks().isEmpty())
+        assertTrue(result.getOutput().contains("unknown is invalid as the report name"))
     }
 }

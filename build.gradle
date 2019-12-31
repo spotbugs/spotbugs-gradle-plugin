@@ -41,7 +41,15 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 }
 
-test { useJUnitPlatform() }
+test {
+    useJUnitPlatform()
+    maxParallelForks = Runtime.runtime.availableProcessors()
+}
+
+javadoc {
+    title = 'SpotBugs Gradle Plugin'
+    options.addBooleanOption('html5', true)
+}
 
 task processVersionFile(type: WriteProperties) {
     outputFile file('src/main/resources/spotbugs-gradle-plugin.properties')

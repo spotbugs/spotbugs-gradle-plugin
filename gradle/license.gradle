@@ -1,4 +1,0 @@
-license {
-    header rootProject.file('gradle/HEADER.txt')
-    exclude '**/*.properties'
-}
