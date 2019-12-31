@@ -23,20 +23,20 @@ import org.gradle.api.tasks.Internal;
 public interface SpotBugsReportsContainer
 // TODO consider to extends ReportContainer<ConfigurableReport> that needs internal dependencies
 {
-  @Internal
   @NonNull
+  @Internal
   SingleFileReport getText();
 
-  @Internal
   @NonNull
+  @Internal
   SingleFileReport getXml();
 
-  @Internal
   @NonNull
+  @Internal
   CustomizableHtmlReport getHtml();
 
   /** @return Get the enabled report. */
-  @Internal
   @NonNull
+  @Internal
   Optional<AbstractSingleFileReport> getFirstEnabled();
 }

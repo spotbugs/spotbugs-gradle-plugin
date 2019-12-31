@@ -110,7 +110,7 @@ public abstract class SpotBugsTask extends DefaultTask
   }
 
   @NonNull
-  @Internal
+  @Internal("Refer the destination of each report instead.")
   public Property<File> getReportsDir() {
     return reportsDir;
   }
