@@ -13,7 +13,6 @@
  */
 package com.github.spotbugs.snom;
 
-import com.github.spotbugs.snom.internal.AbstractSingleFileReport;
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
@@ -58,7 +57,7 @@ public abstract class SpotBugsTask extends DefaultTask
   @NonNull final ListProperty<String> visitors;
   @NonNull final ListProperty<String> omitVisitors;
   @NonNull final Property<File> reportsDir;
-  @NonNull final NamedDomainObjectContainer<AbstractSingleFileReport> reports;
+  @NonNull final NamedDomainObjectContainer<SpotBugsReport> reports;
 
   @InputFiles
   @PathSensitive(PathSensitivity.RELATIVE)
@@ -135,7 +134,7 @@ public abstract class SpotBugsTask extends DefaultTask
     reportsDir = objects.property(File.class);
     reports =
         objects.domainObjectContainer(
-            AbstractSingleFileReport.class,
+            SpotBugsReport.class,
             (name) -> {
               switch (name) {
                 case "html":
@@ -220,15 +219,14 @@ public abstract class SpotBugsTask extends DefaultTask
     return reports;
   }
 
-  public final NamedDomainObjectContainer<? extends AbstractSingleFileReport> reports(
-      Closure<NamedDomainObjectContainer<? extends AbstractSingleFileReport>> closure) {
+  public final NamedDomainObjectContainer<? extends SpotBugsReport> reports(
+      Closure<NamedDomainObjectContainer<? extends SpotBugsReport>> closure) {
     return reports(
-        new ClosureBackedAction<NamedDomainObjectContainer<? extends AbstractSingleFileReport>>(
-            closure));
+        new ClosureBackedAction<NamedDomainObjectContainer<? extends SpotBugsReport>>(closure));
   }
 
-  public final NamedDomainObjectContainer<? extends AbstractSingleFileReport> reports(
-      Action<NamedDomainObjectContainer<? extends AbstractSingleFileReport>> configureAction) {
+  public final NamedDomainObjectContainer<? extends SpotBugsReport> reports(
+      Action<NamedDomainObjectContainer<? extends SpotBugsReport>> configureAction) {
     configureAction.execute(reports);
     return reports;
   }
@@ -251,7 +249,7 @@ public abstract class SpotBugsTask extends DefaultTask
 
   @NonNull
   @Nested
-  public java.util.Optional<AbstractSingleFileReport> getFirstEnabledReport() {
+  public java.util.Optional<SpotBugsReport> getFirstEnabledReport() {
     return reports.stream().filter(SingleFileReport::isEnabled).findFirst();
   }
 }

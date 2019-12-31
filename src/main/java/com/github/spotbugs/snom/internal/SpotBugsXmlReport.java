@@ -13,13 +13,14 @@
  */
 package com.github.spotbugs.snom.internal;
 
+import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
 import java.util.Optional;
 import org.gradle.api.model.ObjectFactory;
 
-public class SpotBugsXmlReport extends AbstractSingleFileReport {
+public class SpotBugsXmlReport extends SpotBugsReport {
   public SpotBugsXmlReport(ObjectFactory objects, SpotBugsTask task) {
     super(objects, task);
     // the default reportsDir is "$buildDir/reports/spotbugs/${taskName}/spotbugs.xml"

@@ -24,7 +24,7 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertTrue
 
-class ReportTest extends Specification {
+class ReportFunctionalTest extends Specification {
     File rootDir
     File buildFile
 

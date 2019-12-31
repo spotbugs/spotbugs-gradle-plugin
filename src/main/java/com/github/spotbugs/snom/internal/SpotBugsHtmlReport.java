@@ -13,6 +13,7 @@
  */
 package com.github.spotbugs.snom.internal;
 
+import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -22,7 +23,7 @@ import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.resources.TextResource;
 
-public class SpotBugsHtmlReport extends AbstractSingleFileReport {
+public class SpotBugsHtmlReport extends SpotBugsReport {
   private final Property<TextResource> stylesheet;
 
   public SpotBugsHtmlReport(ObjectFactory objects, SpotBugsTask task) {

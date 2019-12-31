@@ -11,9 +11,8 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.snom.internal;
+package com.github.spotbugs.snom;
 
-import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import groovy.lang.Closure;
@@ -32,7 +31,7 @@ import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.util.ConfigureUtil;
 
-public abstract class AbstractSingleFileReport
+public abstract class SpotBugsReport
     implements SingleFileReport,
         CustomizableHtmlReport // to expose CustomizableHtmlReport#setStylesheet to build script
 {
@@ -40,7 +39,7 @@ public abstract class AbstractSingleFileReport
   private final Property<Boolean> isEnabled;
   private final SpotBugsTask task;
 
-  public AbstractSingleFileReport(ObjectFactory objects, SpotBugsTask task) {
+  public SpotBugsReport(ObjectFactory objects, SpotBugsTask task) {
     this.destination = objects.property(File.class);
     this.isEnabled = objects.property(Boolean.class);
     this.task = task;
