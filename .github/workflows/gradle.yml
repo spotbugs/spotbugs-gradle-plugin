@@ -1,6 +1,12 @@
 name: Java CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
@@ -11,12 +17,6 @@ jobs:
     - uses: actions/checkout@722adc6
       with:
         fetch-depth: 0
-    - name: Fetch origin/master for SonarQube analysis
-      # https://community.sonarsource.com/t/sonarcloud-now-not-updating-github-pr-and-checks/6595/17
-
-      # Use the same URL as remote repo with actions/checkout. Expect that github.repository does not need encodeURIComponent
-      # https://github.com/actions/checkout/blob/a6747255bd19d7a757dbdda8c654a9f84db19839/src/git-source-provider.ts#L32-L34
-      run: git fetch --no-tags https://github.com/${{ github.repository }} +refs/heads/master:refs/remotes/origin/master
     - name: Set up JDK 11
       uses: actions/setup-java@081536e
       with:
