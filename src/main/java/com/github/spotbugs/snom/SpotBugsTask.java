@@ -13,7 +13,10 @@
  */
 package com.github.spotbugs.snom;
 
-import com.github.spotbugs.snom.internal.DefaultSpotBugsReportsContainer;
+import com.github.spotbugs.snom.internal.AbstractSingleFileReport;
+import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
+import com.github.spotbugs.snom.internal.SpotBugsTextReport;
+import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.OverrideMustInvoke;
 import groovy.lang.Closure;
@@ -23,12 +26,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.gradle.api.Action;
 import org.gradle.api.DefaultTask;
+import org.gradle.api.InvalidUserDataException;
+import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
+import org.gradle.api.reporting.SingleFileReport;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFiles;
 import org.gradle.api.tasks.Internal;
@@ -52,7 +58,7 @@ public abstract class SpotBugsTask extends DefaultTask
   @NonNull final ListProperty<String> visitors;
   @NonNull final ListProperty<String> omitVisitors;
   @NonNull final Property<File> reportsDir;
-  @NonNull final SpotBugsReportsContainer reports;
+  @NonNull final NamedDomainObjectContainer<AbstractSingleFileReport> reports;
 
   @InputFiles
   @PathSensitive(PathSensitivity.RELATIVE)
@@ -127,7 +133,21 @@ public abstract class SpotBugsTask extends DefaultTask
     visitors = objects.listProperty(String.class);
     omitVisitors = objects.listProperty(String.class);
     reportsDir = objects.property(File.class);
-    reports = new DefaultSpotBugsReportsContainer(this);
+    reports =
+        objects.domainObjectContainer(
+            AbstractSingleFileReport.class,
+            (name) -> {
+              switch (name) {
+                case "html":
+                  return new SpotBugsHtmlReport(objects, this);
+                case "xml":
+                  return new SpotBugsXmlReport(objects, this);
+                case "text":
+                  return new SpotBugsTextReport(objects, this);
+                default:
+                  throw new InvalidUserDataException(name + " is invalid as the report name");
+              }
+            });
   }
 
   /**
@@ -151,8 +171,7 @@ public abstract class SpotBugsTask extends DefaultTask
   final void applyTo(ImmutableSpotBugsSpec.Builder builder) {
     builder.isIgnoreFailures(ignoreFailures.getOrElse(false));
     builder.isShowProgress(showProgress.getOrElse(false));
-    getReports()
-        .getFirstEnabled()
+    getFirstEnabledReport()
         .ifPresent(
             report -> {
               File dir = report.getDestination().getParentFile();
@@ -197,16 +216,19 @@ public abstract class SpotBugsTask extends DefaultTask
   }
 
   @Nested
-  public final SpotBugsReportsContainer getReports() {
+  public final NamedDomainObjectContainer<? extends SingleFileReport> getReports() {
     return reports;
   }
 
-  public final SpotBugsReportsContainer reports(Closure<? super SpotBugsReportsContainer> closure) {
-    return reports(new ClosureBackedAction<SpotBugsReportsContainer>(closure));
+  public final NamedDomainObjectContainer<? extends AbstractSingleFileReport> reports(
+      Closure<NamedDomainObjectContainer<? extends AbstractSingleFileReport>> closure) {
+    return reports(
+        new ClosureBackedAction<NamedDomainObjectContainer<? extends AbstractSingleFileReport>>(
+            closure));
   }
 
-  public final SpotBugsReportsContainer reports(
-      Action<? super SpotBugsReportsContainer> configureAction) {
+  public final NamedDomainObjectContainer<? extends AbstractSingleFileReport> reports(
+      Action<NamedDomainObjectContainer<? extends AbstractSingleFileReport>> configureAction) {
     configureAction.execute(reports);
     return reports;
   }
@@ -225,5 +247,11 @@ public abstract class SpotBugsTask extends DefaultTask
     jarOnClasspath.addAll(spotbugsJar);
     jarOnClasspath.addAll(slf4jJar);
     return jarOnClasspath;
+  }
+
+  @NonNull
+  @Nested
+  public java.util.Optional<AbstractSingleFileReport> getFirstEnabledReport() {
+    return reports.stream().filter(SingleFileReport::isEnabled).findFirst();
   }
 }

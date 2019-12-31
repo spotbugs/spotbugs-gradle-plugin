@@ -110,6 +110,34 @@ spotbugsMain {
         assertTrue(report.isFile())
     }
 
+    def "can generate spotbugs.html with stylesheet"() {
+        buildFile << """
+// https://github.com/spotbugs/spotbugs-gradle-plugin/issues/107#issue-408724750
+configurations { spotbugsStylesheets { transitive false } }
+dependencies { spotbugsStylesheets 'com.github.spotbugs:spotbugs:3.1.10' }
+
+spotbugsMain {
+    reports {
+        html {
+            enabled = true
+            stylesheet = resources.text.fromArchiveEntry(configurations.spotbugsStylesheets, 'fancy-hist.xsl')
+        }
+    }
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', "--stacktrace")
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
+        System.out.println(Arrays.toString(report.parentFile.list()))
+        assertTrue(report.isFile())
+    }
+
     def "can generate spotbugs.xml"() {
         buildFile << """
 spotbugsMain {
