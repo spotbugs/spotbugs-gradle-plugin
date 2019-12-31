@@ -165,7 +165,7 @@ spotbugs {
 }
 spotbugsMain {
     reports {
-        text.enabled = true
+        text {}
     }
 }
 """

@@ -64,7 +64,7 @@ public abstract class SpotBugsReport
   @Override
   @Input
   public boolean isEnabled() {
-    return isEnabled.getOrElse(Boolean.FALSE);
+    return isEnabled.getOrElse(Boolean.TRUE);
   }
 
   @Override
