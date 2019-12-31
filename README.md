@@ -21,7 +21,7 @@ This Gradle plugin is designed to solve the following problems in the official o
 ### Apply to your project
 
 Apply the plugin to your project.
-Currently this plugin isn't published to the repository, so you need to build and install your own.
+Currently this plugin isn't published to the repository, so [you need to build and install your own](.github/CONTRIBUTING.md).
 
 ```groovy
 plugins {
@@ -61,14 +61,35 @@ dependencies {
 }
 ```
 
-### For Java project
+### Apply to Java project
 
 Apply this plugin with [the `java` plugin](https://docs.gradle.org/current/userguide/java_plugin.html) to your project,
-then `SpotBugsTask` will be generated for each existing sourceSet.
+then [`SpotBugsTask`](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/spotbugstask) will be generated for each existing sourceSet.
 
-### For Android project
+### Apply to Android project
 
 TBU
+
+### Configure the SpotBugsTask
+
+Configure [`SpotBugsTask`](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/spotbugstask) directly,
+to set task-specific properties.
+
+```groovy
+// Example to configure HTML report
+configurations { spotbugsStylesheets { transitive false } }
+dependencies { spotbugsStylesheets 'com.github.spotbugs:spotbugs:3.1.10' }
+
+spotbugsMain {
+    reports {
+        html {
+            enabled = true
+            destination = file("$buildDir/reports/spotbugs/main/spotbugs.html")
+            stylesheet = resources.text.fromArchiveEntry(configurations.spotbugsStylesheets, 'fancy-hist.xsl')
+        }
+    }
+}
+```
 
 ## Copyright
 
