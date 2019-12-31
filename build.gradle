@@ -48,7 +48,12 @@ test {
 
 javadoc {
     title = 'SpotBugs Gradle Plugin'
-    options.addBooleanOption('html5', true)
+    options.with {
+        addBooleanOption('html5', true)
+        links 'https://docs.gradle.org/current/javadoc/'
+        links 'https://docs.oracle.com/en/java/javase/11/docs/api/'
+        links 'http://docs.groovy-lang.org/latest/html/api/'
+    }
 }
 
 task processVersionFile(type: WriteProperties) {
