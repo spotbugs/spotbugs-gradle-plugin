@@ -42,6 +42,8 @@ spotbugs {
     visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
     omitVisitors = [ 'FindNonShortCircuit' ]
     reportsDir = file("$buildDir/spotbugs")
+    includeFilter = file("include.xml")
+    excludeFilter = file("exclude.xml")
 }
 ```
 

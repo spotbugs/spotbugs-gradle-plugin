@@ -58,6 +58,8 @@ public abstract class SpotBugsTask extends DefaultTask
   @NonNull final ListProperty<String> omitVisitors;
   @NonNull final Property<File> reportsDir;
   @NonNull final NamedDomainObjectContainer<SpotBugsReport> reports;
+  @NonNull final Property<File> includeFilter;
+  @NonNull final Property<File> excludeFilter;
 
   @InputFiles
   @PathSensitive(PathSensitivity.RELATIVE)
@@ -147,6 +149,8 @@ public abstract class SpotBugsTask extends DefaultTask
                   throw new InvalidUserDataException(name + " is invalid as the report name");
               }
             });
+    includeFilter = objects.property(File.class);
+    excludeFilter = objects.property(File.class);
   }
 
   /**
@@ -165,6 +169,8 @@ public abstract class SpotBugsTask extends DefaultTask
     omitVisitors.set(extension.omitVisitors);
     // the default reportsDir is "$buildDir/reports/spotbugs/${taskName}"
     reportsDir.set(extension.reportsDir.map(dir -> new File(dir, getName())));
+    includeFilter.set(extension.includeFilter);
+    excludeFilter.set(extension.excludeFilter);
   }
 
   final void applyTo(ImmutableSpotBugsSpec.Builder builder) {
@@ -191,6 +197,12 @@ public abstract class SpotBugsTask extends DefaultTask
     if (omitVisitors.isPresent() && !omitVisitors.get().isEmpty()) {
       builder.addExtraArguments("-omitVisitors");
       builder.addExtraArguments(omitVisitors.get().stream().collect(Collectors.joining(",")));
+    }
+    if (includeFilter.isPresent() && includeFilter.get() != null) {
+      builder.addExtraArguments("-include", includeFilter.get().getAbsolutePath());
+    }
+    if (excludeFilter.isPresent() && excludeFilter.get() != null) {
+      builder.addExtraArguments("-exclude", excludeFilter.get().getAbsolutePath());
     }
     builder
         .sourceDirs(getSourceDirs())

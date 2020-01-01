@@ -14,6 +14,7 @@
 package com.github.spotbugs.snom;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.File;
 import java.nio.file.Paths;
 import javax.inject.Inject;
@@ -30,6 +31,8 @@ public class SpotBugsExtension {
   @NonNull final ListProperty<String> visitors;
   @NonNull final ListProperty<String> omitVisitors;
   @NonNull final Property<File> reportsDir;
+  @NonNull final Property<File> includeFilter;
+  @NonNull final Property<File> excludeFilter;
 
   @Inject
   public SpotBugsExtension(Project project, ObjectFactory objects) {
@@ -43,6 +46,8 @@ public class SpotBugsExtension {
     // the default reportsDir is "$buildDir/reports/spotbugs"
     reportsDir.set(
         project.getBuildDir().toPath().resolve(Paths.get("reports", "spotbugs")).toFile());
+    includeFilter = objects.property(File.class);
+    excludeFilter = objects.property(File.class);
   }
 
   public Property<File> getReportsDir() {
@@ -55,5 +60,29 @@ public class SpotBugsExtension {
 
   public void setReportsDir(File file) {
     reportsDir.set(file);
+  }
+
+  public Property<File> getIncludeFilter() {
+    return includeFilter;
+  }
+
+  public void setIncludeFilter(Property<File> file) {
+    includeFilter.set(file);
+  }
+
+  public void setIncludeFilter(@Nullable File file) {
+    includeFilter.set(file);
+  }
+
+  public Property<File> getExcludeFilter() {
+    return excludeFilter;
+  }
+
+  public void setExcludeFilter(Property<File> file) {
+    excludeFilter.set(file);
+  }
+
+  public void setExcludeFilter(@Nullable File file) {
+    excludeFilter.set(file);
   }
 }
