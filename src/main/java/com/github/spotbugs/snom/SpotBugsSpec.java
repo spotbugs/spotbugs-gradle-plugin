@@ -14,7 +14,6 @@
 package com.github.spotbugs.snom;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,8 +28,7 @@ import org.slf4j.LoggerFactory;
 
 @Value.Style(jdkOnly = true) // do not use Guava even though it's in CLASSPATH
 @Value.Immutable
-abstract class SpotBugsSpec implements Serializable {
-  private static final long serialVersionUID = 100L;
+abstract class SpotBugsSpec {
   private final Logger log = LoggerFactory.getLogger(SpotBugsSpec.class);
 
   /**

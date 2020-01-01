@@ -56,7 +56,7 @@ import org.slf4j.LoggerFactory;
 public abstract class SpotBugsTask extends DefaultTask
 // TODO consider to implements VerificationTask
 {
-  private static final String FEATURE_FLAG__WORKER_API = "com.github.spotbugs.snom.worker";
+  private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
   private final Logger log = LoggerFactory.getLogger(SpotBugsTask.class);
 
   private final WorkerExecutor workerExecutor;
@@ -264,9 +264,9 @@ public abstract class SpotBugsTask extends DefaultTask
             .addAllPlugins(pluginConfig.getFiles())
             .build();
 
-    if (getProject().hasProperty(FEATURE_FLAG__WORKER_API)
+    if (getProject().hasProperty(FEATURE_FLAG_WORKER_API)
         && getProject()
-            .property(FEATURE_FLAG__WORKER_API)
+            .property(FEATURE_FLAG_WORKER_API)
             .toString()
             .equals(Boolean.TRUE.toString())) {
       log.info("Experimental: Try to run SpotBugs in the worker process.");

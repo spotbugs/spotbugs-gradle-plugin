@@ -15,7 +15,6 @@ package com.github.spotbugs.snom.internal;
 
 import com.github.spotbugs.snom.SpotBugsExtension;
 import com.github.spotbugs.snom.SpotBugsTask;
-import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
 import java.util.Objects;
 import javax.inject.Inject;
@@ -27,7 +26,7 @@ import org.gradle.workers.WorkerExecutor;
 
 @CacheableTask
 public class SpotBugsTaskForJava extends SpotBugsTask {
-  @NonNull private SourceSet sourceSet;
+  private SourceSet sourceSet;
 
   @Inject
   public SpotBugsTaskForJava(ObjectFactory objects, WorkerExecutor workerExecutor) {

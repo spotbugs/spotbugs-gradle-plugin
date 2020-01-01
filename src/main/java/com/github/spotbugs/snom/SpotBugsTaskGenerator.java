@@ -72,9 +72,7 @@ class SpotBugsTaskGenerator {
                   .create(
                       name,
                       SpotBugsTaskForAndroid.class,
-                      spotbugsTask -> {
-                        spotbugsTask.setTask(task);
-                      });
+                      spotbugsTask -> spotbugsTask.setTask(task));
             })
         .collect(Collectors.toSet());
   }
