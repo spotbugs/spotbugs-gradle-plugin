@@ -80,15 +80,12 @@ to set task-specific properties.
 
 ```groovy
 // Example to configure HTML report
-configurations { spotbugsStylesheets { transitive false } }
-dependencies { spotbugsStylesheets 'com.github.spotbugs:spotbugs:3.1.10' }
-
 spotbugsMain {
     reports {
         html {
             enabled = true
             destination = file("$buildDir/reports/spotbugs/main/spotbugs.html")
-            stylesheet = resources.text.fromArchiveEntry(configurations.spotbugsStylesheets, 'fancy-hist.xsl')
+            stylesheet = 'fancy-hist.xsl'
         }
     }
 }
