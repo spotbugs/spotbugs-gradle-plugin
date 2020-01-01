@@ -73,6 +73,8 @@ public abstract class SpotBugsTask extends DefaultTask
   @NonNull final Property<File> includeFilter;
   @NonNull final Property<File> excludeFilter;
   @NonNull final ListProperty<String> onlyAnalyze;
+  @NonNull final Property<String> projectName;
+  @NonNull final Property<String> release;
 
   @InputFiles
   @PathSensitive(PathSensitivity.RELATIVE)
@@ -189,6 +191,8 @@ public abstract class SpotBugsTask extends DefaultTask
     includeFilter = objects.property(File.class);
     excludeFilter = objects.property(File.class);
     onlyAnalyze = objects.listProperty(String.class);
+    projectName = objects.property(String.class);
+    release = objects.property(String.class);
   }
 
   /**
@@ -210,6 +214,8 @@ public abstract class SpotBugsTask extends DefaultTask
     includeFilter.set(extension.includeFilter);
     excludeFilter.set(extension.excludeFilter);
     onlyAnalyze.set(extension.onlyAnalyze);
+    projectName.set(extension.projectName.map(p -> String.format("%s (%s)", p, getName())));
+    release.set(extension.release);
   }
 
   final void applyTo(ImmutableSpotBugsSpec.Builder builder) {
@@ -247,6 +253,9 @@ public abstract class SpotBugsTask extends DefaultTask
       builder.addExtraArguments(
           "-onlyAnalyze", onlyAnalyze.get().stream().collect(Collectors.joining(",")));
     }
+
+    builder.addExtraArguments("-projectName", projectName.get());
+    builder.addExtraArguments("-release", release.getOrElse(getProject().getVersion().toString()));
     builder
         .sourceDirs(getSourceDirs())
         .addAllClassDirs(getClassDirs())

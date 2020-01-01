@@ -20,6 +20,7 @@ import org.gradle.testkit.runner.GradleRunner
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertFalse
+import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
 
 class ReportFunctionalTest extends Specification {
@@ -110,8 +111,12 @@ spotbugsMain {
     }
 
     def "can generate spotbugs.html with stylesheet"() {
+        new File(rootDir, "settings.gradle") << """
+rootProject.name = 'sample-project'
+"""
         buildFile << """
 // https://github.com/spotbugs/spotbugs-gradle-plugin/issues/107#issue-408724750
+version = '1.2.3'
 configurations { spotbugsStylesheets { transitive false } }
 dependencies { spotbugsStylesheets 'com.github.spotbugs:spotbugs:3.1.10' }
 
@@ -135,6 +140,10 @@ spotbugsMain {
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
         assertTrue(report.isFile())
         assertTrue(result.getOutput().contains("-html:"))
+        // confirm -projectName is working
+        assertNotNull(report.readLines("utf-8").find({line -> line.contains("sample-project (spotbugsMain)")}))
+        // confirm -release is working
+        assertNotNull(report.readLines("utf-8").find({line -> line.contains("1.2.3")}))
     }
 
     def "can generate spotbugs.html with the path of stylesheet"() {
