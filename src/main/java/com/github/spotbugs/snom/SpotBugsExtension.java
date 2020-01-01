@@ -17,6 +17,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Collection;
 import javax.inject.Inject;
 import org.gradle.api.Project;
 import org.gradle.api.model.ObjectFactory;
@@ -86,5 +87,17 @@ public class SpotBugsExtension {
 
   public void setExcludeFilter(@Nullable File file) {
     excludeFilter.set(file);
+  }
+
+  public void setVisitors(@Nullable Collection<String> collection) {
+    visitors.set(collection);
+  }
+
+  public void setOmitVisitors(@Nullable Collection<String> collection) {
+    omitVisitors.set(collection);
+  }
+
+  public void setOnlyAnalyze(@Nullable Collection<String> collection) {
+    onlyAnalyze.set(collection);
   }
 }

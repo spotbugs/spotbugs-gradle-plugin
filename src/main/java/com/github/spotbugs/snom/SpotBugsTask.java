@@ -17,9 +17,11 @@ import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.umd.cs.findbugs.annotations.OverrideMustInvoke;
 import groovy.lang.Closure;
 import java.io.File;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -272,6 +274,18 @@ public abstract class SpotBugsTask extends DefaultTask
       Action<NamedDomainObjectContainer<? extends SpotBugsReport>> configureAction) {
     configureAction.execute(reports);
     return reports;
+  }
+
+  public void setVisitors(@Nullable Collection<String> collection) {
+    visitors.set(collection);
+  }
+
+  public void setOmitVisitors(@Nullable Collection<String> collection) {
+    omitVisitors.set(collection);
+  }
+
+  public void setOnlyAnalyze(Collection<String> collection) {
+    onlyAnalyze.set(collection);
   }
 
   @NonNull

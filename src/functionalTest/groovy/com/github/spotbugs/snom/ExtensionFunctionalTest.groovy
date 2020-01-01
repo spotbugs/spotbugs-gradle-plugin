@@ -97,10 +97,44 @@ spotbugs {
         assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
     }
 
+    def "can use visitors"() {
+        buildFile << """
+spotbugs {
+    visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        assertTrue(result.getOutput().contains("-visitors, FindSqlInjection,SwitchFallthrough,"))
+    }
+
+    def "can use omitVisitors"() {
+        buildFile << """
+spotbugs {
+    omitVisitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        assertTrue(result.getOutput().contains("-omitVisitors, FindSqlInjection,SwitchFallthrough,"))
+    }
+
     def "can use onlyAnalyze"() {
         buildFile << """
 spotbugs {
-    onlyAnalyze.addAll 'com.foobar.MyClass', 'com.foobar.mypkg.*'
+    onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']
 }"""
         when:
         def result = GradleRunner.create()
