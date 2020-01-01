@@ -14,6 +14,7 @@
 package com.github.spotbugs.snom;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,13 +22,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.gradle.api.file.FileCollection;
 import org.gradle.process.JavaExecSpec;
+import org.gradle.workers.ProcessWorkerSpec;
 import org.immutables.value.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Value.Style(jdkOnly = true) // do not use Guava even though it's in CLASSPATH
 @Value.Immutable
-abstract class SpotBugsSpec {
+abstract class SpotBugsSpec implements Serializable {
+  private static final long serialVersionUID = 100L;
   private final Logger log = LoggerFactory.getLogger(SpotBugsSpec.class);
 
   /**
@@ -62,9 +65,23 @@ abstract class SpotBugsSpec {
 
   void applyTo(JavaExecSpec javaExec) {
     javaExec.classpath(spotbugsJar());
-    javaExec.setArgs(generateArguments());
     javaExec.setJvmArgs(jvmArgs());
+    javaExec.setMain("edu.umd.cs.findbugs.FindBugs2");
+    javaExec.setArgs(generateArguments());
     maxHeapSize().ifPresent(javaExec::setMaxHeapSize);
+  }
+
+  void applyTo(ProcessWorkerSpec spec) {
+    spec.getClasspath().setFrom(spotbugsJar());
+    spec.forkOptions(
+        option -> {
+          option.jvmArgs(jvmArgs());
+          maxHeapSize().ifPresent(option::setMaxHeapSize);
+        });
+  }
+
+  void applyTo(SpotBugsWorkParameters params) {
+    params.getArguments().addAll(generateArguments());
   }
 
   private String join(Collection<File> files) {

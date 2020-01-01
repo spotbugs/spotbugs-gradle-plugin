@@ -23,14 +23,18 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.tasks.CacheableTask;
 import org.gradle.api.tasks.SourceSet;
+import org.gradle.workers.WorkerExecutor;
 
 @CacheableTask
 public class SpotBugsTaskForJava extends SpotBugsTask {
-  @NonNull private final SourceSet sourceSet;
+  @NonNull private SourceSet sourceSet;
 
   @Inject
-  public SpotBugsTaskForJava(@NonNull SourceSet sourceSet, ObjectFactory objects) {
-    super(objects);
+  public SpotBugsTaskForJava(ObjectFactory objects, WorkerExecutor workerExecutor) {
+    super(objects, workerExecutor);
+  }
+
+  public void setSourceSet(SourceSet sourceSet) {
     this.sourceSet = Objects.requireNonNull(sourceSet);
     dependsOn(sourceSet.getClassesTaskName());
   }

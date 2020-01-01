@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.gradle.api.Action;
 import org.gradle.api.DefaultTask;
+import org.gradle.api.GradleException;
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.artifacts.Configuration;
@@ -46,13 +47,20 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.util.ClosureBackedAction;
+import org.gradle.workers.WorkAction;
+import org.gradle.workers.WorkQueue;
+import org.gradle.workers.WorkerExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class SpotBugsTask extends DefaultTask
 // TODO consider to implements VerificationTask
 {
+  private static final String FEATURE_FLAG__WORKER_API = "com.github.spotbugs.snom.worker";
   private final Logger log = LoggerFactory.getLogger(SpotBugsTask.class);
+
+  private final WorkerExecutor workerExecutor;
+
   @NonNull final Property<Boolean> ignoreFailures;
   @NonNull final Property<Boolean> showProgress;
   @NonNull final Property<Confidence> reportLevel;
@@ -153,7 +161,9 @@ public abstract class SpotBugsTask extends DefaultTask
     return onlyAnalyze;
   }
 
-  public SpotBugsTask(ObjectFactory objects) {
+  public SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
+    this.workerExecutor = workerExecutor;
+
     ignoreFailures = objects.property(Boolean.class);
     showProgress = objects.property(Boolean.class);
     reportLevel = objects.property(Confidence.class);
@@ -248,15 +258,22 @@ public abstract class SpotBugsTask extends DefaultTask
     ImmutableSpotBugsSpec.Builder builder = ImmutableSpotBugsSpec.builder();
     applyTo(builder);
     Configuration pluginConfig = getProject().getConfigurations().getByName("spotbugsPlugin");
-    builder.addAllPlugins(pluginConfig.getFiles());
-    getProject()
-        .javaexec(
-            spec -> {
-              spec.setIgnoreExitValue(ignoreFailures.getOrElse(false));
-              spec.classpath(createJarOnClasspath());
-              spec.setMain("edu.umd.cs.findbugs.FindBugs2");
-              builder.build().applyTo(spec);
-            });
+    SpotBugsSpec spotbugsSpec =
+        builder
+            .addAllSpotbugsJar(createJarOnClasspath())
+            .addAllPlugins(pluginConfig.getFiles())
+            .build();
+
+    if (getProject().hasProperty(FEATURE_FLAG__WORKER_API)
+        && getProject()
+            .property(FEATURE_FLAG__WORKER_API)
+            .toString()
+            .equals(Boolean.TRUE.toString())) {
+      log.info("Experimental: Try to run SpotBugs in the worker process.");
+      runByWorkerAPI(spotbugsSpec);
+    } else {
+      runByJavaExec(spotbugsSpec);
+    }
   }
 
   @Nested
@@ -308,5 +325,35 @@ public abstract class SpotBugsTask extends DefaultTask
   @Nested
   public java.util.Optional<SpotBugsReport> getFirstEnabledReport() {
     return reports.stream().filter(SingleFileReport::isEnabled).findFirst();
+  }
+
+  /**
+   * Run SpotBugs in the worker process.
+   *
+   * @param spotbugsSpec Spec to run SpotBugs
+   */
+  private void runByWorkerAPI(SpotBugsSpec spotbugsSpec) {
+    WorkQueue workerQueue = workerExecutor.processIsolation(spotbugsSpec::applyTo);
+    workerQueue.submit(SpotBugsExecutor.class, spotbugsSpec::applyTo);
+  }
+
+  private void runByJavaExec(SpotBugsSpec spotbugsSpec) {
+    getProject().javaexec(spotbugsSpec::applyTo);
+    // TODO handle isIgnoreFailures
+  }
+
+  public abstract static class SpotBugsExecutor implements WorkAction<SpotBugsWorkParameters> {
+    @Override
+    public void execute() {
+      SpotBugsWorkParameters params = getParameters();
+      String[] args = params.getArguments().get().toArray(new String[0]);
+
+      // TODO handle isIgnoreFailures
+      try {
+        edu.umd.cs.findbugs.FindBugs2.main(args);
+      } catch (Exception e) {
+        throw new GradleException("SpotBugs execution thrown exception", e);
+      }
+    }
   }
 }

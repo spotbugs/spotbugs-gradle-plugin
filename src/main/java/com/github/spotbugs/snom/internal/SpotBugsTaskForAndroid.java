@@ -20,14 +20,18 @@ import javax.inject.Inject;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.tasks.CacheableTask;
+import org.gradle.workers.WorkerExecutor;
 
 @CacheableTask
 public class SpotBugsTaskForAndroid extends SpotBugsTask {
-  private final AndroidJavaCompile task;
+  private AndroidJavaCompile task;
 
   @Inject
-  public SpotBugsTaskForAndroid(AndroidJavaCompile task, ObjectFactory objects) {
-    super(objects);
+  public SpotBugsTaskForAndroid(ObjectFactory objects, WorkerExecutor workerExecutor) {
+    super(objects, workerExecutor);
+  }
+
+  public void setTask(AndroidJavaCompile task) {
     this.task = Objects.requireNonNull(task);
     dependsOn(task);
   }

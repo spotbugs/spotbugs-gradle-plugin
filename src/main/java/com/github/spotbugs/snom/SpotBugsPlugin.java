@@ -96,7 +96,8 @@ public class SpotBugsPlugin implements Plugin<Project> {
 
   private void createTasks(Project project, SpotBugsExtension extension) {
     Task check = project.getTasks().getByName("check");
-    new SpotBugsTaskGenerator()
+    SpotBugsTaskGenerator generator = new SpotBugsTaskGenerator();
+    generator
         .generate(project)
         .forEach(
             task -> {

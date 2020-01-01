@@ -12,7 +12,7 @@ This Gradle plugin is designed to solve the following problems in the official o
 
 - [x] Remove any dependency on the Gradle's internal API
 - [x] Solve mutability problem for the build contains multiple projects and/or sourceSet
-- [ ] Native Support for [the Parallel Build](https://guides.gradle.org/using-the-worker-api/)
+- [x] Native Support for [the Parallel Build](https://guides.gradle.org/using-the-worker-api/)
 - [ ] Native Support for [the Android project](https://developer.android.com/studio/build/gradle-tips)
 - [ ] Missing user document about how to use extension and task
 
@@ -92,6 +92,17 @@ spotbugsMain {
         }
     }
 }
+```
+
+### Run Analysis in Gradle Worker process
+
+For multi sub-projects project, use [Gradle Worker](https://guides.gradle.org/using-the-worker-api/) to accelerate your build.
+This feature is still experimental so you need to enable it explicitly by `com.github.spotbugs.snom.worker` property.
+
+For instance, you can add the following line to your `gradle.properties` file:
+
+```properties
+com.github.spotbugs.snom.worker=true
 ```
 
 ## Copyright
