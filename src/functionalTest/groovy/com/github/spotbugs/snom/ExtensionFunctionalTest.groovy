@@ -96,4 +96,21 @@ spotbugs {
         assertTrue(result.getOutput().contains("-exclude"))
         assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
     }
+
+    def "can use onlyAnalyze"() {
+        buildFile << """
+spotbugs {
+    onlyAnalyze.addAll 'com.foobar.MyClass', 'com.foobar.mypkg.*'
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        assertTrue(result.getOutput().contains("-onlyAnalyze, com.foobar.MyClass,com.foobar.mypkg.*,"))
+    }
 }

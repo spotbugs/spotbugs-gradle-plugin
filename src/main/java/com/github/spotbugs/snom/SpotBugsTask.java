@@ -35,6 +35,7 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.reporting.SingleFileReport;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.InputFiles;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.Nested;
@@ -58,8 +59,10 @@ public abstract class SpotBugsTask extends DefaultTask
   @NonNull final ListProperty<String> omitVisitors;
   @NonNull final Property<File> reportsDir;
   @NonNull final NamedDomainObjectContainer<SpotBugsReport> reports;
+
   @NonNull final Property<File> includeFilter;
   @NonNull final Property<File> excludeFilter;
+  @NonNull final ListProperty<String> onlyAnalyze;
 
   @InputFiles
   @PathSensitive(PathSensitivity.RELATIVE)
@@ -126,6 +129,28 @@ public abstract class SpotBugsTask extends DefaultTask
     reportsDir.set(provider);
   }
 
+  @NonNull
+  @Optional
+  @InputFile
+  @PathSensitive(PathSensitivity.RELATIVE)
+  public Property<File> getIncludeFilter() {
+    return includeFilter;
+  }
+
+  @NonNull
+  @Optional
+  @InputFile
+  @PathSensitive(PathSensitivity.RELATIVE)
+  public Property<File> getExcludeFilter() {
+    return excludeFilter;
+  }
+
+  @NonNull
+  @Input
+  public ListProperty<String> getOnlyAnalyze() {
+    return onlyAnalyze;
+  }
+
   public SpotBugsTask(ObjectFactory objects) {
     ignoreFailures = objects.property(Boolean.class);
     showProgress = objects.property(Boolean.class);
@@ -151,6 +176,7 @@ public abstract class SpotBugsTask extends DefaultTask
             });
     includeFilter = objects.property(File.class);
     excludeFilter = objects.property(File.class);
+    onlyAnalyze = objects.listProperty(String.class);
   }
 
   /**
@@ -171,6 +197,7 @@ public abstract class SpotBugsTask extends DefaultTask
     reportsDir.set(extension.reportsDir.map(dir -> new File(dir, getName())));
     includeFilter.set(extension.includeFilter);
     excludeFilter.set(extension.excludeFilter);
+    onlyAnalyze.set(extension.onlyAnalyze);
   }
 
   final void applyTo(ImmutableSpotBugsSpec.Builder builder) {
@@ -203,6 +230,10 @@ public abstract class SpotBugsTask extends DefaultTask
     }
     if (excludeFilter.isPresent() && excludeFilter.get() != null) {
       builder.addExtraArguments("-exclude", excludeFilter.get().getAbsolutePath());
+    }
+    if (onlyAnalyze.isPresent() && !onlyAnalyze.get().isEmpty()) {
+      builder.addExtraArguments(
+          "-onlyAnalyze", onlyAnalyze.get().stream().collect(Collectors.joining(",")));
     }
     builder
         .sourceDirs(getSourceDirs())

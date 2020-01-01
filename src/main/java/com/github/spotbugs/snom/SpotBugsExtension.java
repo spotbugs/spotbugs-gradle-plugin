@@ -33,6 +33,7 @@ public class SpotBugsExtension {
   @NonNull final Property<File> reportsDir;
   @NonNull final Property<File> includeFilter;
   @NonNull final Property<File> excludeFilter;
+  @NonNull final ListProperty<String> onlyAnalyze;
 
   @Inject
   public SpotBugsExtension(Project project, ObjectFactory objects) {
@@ -48,6 +49,7 @@ public class SpotBugsExtension {
         project.getBuildDir().toPath().resolve(Paths.get("reports", "spotbugs")).toFile());
     includeFilter = objects.property(File.class);
     excludeFilter = objects.property(File.class);
+    onlyAnalyze = objects.listProperty(String.class);
   }
 
   public Property<File> getReportsDir() {

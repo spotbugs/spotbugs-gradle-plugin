@@ -44,6 +44,7 @@ spotbugs {
     reportsDir = file("$buildDir/spotbugs")
     includeFilter = file("include.xml")
     excludeFilter = file("exclude.xml")
+    onlyAnalyze.addAll 'com.foobar.MyClass', 'com.foobar.mypkg.*'
 }
 ```
 
