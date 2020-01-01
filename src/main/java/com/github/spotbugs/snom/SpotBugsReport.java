@@ -112,6 +112,11 @@ public abstract class SpotBugsReport
         String.format("stylesheet property is not available in the %s type report", getName()));
   }
 
+  public void setStylesheet(@Nullable String path) {
+    throw new UnsupportedOperationException(
+        String.format("stylesheet property is not available in the %s type report", getName()));
+  }
+
   @NonNull
   @Internal
   protected final SpotBugsTask getTask() {

@@ -18,9 +18,6 @@ import spock.lang.Specification
 
 import org.gradle.testkit.runner.GradleRunner
 
-import java.nio.file.Paths
-
-import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -101,7 +98,7 @@ spotbugsMain {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments('spotbugsMain')
+                .withArguments('spotbugsMain', '--info')
                 .withPluginClasspath()
                 .build()
 
@@ -109,6 +106,7 @@ spotbugsMain {
         result.task(":spotbugsMain").outcome == SUCCESS
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
         assertTrue(report.isFile())
+        assertTrue(result.getOutput().contains("-html "))
     }
 
     def "can generate spotbugs.html with stylesheet"() {
@@ -128,7 +126,7 @@ spotbugsMain {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments('spotbugsMain', "--stacktrace")
+                .withArguments('spotbugsMain', "--info")
                 .withPluginClasspath()
                 .build()
 
@@ -136,6 +134,32 @@ spotbugsMain {
         result.task(":spotbugsMain").outcome == SUCCESS
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
         assertTrue(report.isFile())
+        assertTrue(result.getOutput().contains("-html:"))
+    }
+
+    def "can generate spotbugs.html with the path of stylesheet"() {
+        buildFile << """
+// https://github.com/spotbugs/spotbugs-gradle-plugin/issues/107#issue-408724750
+spotbugsMain {
+    reports {
+        html {
+            enabled = true
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--info')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
+        assertTrue(report.isFile())
+        assertTrue(result.getOutput().contains("-html:"))
     }
 
     def "can generate spotbugs.xml"() {

@@ -19,6 +19,7 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.File;
 import java.util.Optional;
+import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.resources.TextResource;
@@ -58,5 +59,27 @@ public class SpotBugsHtmlReport extends SpotBugsReport {
   @Override
   public void setStylesheet(@Nullable TextResource textResource) {
     stylesheet.set(textResource);
+  }
+
+  @Override
+  public void setStylesheet(@Nullable String path) {
+    Optional<File> spotbugsJar =
+        getTask().getProject().getConfigurations().getByName("spotbugs")
+            // FIXME this operation probably evaluates the spotbugs configuration, that may make the
+            // build slow
+            .files(
+                dependency ->
+                    dependency.getGroup().equals("com.github.spotbugs")
+                        && dependency.getName().equals("spotbugs"))
+            .stream()
+            .findFirst();
+    if (spotbugsJar.isPresent()) {
+      TextResource textResource =
+          getTask().getProject().getResources().getText().fromArchiveEntry(spotbugsJar.get(), path);
+      setStylesheet(textResource);
+    } else {
+      throw new InvalidUserDataException(
+          "The dependency on SpotBugs not found in 'spotbugs' configuration");
+    }
   }
 }
