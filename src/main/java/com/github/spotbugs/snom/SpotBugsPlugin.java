@@ -13,6 +13,7 @@
  */
 package com.github.spotbugs.snom;
 
+import com.github.spotbugs.snom.internal.SpotBugsTaskGenerator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;

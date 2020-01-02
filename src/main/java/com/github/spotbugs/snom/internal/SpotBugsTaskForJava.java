@@ -25,7 +25,7 @@ import org.gradle.api.tasks.SourceSet;
 import org.gradle.workers.WorkerExecutor;
 
 @CacheableTask
-public class SpotBugsTaskForJava extends SpotBugsTask {
+class SpotBugsTaskForJava extends SpotBugsTask {
   private SourceSet sourceSet;
 
   @Inject
@@ -33,7 +33,7 @@ public class SpotBugsTaskForJava extends SpotBugsTask {
     super(objects, workerExecutor);
   }
 
-  public void setSourceSet(SourceSet sourceSet) {
+  void setSourceSet(SourceSet sourceSet) {
     this.sourceSet = Objects.requireNonNull(sourceSet);
     dependsOn(sourceSet.getClassesTaskName());
   }

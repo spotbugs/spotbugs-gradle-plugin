@@ -23,7 +23,7 @@ import org.gradle.api.tasks.CacheableTask;
 import org.gradle.workers.WorkerExecutor;
 
 @CacheableTask
-public class SpotBugsTaskForAndroid extends SpotBugsTask {
+class SpotBugsTaskForAndroid extends SpotBugsTask {
   private AndroidJavaCompile task;
 
   @Inject
@@ -31,7 +31,7 @@ public class SpotBugsTaskForAndroid extends SpotBugsTask {
     super(objects, workerExecutor);
   }
 
-  public void setTask(AndroidJavaCompile task) {
+  void setTask(AndroidJavaCompile task) {
     this.task = Objects.requireNonNull(task);
     dependsOn(task);
   }
