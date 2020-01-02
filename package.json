@@ -39,7 +39,7 @@
         "@semantic-release/github",
         {
           "assets": [
-            "gradle.properties"
+            "build/libs/*.jar"
           ]
         }
       ]
