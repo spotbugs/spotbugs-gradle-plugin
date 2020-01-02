@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# This script installs the development toolchain runs on node.js (commitlint, husky, prettier, etc.).
+# It helps Java engineers to set up full development toolchain seamless.
+#
+# Gradle plugin (ghooks.gradle) will install this git-hook script.
+# We use `post-checkout` because `pre-commit` is used by husky to lint code, and
+# `post-clone` is still unofficial so we have no other hook runs before the commit.
+
+set -e
+
+if [ ! -d "node_modules" ]
+then
+  if [ -x "$(command -v yarn)" ]
+  then
+    echo "🔍🐛 node_modules directory not found, running `yarn install` to install the dev toolchain..."
+    yarn install
+    echo "🔍🐛 The dev toolchain has been installed."
+  else
+    echo "🔍🐛 The yarn command not found. Please install it to keep your commit clean:"
+    echo "🔍🐛 https://yarnpkg.com/en/docs/install"
+  fi
+fi

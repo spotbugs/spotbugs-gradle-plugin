@@ -1,5 +1,14 @@
 # Contributing Guideline
 
+## How to hack this project
+
+Make sure you have Java 11+, Node.js 10+ and Yarn on your `PATH`.
+
+Before you start hacking, run `yarn install` once to install development toolchain
+to follow [the Conventional Commits](https://conventionalcommits.org/).
+
+To build the implementation and test, run `./gradlew` then it runs all necessary formatter, compile and test.
+
 ## How to use latest plugin in your project
 
 This Gradle plugin has already been published to [Gradle Plugin Portal](https://plugins.gradle.org/plugin/jp.skypencil.spotbugs.snom) but the approval process is still pending. So you need to build and install the plugin by your own.
