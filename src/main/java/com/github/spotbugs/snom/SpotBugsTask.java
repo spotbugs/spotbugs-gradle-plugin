@@ -163,6 +163,18 @@ public abstract class SpotBugsTask extends DefaultTask
     return onlyAnalyze;
   }
 
+  @NonNull
+  @Input
+  public Property<String> getProjectName() {
+    return projectName;
+  }
+
+  @NonNull
+  @Input
+  public Property<String> getRelease() {
+    return release;
+  }
+
   public SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
     this.workerExecutor = workerExecutor;
 
@@ -255,7 +267,7 @@ public abstract class SpotBugsTask extends DefaultTask
     }
 
     builder.addExtraArguments("-projectName", projectName.get());
-    builder.addExtraArguments("-release", release.getOrElse(getProject().getVersion().toString()));
+    builder.addExtraArguments("-release", release.get());
     builder
         .sourceDirs(getSourceDirs())
         .addAllClassDirs(getClassDirs())

@@ -54,8 +54,12 @@ public class SpotBugsExtension {
     excludeFilter = objects.property(File.class);
     onlyAnalyze = objects.listProperty(String.class);
     projectName = objects.property(String.class);
-    projectName.convention(project.getName());
     release = objects.property(String.class);
+    project.afterEvaluate(
+        p -> {
+          if (!projectName.isPresent()) projectName.set(p.getName());
+          if (!release.isPresent()) release.set(p.getVersion().toString());
+        });
   }
 
   public Property<File> getReportsDir() {
