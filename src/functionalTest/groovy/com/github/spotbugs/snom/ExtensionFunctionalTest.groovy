@@ -54,6 +54,7 @@ public class Foo {
     }
 
     def "can use includeFilter"() {
+        setup:
         File filter = new File(rootDir, "include.xml")
         buildFile << """
 spotbugs {
@@ -76,6 +77,7 @@ spotbugs {
     }
 
     def "can use excludeFilter"() {
+        setup:
         File filter = new File(rootDir, "exclude.xml")
         buildFile << """
 spotbugs {
@@ -98,6 +100,7 @@ spotbugs {
     }
 
     def "can use visitors"() {
+        setup:
         buildFile << """
 spotbugs {
     visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
