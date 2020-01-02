@@ -46,7 +46,6 @@ public abstract class SpotBugsReport
   }
 
   @NonNull
-  @Internal("This property returns always same value")
   public abstract Optional<String> toCommandLineOption();
 
   @Override

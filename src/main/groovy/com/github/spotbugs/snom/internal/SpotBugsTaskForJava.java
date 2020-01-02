@@ -42,7 +42,7 @@ class SpotBugsTaskForJava extends SpotBugsTask {
   protected void init(SpotBugsExtension extension) {
     super.init(extension);
     // the default reportsDir is "$buildDir/reports/spotbugs/${sourceSetName}"
-    setReportsDir(extension.getReportsDir().map(dir -> new File(dir, sourceSet.getName())));
+    getReportsDir().set(extension.getReportsDir().map(dir -> new File(dir, sourceSet.getName())));
   }
 
   @Override
