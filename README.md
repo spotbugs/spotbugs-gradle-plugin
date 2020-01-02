@@ -45,6 +45,9 @@ spotbugs {
     includeFilter = file("include.xml")
     excludeFilter = file("exclude.xml")
     onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']
+    maxHeapSize = '1g'
+    extraArgs = ['-nested:false']
+    jvmArgs = ['-Duser.language=ja']
 }
 ```
 

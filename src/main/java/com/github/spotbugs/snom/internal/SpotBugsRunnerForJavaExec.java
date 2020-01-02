@@ -32,7 +32,10 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
       spec.setJvmArgs(buildJvmArguments(task));
       spec.setMain("edu.umd.cs.findbugs.FindBugs2");
       spec.setArgs(buildArguments(task));
-      // TODO get maxHeapSize from task
+      String maxHeapSize = task.getMaxHeapSize().getOrNull();
+      if (maxHeapSize != null) {
+        spec.setMaxHeapSize(maxHeapSize);
+      }
     };
   }
 }

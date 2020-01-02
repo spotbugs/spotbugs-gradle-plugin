@@ -17,7 +17,6 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.Collection;
 import javax.inject.Inject;
 import org.gradle.api.Project;
 import org.gradle.api.model.ObjectFactory;
@@ -37,6 +36,9 @@ public class SpotBugsExtension {
   @NonNull final ListProperty<String> onlyAnalyze;
   @NonNull final Property<String> projectName;
   @NonNull final Property<String> release;
+  @NonNull final ListProperty<String> extraArgs;
+  @NonNull final ListProperty<String> jvmArgs;
+  @NonNull final Property<String> maxHeapSize;
 
   @Inject
   public SpotBugsExtension(Project project, ObjectFactory objects) {
@@ -60,6 +62,9 @@ public class SpotBugsExtension {
           if (!projectName.isPresent()) projectName.set(p.getName());
           if (!release.isPresent()) release.set(p.getVersion().toString());
         });
+    jvmArgs = objects.listProperty(String.class);
+    extraArgs = objects.listProperty(String.class);
+    maxHeapSize = objects.property(String.class);
   }
 
   public Property<File> getReportsDir() {
@@ -98,15 +103,27 @@ public class SpotBugsExtension {
     excludeFilter.set(file);
   }
 
-  public void setVisitors(@Nullable Collection<String> collection) {
+  public void setVisitors(@Nullable Iterable<String> collection) {
     visitors.set(collection);
   }
 
-  public void setOmitVisitors(@Nullable Collection<String> collection) {
+  public void setOmitVisitors(@Nullable Iterable<String> collection) {
     omitVisitors.set(collection);
   }
 
-  public void setOnlyAnalyze(@Nullable Collection<String> collection) {
+  public void setOnlyAnalyze(@Nullable Iterable<String> collection) {
     onlyAnalyze.set(collection);
+  }
+
+  public void setExtraArgs(@Nullable Iterable<String> iterable) {
+    extraArgs.set(iterable);
+  }
+
+  public void setJvmArgs(@Nullable Iterable<String> iterable) {
+    jvmArgs.set(iterable);
+  }
+
+  public void setMaxHeapSize(@Nullable String string) {
+    maxHeapSize.set(string);
   }
 }

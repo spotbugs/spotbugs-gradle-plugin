@@ -42,7 +42,10 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
       spec.forkOptions(
           option -> {
             option.jvmArgs(buildJvmArguments(task));
-            // TODO get maxHeapSize from task
+            String maxHeapSize = task.getMaxHeapSize().getOrNull();
+            if (maxHeapSize != null) {
+              option.setMaxHeapSize(maxHeapSize);
+            }
           });
     };
   }

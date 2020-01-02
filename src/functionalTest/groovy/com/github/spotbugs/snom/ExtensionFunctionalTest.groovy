@@ -150,4 +150,40 @@ spotbugs {
         result.task(":spotbugsMain").outcome == SUCCESS
         assertTrue(result.getOutput().contains("-onlyAnalyze, com.foobar.MyClass,com.foobar.mypkg.*,"))
     }
+
+    def "can use extraArgs and jvmArgs"() {
+        buildFile << """
+spotbugs {
+    extraArgs = ['-nested:false']
+    jvmArgs = ['-Duser.language=ja']
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        assertTrue(result.getOutput().contains("-nested:false"))
+        assertTrue(result.getOutput().contains("-Duser.language=ja"))
+    }
+
+    def "can use maxHeapSize"() {
+        buildFile << """
+spotbugs {
+    maxHeapSize = '256m'
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        assertTrue(result.getOutput().contains("-Xmx256m"))
+    }
 }

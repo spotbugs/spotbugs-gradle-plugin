@@ -94,7 +94,7 @@ public abstract class SpotBugsRunner {
     args.add("-release");
     args.add(task.getRelease().get());
 
-    // TODO get extraArguments from task
+    args.addAll(task.getExtraArgs().getOrElse(Collections.emptyList()));
     task.getClassDirs().forEach(dir -> args.add(dir.getAbsolutePath()));
 
     log.debug("Arguments for SpotBugs are generated: {}", args);
@@ -102,8 +102,7 @@ public abstract class SpotBugsRunner {
   }
 
   protected List<String> buildJvmArguments(SpotBugsTask task) {
-    // TODO get jvmArgs from task
-    return Collections.emptyList();
+    return task.getJvmArgs().getOrElse(Collections.emptyList());
   }
 
   private String join(Collection<File> files) {

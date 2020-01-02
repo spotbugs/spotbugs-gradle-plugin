@@ -23,7 +23,6 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.umd.cs.findbugs.annotations.OverrideMustInvoke;
 import groovy.lang.Closure;
 import java.io.File;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.gradle.api.Action;
@@ -51,9 +50,7 @@ import org.gradle.workers.WorkerExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class SpotBugsTask extends DefaultTask
-// TODO consider to implements VerificationTask
-{
+public abstract class SpotBugsTask extends DefaultTask {
   private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
   private final Logger log = LoggerFactory.getLogger(SpotBugsTask.class);
 
@@ -73,6 +70,9 @@ public abstract class SpotBugsTask extends DefaultTask
   @NonNull final ListProperty<String> onlyAnalyze;
   @NonNull final Property<String> projectName;
   @NonNull final Property<String> release;
+  @NonNull final ListProperty<String> extraArgs;
+  @NonNull final ListProperty<String> jvmArgs;
+  @NonNull final Property<String> maxHeapSize;
 
   @InputFiles
   @PathSensitive(PathSensitivity.RELATIVE)
@@ -173,6 +173,27 @@ public abstract class SpotBugsTask extends DefaultTask
     return release;
   }
 
+  @NonNull
+  @Optional
+  @Input
+  public ListProperty<String> getExtraArgs() {
+    return extraArgs;
+  }
+
+  @NonNull
+  @Optional
+  @Input
+  public ListProperty<String> getJvmArgs() {
+    return jvmArgs;
+  }
+
+  @NonNull
+  @Optional
+  @Input
+  public Property<String> getMaxHeapSize() {
+    return maxHeapSize;
+  }
+
   public SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
     this.workerExecutor = workerExecutor;
 
@@ -203,6 +224,9 @@ public abstract class SpotBugsTask extends DefaultTask
     onlyAnalyze = objects.listProperty(String.class);
     projectName = objects.property(String.class);
     release = objects.property(String.class);
+    jvmArgs = objects.listProperty(String.class);
+    extraArgs = objects.listProperty(String.class);
+    maxHeapSize = objects.property(String.class);
   }
 
   /**
@@ -226,6 +250,9 @@ public abstract class SpotBugsTask extends DefaultTask
     onlyAnalyze.set(extension.onlyAnalyze);
     projectName.set(extension.projectName.map(p -> String.format("%s (%s)", p, getName())));
     release.set(extension.release);
+    jvmArgs.set(extension.jvmArgs);
+    extraArgs.set(extension.extraArgs);
+    maxHeapSize.set(extension.maxHeapSize);
   }
 
   @TaskAction
@@ -259,16 +286,28 @@ public abstract class SpotBugsTask extends DefaultTask
     return reports;
   }
 
-  public void setVisitors(@Nullable Collection<String> collection) {
+  public void setVisitors(@Nullable Iterable<String> collection) {
     visitors.set(collection);
   }
 
-  public void setOmitVisitors(@Nullable Collection<String> collection) {
+  public void setOmitVisitors(@Nullable Iterable<String> collection) {
     omitVisitors.set(collection);
   }
 
-  public void setOnlyAnalyze(Collection<String> collection) {
+  public void setOnlyAnalyze(Iterable<String> collection) {
     onlyAnalyze.set(collection);
+  }
+
+  public void setExtraArgs(@Nullable Iterable<String> iterable) {
+    extraArgs.set(iterable);
+  }
+
+  public void setJvmArgs(@Nullable Iterable<String> iterable) {
+    jvmArgs.set(iterable);
+  }
+
+  public void setMaxHeapSize(@Nullable String string) {
+    maxHeapSize.set(string);
   }
 
   @NonNull
