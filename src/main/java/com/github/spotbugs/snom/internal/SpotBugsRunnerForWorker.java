@@ -19,7 +19,11 @@ import java.util.Objects;
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
 import org.gradle.api.provider.ListProperty;
-import org.gradle.workers.*;
+import org.gradle.workers.ProcessWorkerSpec;
+import org.gradle.workers.WorkAction;
+import org.gradle.workers.WorkParameters;
+import org.gradle.workers.WorkQueue;
+import org.gradle.workers.WorkerExecutor;
 
 public class SpotBugsRunnerForWorker extends SpotBugsRunner {
   private final WorkerExecutor workerExecutor;
@@ -51,9 +55,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
   }
 
   private Action<SpotBugsWorkParameters> configureWorkParameters(SpotBugsTask task) {
-    return params -> {
-      params.getArguments().addAll(buildArguments(task));
-    };
+    return params -> params.getArguments().addAll(buildArguments(task));
   }
 
   interface SpotBugsWorkParameters extends WorkParameters {
