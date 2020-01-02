@@ -1,4 +1,5 @@
 plugins {
+    id 'groovy'
     id 'java-gradle-plugin'
     id 'jacoco'
     id 'com.gradle.plugin-publish' version '0.10.1'
@@ -31,6 +32,7 @@ ext {
 
 dependencies {
     errorprone "com.google.errorprone:error_prone_core:${errorproneVersion}"
+    compile localGroovy()
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
     compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
@@ -44,14 +46,11 @@ test {
     maxParallelForks = Runtime.runtime.availableProcessors()
 }
 
-javadoc {
-    title = 'SpotBugs Gradle Plugin'
-    options.with {
-        addBooleanOption('html5', true)
-        links 'https://docs.gradle.org/current/javadoc/'
-        links 'https://docs.oracle.com/en/java/javase/11/docs/api/'
-        links 'http://docs.groovy-lang.org/latest/html/api/'
-    }
+groovydoc {
+    docTitle 'SpotBugs Gradle Plugin'
+    link 'https://docs.gradle.org/current/javadoc/', 'org.gradle.api.'
+    link 'https://docs.oracle.com/en/java/javase/11/docs/api/', 'java.'
+    link 'http://docs.groovy-lang.org/latest/html/gapi/', 'groovy.', 'org.codehaus.groovy.'
 }
 
 task processVersionFile(type: WriteProperties) {
