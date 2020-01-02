@@ -347,6 +347,7 @@ public abstract class SpotBugsTask extends DefaultTask
   }
 
   private void runByJavaExec(SpotBugsSpec spotbugsSpec) {
+    // TODO print version of SpotBugs and Plugins
     getProject().javaexec(spotbugsSpec::applyTo);
     // TODO handle isIgnoreFailures
   }
@@ -359,6 +360,7 @@ public abstract class SpotBugsTask extends DefaultTask
 
       // TODO handle isIgnoreFailures
       try {
+        edu.umd.cs.findbugs.Version.printVersion(false);
         edu.umd.cs.findbugs.FindBugs2.main(args);
       } catch (Exception e) {
         throw new GradleException("SpotBugs execution thrown exception", e);
