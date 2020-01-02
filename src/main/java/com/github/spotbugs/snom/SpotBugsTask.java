@@ -14,6 +14,8 @@
 package com.github.spotbugs.snom;
 
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
+import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
+import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -24,10 +26,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.gradle.api.Action;
 import org.gradle.api.DefaultTask;
-import org.gradle.api.GradleException;
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.artifacts.Configuration;
@@ -47,8 +47,6 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.util.ClosureBackedAction;
-import org.gradle.workers.WorkAction;
-import org.gradle.workers.WorkQueue;
 import org.gradle.workers.WorkerExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -230,70 +228,17 @@ public abstract class SpotBugsTask extends DefaultTask
     release.set(extension.release);
   }
 
-  final void applyTo(ImmutableSpotBugsSpec.Builder builder) {
-    builder.isIgnoreFailures(ignoreFailures.getOrElse(false));
-    builder.isShowProgress(showProgress.getOrElse(false));
-    getFirstEnabledReport()
-        .ifPresent(
-            report -> {
-              File dir = report.getDestination().getParentFile();
-              dir.mkdirs();
-              report.toCommandLineOption().ifPresent(builder::addExtraArguments);
-              builder.addExtraArguments("-outputFile", report.getDestination().getAbsolutePath());
-            });
-    if (effort.isPresent()) {
-      builder.addExtraArguments("-effort:" + effort.get().toString().toLowerCase());
-    }
-    if (reportLevel.isPresent()) {
-      builder.addExtraArguments(reportLevel.get().toCommandLineOption());
-    }
-    if (visitors.isPresent() && !visitors.get().isEmpty()) {
-      builder.addExtraArguments("-visitors");
-      builder.addExtraArguments(visitors.get().stream().collect(Collectors.joining(",")));
-    }
-    if (omitVisitors.isPresent() && !omitVisitors.get().isEmpty()) {
-      builder.addExtraArguments("-omitVisitors");
-      builder.addExtraArguments(omitVisitors.get().stream().collect(Collectors.joining(",")));
-    }
-    if (includeFilter.isPresent() && includeFilter.get() != null) {
-      builder.addExtraArguments("-include", includeFilter.get().getAbsolutePath());
-    }
-    if (excludeFilter.isPresent() && excludeFilter.get() != null) {
-      builder.addExtraArguments("-exclude", excludeFilter.get().getAbsolutePath());
-    }
-    if (onlyAnalyze.isPresent() && !onlyAnalyze.get().isEmpty()) {
-      builder.addExtraArguments(
-          "-onlyAnalyze", onlyAnalyze.get().stream().collect(Collectors.joining(",")));
-    }
-
-    builder.addExtraArguments("-projectName", projectName.get());
-    builder.addExtraArguments("-release", release.get());
-    builder
-        .sourceDirs(getSourceDirs())
-        .addAllClassDirs(getClassDirs())
-        .addAllAuxClassPaths(getAuxClassPaths());
-  }
-
   @TaskAction
   public void run() {
-    ImmutableSpotBugsSpec.Builder builder = ImmutableSpotBugsSpec.builder();
-    applyTo(builder);
-    Configuration pluginConfig = getProject().getConfigurations().getByName("spotbugsPlugin");
-    SpotBugsSpec spotbugsSpec =
-        builder
-            .addAllSpotbugsJar(createJarOnClasspath())
-            .addAllPlugins(pluginConfig.getFiles())
-            .build();
-
     if (getProject().hasProperty(FEATURE_FLAG_WORKER_API)
         && getProject()
             .property(FEATURE_FLAG_WORKER_API)
             .toString()
             .equals(Boolean.TRUE.toString())) {
       log.info("Experimental: Try to run SpotBugs in the worker process.");
-      runByWorkerAPI(spotbugsSpec);
+      new SpotBugsRunnerForWorker(workerExecutor).run(this);
     } else {
-      runByJavaExec(spotbugsSpec);
+      new SpotBugsRunnerForJavaExec().run(this);
     }
   }
 
@@ -327,7 +272,14 @@ public abstract class SpotBugsTask extends DefaultTask
   }
 
   @NonNull
-  private Set<File> createJarOnClasspath() {
+  @Internal
+  public Set<File> getPluginJar() {
+    return getProject().getConfigurations().getByName("spotbugsPlugin").getFiles();
+  }
+
+  @NonNull
+  @Internal
+  public Set<File> getJarOnClasspath() {
     Configuration config = getProject().getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME);
     Configuration spotbugsSlf4j = getProject().getConfigurations().getByName("spotbugsSlf4j");
 
@@ -346,37 +298,5 @@ public abstract class SpotBugsTask extends DefaultTask
   @Nested
   public java.util.Optional<SpotBugsReport> getFirstEnabledReport() {
     return reports.stream().filter(SingleFileReport::isEnabled).findFirst();
-  }
-
-  /**
-   * Run SpotBugs in the worker process.
-   *
-   * @param spotbugsSpec Spec to run SpotBugs
-   */
-  private void runByWorkerAPI(SpotBugsSpec spotbugsSpec) {
-    WorkQueue workerQueue = workerExecutor.processIsolation(spotbugsSpec::applyTo);
-    workerQueue.submit(SpotBugsExecutor.class, spotbugsSpec::applyTo);
-  }
-
-  private void runByJavaExec(SpotBugsSpec spotbugsSpec) {
-    // TODO print version of SpotBugs and Plugins
-    getProject().javaexec(spotbugsSpec::applyTo);
-    // TODO handle isIgnoreFailures
-  }
-
-  public abstract static class SpotBugsExecutor implements WorkAction<SpotBugsWorkParameters> {
-    @Override
-    public void execute() {
-      SpotBugsWorkParameters params = getParameters();
-      String[] args = params.getArguments().get().toArray(new String[0]);
-
-      // TODO handle isIgnoreFailures
-      try {
-        edu.umd.cs.findbugs.Version.printVersion(false);
-        edu.umd.cs.findbugs.FindBugs2.main(args);
-      } catch (Exception e) {
-        throw new GradleException("SpotBugs execution thrown exception", e);
-      }
-    }
   }
 }

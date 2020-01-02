@@ -38,32 +38,32 @@ public enum Confidence {
   /** The report level to report all detected bugs in the report. */
   LOW {
     @Override
-    String toCommandLineOption() {
+    public String toCommandLineOption() {
       return "-low";
     }
   },
   /** The report level to report medium and high priority detected bugs in the report. */
   MEDIUM {
     @Override
-    String toCommandLineOption() {
+    public String toCommandLineOption() {
       return "-medium";
     }
   },
   /** The default level that provides the same feature with {@link MEDIUM}. */
   DEFAULT {
     @Override
-    String toCommandLineOption() {
+    public String toCommandLineOption() {
       return "";
     }
   },
   /** The report level to report high priority detected bugs in the report. */
   HIGH {
     @Override
-    String toCommandLineOption() {
+    public String toCommandLineOption() {
       return "-high";
     }
   };
 
   @Internal("This is internally used property so no need to refer to judge out-of-date or not.")
-  abstract @Nonnull String toCommandLineOption();
+  public abstract @Nonnull String toCommandLineOption();
 }
