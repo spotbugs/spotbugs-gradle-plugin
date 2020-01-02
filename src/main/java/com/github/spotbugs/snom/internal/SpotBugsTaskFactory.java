@@ -26,8 +26,8 @@ import org.gradle.util.GUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SpotBugsTaskGenerator {
-  private final Logger log = LoggerFactory.getLogger(SpotBugsTaskGenerator.class);
+public class SpotBugsTaskFactory {
+  private final Logger log = LoggerFactory.getLogger(SpotBugsTaskFactory.class);
 
   public Set<SpotBugsTask> generate(Project project) {
     Set<SpotBugsTask> tasks = new HashSet<>();

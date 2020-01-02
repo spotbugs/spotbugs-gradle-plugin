@@ -13,7 +13,7 @@
  */
 package com.github.spotbugs.snom;
 
-import com.github.spotbugs.snom.internal.SpotBugsTaskGenerator;
+import com.github.spotbugs.snom.internal.SpotBugsTaskFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -99,7 +99,7 @@ public class SpotBugsPlugin implements Plugin<Project> {
 
   private void createTasks(Project project, SpotBugsExtension extension) {
     Task check = project.getTasks().getByName("check");
-    SpotBugsTaskGenerator generator = new SpotBugsTaskGenerator();
+    SpotBugsTaskFactory generator = new SpotBugsTaskFactory();
     generator
         .generate(project)
         .forEach(
