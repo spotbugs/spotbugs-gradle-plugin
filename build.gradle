@@ -30,7 +30,7 @@ dependencies {
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
 
     testImplementation gradleTestKit()
-    testImplementation 'junit:junit:4.12'//, 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testImplementation 'junit:junit:4.13'//, 'org.spockframework:spock-core:1.0-groovy-2.4'
 }
 
 test {
