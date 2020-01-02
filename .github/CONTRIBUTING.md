@@ -2,7 +2,7 @@
 
 ## How to hack this project
 
-Make sure you have Java 11+, Node.js 10+ and Yarn on your `PATH`.
+Make sure you have Java 11+, Node.js 12+ and Yarn on your `PATH`.
 
 Before you start hacking, run `yarn install` once to install development toolchain
 to follow [the Conventional Commits](https://conventionalcommits.org/).
