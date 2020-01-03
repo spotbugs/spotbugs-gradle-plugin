@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2019 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
@@ -18,7 +18,7 @@ import org.gradle.api.tasks.Internal;
 
 /**
  * The {@code Confidence} is used to specify the level to report bugs. Lower level contains more
- * bugs reported. To include all bugs to your report, use {@link LOW}.
+ * bugs reported. To include all bugs to your report, use {@link #LOW}.
  *
  * <p><strong>Usage:</strong>
  *
@@ -32,38 +32,38 @@ import org.gradle.api.tasks.Internal;
  * &nbsp;&nbsp;&nbsp;&nbsp;reportLevel = 'high'<br>
  * }</code></div>
  *
- * @see <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual</a>
+ * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual</a>.</p>
  */
-public enum Confidence {
-  /** The report level to report all detected bugs in the report. */
-  LOW {
-    @Override
-    String toCommandLineOption() {
-      return "-low";
+enum Confidence {
+    /** The report level to report all detected bugs in the report. */
+    LOW {
+        @Override
+        String toCommandLineOption() {
+            return "-low"
+        }
+    },
+    /** The report level to report medium and high priority detected bugs in the report. */
+    MEDIUM {
+        @Override
+        String toCommandLineOption() {
+            return "-medium"
+        }
+    },
+    /** The default level that provides the same feature with {@link #MEDIUM}. */
+    DEFAULT {
+        @Override
+        String toCommandLineOption() {
+            return ""
+        }
+    },
+    /** The report level to report high priority detected bugs in the report. */
+    HIGH {
+        @Override
+        String toCommandLineOption() {
+            return "-high"
+        }
     }
-  },
-  /** The report level to report medium and high priority detected bugs in the report. */
-  MEDIUM {
-    @Override
-    String toCommandLineOption() {
-      return "-medium";
-    }
-  },
-  /** The default level that provides the same feature with {@link MEDIUM}. */
-  DEFAULT {
-    @Override
-    String toCommandLineOption() {
-      return "";
-    }
-  },
-  /** The report level to report high priority detected bugs in the report. */
-  HIGH {
-    @Override
-    String toCommandLineOption() {
-      return "-high";
-    }
-  };
 
-  @Internal("This is internally used property so no need to refer to judge out-of-date or not.")
-  abstract @Nonnull String toCommandLineOption();
+    @Internal("This is internally used property so no need to refer to judge out-of-date or not.")
+    abstract @Nonnull String toCommandLineOption()
 }

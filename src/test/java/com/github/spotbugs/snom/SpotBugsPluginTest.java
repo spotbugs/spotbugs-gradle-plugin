@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2019 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
@@ -31,8 +31,8 @@ class SpotBugsPluginTest {
     assertThrows(
         IllegalArgumentException.class,
         () -> {
-          new SpotBugsPlugin().verifyGradleVersion(GradleVersion.version("3.9"));
+          new SpotBugsPlugin().verifyGradleVersion(GradleVersion.version("5.5"));
         });
-    new SpotBugsPlugin().verifyGradleVersion(GradleVersion.version("4.0"));
+    new SpotBugsPlugin().verifyGradleVersion(GradleVersion.version("5.6"));
   }
 }

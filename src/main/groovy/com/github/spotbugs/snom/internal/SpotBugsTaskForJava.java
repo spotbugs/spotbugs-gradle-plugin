@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2019 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
@@ -25,7 +25,7 @@ import org.gradle.api.tasks.SourceSet;
 import org.gradle.workers.WorkerExecutor;
 
 @CacheableTask
-public class SpotBugsTaskForJava extends SpotBugsTask {
+class SpotBugsTaskForJava extends SpotBugsTask {
   private SourceSet sourceSet;
 
   @Inject
@@ -33,7 +33,7 @@ public class SpotBugsTaskForJava extends SpotBugsTask {
     super(objects, workerExecutor);
   }
 
-  public void setSourceSet(SourceSet sourceSet) {
+  void setSourceSet(SourceSet sourceSet) {
     this.sourceSet = Objects.requireNonNull(sourceSet);
     dependsOn(sourceSet.getClassesTaskName());
   }
@@ -42,12 +42,12 @@ public class SpotBugsTaskForJava extends SpotBugsTask {
   protected void init(SpotBugsExtension extension) {
     super.init(extension);
     // the default reportsDir is "$buildDir/reports/spotbugs/${sourceSetName}"
-    setReportsDir(extension.getReportsDir().map(dir -> new File(dir, sourceSet.getName())));
+    getReportsDir().set(extension.getReportsDir().map(dir -> new File(dir, sourceSet.getName())));
   }
 
   @Override
   public FileCollection getSourceDirs() {
-    return sourceSet.getAllJava();
+    return sourceSet.getAllSource().getSourceDirectories();
   }
 
   @Override

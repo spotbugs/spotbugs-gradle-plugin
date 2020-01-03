@@ -4,7 +4,7 @@ This is an unofficial Gradle Plugin to run SpotBugs on Java and Android project.
 
 ![](https://github.com/KengoTODA/spotbugs-gradle-plugin-v2/workflows/Java%20CI/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KengoTODA_spotbugs-gradle-plugin-v2&metric=alert_status)](https://sonarcloud.io/dashboard?id=KengoTODA_spotbugs-gradle-plugin-v2)
-[![](https://img.shields.io/badge/javadoc-latest-blightgreen?logo=java)](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/package-summary.html)
+[![](https://img.shields.io/badge/groovydoc-latest-blightgreen?logo=groovy)](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/package-summary.html)
 
 ## Goal
 
@@ -14,7 +14,7 @@ This Gradle plugin is designed to solve the following problems in the official o
 - [x] Solve mutability problem for the build contains multiple projects and/or sourceSet
 - [x] Native Support for [the Parallel Build](https://guides.gradle.org/using-the-worker-api/)
 - [ ] Native Support for [the Android project](https://developer.android.com/studio/build/gradle-tips)
-- [ ] Missing user document about how to use extension and task
+- [x] Missing user document about how to use extension and task
 
 ## Usage
 
@@ -44,7 +44,10 @@ spotbugs {
     reportsDir = file("$buildDir/spotbugs")
     includeFilter = file("include.xml")
     excludeFilter = file("exclude.xml")
-    onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']
+    onlyAnalyze = [ 'com.foobar.MyClass', 'com.foobar.mypkg.*' ]
+    maxHeapSize = '1g'
+    extraArgs = [ '-nested:false' ]
+    jvmArgs = [ '-Duser.language=ja' ]
 }
 ```
 

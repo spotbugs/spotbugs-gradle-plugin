@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2019 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
@@ -13,6 +13,7 @@
  */
 package com.github.spotbugs.snom;
 
+import com.github.spotbugs.snom.internal.SpotBugsTaskFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -30,9 +31,11 @@ public class SpotBugsPlugin implements Plugin<Project> {
 
   /**
    * Supported Gradle version described at <a
-   * href="http://spotbugs.readthedocs.io/en/latest/gradle.html">official manual site</a>.
+   * href="http://spotbugs.readthedocs.io/en/latest/gradle.html">official manual site</a>. <a
+   * href="https://guides.gradle.org/using-the-worker-api/">The Gradle Worker API</a> needs 5.6 or
+   * later, so we use this value as minimal required version.
    */
-  private static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("4.0");
+  private static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("5.6");
 
   @Override
   public void apply(Project project) {
@@ -96,7 +99,7 @@ public class SpotBugsPlugin implements Plugin<Project> {
 
   private void createTasks(Project project, SpotBugsExtension extension) {
     Task check = project.getTasks().getByName("check");
-    SpotBugsTaskGenerator generator = new SpotBugsTaskGenerator();
+    SpotBugsTaskFactory generator = new SpotBugsTaskFactory();
     generator
         .generate(project)
         .forEach(

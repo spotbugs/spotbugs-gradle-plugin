@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2019 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
@@ -46,7 +46,6 @@ public abstract class SpotBugsReport
   }
 
   @NonNull
-  @Internal("This property returns always same value")
   public abstract Optional<String> toCommandLineOption();
 
   @Override

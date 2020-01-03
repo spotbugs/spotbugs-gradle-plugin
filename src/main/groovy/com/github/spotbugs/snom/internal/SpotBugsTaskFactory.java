@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2019 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
@@ -11,11 +11,10 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.snom;
+package com.github.spotbugs.snom.internal;
 
 import com.android.build.gradle.tasks.AndroidJavaCompile;
-import com.github.spotbugs.snom.internal.SpotBugsTaskForAndroid;
-import com.github.spotbugs.snom.internal.SpotBugsTaskForJava;
+import com.github.spotbugs.snom.SpotBugsTask;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,10 +26,10 @@ import org.gradle.util.GUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class SpotBugsTaskGenerator {
-  private final Logger log = LoggerFactory.getLogger(SpotBugsTaskGenerator.class);
+public class SpotBugsTaskFactory {
+  private final Logger log = LoggerFactory.getLogger(SpotBugsTaskFactory.class);
 
-  Set<SpotBugsTask> generate(Project project) {
+  public Set<SpotBugsTask> generate(Project project) {
     Set<SpotBugsTask> tasks = new HashSet<>();
     tasks.addAll(generateForJava(project));
     tasks.addAll(generateForAndroid(project));

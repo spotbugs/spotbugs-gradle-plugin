@@ -13,11 +13,11 @@ jobs:
         uses: actions/setup-java@081536e
         with:
           java-version: 11
-      - name: Generate Javadoc
-        run: ./gradlew javadoc
+      - name: Generate Groovydoc
+        run: ./gradlew groovydoc
       - name: Build and Deploy
         uses: JamesIves/github-pages-deploy-action@c74c1d2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: build/docs/javadoc/
+          FOLDER: build/docs/groovydoc/
