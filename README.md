@@ -14,7 +14,7 @@ This Gradle plugin is designed to solve the following problems in the official o
 - [x] Solve mutability problem for the build contains multiple projects and/or sourceSet
 - [x] Native Support for [the Parallel Build](https://guides.gradle.org/using-the-worker-api/)
 - [ ] Native Support for [the Android project](https://developer.android.com/studio/build/gradle-tips)
-- [ ] Missing user document about how to use extension and task
+- [x] Missing user document about how to use extension and task
 
 ## Usage
 
@@ -44,10 +44,10 @@ spotbugs {
     reportsDir = file("$buildDir/spotbugs")
     includeFilter = file("include.xml")
     excludeFilter = file("exclude.xml")
-    onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']
+    onlyAnalyze = [ 'com.foobar.MyClass', 'com.foobar.mypkg.*' ]
     maxHeapSize = '1g'
-    extraArgs = ['-nested:false']
-    jvmArgs = ['-Duser.language=ja']
+    extraArgs = [ '-nested:false' ]
+    jvmArgs = [ '-Duser.language=ja' ]
 }
 ```
 

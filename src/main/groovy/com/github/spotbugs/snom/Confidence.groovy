@@ -18,7 +18,7 @@ import org.gradle.api.tasks.Internal;
 
 /**
  * The {@code Confidence} is used to specify the level to report bugs. Lower level contains more
- * bugs reported. To include all bugs to your report, use {@link LOW}.
+ * bugs reported. To include all bugs to your report, use {@link #LOW}.
  *
  * <p><strong>Usage:</strong>
  *
@@ -32,7 +32,7 @@ import org.gradle.api.tasks.Internal;
  * &nbsp;&nbsp;&nbsp;&nbsp;reportLevel = 'high'<br>
  * }</code></div>
  *
- * @see <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual</a>
+ * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual</a>.</p>
  */
 enum Confidence {
     /** The report level to report all detected bugs in the report. */
@@ -49,7 +49,7 @@ enum Confidence {
             return "-medium"
         }
     },
-    /** The default level that provides the same feature with {@link MEDIUM}. */
+    /** The default level that provides the same feature with {@link #MEDIUM}. */
     DEFAULT {
         @Override
         String toCommandLineOption() {

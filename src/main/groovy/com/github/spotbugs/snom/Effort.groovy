@@ -29,7 +29,7 @@ package com.github.spotbugs.snom;
  * &nbsp;&nbsp;&nbsp;&nbsp;effort = 'max'<br>
  * }</code></div>
  *
- * @see <a href="https://spotbugs.readthedocs.io/en/stable/effort.html">SpotBugs Manual</a>
+ * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/effort.html">SpotBugs Manual</a>.</p>
  */
 enum Effort {
     /**
@@ -39,7 +39,7 @@ enum Effort {
     MIN,
     /** The effort level to reduce the computation cost. */
     LESS,
-    /** The default level that provides the same feature with {@link MORE}. */
+    /** The default level that provides the same feature with {@link #MORE}. */
     DEFAULT,
     /**
      * The effort level that uses more computation cost. SpotBugs will try to detect more problems by

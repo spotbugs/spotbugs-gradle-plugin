@@ -53,6 +53,36 @@ import org.slf4j.LoggerFactory
 import java.util.function.Function
 import java.util.function.Predicate;
 
+/**
+ * The Gradle task to run the SpotBugs analysis. All properties are optional.
+ *
+ * <p><strong>Usage for Java project:</strong>
+ * <p>After you apply the SpotBugs Gradle plugin to project, {@code SpotBugsTask} is automatically
+ * generated for each sourceSet. If you want to configure generated tasks, write build scripts like below:<div><code>
+ * spotbugsMain {<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;sourceDirs = sourceSets.main.allSource.srcDirs<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;classDirs = sourceSets.main.output<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;auxClassPaths = sourceSets.main.compileClasspath<br>
+ * <br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;ignoreFailures = false<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;showProgress = false<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;reportLevel = 'default'<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;effort = 'default'<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;omitVisitors = [ 'FindNonShortCircuit' ]<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;reportsDir = file("$buildDir/reports/spotbugs")<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;includeFilter = file('spotbugs-include.xml')<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;excludeFilter = file('spotbugs-exclude.xml')<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;projectName = name<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;release = version<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;extraArgs = [ '-nested:false' ]<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;jvmArgs = [ '-Duser.language=ja' ]<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;maxHeapSize = '512m'<br>
+ *}</code></div>
+ *
+ * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p>
+ */
 abstract class SpotBugsTask extends DefaultTask {
     private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
@@ -62,66 +92,150 @@ abstract class SpotBugsTask extends DefaultTask {
     @Input
     @Optional
     @NonNull final Property<Boolean> ignoreFailures;
+    /**
+     * Property to enable progress reporting during the analysis. Default value is {@code false}.
+     */
     @Input
     @Optional
-    @NonNull final Property<Boolean> showProgress;
+    @NonNull
+    final Property<Boolean> showProgress;
+    /**
+     * Property to specify the level to report bugs. Default value is {@link Confidence#DEFAULT}.
+     */
     @Input
     @Optional
-    @NonNull final Property<Confidence> reportLevel;
+    @NonNull
+    final Property<Confidence> reportLevel;
+    /**
+     * Property to adjust SpotBugs detectors. Default value is {@link Effort#DEFAULT}.
+     */
     @Input
     @Optional
-    @NonNull final Property<Effort> effort;
+    @NonNull
+    final Property<Effort> effort;
+    /**
+     * Property to enable visitors (detectors) for analysis. Default is empty that means all visitors run analysis.
+     */
     @Input
-    @NonNull final ListProperty<String> visitors;
+    @NonNull
+    final ListProperty<String> visitors;
+    /**
+     * Property to disable visitors (detectors) for analysis. Default is empty that means SpotBugs omits no visitor.
+     */
     @Input
-    @NonNull final ListProperty<String> omitVisitors;
+    @NonNull
+    final ListProperty<String> omitVisitors;
+
+    /**
+     * Property to set the directory to generate report files. Default is {@code "$buildDir/reports/spotbugs/$taskName"}.
+     */
     @Internal("Refer the destination of each report instead.")
-    @NonNull final Property<File> reportsDir;
+    @NonNull
+    final Property<File> reportsDir;
+
+    /**
+     * Property to specify which report you need.
+     *
+     * @see SpotBugsReport
+     */
     @Nested
-    @NonNull final NamedDomainObjectContainer<SpotBugsReport> reports;
+    @NonNull
+    final NamedDomainObjectContainer<SpotBugsReport> reports;
 
+    /**
+     * Property to set the filter file to limit which bug should be reported.
+     *
+     * <p>Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze, use {@link #onlyAnalyze} instead.
+     * To limit the visitors (detectors) to run, use {@link #visitors} and {@link #omitVisitors} instead.</p>
+     *
+     * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html>SpotBugs Manual about Filter file</a>.</p>
+     */
     @Optional
     @InputFile
     @PathSensitive(PathSensitivity.RELATIVE)
-    @NonNull final Property<File> includeFilter;
+    @NonNull
+    final Property<File> includeFilter;
+    /**
+     * Property to set the filter file to limit which bug should be reported.
+     *
+     * <p>Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze, use {@link #onlyAnalyze} instead.
+     * To limit the visitors (detectors) to run, use {@link #visitors} and {@link #omitVisitors} instead.</p>
+     *
+     * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html>SpotBugs Manual about Filter file</a>.</p>
+     */
     @Optional
     @InputFile
     @PathSensitive(PathSensitivity.RELATIVE)
-    @NonNull final Property<File> excludeFilter;
-
+    @NonNull
+    final Property<File> excludeFilter;
+    /**
+     * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
+     */
     @Input
-    @NonNull final ListProperty<String> onlyAnalyze;
+    @NonNull
+    final ListProperty<String> onlyAnalyze;
+    /**
+     * Property to specify the name of project. Some reporting formats use this property.
+     * Default value is {@code "${project.name} (${task.name})"}.
+     */
     @Input
-    @NonNull final Property<String> projectName;
+    @NonNull
+    final Property<String> projectName;
+    /**
+     * Property to specify the release identifier of project. Some reporting formats use this property. Default value is the version of your Gradle project.
+     */
     @Input
-    @NonNull final Property<String> release;
+    @NonNull
+    final Property<String> release;
+    /**
+     * Property to specify the extra arguments for SpotBugs. Default value is empty so SpotBugs will get no extra argument.
+     */
     @Optional
     @Input
-    @NonNull final ListProperty<String> extraArgs;
+    @NonNull
+    final ListProperty<String> extraArgs;
+    /**
+     * Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.
+     */
     @Optional
     @Input
-    @NonNull final ListProperty<String> jvmArgs;
+    @NonNull
+    final ListProperty<String> jvmArgs;
+    /**
+     * Property to specify the max heap size ({@code -Xmx} option) of JVM process.
+     * Default value is empty so the default configuration made by Gradle will be used.
+     */
     @Optional
     @Input
-    @NonNull final Property<String> maxHeapSize;
-
+    @NonNull
+    final Property<String> maxHeapSize;
+    /**
+     * Property to specify the directories that contain the source of target classes to analyze.
+     * Default value is the source directory of the target sourceSet.
+     */
     @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
     @NonNull
     abstract FileCollection getSourceDirs();
-
+    /**
+     * Property to specify the directories that contains the target classes to analyze.
+     * Default value is the output directory of the target sourceSet.
+     */
     @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
     @NonNull
     abstract FileCollection getClassDirs();
-
+    /**
+     * Property to specify the aux class paths that contains the libraries to refer during analysis.
+     * Default value is the compile-scope dependencies of the target sourceSet.
+     */
     @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
     @NonNull
     abstract FileCollection getAuxClassPaths();
 
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
-        this.workerExecutor = workerExecutor;
+        this.workerExecutor = Objects.requireNonNull(workerExecutor);
 
         ignoreFailures = objects.property(Boolean);
         showProgress = objects.property(Boolean);
