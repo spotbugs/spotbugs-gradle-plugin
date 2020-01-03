@@ -47,7 +47,7 @@ class SpotBugsTaskForJava extends SpotBugsTask {
 
   @Override
   public FileCollection getSourceDirs() {
-    return sourceSet.getAllJava();
+    return sourceSet.getAllSource().getSourceDirectories();
   }
 
   @Override
