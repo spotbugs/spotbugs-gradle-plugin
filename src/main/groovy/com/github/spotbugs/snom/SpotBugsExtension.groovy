@@ -14,7 +14,6 @@
 package com.github.spotbugs.snom;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.File;
 import java.nio.file.Paths;
 import javax.inject.Inject;
@@ -23,7 +22,7 @@ import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 
-public class SpotBugsExtension {
+class SpotBugsExtension {
     @NonNull final Property<Boolean> ignoreFailures;
     @NonNull final Property<Boolean> showProgress;
     @NonNull final Property<Confidence> reportLevel;
@@ -41,29 +40,28 @@ public class SpotBugsExtension {
     @NonNull final Property<String> maxHeapSize;
 
     @Inject
-    public SpotBugsExtension(Project project, ObjectFactory objects) {
-        ignoreFailures = objects.property(Boolean.class);
-        showProgress = objects.property(Boolean.class);
-        reportLevel = objects.property(Confidence.class);
-        effort = objects.property(Effort.class);
-        visitors = objects.listProperty(String.class);
-        omitVisitors = objects.listProperty(String.class);
-        reportsDir = objects.property(File.class);
+    SpotBugsExtension(Project project, ObjectFactory objects) {
+        ignoreFailures = objects.property(Boolean);
+        showProgress = objects.property(Boolean);
+        reportLevel = objects.property(Confidence);
+        effort = objects.property(Effort);
+        visitors = objects.listProperty(String);
+        omitVisitors = objects.listProperty(String);
         // the default reportsDir is "$buildDir/reports/spotbugs"
-        reportsDir.set(
-                project.getBuildDir().toPath().resolve(Paths.get("reports", "spotbugs")).toFile());
-        includeFilter = objects.property(File.class);
-        excludeFilter = objects.property(File.class);
-        onlyAnalyze = objects.listProperty(String.class);
-        projectName = objects.property(String.class);
-        release = objects.property(String.class);
+        File reports = new File(project.buildDir, "reports")
+        reportsDir = objects.property(File).convention(new File(reports, "spotbugs"));
+        includeFilter = objects.property(File);
+        excludeFilter = objects.property(File);
+        onlyAnalyze = objects.listProperty(String);
+        projectName = objects.property(String);
+        release = objects.property(String);
         project.afterEvaluate(
                 {p ->
-                    if (!projectName.isPresent()) projectName.set(p.getName());
-                    if (!release.isPresent()) release.set(p.getVersion().toString());
+                    projectName.convention(p.getName());
+                    release.convention(p.getVersion().toString());
                 });
-        jvmArgs = objects.listProperty(String.class);
-        extraArgs = objects.listProperty(String.class);
-        maxHeapSize = objects.property(String.class);
+        jvmArgs = objects.listProperty(String);
+        extraArgs = objects.listProperty(String);
+        maxHeapSize = objects.property(String);
     }
 }

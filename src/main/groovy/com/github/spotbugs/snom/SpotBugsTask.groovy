@@ -55,7 +55,7 @@ import java.util.function.Predicate;
 
 abstract class SpotBugsTask extends DefaultTask {
     private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
-    private final Logger log = LoggerFactory.getLogger(SpotBugsTask.class);
+    private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
 
     private final WorkerExecutor workerExecutor;
 
@@ -123,16 +123,16 @@ abstract class SpotBugsTask extends DefaultTask {
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
         this.workerExecutor = workerExecutor;
 
-        ignoreFailures = objects.property(Boolean.class);
-        showProgress = objects.property(Boolean.class);
-        reportLevel = objects.property(Confidence.class);
-        effort = objects.property(Effort.class);
-        visitors = objects.listProperty(String.class);
-        omitVisitors = objects.listProperty(String.class);
-        reportsDir = objects.property(File.class);
+        ignoreFailures = objects.property(Boolean);
+        showProgress = objects.property(Boolean);
+        reportLevel = objects.property(Confidence);
+        effort = objects.property(Effort);
+        visitors = objects.listProperty(String);
+        omitVisitors = objects.listProperty(String);
+        reportsDir = objects.property(File);
         reports =
                 objects.domainObjectContainer(
-                SpotBugsReport.class, {name ->
+                SpotBugsReport, {name ->
                     switch (name) {
                         case "html":
                             return new SpotBugsHtmlReport(objects, this);
@@ -144,14 +144,14 @@ abstract class SpotBugsTask extends DefaultTask {
                             throw new InvalidUserDataException(name + " is invalid as the report name");
                     }
                 });
-        includeFilter = objects.property(File.class);
-        excludeFilter = objects.property(File.class);
-        onlyAnalyze = objects.listProperty(String.class);
-        projectName = objects.property(String.class);
-        release = objects.property(String.class);
-        jvmArgs = objects.listProperty(String.class);
-        extraArgs = objects.listProperty(String.class);
-        maxHeapSize = objects.property(String.class);
+        includeFilter = objects.property(File);
+        excludeFilter = objects.property(File);
+        onlyAnalyze = objects.listProperty(String);
+        projectName = objects.property(String);
+        release = objects.property(String);
+        jvmArgs = objects.listProperty(String);
+        extraArgs = objects.listProperty(String);
+        maxHeapSize = objects.property(String);
     }
 
     /**
