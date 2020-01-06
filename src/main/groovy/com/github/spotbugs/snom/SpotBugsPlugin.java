@@ -14,6 +14,7 @@
 package com.github.spotbugs.snom;
 
 import com.github.spotbugs.snom.internal.SpotBugsTaskFactory;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -98,13 +99,15 @@ public class SpotBugsPlugin implements Plugin<Project> {
   }
 
   private void createTasks(Project project, SpotBugsExtension extension) {
-    Task check = project.getTasks().getByName("check");
+    @Nullable Task check = project.getTasks().findByName("check");
     SpotBugsTaskFactory generator = new SpotBugsTaskFactory();
     generator
         .generate(project)
         .forEach(
             task -> {
-              check.dependsOn(task);
+              if (check != null) {
+                check.dependsOn(task);
+              }
               task.init(extension);
             });
   }

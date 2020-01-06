@@ -23,7 +23,6 @@ repositories {
 }
 
 ext {
-    junitVersion = '5.5.2'
     errorproneVersion = '2.3.4'
     spotBugsVersion = '3.1.11'
     slf4jVersion = '2.0.0-alpha1'
@@ -32,18 +31,9 @@ ext {
 
 dependencies {
     errorprone "com.google.errorprone:error_prone_core:${errorproneVersion}"
-    compile localGroovy()
+    compileOnly localGroovy()
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
     compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
-    testImplementation gradleTestKit()
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-}
-
-test {
-    useJUnitPlatform()
-    maxParallelForks = Runtime.runtime.availableProcessors()
 }
 
 groovydoc {
@@ -61,11 +51,10 @@ task processVersionFile(type: WriteProperties) {
 }
 tasks.processResources.dependsOn processVersionFile
 
+apply from: "$rootDir/gradle/test.gradle"
 apply from: "$rootDir/gradle/functional-test.gradle"
-apply from: "$rootDir/gradle/jacoco.gradle"
 apply from: "$rootDir/gradle/spotless.gradle"
 apply from: "$rootDir/gradle/errorprone.gradle"
 apply from: "$rootDir/gradle/publish.gradle"
-apply from: "$rootDir/gradle/sonarcloud.gradle"
 
 defaultTasks 'spotlessApply', 'build'

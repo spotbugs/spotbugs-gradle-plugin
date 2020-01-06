@@ -1,0 +1,36 @@
+ext {
+    junitVersion = '5.5.2'
+}
+dependencies {
+    testImplementation gradleTestKit()
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+}
+
+test {
+    useJUnitPlatform()
+    maxParallelForks = Runtime.runtime.availableProcessors()
+}
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+jacocoTestReport {
+    reports {
+        xml {
+            enabled true
+        }
+    }
+}
+tasks.check.dependsOn 'jacocoTestReport'
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "KengoTODA_spotbugs-gradle-plugin-v2"
+        property "sonar.organization", "kengotoda-github"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.destination
+    }
+}
+tasks.sonarqube.mustRunAfter jacocoTestReport
