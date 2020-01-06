@@ -1,6 +1,5 @@
 {
   "devDependencies": {
-    "@semantic-release/changelog": "3.0.6",
     "@semantic-release/commit-analyzer": "6.3.3",
     "@semantic-release/github": "5.5.5",
     "commitlint": "^8.3.4",
@@ -33,7 +32,6 @@
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
       "gradle-semantic-release-plugin",
       [
         "@semantic-release/github",
