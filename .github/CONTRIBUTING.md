@@ -11,7 +11,7 @@ To build the implementation and test, run `./gradlew` then it runs all necessary
 
 ## How to use latest plugin in your project
 
-This Gradle plugin has already been published to [Gradle Plugin Portal](https://plugins.gradle.org/plugin/jp.skypencil.spotbugs.snom) but the approval process is still pending. So you need to build and install the plugin by your own.
+To test your changes, you need to build and install the plugin by your own.
 
 To install the plugin into your Maven Local Repository, add `apply plugin: 'maven-publish'` to `build.gradle` and run `./gradlew publishToMavenLocal`. Then you can use the installed plugin like below:
 
