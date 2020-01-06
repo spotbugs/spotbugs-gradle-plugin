@@ -32,7 +32,7 @@ ext {
 
 dependencies {
     errorprone "com.google.errorprone:error_prone_core:${errorproneVersion}"
-    compile localGroovy()
+    compileOnly localGroovy()
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
     compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
