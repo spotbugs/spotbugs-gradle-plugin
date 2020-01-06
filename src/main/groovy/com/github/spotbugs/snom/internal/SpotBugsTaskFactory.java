@@ -15,6 +15,7 @@ package com.github.spotbugs.snom.internal;
 
 import com.android.build.gradle.tasks.AndroidJavaCompile;
 import com.github.spotbugs.snom.SpotBugsTask;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +38,9 @@ public class SpotBugsTaskFactory {
   }
 
   private Set<SpotBugsTask> generateForJava(Project project) {
-    JavaPluginConvention convention = project.getConvention().getPlugin(JavaPluginConvention.class);
+    @Nullable
+    JavaPluginConvention convention =
+        project.getConvention().findPlugin(JavaPluginConvention.class);
     if (convention == null) {
       return Collections.emptySet();
     }
