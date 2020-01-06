@@ -21,13 +21,7 @@ This Gradle plugin is designed to solve the following problems in the official o
 ### Apply to your project
 
 Apply the plugin to your project.
-Currently this plugin isn't published to the repository, so [you need to build and install your own](.github/CONTRIBUTING.md).
-
-```groovy
-plugins {
-    id 'jp.skypencil.spotbugs.snom' // will be changed at the timing of official release
-}
-```
+Refer [the Gradle Plugin portal](https://plugins.gradle.org/plugin/jp.skypencil.spotbugs.snom) about the detail of installation procedure.
 
 ### Configure SpotBugs Plugin
 
