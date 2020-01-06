@@ -1,0 +1,16 @@
+template: |
+  ## Install
+
+  Using the plugin DSL:
+  ```groovy
+  plugins {
+    id "jp.skypencil.spotbugs.snom" version "$MAJOR.$MINOR.$PATCH"
+  }
+  ```
+
+  Visit the [Gradle Plugin portal](https://plugins.gradle.org/plugin/jp.skypencil.spotbugs.snom/$MAJOR.$MINOR.$PATCH)
+  to learn other ways to introduce the plugin.
+
+  ## What’s Changed
+
+  $CHANGES
