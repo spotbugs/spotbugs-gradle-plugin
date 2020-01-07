@@ -19,12 +19,9 @@ import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.umd.cs.findbugs.annotations.OverrideMustInvoke;
-import groovy.lang.Closure;
-import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
+import org.gradle.api.tasks.SkipWhenEmpty
+
 import org.gradle.api.Action;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.InvalidUserDataException;
@@ -34,8 +31,6 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
-import org.gradle.api.provider.Provider;
-import org.gradle.api.reporting.SingleFileReport;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.InputFiles;
@@ -49,9 +44,6 @@ import org.gradle.util.ClosureBackedAction;
 import org.gradle.workers.WorkerExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory
-
-import java.util.function.Function
-import java.util.function.Predicate;
 
 /**
  * The Gradle task to run the SpotBugs analysis. All properties are optional.
@@ -221,8 +213,7 @@ abstract class SpotBugsTask extends DefaultTask {
      * Property to specify the directories that contains the target classes to analyze.
      * Default value is the output directory of the target sourceSet.
      */
-    @InputFiles
-    @PathSensitive(PathSensitivity.RELATIVE)
+    @Internal
     @NonNull
     abstract FileCollection getClassDirs();
     /**
@@ -233,6 +224,14 @@ abstract class SpotBugsTask extends DefaultTask {
     @PathSensitive(PathSensitivity.RELATIVE)
     @NonNull
     abstract FileCollection getAuxClassPaths();
+
+    @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
+    @SkipWhenEmpty
+    @NonNull
+    FileCollection getTargetClassFiles() {
+        getClassDirs().asFileTree
+    }
 
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
         this.workerExecutor = Objects.requireNonNull(workerExecutor);
