@@ -13,10 +13,16 @@ jobs:
         uses: actions/setup-java@081536e
         with:
           java-version: 11
+      - name: Set up Node.js 12
+        uses: actions/setup-node@8de2f9f
+        with:
+          node-version: 12
       - name: Generate Groovydoc
+        run: ./gradlew groovydoc
+      - name: Prepare to Deploy
         run: |
-          ./gradlew groovydoc
-          rm .git/hooks/commit-msg
+          yarn
+          rm -f .git/hooks/commit-msg
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@c74c1d2
         with:
