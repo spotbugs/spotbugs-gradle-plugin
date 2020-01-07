@@ -16,13 +16,15 @@ package com.github.spotbugs.snom.internal;
 import com.android.build.gradle.tasks.AndroidJavaCompile;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
+import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSetContainer;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.util.GUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,19 +32,22 @@ import org.slf4j.LoggerFactory;
 public class SpotBugsTaskFactory {
   private final Logger log = LoggerFactory.getLogger(SpotBugsTaskFactory.class);
 
-  public Set<SpotBugsTask> generate(Project project) {
-    Set<SpotBugsTask> tasks = new HashSet<>();
-    tasks.addAll(generateForJava(project));
-    tasks.addAll(generateForAndroid(project));
+  public List<TaskProvider<? extends SpotBugsTask>> generate(
+      Project project, Action<? super SpotBugsTask> configurationAction) {
+    List<TaskProvider<? extends SpotBugsTask>> tasks = new ArrayList<>();
+    tasks.addAll(generateForJava(project, configurationAction));
+    tasks.addAll(generateForAndroid(project, configurationAction));
     return tasks;
   }
 
-  private Set<SpotBugsTask> generateForJava(Project project) {
+  private List<TaskProvider<? extends SpotBugsTask>> generateForJava(
+      Project project, Action<? super SpotBugsTask> configurationAction) {
     @Nullable
     JavaPluginConvention convention =
         project.getConvention().findPlugin(JavaPluginConvention.class);
     if (convention == null) {
-      return Collections.emptySet();
+      log.info("JavaPluginConvention not found, so skip the task generation for Java");
+      return Collections.emptyList();
     }
 
     SourceSetContainer sourceSets = convention.getSourceSets();
@@ -50,32 +55,44 @@ public class SpotBugsTaskFactory {
         .map(
             sourceSet -> {
               String name = sourceSet.getTaskName("spotbugs", null);
+              log.debug("Creating SpotBugsTaskForJava for {}", sourceSet);
               return project
                   .getTasks()
-                  .create(name, SpotBugsTaskForJava.class, task -> task.setSourceSet(sourceSet));
+                  .register(
+                      name,
+                      SpotBugsTaskForJava.class,
+                      task -> {
+                        task.setSourceSet(sourceSet);
+                        configurationAction.execute(task);
+                      });
             })
-        .collect(Collectors.toSet());
+        .collect(Collectors.toList());
   }
 
-  private Set<SpotBugsTask> generateForAndroid(Project project) {
+  private List<TaskProvider<? extends SpotBugsTask>> generateForAndroid(
+      Project project, Action<? super SpotBugsTask> configurationAction) {
     try {
       Class.forName("com.android.build.gradle.tasks.AndroidJavaCompile");
     } catch (ClassNotFoundException ignore) {
       log.info("Android Gradle Plugin not found, so skip the task generation for Android");
-      return Collections.emptySet();
+      return Collections.emptyList();
     }
 
     return project.getTasks().withType(AndroidJavaCompile.class).stream()
         .map(
             task -> {
               String name = GUtil.toLowerCamelCase("spotbugs " + task.getVariantName());
+              log.debug("Creating SpotBugsTaskForAndroid for {}", task);
               return project
                   .getTasks()
-                  .create(
+                  .register(
                       name,
                       SpotBugsTaskForAndroid.class,
-                      spotbugsTask -> spotbugsTask.setTask(task));
+                      spotbugsTask -> {
+                        configurationAction.execute(spotbugsTask);
+                        spotbugsTask.setTask(task);
+                      });
             })
-        .collect(Collectors.toSet());
+        .collect(Collectors.toList());
   }
 }

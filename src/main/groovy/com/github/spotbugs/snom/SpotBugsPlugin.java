@@ -100,10 +100,9 @@ public class SpotBugsPlugin implements Plugin<Project> {
 
   private void createTasks(Project project, SpotBugsExtension extension) {
     @Nullable Task check = project.getTasks().findByName("check");
-    SpotBugsTaskFactory generator = new SpotBugsTaskFactory();
-    generator
-        .generate(project)
-        .forEach(
+    new SpotBugsTaskFactory()
+        .generate(
+            project,
             task -> {
               if (check != null) {
                 check.dependsOn(task);
