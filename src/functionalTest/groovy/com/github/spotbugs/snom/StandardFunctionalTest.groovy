@@ -89,4 +89,23 @@ dependencies {
         assertEquals(TaskOutcome.SUCCESS, result.task(":classes").getOutcome())
         assertTrue(result.output.contains("spotbugs-4.0.0-beta4.jar"))
     }
+
+    def "can skip analysis when no class file we have"() {
+        setup:
+        File sourceDir = rootDir.toPath().resolve("src").resolve("main").resolve("java").toFile()
+        File sourceFile = new File(sourceDir, "Foo.java")
+        sourceFile.delete()
+
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(":spotbugsMain")
+                .withPluginClasspath()
+                .forwardOutput()
+                .build()
+
+        then:
+        assertEquals(TaskOutcome.NO_SOURCE, result.task(":spotbugsMain").getOutcome())
+    }
 }
