@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SourceSetContainer;
-import org.gradle.api.tasks.TaskProvider;
 import org.gradle.util.GUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,15 +32,15 @@ import org.slf4j.LoggerFactory;
 public class SpotBugsTaskFactory {
   private final Logger log = LoggerFactory.getLogger(SpotBugsTaskFactory.class);
 
-  public List<TaskProvider<? extends SpotBugsTask>> generate(
+  public List<Provider<SpotBugsTask>> generate(
       Project project, Action<? super SpotBugsTask> configurationAction) {
-    List<TaskProvider<? extends SpotBugsTask>> tasks = new ArrayList<>();
+    List<Provider<SpotBugsTask>> tasks = new ArrayList<>();
     tasks.addAll(generateForJava(project, configurationAction));
     tasks.addAll(generateForAndroid(project, configurationAction));
     return tasks;
   }
 
-  private List<TaskProvider<? extends SpotBugsTask>> generateForJava(
+  private List<Provider<SpotBugsTask>> generateForJava(
       Project project, Action<? super SpotBugsTask> configurationAction) {
     @Nullable
     JavaPluginConvention convention =
@@ -66,10 +66,11 @@ public class SpotBugsTaskFactory {
                         configurationAction.execute(task);
                       });
             })
+        .map(p -> p.map(SpotBugsTask.class::cast))
         .collect(Collectors.toList());
   }
 
-  private List<TaskProvider<? extends SpotBugsTask>> generateForAndroid(
+  private List<Provider<SpotBugsTask>> generateForAndroid(
       Project project, Action<? super SpotBugsTask> configurationAction) {
     try {
       Class.forName("com.android.build.gradle.tasks.AndroidJavaCompile");
@@ -93,6 +94,7 @@ public class SpotBugsTaskFactory {
                         spotbugsTask.setTask(task);
                       });
             })
+        .map(p -> p.map(SpotBugsTask.class::cast))
         .collect(Collectors.toList());
   }
 }
