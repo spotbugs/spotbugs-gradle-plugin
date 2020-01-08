@@ -18,7 +18,8 @@ import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
-import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.NonNull
+import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.umd.cs.findbugs.annotations.OverrideMustInvoke;
 import org.gradle.api.tasks.SkipWhenEmpty
 
@@ -345,5 +346,15 @@ abstract class SpotBugsTask extends DefaultTask {
     @Nested
     java.util.Optional<SpotBugsReport> getFirstEnabledReport() {
         return reports.stream().filter({report -> report.enabled}).findFirst()
+    }
+
+    void setReportLevel(@Nullable String name) {
+        Confidence confidence = name == null ? null : Confidence.valueOf(name.toUpperCase())
+        getReportLevel().set(confidence)
+    }
+
+    void setEffort(@Nullable String name) {
+        Effort effort = name == null ? null : Effort.valueOf(name.toUpperCase())
+        getEffort().set(effort)
     }
 }

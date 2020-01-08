@@ -13,7 +13,9 @@
  */
 package com.github.spotbugs.snom;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.NonNull
+import edu.umd.cs.findbugs.annotations.Nullable;
+
 import java.io.File;
 import javax.inject.Inject;
 import org.gradle.api.Project;
@@ -157,5 +159,15 @@ class SpotBugsExtension {
         jvmArgs = objects.listProperty(String);
         extraArgs = objects.listProperty(String);
         maxHeapSize = objects.property(String);
+    }
+
+    void setReportLevel(@Nullable String name) {
+        Confidence confidence = name == null ? null : Confidence.valueOf(name.toUpperCase())
+        getReportLevel().set(confidence)
+    }
+
+    void setEffort(@Nullable String name) {
+        Effort effort = name == null ? null : Effort.valueOf(name.toUpperCase())
+        getEffort().set(effort)
     }
 }

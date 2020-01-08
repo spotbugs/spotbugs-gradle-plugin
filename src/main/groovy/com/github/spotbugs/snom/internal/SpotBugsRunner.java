@@ -63,7 +63,7 @@ public abstract class SpotBugsRunner {
               args.add(report.getDestination().getAbsolutePath());
             });
     if (task.getEffort().isPresent()) {
-      args.add("-effort:" + task.getEffort().toString().toLowerCase());
+      args.add("-effort:" + task.getEffort().get().name().toLowerCase());
     }
     if (task.getReportLevel().isPresent()) {
       args.add(task.getReportLevel().get().toCommandLineOption());
