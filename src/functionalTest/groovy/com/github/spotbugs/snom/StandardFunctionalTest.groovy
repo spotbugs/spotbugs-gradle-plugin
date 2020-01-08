@@ -20,6 +20,7 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
 
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 
@@ -107,5 +108,24 @@ dependencies {
 
         then:
         assertEquals(TaskOutcome.NO_SOURCE, result.task(":spotbugsMain").getOutcome())
+    }
+
+    def "can use effort and reportLevel"() {
+        buildFile << """
+spotbugsMain {
+    effort = 'min'
+    reportLevel = 'high'
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        assertTrue(result.getOutput().contains("-effort:min"))
+        assertTrue(result.getOutput().contains("-high"))
     }
 }

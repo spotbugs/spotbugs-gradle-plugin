@@ -186,4 +186,23 @@ spotbugs {
         result.task(":spotbugsMain").outcome == SUCCESS
         assertTrue(result.getOutput().contains("-Xmx256m"))
     }
+
+    def "can use effort and reportLevel"() {
+        buildFile << """
+spotbugs {
+    effort = 'less'
+    reportLevel = 'high'
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        assertTrue(result.getOutput().contains("-effort:less"))
+        assertTrue(result.getOutput().contains("-high"))
+    }
 }
