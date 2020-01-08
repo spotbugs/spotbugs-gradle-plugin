@@ -236,7 +236,7 @@ spotbugsMain {
         assertTrue(result.getOutput().contains("unknown is invalid as the report name"))
     }
 
-    def "can run task in the worker process"() {
+    def "can run task in the worker process by gradle.properties"() {
         new File(rootDir, "gradle.properties") << """
 com.github.spotbugs.snom.worker=true
 """
@@ -244,6 +244,20 @@ com.github.spotbugs.snom.worker=true
         def result = GradleRunner.create()
                 .withProjectDir(rootDir)
                 .withArguments('spotbugsMain', '--info')
+                .withPluginClasspath()
+                .forwardOutput()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        assertTrue(result.getOutput().contains("Experimental: Try to run SpotBugs in the worker process."));
+    }
+
+    def "can run task in the worker process"() {
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '-Pcom.github.spotbugs.snom.worker=true', '--info')
                 .withPluginClasspath()
                 .forwardOutput()
                 .build()
