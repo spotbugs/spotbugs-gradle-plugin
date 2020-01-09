@@ -57,7 +57,7 @@ Configure `spotbugs` to choose your favorite SpotBugs version:
 
 ```groovy
 dependencies {
-    spotbugsPlugins 'com.github.spotbugs:spotbugs:3.1.11'
+    spotbugs 'com.github.spotbugs:spotbugs:3.1.11'
 }
 ```
 
