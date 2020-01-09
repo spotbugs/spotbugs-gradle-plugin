@@ -90,7 +90,7 @@ class SpotBugsExtension {
      * <p>Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze, use {@link #onlyAnalyze} instead.
      * To limit the visitors (detectors) to run, use {@link #visitors} and {@link #omitVisitors} instead.</p>
      *
-     * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html>SpotBugs Manual about Filter file</a>.</p>
+     * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
      */
     @NonNull
     final Property<File> includeFilter;
@@ -100,7 +100,7 @@ class SpotBugsExtension {
      * <p>Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze, use {@link #onlyAnalyze} instead.
      * To limit the visitors (detectors) to run, use {@link #visitors} and {@link #omitVisitors} instead.</p>
      *
-     * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html>SpotBugs Manual about Filter file</a>.</p>
+     * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
      */
     @NonNull
     final Property<File> excludeFilter;
