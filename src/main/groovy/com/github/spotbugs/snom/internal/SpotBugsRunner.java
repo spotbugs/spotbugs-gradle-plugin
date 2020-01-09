@@ -102,7 +102,9 @@ public abstract class SpotBugsRunner {
   }
 
   protected List<String> buildJvmArguments(SpotBugsTask task) {
-    return task.getJvmArgs().getOrElse(Collections.emptyList());
+    List<String> args = task.getJvmArgs().getOrElse(Collections.emptyList());
+    log.debug("Arguments for JVM process are generated: {}", args);
+    return args;
   }
 
   private String join(Collection<File> files) {

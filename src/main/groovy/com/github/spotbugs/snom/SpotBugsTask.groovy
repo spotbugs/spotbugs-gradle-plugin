@@ -299,11 +299,12 @@ abstract class SpotBugsTask extends DefaultTask {
         if (getProject().hasProperty(FEATURE_FLAG_WORKER_API)
         && getProject()
         .property(FEATURE_FLAG_WORKER_API)
-        .toString() == "true") {
-            log.info("Experimental: Try to run SpotBugs in the worker process.");
-            new SpotBugsRunnerForWorker(workerExecutor).run(this);
-        } else {
+        .toString() == "false") {
+            log.info("Running SpotBugs by JavaExec...");
             new SpotBugsRunnerForJavaExec().run(this);
+        } else {
+            log.info("Running SpotBugs by Gradle Worker...");
+            new SpotBugsRunnerForWorker(workerExecutor).run(this);
         }
     }
 
