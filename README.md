@@ -88,17 +88,6 @@ spotbugsMain {
 }
 ```
 
-### Run Analysis in Gradle Worker process
-
-For multi sub-projects project, use [Gradle Worker](https://guides.gradle.org/using-the-worker-api/) to accelerate your build.
-This feature is still experimental so you need to enable it explicitly by `com.github.spotbugs.snom.worker` property.
-
-For instance, you can add the following line to your `gradle.properties` file:
-
-```properties
-com.github.spotbugs.snom.worker=true
-```
-
 ## Copyright
 
 Copyright &copy; 2019-present SpotBugs Team

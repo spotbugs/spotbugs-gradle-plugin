@@ -99,15 +99,16 @@ spotbugsMain {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments('spotbugsMain', '--info')
+                .withArguments('spotbugsMain', '--debug')
                 .withPluginClasspath()
+                .forwardOutput()
                 .build()
 
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
         assertTrue(report.isFile())
-        assertTrue(result.getOutput().contains("-html "))
+        assertTrue(result.getOutput().contains("-html,"))
     }
 
     def "can generate spotbugs.html with stylesheet"() {
@@ -131,7 +132,7 @@ spotbugsMain {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments('spotbugsMain', "--info")
+                .withArguments('spotbugsMain', "--debug")
                 .withPluginClasspath()
                 .build()
 
@@ -160,7 +161,7 @@ spotbugsMain {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments('spotbugsMain', '--info')
+                .withArguments('spotbugsMain', '--debug')
                 .withPluginClasspath()
                 .build()
 
@@ -236,9 +237,23 @@ spotbugsMain {
         assertTrue(result.getOutput().contains("unknown is invalid as the report name"))
     }
 
-    def "can run task in the worker process"() {
+    def "can run task by Worker Process"() {
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--info')
+                .withPluginClasspath()
+                .forwardOutput()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        assertTrue(result.getOutput().contains("Running SpotBugs by Gradle Worker..."));
+    }
+
+    def "can run task by JavaExec by gradle.properties"() {
         new File(rootDir, "gradle.properties") << """
-com.github.spotbugs.snom.worker=true
+com.github.spotbugs.snom.worker=false
 """
         when:
         def result = GradleRunner.create()
@@ -250,6 +265,20 @@ com.github.spotbugs.snom.worker=true
 
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
-        assertTrue(result.getOutput().contains("Experimental: Try to run SpotBugs in the worker process."));
+        assertTrue(result.getOutput().contains("Running SpotBugs by JavaExec..."));
+    }
+
+    def "can run task by JavaExec by commandline option"() {
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '-Pcom.github.spotbugs.snom.worker=false', '--info')
+                .withPluginClasspath()
+                .forwardOutput()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        assertTrue(result.getOutput().contains("Running SpotBugs by JavaExec..."));
     }
 }

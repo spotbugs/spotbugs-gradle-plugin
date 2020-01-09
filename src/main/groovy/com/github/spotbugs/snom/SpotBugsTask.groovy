@@ -18,7 +18,8 @@ import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
-import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.NonNull
+import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.umd.cs.findbugs.annotations.OverrideMustInvoke;
 import org.gradle.api.tasks.SkipWhenEmpty
 
@@ -298,11 +299,12 @@ abstract class SpotBugsTask extends DefaultTask {
         if (getProject().hasProperty(FEATURE_FLAG_WORKER_API)
         && getProject()
         .property(FEATURE_FLAG_WORKER_API)
-        .toString() == "true") {
-            log.info("Experimental: Try to run SpotBugs in the worker process.");
-            new SpotBugsRunnerForWorker(workerExecutor).run(this);
-        } else {
+        .toString() == "false") {
+            log.info("Running SpotBugs by JavaExec...");
             new SpotBugsRunnerForJavaExec().run(this);
+        } else {
+            log.info("Running SpotBugs by Gradle Worker...");
+            new SpotBugsRunnerForWorker(workerExecutor).run(this);
         }
     }
 
@@ -345,5 +347,15 @@ abstract class SpotBugsTask extends DefaultTask {
     @Nested
     java.util.Optional<SpotBugsReport> getFirstEnabledReport() {
         return reports.stream().filter({report -> report.enabled}).findFirst()
+    }
+
+    void setReportLevel(@Nullable String name) {
+        Confidence confidence = name == null ? null : Confidence.valueOf(name.toUpperCase())
+        getReportLevel().set(confidence)
+    }
+
+    void setEffort(@Nullable String name) {
+        Effort effort = name == null ? null : Effort.valueOf(name.toUpperCase())
+        getEffort().set(effort)
     }
 }
