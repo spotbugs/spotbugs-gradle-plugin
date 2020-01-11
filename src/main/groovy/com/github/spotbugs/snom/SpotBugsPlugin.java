@@ -29,6 +29,7 @@ import org.gradle.util.GradleVersion;
 
 public class SpotBugsPlugin implements Plugin<Project> {
   public static final String CONFIG_NAME = "spotbugs";
+  public static final String EXTENSION_NAME = "spotbugs";
 
   /**
    * Supported Gradle version described at <a
@@ -52,7 +53,7 @@ public class SpotBugsPlugin implements Plugin<Project> {
   private SpotBugsExtension createExtension(Project project) {
     return project
         .getExtensions()
-        .create("spotbugs", SpotBugsExtension.class, project, project.getObjects());
+        .create(EXTENSION_NAME, SpotBugsExtension.class, project, project.getObjects());
   }
 
   private void createConfiguration(Project project) {
