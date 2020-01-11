@@ -128,4 +128,27 @@ spotbugsMain {
         assertTrue(result.getOutput().contains("-effort:min"))
         assertTrue(result.getOutput().contains("-high"))
     }
+
+    def "can be cancelled by withType(VerificationTask)"() {
+        buildFile << """
+tasks.withType(VerificationTask).configureEach {
+    ignoreFailures = true
+}
+spotbugsMain {
+    doLast {
+        print "SpotBugsMain ignores failures? \${ignoreFailures}"
+    }
+}
+"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+        assertTrue(result.getOutput().contains("SpotBugsMain ignores failures? true"))
+    }
 }
