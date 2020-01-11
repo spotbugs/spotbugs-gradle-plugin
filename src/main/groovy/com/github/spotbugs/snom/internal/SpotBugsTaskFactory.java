@@ -15,13 +15,12 @@ package com.github.spotbugs.snom.internal;
 
 import com.android.build.gradle.tasks.AndroidJavaCompile;
 import com.github.spotbugs.snom.SpotBugsTask;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SourceSetContainer;
@@ -35,66 +34,74 @@ public class SpotBugsTaskFactory {
   public List<Provider<SpotBugsTask>> generate(
       Project project, Action<? super SpotBugsTask> configurationAction) {
     List<Provider<SpotBugsTask>> tasks = new ArrayList<>();
-    tasks.addAll(generateForJava(project, configurationAction));
-    tasks.addAll(generateForAndroid(project, configurationAction));
+    generateForJava(project, tasks, configurationAction);
+    generateForAndroid(project, tasks, configurationAction);
     return tasks;
   }
 
-  private List<Provider<SpotBugsTask>> generateForJava(
-      Project project, Action<? super SpotBugsTask> configurationAction) {
-    @Nullable
-    JavaPluginConvention convention =
-        project.getConvention().findPlugin(JavaPluginConvention.class);
-    if (convention == null) {
-      log.info("JavaPluginConvention not found, so skip the task generation for Java");
-      return Collections.emptyList();
-    }
-
-    SourceSetContainer sourceSets = convention.getSourceSets();
-    return sourceSets.stream()
-        .map(
-            sourceSet -> {
-              String name = sourceSet.getTaskName("spotbugs", null);
-              log.debug("Creating SpotBugsTaskForJava for {}", sourceSet);
-              return project
-                  .getTasks()
-                  .register(
-                      name,
-                      SpotBugsTaskForJava.class,
-                      task -> {
-                        task.setSourceSet(sourceSet);
-                        configurationAction.execute(task);
-                      });
-            })
-        .map(p -> p.map(SpotBugsTask.class::cast))
-        .collect(Collectors.toList());
+  private void generateForJava(
+      Project project,
+      List<Provider<SpotBugsTask>> tasks,
+      Action<? super SpotBugsTask> configurationAction) {
+    project
+        .getPlugins()
+        .withType(JavaBasePlugin.class)
+        .configureEach(
+            javaBasePlugin -> {
+              JavaPluginConvention convention =
+                  project.getConvention().findPlugin(JavaPluginConvention.class);
+              SourceSetContainer sourceSets = convention.getSourceSets();
+              List<Provider<SpotBugsTask>> spotbugsTasks =
+                  sourceSets.stream()
+                      .map(
+                          sourceSet -> {
+                            String name = sourceSet.getTaskName("spotbugs", null);
+                            log.debug("Creating SpotBugsTaskForJava for {}", sourceSet);
+                            return project
+                                .getTasks()
+                                .register(
+                                    name,
+                                    SpotBugsTaskForJava.class,
+                                    task -> {
+                                      task.setSourceSet(sourceSet);
+                                      configurationAction.execute(task);
+                                    });
+                          })
+                      .map(p -> p.map(SpotBugsTask.class::cast))
+                      .collect(Collectors.toList());
+              tasks.addAll(spotbugsTasks);
+            });
   }
 
-  private List<Provider<SpotBugsTask>> generateForAndroid(
-      Project project, Action<? super SpotBugsTask> configurationAction) {
-    try {
-      Class.forName("com.android.build.gradle.tasks.AndroidJavaCompile");
-    } catch (ClassNotFoundException ignore) {
-      log.info("Android Gradle Plugin not found, so skip the task generation for Android");
-      return Collections.emptyList();
-    }
-
-    return project.getTasks().withType(AndroidJavaCompile.class).stream()
-        .map(
-            task -> {
-              String name = GUtil.toLowerCamelCase("spotbugs " + task.getVariantName());
-              log.debug("Creating SpotBugsTaskForAndroid for {}", task);
-              return project
-                  .getTasks()
-                  .register(
-                      name,
-                      SpotBugsTaskForAndroid.class,
-                      spotbugsTask -> {
-                        configurationAction.execute(spotbugsTask);
-                        spotbugsTask.setTask(task);
-                      });
-            })
-        .map(p -> p.map(SpotBugsTask.class::cast))
-        .collect(Collectors.toList());
+  private void generateForAndroid(
+      Project project,
+      List<Provider<SpotBugsTask>> tasks,
+      Action<? super SpotBugsTask> configurationAction) {
+    project
+        .getPlugins()
+        .withId(
+            "com.android.application",
+            plugin -> {
+              List<Provider<SpotBugsTask>> spotbugsTasks =
+                  project.getTasks().withType(AndroidJavaCompile.class).stream()
+                      .map(
+                          task -> {
+                            String name =
+                                GUtil.toLowerCamelCase("spotbugs " + task.getVariantName());
+                            log.debug("Creating SpotBugsTaskForAndroid for {}", task);
+                            return project
+                                .getTasks()
+                                .register(
+                                    name,
+                                    SpotBugsTaskForAndroid.class,
+                                    spotbugsTask -> {
+                                      configurationAction.execute(spotbugsTask);
+                                      spotbugsTask.setTask(task);
+                                    });
+                          })
+                      .map(p -> p.map(SpotBugsTask.class::cast))
+                      .collect(Collectors.toList());
+              tasks.addAll(spotbugsTasks);
+            });
   }
 }
