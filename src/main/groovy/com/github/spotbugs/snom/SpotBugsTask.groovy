@@ -131,7 +131,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
      *
      * @see SpotBugsReport
      */
-    @Nested
+    @Internal
     @NonNull
     final NamedDomainObjectContainer<SpotBugsReport> reports;
 
@@ -343,10 +343,11 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         return jarOnClasspath
     }
 
-    @NonNull
+    @Nullable
+    @Optional
     @Nested
-    java.util.Optional<SpotBugsReport> getFirstEnabledReport() {
-        return reports.stream().filter({report -> report.enabled}).findFirst()
+    SpotBugsReport getFirstEnabledReport() {
+        return reports.stream().filter({report -> report.enabled}).findFirst().orElse(null)
     }
 
     void setReportLevel(@Nullable String name) {

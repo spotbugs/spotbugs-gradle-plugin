@@ -13,6 +13,7 @@
  */
 package com.github.spotbugs.snom.internal;
 
+import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
@@ -53,15 +54,16 @@ public abstract class SpotBugsRunner {
       args.add("-progress");
     }
 
-    task.getFirstEnabledReport()
-        .ifPresent(
-            report -> {
-              File dir = report.getDestination().getParentFile();
-              dir.mkdirs();
-              report.toCommandLineOption().ifPresent(args::add);
-              args.add("-outputFile");
-              args.add(report.getDestination().getAbsolutePath());
-            });
+    SpotBugsReport report = task.getFirstEnabledReport();
+    if (report != null) {
+      File dir = report.getDestination().getParentFile();
+      dir.mkdirs();
+      report.toCommandLineOption().ifPresent(args::add);
+      args.add("-outputFile");
+      args.add(report.getDestination().getAbsolutePath());
+    }
+    ;
+
     if (task.getEffort().isPresent()) {
       args.add("-effort:" + task.getEffort().get().name().toLowerCase());
     }
