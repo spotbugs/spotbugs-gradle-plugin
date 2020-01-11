@@ -138,7 +138,7 @@ class SpotBugsExtension {
 
     @Inject
     SpotBugsExtension(Project project, ObjectFactory objects) {
-        ignoreFailures = objects.property(Boolean);
+        ignoreFailures = objects.property(Boolean).convention(false);
         showProgress = objects.property(Boolean);
         reportLevel = objects.property(Confidence);
         effort = objects.property(Effort);

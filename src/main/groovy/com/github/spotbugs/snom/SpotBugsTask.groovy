@@ -20,7 +20,8 @@ import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
 import edu.umd.cs.findbugs.annotations.NonNull
 import edu.umd.cs.findbugs.annotations.Nullable;
-import edu.umd.cs.findbugs.annotations.OverrideMustInvoke;
+import edu.umd.cs.findbugs.annotations.OverrideMustInvoke
+import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SkipWhenEmpty
 
 import org.gradle.api.Action;
@@ -40,7 +41,8 @@ import org.gradle.api.tasks.Nested;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
-import org.gradle.api.tasks.TaskAction;
+import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.VerificationTask;
 import org.gradle.util.ClosureBackedAction;
 import org.gradle.workers.WorkerExecutor;
 import org.slf4j.Logger;
@@ -76,14 +78,12 @@ import org.slf4j.LoggerFactory
  *
  * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p>
  */
-abstract class SpotBugsTask extends DefaultTask {
+abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
 
     private final WorkerExecutor workerExecutor;
 
-    @Input
-    @Optional
     @NonNull final Property<Boolean> ignoreFailures;
     /**
      * Property to enable progress reporting during the analysis. Default value is {@code false}.
@@ -237,7 +237,7 @@ abstract class SpotBugsTask extends DefaultTask {
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
         this.workerExecutor = Objects.requireNonNull(workerExecutor);
 
-        ignoreFailures = objects.property(Boolean);
+        ignoreFailures = objects.property(Boolean)
         showProgress = objects.property(Boolean);
         reportLevel = objects.property(Confidence);
         effort = objects.property(Effort);
@@ -357,5 +357,18 @@ abstract class SpotBugsTask extends DefaultTask {
     void setEffort(@Nullable String name) {
         Effort effort = name == null ? null : Effort.valueOf(name.toUpperCase())
         getEffort().set(effort)
+    }
+
+    void setIgnoreFailures(Provider<Boolean> b) {
+        ignoreFailures.set(b);
+    }
+
+    void setIgnoreFailures(boolean b) {
+        ignoreFailures.set(b);
+    }
+
+    @Input
+    boolean getIgnoreFailures() {
+        ignoreFailures.get();
     }
 }
