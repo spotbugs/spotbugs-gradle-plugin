@@ -42,7 +42,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
 
   private Action<ProcessWorkerSpec> configureWorkerSpec(SpotBugsTask task) {
     return spec -> {
-      spec.getClasspath().setFrom(task.getJarOnClasspath());
+      spec.getClasspath().setFrom(task.getSpotbugsClasspath());
       spec.forkOptions(
           option -> {
             option.jvmArgs(buildJvmArguments(task));

@@ -328,7 +328,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     @NonNull
     @Internal
-    Set<File> getJarOnClasspath() {
+    Set<File> getSpotbugsClasspath() {
         Configuration config = getProject().getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME)
         Configuration spotbugsSlf4j = getProject().getConfigurations().getByName("spotbugsSlf4j")
 

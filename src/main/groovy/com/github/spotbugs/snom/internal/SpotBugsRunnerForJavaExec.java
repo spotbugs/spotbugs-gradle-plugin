@@ -28,7 +28,7 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
 
   private Action<? super JavaExecSpec> configureJavaExec(SpotBugsTask task) {
     return spec -> {
-      spec.classpath(task.getJarOnClasspath());
+      spec.classpath(task.getSpotbugsClasspath());
       spec.setJvmArgs(buildJvmArguments(task));
       spec.setMain("edu.umd.cs.findbugs.FindBugs2");
       spec.setArgs(buildArguments(task));
