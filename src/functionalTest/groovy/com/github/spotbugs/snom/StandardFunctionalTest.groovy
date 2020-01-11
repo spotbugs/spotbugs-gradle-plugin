@@ -151,4 +151,30 @@ spotbugsMain {
         result.task(":spotbugsMain").outcome == SUCCESS
         assertTrue(result.getOutput().contains("SpotBugsMain ignores failures? true"))
     }
+
+    def "is cache-able"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        text.enabled = true
+    }
+}"""
+
+        when:
+        GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(":spotbugsMain")
+                .withPluginClasspath()
+                .build()
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(":spotbugsMain", "--info")
+                .withPluginClasspath()
+                .forwardOutput()
+                .build()
+
+        then:
+        assertEquals(TaskOutcome.UP_TO_DATE, result.task(":classes").getOutcome())
+        assertEquals(TaskOutcome.UP_TO_DATE, result.task(":spotbugsMain").getOutcome())
+    }
 }
