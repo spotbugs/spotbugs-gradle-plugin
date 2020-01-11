@@ -19,11 +19,14 @@ import java.util.Objects;
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
 import org.gradle.api.provider.ListProperty;
+import org.gradle.api.provider.Property;
 import org.gradle.workers.ProcessWorkerSpec;
 import org.gradle.workers.WorkAction;
 import org.gradle.workers.WorkParameters;
 import org.gradle.workers.WorkQueue;
 import org.gradle.workers.WorkerExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpotBugsRunnerForWorker extends SpotBugsRunner {
   private final WorkerExecutor workerExecutor;
@@ -55,25 +58,35 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
   }
 
   private Action<SpotBugsWorkParameters> configureWorkParameters(SpotBugsTask task) {
-    return params -> params.getArguments().addAll(buildArguments(task));
+    return params -> {
+      params.getArguments().addAll(buildArguments(task));
+      params.getIgnoreFailures().set(task.getIgnoreFailures());
+    };
   }
 
   interface SpotBugsWorkParameters extends WorkParameters {
     ListProperty<String> getArguments();
+
+    Property<Boolean> getIgnoreFailures();
   }
 
   public abstract static class SpotBugsExecutor implements WorkAction<SpotBugsWorkParameters> {
+    private final Logger log = LoggerFactory.getLogger(SpotBugsExecutor.class);
+
     @Override
     public void execute() {
       SpotBugsWorkParameters params = getParameters();
       String[] args = params.getArguments().get().toArray(new String[0]);
 
-      // TODO handle isIgnoreFailures
       try {
         edu.umd.cs.findbugs.Version.printVersion(false);
         edu.umd.cs.findbugs.FindBugs2.main(args);
       } catch (Exception e) {
-        throw new GradleException("SpotBugs execution thrown exception", e);
+        if (params.getIgnoreFailures().getOrElse(false)) {
+          log.warn("SpotBugs reported failures", e);
+        } else {
+          throw new GradleException("SpotBugs execution thrown exception", e);
+        }
       }
     }
   }

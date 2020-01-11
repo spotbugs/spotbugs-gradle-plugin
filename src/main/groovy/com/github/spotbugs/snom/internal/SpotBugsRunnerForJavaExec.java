@@ -16,14 +16,27 @@ package com.github.spotbugs.snom.internal;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.gradle.api.Action;
+import org.gradle.api.GradleException;
 import org.gradle.process.JavaExecSpec;
+import org.gradle.process.internal.ExecException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
+  private final Logger log = LoggerFactory.getLogger(SpotBugsRunnerForJavaExec.class);
+
   @Override
   public void run(@NonNull SpotBugsTask task) {
     // TODO print version of SpotBugs and Plugins
-    task.getProject().javaexec(configureJavaExec(task));
-    // TODO handle isIgnoreFailures
+    try {
+      task.getProject().javaexec(configureJavaExec(task)).rethrowFailure();
+    } catch (ExecException e) {
+      if (task.getIgnoreFailures()) {
+        log.warn("SpotBugs reported failures", e);
+      } else {
+        throw new GradleException("SpotBugs execution thrown exception", e);
+      }
+    }
   }
 
   private Action<? super JavaExecSpec> configureJavaExec(SpotBugsTask task) {
