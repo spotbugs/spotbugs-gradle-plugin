@@ -41,14 +41,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
     - name: Build with Gradle
-      run: |
-        ./gradlew build
-        if [ "$SONAR_LOGIN" != "" ]; then
-          ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN
-        fi
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
+      run: ./gradlew build
     - name: Run Semantic Release
       run: |
         echo "gradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY }}" > ~/.gradle/gradle.properties
@@ -58,6 +51,14 @@ jobs:
         yarn semantic-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run SonarQube Scanner
+      run: |
+        if [ "$SONAR_LOGIN" != "" ]; then
+          ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
     - uses: actions/upload-artifact@3446296
       if: always()
       with:
