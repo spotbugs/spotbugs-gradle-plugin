@@ -62,7 +62,6 @@ public abstract class SpotBugsRunner {
       args.add("-outputFile");
       args.add(report.getDestination().getAbsolutePath());
     }
-    ;
 
     if (task.getEffort().isPresent()) {
       args.add("-effort:" + task.getEffort().get().name().toLowerCase());
