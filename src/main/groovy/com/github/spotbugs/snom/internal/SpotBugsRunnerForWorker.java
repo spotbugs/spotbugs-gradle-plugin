@@ -82,7 +82,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
         edu.umd.cs.findbugs.Version.printVersion(false);
         edu.umd.cs.findbugs.FindBugs2.main(args);
       } catch (Exception e) {
-        if (params.getIgnoreFailures().getOrElse(false)) {
+        if (params.getIgnoreFailures().getOrElse(Boolean.FALSE)) {
           log.warn("SpotBugs reported failures", e);
         } else {
           throw new GradleException("SpotBugs execution thrown exception", e);

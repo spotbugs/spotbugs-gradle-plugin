@@ -50,7 +50,7 @@ public abstract class SpotBugsRunner {
       args.add("-sourcepath");
       args.add(task.getSourceDirs().getAsPath());
     }
-    if (task.getShowProgress().getOrElse(false)) {
+    if (task.getShowProgress().getOrElse(Boolean.FALSE)) {
       args.add("-progress");
     }
 
