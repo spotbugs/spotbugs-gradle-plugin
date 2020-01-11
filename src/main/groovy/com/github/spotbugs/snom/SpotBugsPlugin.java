@@ -28,7 +28,7 @@ import org.gradle.api.artifacts.DependencySet;
 import org.gradle.util.GradleVersion;
 
 public class SpotBugsPlugin implements Plugin<Project> {
-  static final String CONFIG_NAME = "spotbugs";
+  public static final String CONFIG_NAME = "spotbugs";
 
   /**
    * Supported Gradle version described at <a
