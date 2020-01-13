@@ -67,8 +67,8 @@ public class Foo {
                 .build()
 
         then:
-        assertEquals(TaskOutcome.SUCCESS, result.task(":classes").getOutcome())
-        assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").getOutcome())
+        assertEquals(TaskOutcome.SUCCESS, result.task(":classes").outcome)
+        assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").outcome)
     }
 
     def "can use the specified SpotBugs version"() {
@@ -87,7 +87,7 @@ dependencies {
                 .build()
 
         then:
-        assertEquals(TaskOutcome.SUCCESS, result.task(":classes").getOutcome())
+        assertEquals(TaskOutcome.SUCCESS, result.task(":classes").outcome)
         assertTrue(result.output.contains("spotbugs-4.0.0-beta4.jar"))
     }
 
@@ -107,7 +107,7 @@ dependencies {
                 .build()
 
         then:
-        assertEquals(TaskOutcome.NO_SOURCE, result.task(":spotbugsMain").getOutcome())
+        assertEquals(TaskOutcome.NO_SOURCE, result.task(":spotbugsMain").outcome)
     }
 
     def "can use effort and reportLevel"() {
@@ -148,7 +148,7 @@ spotbugsMain {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("SpotBugsMain ignores failures? true"))
     }
 
@@ -174,7 +174,7 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(TaskOutcome.UP_TO_DATE, result.task(":classes").getOutcome())
-        assertEquals(TaskOutcome.UP_TO_DATE, result.task(":spotbugsMain").getOutcome())
+        assertEquals(TaskOutcome.UP_TO_DATE, result.task(":classes").outcome)
+        assertEquals(TaskOutcome.UP_TO_DATE, result.task(":spotbugsMain").outcome)
     }
 }

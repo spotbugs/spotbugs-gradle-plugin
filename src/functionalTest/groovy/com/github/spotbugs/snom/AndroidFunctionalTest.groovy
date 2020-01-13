@@ -16,10 +16,11 @@ package com.github.spotbugs.snom
 import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
-import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.BeforeEach
 import spock.lang.Ignore
 import spock.lang.Specification
+
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 class AndroidFunctionalTest extends Specification {
@@ -96,6 +97,6 @@ public class Foo {
                 .build()
 
         then: "gradle runs spotbugsMain successfully"
-        assertEquals(result.task(":spotbugsMain").outcome, TaskOutcome.SUCCESS)
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
     }
 }

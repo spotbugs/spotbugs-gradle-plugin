@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
 
 class ExtensionFunctionalTest extends Specification {
@@ -71,7 +72,7 @@ spotbugs {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-include"))
         assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
     }
@@ -94,7 +95,7 @@ spotbugs {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-exclude"))
         assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
     }
@@ -113,7 +114,7 @@ spotbugs {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-visitors, FindSqlInjection,SwitchFallthrough,"))
     }
 
@@ -130,7 +131,7 @@ spotbugs {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-omitVisitors, FindSqlInjection,SwitchFallthrough,"))
     }
 
@@ -147,7 +148,7 @@ spotbugs {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-onlyAnalyze, com.foobar.MyClass,com.foobar.mypkg.*,"))
     }
 
@@ -165,7 +166,7 @@ spotbugs {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-nested:false"))
         assertTrue(result.getOutput().contains("-Duser.language=ja"))
     }
@@ -183,7 +184,7 @@ spotbugs {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-Xmx256m"))
     }
 
@@ -201,7 +202,7 @@ spotbugs {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-effort:less"))
         assertTrue(result.getOutput().contains("-high"))
     }

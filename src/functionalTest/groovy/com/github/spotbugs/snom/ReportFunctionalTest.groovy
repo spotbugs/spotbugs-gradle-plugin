@@ -65,7 +65,7 @@ public class Foo {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File reportsDir = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").toFile()
         assertFalse(reportsDir.isDirectory())
     }
@@ -85,7 +85,7 @@ spotbugsMain {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.txt").toFile()
         assertTrue(report.isFile())
     }
@@ -106,7 +106,7 @@ spotbugsMain {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
         assertTrue(report.isFile())
         assertTrue(result.getOutput().contains("-html,"))
@@ -138,7 +138,7 @@ spotbugsMain {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
         assertTrue(report.isFile())
         assertTrue(result.getOutput().contains("-html:"))
@@ -167,7 +167,7 @@ spotbugsMain {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
         assertTrue(report.isFile())
         assertTrue(result.getOutput().contains("-html:"))
@@ -188,7 +188,7 @@ spotbugsMain {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.xml").toFile()
         assertTrue(report.isFile())
     }
@@ -212,7 +212,7 @@ spotbugsMain {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File reportsDir = rootDir.toPath().resolve("build").resolve("spotbugs").toFile();
         assertTrue(reportsDir.isDirectory())
         File report = reportsDir.toPath().resolve("main").resolve("spotbugs.txt").toFile()
@@ -248,7 +248,7 @@ spotbugsMain {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("Running SpotBugs by Gradle Worker..."));
     }
 
@@ -265,8 +265,8 @@ com.github.spotbugs.snom.worker=false
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
-        assertTrue(result.getOutput().contains("Running SpotBugs by JavaExec..."));
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        assertTrue(result.getOutput().contains("Running SpotBugs by JavaExec..."))
     }
 
     def "can run task by JavaExec by commandline option"() {
@@ -279,8 +279,8 @@ com.github.spotbugs.snom.worker=false
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == SUCCESS
-        assertTrue(result.getOutput().contains("Running SpotBugs by JavaExec..."));
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        assertTrue(result.getOutput().contains("Running SpotBugs by JavaExec..."))
     }
 
     def "does not resolve spotbugs configuration by setting stylesheet"() {

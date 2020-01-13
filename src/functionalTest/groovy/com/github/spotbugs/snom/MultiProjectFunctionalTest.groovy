@@ -78,7 +78,7 @@ repositories {
                 .build()
 
         then:
-        assertEquals(TaskOutcome.SUCCESS, result.task(":sub:classes").getOutcome())
-        assertEquals(TaskOutcome.SUCCESS, result.task(":sub:spotbugsMain").getOutcome())
+        assertEquals(TaskOutcome.SUCCESS, result.task(":sub:classes").outcome)
+        assertEquals(TaskOutcome.SUCCESS, result.task(":sub:spotbugsMain").outcome)
     }
 }
