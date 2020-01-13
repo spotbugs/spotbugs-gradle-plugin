@@ -328,19 +328,11 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     @NonNull
     @Internal
-    Set<File> getSpotbugsClasspath() {
+    FileCollection getSpotbugsClasspath() {
         Configuration config = getProject().getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME)
-        Configuration spotbugsSlf4j = getProject().getConfigurations().getByName("spotbugsSlf4j")
+        Configuration spotbugsSlf4j = getProject().getConfigurations().getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
 
-        Set<File> spotbugsJar = config.getFiles()
-        log.info("SpotBugs jar file: {}", spotbugsJar)
-        Set<File> slf4jJar = spotbugsSlf4j.getFiles()
-        log.info("SLF4J provider jar file: {}", slf4jJar)
-
-        Set<File> jarOnClasspath = new HashSet<>()
-        jarOnClasspath.addAll(spotbugsJar)
-        jarOnClasspath.addAll(slf4jJar)
-        return jarOnClasspath
+        return getProject().files(config, spotbugsSlf4j)
     }
 
     @Nullable
