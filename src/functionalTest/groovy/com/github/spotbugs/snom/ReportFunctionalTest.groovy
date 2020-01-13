@@ -19,6 +19,7 @@ import spock.lang.Specification
 import org.gradle.testkit.runner.GradleRunner
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertFalse
 import static org.junit.jupiter.api.Assertions.assertNotNull
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -280,5 +281,32 @@ com.github.spotbugs.snom.worker=false
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
         assertTrue(result.getOutput().contains("Running SpotBugs by JavaExec..."));
+    }
+
+    def "does not resolve spotbugs configuration by setting stylesheet"() {
+        given:
+        buildFile << """
+spotbugsMain {
+    reports {
+        html {
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
+}
+
+configurations.spotbugs {
+    exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+}
+"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .forwardOutput()
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
     }
 }
