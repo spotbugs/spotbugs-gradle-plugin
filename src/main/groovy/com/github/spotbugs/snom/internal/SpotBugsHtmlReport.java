@@ -26,12 +26,14 @@ import org.gradle.api.resources.TextResource;
 
 public class SpotBugsHtmlReport extends SpotBugsReport {
   private final Property<TextResource> stylesheet;
+  private final Property<String> stylesheetPath;
 
   public SpotBugsHtmlReport(ObjectFactory objects, SpotBugsTask task) {
     super(objects, task);
     // the default reportsDir is "$buildDir/reports/spotbugs/${taskName}/spotbugs.html"
     setDestination(task.getReportsDir().map(dir -> new File(dir, "spotbugs.html")));
     stylesheet = objects.property(TextResource.class);
+    stylesheetPath = objects.property(String.class);
   }
 
   @NonNull
@@ -42,7 +44,7 @@ public class SpotBugsHtmlReport extends SpotBugsReport {
     if (stylesheet == null) {
       return Optional.of("-html");
     } else {
-      return Optional.of("-html:" + stylesheet.asFile().getAbsolutePath());
+      return Optional.of("-html:" + getStylesheet().asFile().getAbsolutePath());
     }
   }
 
@@ -53,7 +55,34 @@ public class SpotBugsHtmlReport extends SpotBugsReport {
 
   @Override
   public TextResource getStylesheet() {
-    return stylesheet.getOrNull();
+    if (stylesheet.isPresent()) {
+      return stylesheet.get();
+    } else if (stylesheetPath.isPresent()) {
+      return resolve(stylesheetPath.get());
+    }
+
+    return null;
+  }
+
+  private TextResource resolve(String path) {
+    Optional<File> spotbugsJar =
+        getTask().getProject().getConfigurations().getByName("spotbugs")
+            .files(
+                dependency ->
+                    dependency.getGroup().equals("com.github.spotbugs")
+                        && dependency.getName().equals("spotbugs"))
+            .stream()
+            .findFirst();
+    if (spotbugsJar.isPresent()) {
+      return getTask()
+          .getProject()
+          .getResources()
+          .getText()
+          .fromArchiveEntry(spotbugsJar.get(), path);
+    } else {
+      throw new InvalidUserDataException(
+          "The dependency on SpotBugs not found in 'spotbugs' configuration");
+    }
   }
 
   @Override
@@ -63,23 +92,6 @@ public class SpotBugsHtmlReport extends SpotBugsReport {
 
   @Override
   public void setStylesheet(@Nullable String path) {
-    Optional<File> spotbugsJar =
-        getTask().getProject().getConfigurations().getByName("spotbugs")
-            // FIXME this operation probably evaluates the spotbugs configuration, that may make the
-            // build slow
-            .files(
-                dependency ->
-                    dependency.getGroup().equals("com.github.spotbugs")
-                        && dependency.getName().equals("spotbugs"))
-            .stream()
-            .findFirst();
-    if (spotbugsJar.isPresent()) {
-      TextResource textResource =
-          getTask().getProject().getResources().getText().fromArchiveEntry(spotbugsJar.get(), path);
-      setStylesheet(textResource);
-    } else {
-      throw new InvalidUserDataException(
-          "The dependency on SpotBugs not found in 'spotbugs' configuration");
-    }
+    stylesheetPath.set(path);
   }
 }
