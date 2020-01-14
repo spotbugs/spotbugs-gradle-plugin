@@ -219,7 +219,7 @@ spotbugs {
         BuildResult result =
                 GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments(":spotbugsMain", "--info", "-S")
+                .withArguments(":spotbugsMain", "--info")
                 .withPluginClasspath()
                 .forwardOutput()
                 .build()
