@@ -14,7 +14,9 @@
 package com.github.spotbugs.snom
 
 import org.gradle.internal.impldep.com.google.common.io.Files
+import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
 
@@ -205,5 +207,25 @@ spotbugs {
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-effort:less"))
         assertTrue(result.getOutput().contains("-high"))
+    }
+
+    def "can use toolVersion to set the SpotBugs version"() {
+        setup:
+        buildFile << """
+spotbugs {
+    toolVersion = "4.0.0-beta4"
+}"""
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(":spotbugsMain", "--info", "-S")
+                .withPluginClasspath()
+                .forwardOutput()
+                .build()
+
+        then:
+        assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").outcome)
+        assertTrue(result.output.contains("SpotBugs 4.0.0-beta4"))
     }
 }
