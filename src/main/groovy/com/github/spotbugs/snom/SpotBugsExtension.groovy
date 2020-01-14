@@ -16,7 +16,6 @@ package com.github.spotbugs.snom;
 import edu.umd.cs.findbugs.annotations.NonNull
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-import java.io.File;
 import javax.inject.Inject;
 import org.gradle.api.Project;
 import org.gradle.api.model.ObjectFactory;
@@ -136,6 +135,9 @@ class SpotBugsExtension {
     @NonNull
     final Property<String> maxHeapSize;
 
+    @NonNull
+    final Property<String> toolVersion
+
     @Inject
     SpotBugsExtension(Project project, ObjectFactory objects) {
         ignoreFailures = objects.property(Boolean).convention(false);
@@ -159,6 +161,7 @@ class SpotBugsExtension {
         jvmArgs = objects.listProperty(String);
         extraArgs = objects.listProperty(String);
         maxHeapSize = objects.property(String);
+        toolVersion = objects.property(String)
     }
 
     void setReportLevel(@Nullable String name) {

@@ -45,7 +45,7 @@ public class SpotBugsPlugin implements Plugin<Project> {
     verifyGradleVersion(GradleVersion.current());
 
     SpotBugsExtension extension = createExtension(project);
-    createConfiguration(project);
+    createConfiguration(project, extension);
     createPluginConfiguration(project);
 
     createTasks(project, extension);
@@ -57,8 +57,9 @@ public class SpotBugsPlugin implements Plugin<Project> {
         .create(EXTENSION_NAME, SpotBugsExtension.class, project, project.getObjects());
   }
 
-  private void createConfiguration(Project project) {
+  private void createConfiguration(Project project, SpotBugsExtension extension) {
     Properties props = loadProperties();
+    extension.getToolVersion().convention(props.getProperty("spotbugs-version"));
 
     Configuration configuration =
         project
@@ -67,13 +68,13 @@ public class SpotBugsPlugin implements Plugin<Project> {
             .setDescription("configuration for the SpotBugs engine")
             .setVisible(false)
             .setTransitive(true);
+
     configuration.defaultDependencies(
         (DependencySet dependencies) ->
             dependencies.add(
                 project
                     .getDependencies()
-                    .create(
-                        "com.github.spotbugs:spotbugs:" + props.getProperty("spotbugs-version"))));
+                    .create("com.github.spotbugs:spotbugs:" + extension.getToolVersion().get())));
 
     Configuration spotbugsSlf4j =
         project
