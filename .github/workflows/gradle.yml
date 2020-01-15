@@ -42,6 +42,8 @@ jobs:
           ${{ runner.os }}-yarn-
     - name: Build with Gradle
       run: ./gradlew build
+      env:
+        GRADLE_OPTS: -Dorg.gradle.daemon=false
     - name: Run Semantic Release
       run: |
         echo "gradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY }}" > ~/.gradle/gradle.properties
