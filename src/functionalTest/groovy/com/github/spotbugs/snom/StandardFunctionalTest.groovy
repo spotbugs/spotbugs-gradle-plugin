@@ -19,6 +19,7 @@ import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertEquals
@@ -176,5 +177,35 @@ spotbugsMain {
         then:
         assertEquals(TaskOutcome.UP_TO_DATE, result.task(":classes").outcome)
         assertEquals(TaskOutcome.UP_TO_DATE, result.task(":spotbugsMain").outcome)
+    }
+
+    @Unroll
+    def 'build fails when bugs are found (Worker API? #isWorkerApi)'() {
+        given:
+        def badCode = new File(rootDir, 'src/main/java/Bar.java')
+        badCode << '''
+        |public class Bar {
+        |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
+        |}
+        |'''.stripMargin()
+
+        when:
+        def arguments = [':spotbugsMain', '-is']
+        if(!isWorkerApi) {
+            arguments.add('-Pcom.github.spotbugs.snom.worker=false')
+        }
+        def runner = GradleRunner.create()
+            .withProjectDir(rootDir)
+            .withArguments(arguments)
+            .withPluginClasspath()
+            .forwardOutput()
+
+        def result = runner.buildAndFail()
+
+        then:
+        result.task(':spotbugsMain').outcome == TaskOutcome.FAILED
+
+        where:
+        isWorkerApi << [true, false]
     }
 }
