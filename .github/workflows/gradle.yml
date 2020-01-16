@@ -51,6 +51,7 @@ jobs:
         rm -rf build/libs/*.jar
         yarn
         yarn semantic-release
+      if: matrix.gradle == '6.0'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Run SonarQube Scanner
@@ -58,6 +59,7 @@ jobs:
         if [ "$SONAR_LOGIN" != "" ]; then
           ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN --no-daemon
         fi
+      if: matrix.gradle == '6.0'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
