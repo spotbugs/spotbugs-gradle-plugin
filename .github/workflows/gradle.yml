@@ -41,9 +41,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
     - name: Build with Gradle
-      run: ./gradlew build
-      env:
-        GRADLE_OPTS: -Dorg.gradle.daemon=false
+      run: ./gradlew build --no-daemon
     - name: Run Semantic Release
       run: |
         echo "gradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY }}" > ~/.gradle/gradle.properties
@@ -56,7 +54,7 @@ jobs:
     - name: Run SonarQube Scanner
       run: |
         if [ "$SONAR_LOGIN" != "" ]; then
-          ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN
+          ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN --no-daemon
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
