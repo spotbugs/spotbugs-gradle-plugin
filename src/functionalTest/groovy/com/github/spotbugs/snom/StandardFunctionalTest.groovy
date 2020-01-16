@@ -195,10 +195,10 @@ spotbugsMain {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
         def runner = GradleRunner.create()
-            .withProjectDir(rootDir)
-            .withArguments(arguments)
-            .withPluginClasspath()
-            .forwardOutput()
+                .withProjectDir(rootDir)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .forwardOutput()
 
         def result = runner.buildAndFail()
 
