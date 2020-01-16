@@ -15,7 +15,6 @@ package com.github.spotbugs.snom.internal;
 
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.gradle.api.Action;
