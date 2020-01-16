@@ -17,6 +17,7 @@ import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.gradle.util.GradleVersion
 import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
 
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 class ExtensionFunctionalTest extends Specification {
     File rootDir
     File buildFile
+    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     @BeforeEach
     def setup() {
@@ -71,6 +73,7 @@ spotbugs {
                 .withProjectDir(rootDir)
                 .withArguments('spotbugsMain', '--debug')
                 .withPluginClasspath()
+                .withGradleVersion(version)
                 .build()
 
         then:
@@ -94,6 +97,7 @@ spotbugs {
                 .withProjectDir(rootDir)
                 .withArguments('spotbugsMain', '--debug')
                 .withPluginClasspath()
+                .withGradleVersion(version)
                 .build()
 
         then:
@@ -113,6 +117,7 @@ spotbugs {
                 .withProjectDir(rootDir)
                 .withArguments('spotbugsMain', '--debug')
                 .withPluginClasspath()
+                .withGradleVersion(version)
                 .build()
 
         then:
@@ -130,6 +135,7 @@ spotbugs {
                 .withProjectDir(rootDir)
                 .withArguments('spotbugsMain', '--debug')
                 .withPluginClasspath()
+                .withGradleVersion(version)
                 .build()
 
         then:
@@ -147,6 +153,7 @@ spotbugs {
                 .withProjectDir(rootDir)
                 .withArguments('spotbugsMain', '--debug')
                 .withPluginClasspath()
+                .withGradleVersion(version)
                 .build()
 
         then:
@@ -165,6 +172,7 @@ spotbugs {
                 .withProjectDir(rootDir)
                 .withArguments('spotbugsMain', '--debug')
                 .withPluginClasspath()
+                .withGradleVersion(version)
                 .build()
 
         then:
@@ -183,6 +191,7 @@ spotbugs {
                 .withProjectDir(rootDir)
                 .withArguments('spotbugsMain', '--debug')
                 .withPluginClasspath()
+                .withGradleVersion(version)
                 .build()
 
         then:
@@ -201,6 +210,7 @@ spotbugs {
                 .withProjectDir(rootDir)
                 .withArguments('spotbugsMain', '--debug')
                 .withPluginClasspath()
+                .withGradleVersion(version)
                 .build()
 
         then:
@@ -222,6 +232,7 @@ spotbugs {
                 .withArguments(":spotbugsMain", "--info")
                 .withPluginClasspath()
                 .forwardOutput()
+                .withGradleVersion(version)
                 .build()
 
         then:

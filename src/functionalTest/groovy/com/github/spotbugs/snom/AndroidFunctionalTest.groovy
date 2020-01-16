@@ -16,6 +16,7 @@ package com.github.spotbugs.snom
 import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.util.GradleVersion
 import org.junit.jupiter.api.BeforeEach
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 class AndroidFunctionalTest extends Specification {
     File rootDir
     File buildFile
+    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     @BeforeEach
     def setup() {
@@ -41,6 +43,7 @@ class AndroidFunctionalTest extends Specification {
                 .withProjectDir(rootDir)
                 .withPluginClasspath()
                 .forwardOutput()
+                .withGradleVersion(version)
 
         buildFile << """
 buildscript {
@@ -94,6 +97,7 @@ public class Foo {
         when: "the spotbugsMain task is executed"
         BuildResult result = runner
                 .withArguments(":spotbugsMain")
+                .withGradleVersion(version)
                 .build()
 
         then: "gradle runs spotbugsMain successfully"

@@ -17,6 +17,7 @@ import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.gradle.util.GradleVersion
 import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
 
@@ -25,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 class MultiProjectFunctionalTest extends Specification {
     File rootDir
     File buildFile
+    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     @BeforeEach
     def setup() {
@@ -74,6 +76,7 @@ repositories {
                 .withArguments(":sub:spotbugsMain")
                 .withPluginClasspath()
                 .forwardOutput()
+                .withGradleVersion(version)
                 .build()
 
         then:

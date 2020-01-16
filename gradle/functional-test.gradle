@@ -26,6 +26,9 @@ task functionalTest(type: Test) {
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
     mustRunAfter test
+    options {
+        systemProperty "snom.test.functional.gradle", System.getProperty("snom.test.functional.gradle")
+    }
 }
 
 check.dependsOn functionalTest

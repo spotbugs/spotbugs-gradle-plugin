@@ -12,7 +12,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        gradle: ['5.6', '6.0']
     steps:
     - uses: actions/checkout@722adc6
       with:
@@ -41,7 +43,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-yarn-
     - name: Build with Gradle
-      run: ./gradlew build --no-daemon
+      run: ./gradlew build --no-daemon -Dsnom.test.functional.gradle=${{ matrix.gradle }}
     - name: Run Semantic Release
       run: |
         echo "gradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY }}" > ~/.gradle/gradle.properties
