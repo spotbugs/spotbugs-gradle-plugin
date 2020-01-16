@@ -83,14 +83,15 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
 
       try {
         edu.umd.cs.findbugs.Version.printVersion(false);
-        FindBugs2 findBugs2 = new FindBugs2();
-        TextUICommandLine commandLine = new TextUICommandLine();
-        FindBugs.processCommandLine(commandLine, args, findBugs2);
-        findBugs2.execute();
-        if (findBugs2.getErrorCount() > 0) {
-          throw new GradleException("SpotBugs error found: " + findBugs2.getErrorCount());
-        } else if (findBugs2.getBugCount() > 0) {
-          throw new GradleException("SpotBugs violation found: " + findBugs2.getBugCount());
+        try (FindBugs2 findBugs2 = new FindBugs2()) {
+          TextUICommandLine commandLine = new TextUICommandLine();
+          FindBugs.processCommandLine(commandLine, args, findBugs2);
+          findBugs2.execute();
+          if (findBugs2.getErrorCount() > 0) {
+            throw new GradleException("SpotBugs error found: " + findBugs2.getErrorCount());
+          } else if (findBugs2.getBugCount() > 0) {
+            throw new GradleException("SpotBugs violation found: " + findBugs2.getBugCount());
+          }
         }
       } catch (Exception e) {
         if (params.getIgnoreFailures().getOrElse(Boolean.FALSE)) {
