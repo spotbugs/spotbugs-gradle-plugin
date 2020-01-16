@@ -15,6 +15,9 @@ package com.github.spotbugs.snom.internal;
 
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
 import org.gradle.process.JavaExecSpec;
@@ -29,7 +32,7 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
   public void run(@NonNull SpotBugsTask task) {
     // TODO print version of SpotBugs and Plugins
     try {
-      task.getProject().javaexec(configureJavaExec(task)).rethrowFailure();
+      task.getProject().javaexec(configureJavaExec(task)).rethrowFailure().assertNormalExitValue();
     } catch (ExecException e) {
       if (task.getIgnoreFailures()) {
         log.warn("SpotBugs reported failures", e);
@@ -41,10 +44,13 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
 
   private Action<? super JavaExecSpec> configureJavaExec(SpotBugsTask task) {
     return spec -> {
+      List<String> args = new ArrayList<>();
+      args.add("-exitcode");
+      args.addAll(buildArguments(task));
       spec.classpath(task.getSpotbugsClasspath());
       spec.setJvmArgs(buildJvmArguments(task));
       spec.setMain("edu.umd.cs.findbugs.FindBugs2");
-      spec.setArgs(buildArguments(task));
+      spec.setArgs(args);
       String maxHeapSize = task.getMaxHeapSize().getOrNull();
       if (maxHeapSize != null) {
         spec.setMaxHeapSize(maxHeapSize);
