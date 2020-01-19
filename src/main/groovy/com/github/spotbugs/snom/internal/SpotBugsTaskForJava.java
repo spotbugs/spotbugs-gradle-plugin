@@ -15,7 +15,6 @@ package com.github.spotbugs.snom.internal;
 
 import com.github.spotbugs.snom.SpotBugsExtension;
 import com.github.spotbugs.snom.SpotBugsTask;
-import java.io.File;
 import java.util.Objects;
 import javax.inject.Inject;
 import org.gradle.api.file.FileCollection;
@@ -42,7 +41,7 @@ class SpotBugsTaskForJava extends SpotBugsTask {
   protected void init(SpotBugsExtension extension) {
     super.init(extension);
     // the default reportsDir is "$buildDir/reports/spotbugs/${sourceSetName}"
-    getReportsDir().set(extension.getReportsDir().map(dir -> new File(dir, sourceSet.getName())));
+    getReportsDir().set(extension.getReportsDir().dir(sourceSet.getName()));
   }
 
   @Override

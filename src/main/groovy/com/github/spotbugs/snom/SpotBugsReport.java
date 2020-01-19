@@ -19,6 +19,8 @@ import groovy.lang.Closure;
 import java.io.File;
 import java.util.Optional;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
@@ -35,13 +37,16 @@ public abstract class SpotBugsReport
     implements SingleFileReport,
         CustomizableHtmlReport // to expose CustomizableHtmlReport#setStylesheet to build script
 {
-  private final Property<File> destination;
+  private final RegularFileProperty destination;
   private final Property<Boolean> isEnabled;
+  private final Property<Boolean> isRequired;
   private final SpotBugsTask task;
 
+  @Inject
   public SpotBugsReport(ObjectFactory objects, SpotBugsTask task) {
-    this.destination = objects.property(File.class);
+    this.destination = objects.fileProperty();
     this.isEnabled = objects.property(Boolean.class);
+    this.isRequired = objects.property(Boolean.class).value(Boolean.TRUE);
     this.task = task;
   }
 
@@ -51,13 +56,25 @@ public abstract class SpotBugsReport
   @Override
   @OutputFile
   public File getDestination() {
-    return destination.get();
+    return destination.get().getAsFile();
+  }
+
+  // @Override // New API from 6.1; see https://github.com/gradle/gradle/issues/11923
+  @OutputFile
+  public RegularFileProperty getOutputLocation() {
+    return destination;
   }
 
   @Override
   @Internal("This property returns always same value")
   public OutputType getOutputType() {
     return OutputType.FILE;
+  }
+
+  // @Override // New API from 6.1; see https://github.com/gradle/gradle/issues/11923
+  @Input
+  public Property<Boolean> getRequired() {
+    return isRequired;
   }
 
   @Override
@@ -83,7 +100,7 @@ public abstract class SpotBugsReport
 
   @Override
   public void setDestination(Provider<File> provider) {
-    destination.set(provider);
+    destination.set(this.task.getProject().getLayout().file(provider));
   }
 
   @Override

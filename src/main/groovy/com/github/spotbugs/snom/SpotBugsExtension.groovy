@@ -14,7 +14,9 @@
 package com.github.spotbugs.snom;
 
 import edu.umd.cs.findbugs.annotations.NonNull
-import edu.umd.cs.findbugs.annotations.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty;
 
 import javax.inject.Inject;
 import org.gradle.api.Project;
@@ -82,7 +84,7 @@ class SpotBugsExtension {
      * <p>Note that each {@link SpotBugsTask} creates own sub-directory in this directory.</p>
      */
     @NonNull
-    final Property<File> reportsDir;
+    final DirectoryProperty reportsDir;
     /**
      * Property to set the filter file to limit which bug should be reported.
      *
@@ -92,7 +94,7 @@ class SpotBugsExtension {
      * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
      */
     @NonNull
-    final Property<File> includeFilter;
+    final RegularFileProperty includeFilter;
     /**
      * Property to set the filter file to limit which bug should be reported.
      *
@@ -102,7 +104,7 @@ class SpotBugsExtension {
      * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
      */
     @NonNull
-    final Property<File> excludeFilter;
+    final RegularFileProperty excludeFilter;
     /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */
@@ -146,17 +148,16 @@ class SpotBugsExtension {
         effort = objects.property(Effort);
         visitors = objects.listProperty(String);
         omitVisitors = objects.listProperty(String);
-        reportsDir = objects.property(File)
-        includeFilter = objects.property(File);
-        excludeFilter = objects.property(File);
+        reportsDir = objects.directoryProperty()
+        includeFilter = objects.fileProperty()
+        excludeFilter = objects.fileProperty()
         onlyAnalyze = objects.listProperty(String);
         projectName = objects.property(String);
         release = objects.property(String);
         project.afterEvaluate( { p ->
-            File reports = new File(project.buildDir, "reports")
-            reportsDir.convention(new File(reports, "spotbugs"))
             projectName.convention(p.getName());
             release.convention(p.getVersion().toString());
+            reportsDir.convention(project.layout.buildDirectory.dir('reports/spotbugs'))
         });
         jvmArgs = objects.listProperty(String);
         extraArgs = objects.listProperty(String);

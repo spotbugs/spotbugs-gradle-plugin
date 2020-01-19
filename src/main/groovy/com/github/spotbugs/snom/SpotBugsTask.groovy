@@ -21,6 +21,8 @@ import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
 import edu.umd.cs.findbugs.annotations.NonNull
 import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.umd.cs.findbugs.annotations.OverrideMustInvoke
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SkipWhenEmpty
 
@@ -47,6 +49,8 @@ import org.gradle.util.ClosureBackedAction;
 import org.gradle.workers.WorkerExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory
+
+import javax.inject.Inject
 
 /**
  * The Gradle task to run the SpotBugs analysis. All properties are optional.
@@ -124,7 +128,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
      */
     @Internal("Refer the destination of each report instead.")
     @NonNull
-    final Property<File> reportsDir;
+    final DirectoryProperty reportsDir;
 
     /**
      * Property to specify which report you need.
@@ -147,7 +151,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @InputFile
     @PathSensitive(PathSensitivity.RELATIVE)
     @NonNull
-    final Property<File> includeFilter;
+    final RegularFileProperty includeFilter;
     /**
      * Property to set the filter file to limit which bug should be reported.
      *
@@ -160,7 +164,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @InputFile
     @PathSensitive(PathSensitivity.RELATIVE)
     @NonNull
-    final Property<File> excludeFilter;
+    final RegularFileProperty excludeFilter;
     /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */
@@ -234,6 +238,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         getClassDirs().asFileTree
     }
 
+    @Inject
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
         this.workerExecutor = Objects.requireNonNull(workerExecutor);
 
@@ -243,23 +248,23 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         effort = objects.property(Effort);
         visitors = objects.listProperty(String);
         omitVisitors = objects.listProperty(String);
-        reportsDir = objects.property(File);
+        reportsDir = objects.directoryProperty()
         reports =
                 objects.domainObjectContainer(
                 SpotBugsReport, {name ->
                     switch (name) {
                         case "html":
-                            return new SpotBugsHtmlReport(objects, this);
+                            return objects.newInstance(SpotBugsHtmlReport.class, objects, this)
                         case "xml":
-                            return new SpotBugsXmlReport(objects, this);
+                            return objects.newInstance(SpotBugsXmlReport.class, objects, this)
                         case "text":
-                            return new SpotBugsTextReport(objects, this);
+                            return objects.newInstance(SpotBugsTextReport.class, objects, this)
                         default:
                             throw new InvalidUserDataException(name + " is invalid as the report name");
                     }
                 });
-        includeFilter = objects.property(File);
-        excludeFilter = objects.property(File);
+        includeFilter = objects.fileProperty()
+        excludeFilter = objects.fileProperty()
         onlyAnalyze = objects.listProperty(String);
         projectName = objects.property(String);
         release = objects.property(String);
@@ -283,7 +288,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         visitors.set(extension.visitors)
         omitVisitors.set(extension.omitVisitors)
         // the default reportsDir is "$buildDir/reports/spotbugs/${taskName}"
-        reportsDir.set(extension.reportsDir.map({dir -> new File(dir, getName())}))
+        reportsDir.set(extension.reportsDir.dir(getName()))
         includeFilter.set(extension.includeFilter)
         excludeFilter.set(extension.excludeFilter)
         onlyAnalyze.set(extension.onlyAnalyze)

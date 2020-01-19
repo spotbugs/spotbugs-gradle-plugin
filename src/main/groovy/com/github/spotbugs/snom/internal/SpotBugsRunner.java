@@ -79,11 +79,11 @@ public abstract class SpotBugsRunner {
     }
     if (task.getIncludeFilter().isPresent() && task.getIncludeFilter().get() != null) {
       args.add("-include");
-      args.add(task.getIncludeFilter().get().getAbsolutePath());
+      args.add(task.getIncludeFilter().get().getAsFile().getAbsolutePath());
     }
     if (task.getExcludeFilter().isPresent() && task.getExcludeFilter().get() != null) {
       args.add("-exclude");
-      args.add(task.getExcludeFilter().get().getAbsolutePath());
+      args.add(task.getExcludeFilter().get().getAsFile().getAbsolutePath());
     }
     if (task.getOnlyAnalyze().isPresent() && !task.getOnlyAnalyze().get().isEmpty()) {
       args.add("-onlyAnalyze");

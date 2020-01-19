@@ -19,19 +19,22 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import java.io.File;
 import java.util.Optional;
+import javax.inject.Inject;
 import org.gradle.api.InvalidUserDataException;
+import org.gradle.api.file.RegularFile;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.resources.TextResource;
 
-public class SpotBugsHtmlReport extends SpotBugsReport {
+public abstract class SpotBugsHtmlReport extends SpotBugsReport {
   private final Property<TextResource> stylesheet;
   private final Property<String> stylesheetPath;
 
+  @Inject
   public SpotBugsHtmlReport(ObjectFactory objects, SpotBugsTask task) {
     super(objects, task);
     // the default reportsDir is "$buildDir/reports/spotbugs/${taskName}/spotbugs.html"
-    setDestination(task.getReportsDir().map(dir -> new File(dir, "spotbugs.html")));
+    setDestination(task.getReportsDir().file("spotbugs.html").map(RegularFile::getAsFile));
     stylesheet = objects.property(TextResource.class);
     stylesheetPath = objects.property(String.class);
   }

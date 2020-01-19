@@ -83,7 +83,7 @@ spotbugsMain {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments('spotbugsMain')
+                .withArguments('spotbugsMain', '-is')
                 .withPluginClasspath()
                 .withGradleVersion(version)
                 .build()
@@ -91,6 +91,72 @@ spotbugsMain {
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.txt").toFile()
+        assertTrue(report.isFile())
+    }
+
+    def "can generate spotbugs.txt in configured buildDir"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        text.enabled = true
+    }
+}
+buildDir = 'new-build-dir'
+"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.txt").toFile()
+        assertTrue(report.isFile())
+    }
+
+    def "can generate spotbugs.html in configured buildDir"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        html.enabled = true
+    }
+}
+buildDir = 'new-build-dir'
+"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
+        assertTrue(report.isFile())
+    }
+
+    def "can generate spotbugs.xml in configured buildDir"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        xml.enabled = true
+    }
+}
+buildDir = 'new-build-dir'
+"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.xml").toFile()
         assertTrue(report.isFile())
     }
 
