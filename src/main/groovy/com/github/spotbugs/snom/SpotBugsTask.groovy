@@ -287,8 +287,8 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         effort.set(extension.effort)
         visitors.set(extension.visitors)
         omitVisitors.set(extension.omitVisitors)
-        // the default reportsDir is "$buildDir/reports/spotbugs/${taskName}"
-        reportsDir.set(extension.reportsDir.dir(getName()))
+        // the default reportsDir is "$buildDir/reports/spotbugs/"
+        reportsDir.set(extension.reportsDir)
         includeFilter.set(extension.includeFilter)
         excludeFilter.set(extension.excludeFilter)
         onlyAnalyze.set(extension.onlyAnalyze)
@@ -368,5 +368,14 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Input
     boolean getIgnoreFailures() {
         ignoreFailures.get();
+    }
+
+    @Internal
+    String getBaseName() {
+        String prunedName = name.replaceFirst("spotbugs", "")
+        if (prunedName.isEmpty()) {
+            prunedName = task.getName()
+        }
+        return new StringBuilder().append(Character.toLowerCase(prunedName.charAt(0))).append(prunedName.substring(1)).toString()
     }
 }

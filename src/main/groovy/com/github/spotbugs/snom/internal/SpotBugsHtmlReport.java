@@ -33,8 +33,9 @@ public abstract class SpotBugsHtmlReport extends SpotBugsReport {
   @Inject
   public SpotBugsHtmlReport(ObjectFactory objects, SpotBugsTask task) {
     super(objects, task);
-    // the default reportsDir is "$buildDir/reports/spotbugs/${taskName}/spotbugs.html"
-    setDestination(task.getReportsDir().file("spotbugs.html").map(RegularFile::getAsFile));
+    // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.html"
+    setDestination(
+        task.getReportsDir().file(task.getBaseName() + ".html").map(RegularFile::getAsFile));
     stylesheet = objects.property(TextResource.class);
     stylesheetPath = objects.property(String.class);
   }

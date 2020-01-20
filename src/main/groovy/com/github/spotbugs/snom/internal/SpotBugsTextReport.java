@@ -26,8 +26,9 @@ public abstract class SpotBugsTextReport extends SpotBugsReport {
   @Inject
   public SpotBugsTextReport(ObjectFactory objects, SpotBugsTask task) {
     super(objects, task);
-    // the default reportsDir is "$buildDir/reports/spotbugs/${taskName}/spotbugs.txt"
-    setDestination(task.getReportsDir().file("spotbugs.txt").map(RegularFile::getAsFile));
+    // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.txt"
+    setDestination(
+        task.getReportsDir().file(task.getBaseName() + ".txt").map(RegularFile::getAsFile));
   }
 
   @NonNull

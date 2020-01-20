@@ -26,8 +26,9 @@ public abstract class SpotBugsXmlReport extends SpotBugsReport {
   @Inject
   public SpotBugsXmlReport(ObjectFactory objects, SpotBugsTask task) {
     super(objects, task);
-    // the default reportsDir is "$buildDir/reports/spotbugs/${taskName}/spotbugs.xml"
-    setDestination(task.getReportsDir().file("spotbugs.xml").map(RegularFile::getAsFile));
+    // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.xml"
+    setDestination(
+        task.getReportsDir().file(task.getBaseName() + ".xml").map(RegularFile::getAsFile));
   }
 
   @NonNull
