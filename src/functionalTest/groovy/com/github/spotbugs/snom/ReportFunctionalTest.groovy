@@ -90,7 +90,7 @@ spotbugsMain {
 
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.txt").toFile()
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.txt").toFile()
         assertTrue(report.isFile())
     }
 
@@ -112,7 +112,7 @@ buildDir = 'new-build-dir'
 
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.txt").toFile()
+        File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main.txt").toFile()
         assertTrue(report.isFile())
     }
 
@@ -134,7 +134,7 @@ buildDir = 'new-build-dir'
 
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
+        File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main.html").toFile()
         assertTrue(report.isFile())
     }
 
@@ -156,7 +156,7 @@ buildDir = 'new-build-dir'
 
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.xml").toFile()
+        File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main.xml").toFile()
         assertTrue(report.isFile())
     }
 
@@ -178,7 +178,7 @@ spotbugsMain {
 
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.html").toFile()
         assertTrue(report.isFile())
         assertTrue(result.getOutput().contains("-html,"))
     }
@@ -211,7 +211,7 @@ spotbugsMain {
 
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.html").toFile()
         assertTrue(report.isFile())
         assertTrue(result.getOutput().contains("-html:"))
         // confirm -projectName is working
@@ -241,7 +241,7 @@ spotbugsMain {
 
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.html").toFile()
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.html").toFile()
         assertTrue(report.isFile())
         assertTrue(result.getOutput().contains("-html:"))
     }
@@ -263,7 +263,7 @@ spotbugsMain {
 
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main").resolve("spotbugs.xml").toFile()
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.xml").toFile()
         assertTrue(report.isFile())
     }
 
@@ -290,7 +290,7 @@ spotbugsMain {
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File reportsDir = rootDir.toPath().resolve("build").resolve("spotbugs").toFile();
         assertTrue(reportsDir.isDirectory())
-        File report = reportsDir.toPath().resolve("main").resolve("spotbugs.txt").toFile()
+        File report = reportsDir.toPath().resolve("main.txt").toFile()
         assertTrue(report.isFile())
     }
 
