@@ -96,7 +96,7 @@ public abstract class SpotBugsRunner {
     args.add(task.getRelease().get());
 
     args.addAll(task.getExtraArgs().getOrElse(Collections.emptyList()));
-    task.getClassDirs().forEach(dir -> args.add(dir.getAbsolutePath()));
+    task.getClasses().filter(File::exists).forEach(file -> args.add(file.getAbsolutePath()));
 
     log.debug("Arguments for SpotBugs are generated: {}", args);
     return args;

@@ -230,12 +230,26 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @NonNull
     abstract FileCollection getAuxClassPaths();
 
+    private FileCollection classes;
+
+    void setClasses(FileCollection fileCollection) {
+        this.classes = fileCollection
+    }
+
+    /**
+     * Property to specify the target classes to analyse by SpotBugs.
+     * Default value is the all existing {@code .class} files in {@link #getClassDirs}.
+     */
     @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
     @SkipWhenEmpty
     @NonNull
-    FileCollection getTargetClassFiles() {
-        getClassDirs().asFileTree
+    FileCollection getClasses() {
+        if (classes == null) {
+            return getClassDirs().asFileTree
+        } else {
+            return classes
+        }
     }
 
     @Inject
