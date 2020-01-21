@@ -253,4 +253,31 @@ spotbugs {
         where:
         isWorkerApi << [true, false]
     }
+
+    def 'PatternFilterable methods can work for classes props'() {
+        given:
+        def badCode = new File(rootDir, 'src/main/java/Bar.java')
+        badCode << '''
+        |public class Bar {
+        |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
+        |}
+        |'''.stripMargin()
+
+        buildFile << """
+spotbugsMain {
+    classes = classes.filter { it.name.contains 'Foo' }
+}"""
+        when:
+        def runner = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(':spotbugsMain', '-is')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+
+        def result = runner. build()
+
+        then:
+        result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+    }
 }
