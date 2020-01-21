@@ -342,7 +342,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @NonNull
     @Internal
     Set<File> getPluginJar() {
-        return getProject().getConfigurations().getByName("spotbugsPlugin").getFiles()
+        return getProject().getConfigurations().getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME).getFiles()
     }
 
     @NonNull

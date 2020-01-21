@@ -29,6 +29,7 @@ import org.gradle.util.GradleVersion;
 
 public class SpotBugsPlugin implements Plugin<Project> {
   public static final String CONFIG_NAME = "spotbugs";
+  public static final String PLUGINS_CONFIG_NAME = "spotbugsPlugins";
   public static final String SLF4J_CONFIG_NAME = "spotbugsSlf4j";
   public static final String EXTENSION_NAME = "spotbugs";
 
@@ -95,8 +96,8 @@ public class SpotBugsPlugin implements Plugin<Project> {
   private Configuration createPluginConfiguration(Project project) {
     return project
         .getConfigurations()
-        .create("spotbugsPlugin")
-        .setDescription("configuration for the SpotBugs plugin")
+        .create(PLUGINS_CONFIG_NAME)
+        .setDescription("configuration for the external SpotBugs plugins")
         .setVisible(false)
         .setTransitive(true);
   }
