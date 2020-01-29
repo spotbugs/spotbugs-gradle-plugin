@@ -17,12 +17,18 @@ import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.gradle.api.GradleException;
+import org.gradle.api.file.FileCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,12 +100,25 @@ public abstract class SpotBugsRunner {
     args.add(task.getProjectName().get());
     args.add("-release");
     args.add(task.getRelease().get());
+    args.add("-analyzeFromFile");
+    args.add(generateFile(task.getClasses()).getAbsolutePath());
 
     args.addAll(task.getExtraArgs().getOrElse(Collections.emptyList()));
-    task.getClasses().filter(File::exists).forEach(file -> args.add(file.getAbsolutePath()));
-
     log.debug("Arguments for SpotBugs are generated: {}", args);
     return args;
+  }
+
+  private File generateFile(FileCollection files) {
+    try {
+      File file = File.createTempFile("spotbugs-gradle-plugin", ".txt");
+      Iterable<String> lines =
+          files.filter(File::exists).getFiles().stream().map(File::getAbsolutePath)::iterator;
+      Files.write(file.toPath(), lines, StandardCharsets.UTF_8, StandardOpenOption.WRITE);
+
+      return file;
+    } catch (IOException e) {
+      throw new GradleException("Fail to generate the text file to list target .class files", e);
+    }
   }
 
   protected List<String> buildJvmArguments(SpotBugsTask task) {
