@@ -13,8 +13,13 @@
  */
 package com.github.spotbugs.snom;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.lang.ArchRule;
 import org.gradle.util.GradleVersion;
 import org.junit.jupiter.api.Test;
 
@@ -34,5 +39,15 @@ class SpotBugsPluginTest {
           new SpotBugsPlugin().verifyGradleVersion(GradleVersion.version("5.5"));
         });
     new SpotBugsPlugin().verifyGradleVersion(GradleVersion.version("5.6"));
+  }
+
+  @Test
+  void testDependencyOnGradleInternalAPI() {
+    JavaClasses implementation =
+        new ClassFileImporter()
+            .importPackages("com.github.spotbugs.snom", "com.github.spotbugs.snom.internal");
+    ArchRule rule =
+        noClasses().should().dependOnClassesThat().resideInAPackage("org.gradle..internal..");
+    rule.check(implementation);
   }
 }
