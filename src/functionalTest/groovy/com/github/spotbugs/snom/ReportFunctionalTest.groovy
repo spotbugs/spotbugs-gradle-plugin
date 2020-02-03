@@ -389,4 +389,31 @@ configurations.spotbugs {
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
     }
+
+    def "can use configuration configured via reporting extension"() {
+        setup:
+        buildFile << """
+spotbugsMain {
+    reports {
+        text.enabled = true
+    }
+}
+reporting {
+    baseDir "\$buildDir/our-reports"
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        File reportsDir = rootDir.toPath().resolve("build").resolve("our-reports").resolve("spotbugs").toFile();
+        assertTrue(reportsDir.isDirectory())
+        File report = reportsDir.toPath().resolve("main.txt").toFile()
+        assertTrue(report.isFile())
+    }
 }
