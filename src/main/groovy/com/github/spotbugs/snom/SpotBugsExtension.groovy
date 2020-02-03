@@ -16,7 +16,8 @@ package com.github.spotbugs.snom;
 import edu.umd.cs.findbugs.annotations.NonNull
 import edu.umd.cs.findbugs.annotations.Nullable
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.file.RegularFileProperty;
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.reporting.ReportingExtension
 
 import javax.inject.Inject;
 import org.gradle.api.Project;
@@ -51,6 +52,8 @@ import org.gradle.api.provider.Property;
  * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p>
  */
 class SpotBugsExtension {
+    static final String DEFAULT_REPORTS_DIR_NAME = "spotbugs";
+
     @NonNull
     final Property<Boolean> ignoreFailures;
     /**
@@ -154,10 +157,16 @@ class SpotBugsExtension {
         onlyAnalyze = objects.listProperty(String);
         projectName = objects.property(String);
         release = objects.property(String);
+
+        // ReportingBasePlugin should be applied before we create this SpotBugsExtension instance
+        DirectoryProperty baseReportsDir = project.extensions.getByType(ReportingExtension).baseDirectory
+        reportsDir = objects.directoryProperty().convention(baseReportsDir.map({
+            it.dir(DEFAULT_REPORTS_DIR_NAME)
+        }))
+
         project.afterEvaluate( { p ->
             projectName.convention(p.getName());
             release.convention(p.getVersion().toString());
-            reportsDir.convention(project.layout.buildDirectory.dir('reports/spotbugs'))
         });
         jvmArgs = objects.listProperty(String);
         extraArgs = objects.listProperty(String);

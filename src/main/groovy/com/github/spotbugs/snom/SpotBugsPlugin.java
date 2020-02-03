@@ -25,6 +25,7 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.DependencySet;
+import org.gradle.api.plugins.ReportingBasePlugin;
 import org.gradle.util.GradleVersion;
 
 public class SpotBugsPlugin implements Plugin<Project> {
@@ -44,6 +45,7 @@ public class SpotBugsPlugin implements Plugin<Project> {
   @Override
   public void apply(Project project) {
     verifyGradleVersion(GradleVersion.current());
+    project.getPluginManager().apply(ReportingBasePlugin.class);
 
     SpotBugsExtension extension = createExtension(project);
     createConfiguration(project, extension);
