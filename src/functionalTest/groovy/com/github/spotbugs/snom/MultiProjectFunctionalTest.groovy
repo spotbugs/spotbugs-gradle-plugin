@@ -19,14 +19,18 @@ import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.GradleVersion
 import org.junit.jupiter.api.BeforeEach
+import spock.lang.Ignore
 import spock.lang.Specification
 
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 class MultiProjectFunctionalTest extends Specification {
     File rootDir
     File buildFile
     String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+    File subBuildFile
 
     @BeforeEach
     def setup() {
@@ -56,7 +60,7 @@ public class Foo {
     }
 }
 """
-        File subBuildFile = new File(subProject, "build.gradle")
+        subBuildFile = new File(subProject, "build.gradle")
         subBuildFile << """
 apply plugin: 'java'
 apply plugin: 'jp.skypencil.spotbugs.snom'
@@ -82,5 +86,67 @@ repositories {
         then:
         assertEquals(TaskOutcome.SUCCESS, result.task(":sub:classes").outcome)
         assertEquals(TaskOutcome.SUCCESS, result.task(":sub:spotbugsMain").outcome)
+    }
+
+    def "can use project name of sub project"() {
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(':sub:spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .forwardOutput()
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":sub:spotbugsMain").outcome)
+        assertTrue(result.output.contains("-projectName, sub (spotbugsMain)"))
+    }
+
+    @Ignore("Gradle does not support this type of configuration. See https://git.io/JvOVT#issuecomment-580239267")
+    def "can use toolVersion in subprojects block"() {
+        setup:
+        buildFile << """
+subprojects {
+    spotbugs {
+        toolVersion = '4.0.0-RC1'
+    }
+}
+"""
+
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(':sub:spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .forwardOutput()
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":sub:spotbugsMain").outcome)
+        assertTrue(result.output.contains("SpotBugs 4.0.0-RC1"))
+    }
+
+    def "can use toolVersion in the subproject"() {
+        setup:
+        subBuildFile << """
+spotbugs {
+    toolVersion = '4.0.0-RC1'
+}
+"""
+
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(':sub:spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .forwardOutput()
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":sub:spotbugsMain").outcome)
+        assertTrue(result.output.contains("SpotBugs 4.0.0-RC1"))
     }
 }
