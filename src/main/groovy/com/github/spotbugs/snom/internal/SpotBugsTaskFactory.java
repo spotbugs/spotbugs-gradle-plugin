@@ -15,13 +15,10 @@ package com.github.spotbugs.snom.internal;
 
 import com.android.build.gradle.tasks.AndroidJavaCompile;
 import com.github.spotbugs.snom.SpotBugsTask;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
-import org.gradle.api.provider.Provider;
 import org.gradle.util.GUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,25 +65,23 @@ public class SpotBugsTaskFactory {
         .withId(
             "com.android.application",
             plugin -> {
-              List<Provider<SpotBugsTask>> spotbugsTasks =
-                  project.getTasks().withType(AndroidJavaCompile.class).stream()
-                      .map(
-                          task -> {
-                            String name =
-                                GUtil.toLowerCamelCase("spotbugs " + task.getVariantName());
-                            log.debug("Creating SpotBugsTaskForAndroid for {}", task);
-                            return project
-                                .getTasks()
-                                .register(
-                                    name,
-                                    SpotBugsTaskForAndroid.class,
-                                    spotbugsTask -> {
-                                      configurationAction.execute(spotbugsTask);
-                                      spotbugsTask.setTask(task);
-                                    });
-                          })
-                      .map(p -> p.map(SpotBugsTask.class::cast))
-                      .collect(Collectors.toList());
+              project
+                  .getTasks()
+                  .withType(AndroidJavaCompile.class)
+                  .all(
+                      task -> {
+                        String name = GUtil.toLowerCamelCase("spotbugs " + task.getVariantName());
+                        log.debug("Creating SpotBugsTaskForAndroid for {}", task);
+                        project
+                            .getTasks()
+                            .register(
+                                name,
+                                SpotBugsTaskForAndroid.class,
+                                spotbugsTask -> {
+                                  configurationAction.execute(spotbugsTask);
+                                  spotbugsTask.setTask(task);
+                                });
+                      });
             });
   }
 }
