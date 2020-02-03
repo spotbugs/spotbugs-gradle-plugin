@@ -22,6 +22,8 @@ import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.nio.file.Paths
+
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertTrue
@@ -279,5 +281,45 @@ spotbugsMain {
 
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+    }
+
+    def 'can analyse the sourceSet added by user'() {
+        given:
+        buildFile << """
+sourceSets {
+    another {
+        java {
+            srcDir 'src/another'
+        }
+    }
+}
+spotbugsAnother {
+    reports {
+        text.enabled = true
+    }
+}"""
+        File sourceDir = rootDir.toPath().resolve(Paths.get("src", "another", "java")).toFile()
+        sourceDir.mkdirs()
+        File sourceFile = new File(sourceDir, "Foo.java")
+        sourceFile << """
+public class Foo {
+    public static void main(String... args) {
+        System.out.println("Hello, SpotBugs!");
+    }
+}
+"""
+
+        when:
+        def runner = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(':spotbugsAnother')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+
+        def result = runner.build()
+
+        then:
+        TaskOutcome.SUCCESS == result.task(':spotbugsAnother').outcome
     }
 }
