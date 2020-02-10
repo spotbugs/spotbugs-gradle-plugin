@@ -322,7 +322,7 @@ public class SpotBugsTask extends SourceTask implements VerificationTask, Report
         }
 
         if (result.getBugCount() > 0) {
-            String message = "SpotBugs rule violations were found.";
+            String message = "Verification failed: SpotBugs rule violations were found.";
             SingleFileReport report = reports.getFirstEnabled();
             if (report != null) {
                 String reportUrl = new ConsoleRenderer().asClickableFileUrl(report.getDestination());
