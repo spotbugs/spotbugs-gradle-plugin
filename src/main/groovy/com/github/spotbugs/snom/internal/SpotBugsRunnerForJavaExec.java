@@ -36,7 +36,7 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
       if (task.getIgnoreFailures()) {
         log.warn("SpotBugs reported failures", e);
       } else {
-        throw new GradleException("SpotBugs execution thrown exception", e);
+        throw new GradleException("Verification failed: SpotBugs execution thrown exception", e);
       }
     }
   }

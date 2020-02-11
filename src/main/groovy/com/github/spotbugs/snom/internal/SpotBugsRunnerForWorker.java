@@ -88,16 +88,18 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
           FindBugs.processCommandLine(commandLine, args, findBugs2);
           findBugs2.execute();
           if (findBugs2.getErrorCount() > 0) {
-            throw new GradleException("SpotBugs error found: " + findBugs2.getErrorCount());
+            throw new GradleException(
+                "Verification failed: SpotBugs error found: " + findBugs2.getErrorCount());
           } else if (findBugs2.getBugCount() > 0) {
-            throw new GradleException("SpotBugs violation found: " + findBugs2.getBugCount());
+            throw new GradleException(
+                "Verification failed: SpotBugs violation found: " + findBugs2.getBugCount());
           }
         }
       } catch (Exception e) {
         if (params.getIgnoreFailures().getOrElse(Boolean.FALSE)) {
           log.warn("SpotBugs reported failures", e);
         } else {
-          throw new GradleException("SpotBugs execution thrown exception", e);
+          throw new GradleException("Verification failed: SpotBugs execution thrown exception", e);
         }
       }
     }
