@@ -21,7 +21,7 @@ jobs:
         run: ./gradlew groovydoc
       - name: Prepare to Deploy
         run: |
-          yarn
+          npm ci
           rm -f .git/hooks/commit-msg
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@c74c1d2
