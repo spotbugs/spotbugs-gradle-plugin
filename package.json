@@ -6,7 +6,7 @@
     "husky": "^4.2.1",
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
-    "semantic-release": "17.0.3"
+    "semantic-release": "15.14.0"
   },
   "scripts": {
     "semantic-release": "semantic-release"
