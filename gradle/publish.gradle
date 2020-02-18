@@ -13,6 +13,12 @@ pluginBundle {
 
 gradlePlugin {
     plugins {
+        spotbugsGradleBasePlugin {
+            id = 'jp.skypencil.spotbugs.snom-base'
+            displayName = 'Unofficial SpotBugs Gradle Base Plugin'
+            description = 'A base Gradle plugin that runs static bytecode analysis by SpotBugs'
+            implementationClass = 'com.github.spotbugs.snom.SpotBugsBasePlugin'
+        }
         spotbugsGradlePlugin {
             id = 'jp.skypencil.spotbugs.snom'
             displayName = 'Unofficial SpotBugs Gradle Plugin'
