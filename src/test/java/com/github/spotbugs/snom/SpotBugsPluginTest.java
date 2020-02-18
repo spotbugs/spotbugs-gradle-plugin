@@ -27,8 +27,8 @@ class SpotBugsPluginTest {
 
   @Test
   void testLoadToolVersion() {
-    assertNotNull(new SpotBugsPlugin().loadProperties().getProperty("spotbugs-version"));
-    assertNotNull(new SpotBugsPlugin().loadProperties().getProperty("slf4j-version"));
+    assertNotNull(new SpotBugsBasePlugin().loadProperties().getProperty("spotbugs-version"));
+    assertNotNull(new SpotBugsBasePlugin().loadProperties().getProperty("slf4j-version"));
   }
 
   @Test
@@ -36,9 +36,9 @@ class SpotBugsPluginTest {
     assertThrows(
         IllegalArgumentException.class,
         () -> {
-          new SpotBugsPlugin().verifyGradleVersion(GradleVersion.version("5.5"));
+          new SpotBugsBasePlugin().verifyGradleVersion(GradleVersion.version("5.5"));
         });
-    new SpotBugsPlugin().verifyGradleVersion(GradleVersion.version("5.6"));
+    new SpotBugsBasePlugin().verifyGradleVersion(GradleVersion.version("5.6"));
   }
 
   @Test
