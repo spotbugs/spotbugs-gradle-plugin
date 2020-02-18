@@ -282,6 +282,37 @@ spotbugsMain {
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
     }
+    def 'analyse main sourceset only'() {
+        given:
+        buildFile << """
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask).configureEach {
+  it.enabled = it.name == 'spotbugsMain'
+}
+"""
+        File testDir = rootDir.toPath().resolve("src").resolve("test").resolve("java").toFile()
+        testDir.mkdirs()
+        File sourceFile = new File(testDir, "Foo.java")
+        sourceFile << """
+public class Foo {
+    public static void main(String... args) {
+        System.out.println("Hello, SpotBugs!");
+    }
+}
+"""
+        when:
+        def runner = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(':spotbugsMain', ':spotbugsTest')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+
+        def result = runner.build()
+
+        then:
+        TaskOutcome.SUCCESS == result.task(':spotbugsMain').outcome
+        TaskOutcome.SKIPPED == result.task(':spotbugsTest').outcome
+    }
 
     def 'can analyse the sourceSet added by user'() {
         given:
