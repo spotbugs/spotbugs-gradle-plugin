@@ -49,9 +49,12 @@ public class SpotBugsTaskFactory {
                             .getTasks()
                             .register(
                                 name,
-                                SpotBugsTaskForJava.class,
+                                SpotBugsTask.class,
                                 task -> {
-                                  task.setSourceSet(sourceSet);
+                                  task.setSourceDirs(
+                                      sourceSet.getAllSource().getSourceDirectories());
+                                  task.setClassDirs(sourceSet.getOutput());
+                                  task.setAuxClassPaths(sourceSet.getCompileClasspath());
                                   configurationAction.execute(task);
                                 });
                       });
@@ -76,10 +79,13 @@ public class SpotBugsTaskFactory {
                             .getTasks()
                             .register(
                                 name,
-                                SpotBugsTaskForAndroid.class,
+                                SpotBugsTask.class,
                                 spotbugsTask -> {
+                                  spotbugsTask.setSourceDirs(task.getSource());
+                                  spotbugsTask.setClassDirs(
+                                      task.getOutputDirectory().getAsFileTree());
+                                  spotbugsTask.setAuxClassPaths(task.getClasspath());
                                   configurationAction.execute(spotbugsTask);
-                                  spotbugsTask.setTask(task);
                                 });
                       });
             });

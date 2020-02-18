@@ -82,7 +82,7 @@ import javax.inject.Inject
  *
  * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p>
  */
-abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
+class SpotBugsTask extends DefaultTask implements VerificationTask {
     private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
 
@@ -212,23 +212,22 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
      */
     @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
-    @NonNull
-    abstract FileCollection getSourceDirs();
+    FileCollection sourceDirs;
+
     /**
      * Property to specify the directories that contains the target classes to analyze.
      * Default value is the output directory of the target sourceSet.
      */
     @Internal
-    @NonNull
-    abstract FileCollection getClassDirs();
+    FileCollection classDirs;
+
     /**
      * Property to specify the aux class paths that contains the libraries to refer during analysis.
      * Default value is the compile-scope dependencies of the target sourceSet.
      */
     @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
-    @NonNull
-    abstract FileCollection getAuxClassPaths();
+    FileCollection auxClassPaths;
 
     private FileCollection classes;
 
@@ -246,6 +245,9 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @NonNull
     FileCollection getClasses() {
         if (classes == null) {
+            if (getClassDirs() == null) {
+                throw new InvalidUserDataException("The classDirs property is not set")
+            }
             return getClassDirs().asFileTree
         } else {
             return classes
@@ -256,6 +258,8 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
         this.workerExecutor = Objects.requireNonNull(workerExecutor);
 
+        sourceDirs = objects.fileCollection()
+        auxClassPaths = objects.fileCollection()
         ignoreFailures = objects.property(Boolean)
         showProgress = objects.property(Boolean);
         reportLevel = objects.property(Confidence);
@@ -293,24 +297,23 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
      *
      * @param extension the source extension to copy the properties.
      */
-    @OverrideMustInvoke
-    protected void init(SpotBugsExtension extension) {
-        ignoreFailures.set(extension.ignoreFailures)
-        showProgress.set(extension.showProgress)
-        reportLevel.set(extension.reportLevel)
-        effort.set(extension.effort)
-        visitors.set(extension.visitors)
-        omitVisitors.set(extension.omitVisitors)
+    void init(SpotBugsExtension extension) {
+        ignoreFailures.convention(extension.ignoreFailures)
+        showProgress.convention(extension.showProgress)
+        reportLevel.convention(extension.reportLevel)
+        effort.convention(extension.effort)
+        visitors.convention(extension.visitors)
+        omitVisitors.convention(extension.omitVisitors)
         // the default reportsDir is "$buildDir/reports/spotbugs/"
-        reportsDir.set(extension.reportsDir)
-        includeFilter.set(extension.includeFilter)
-        excludeFilter.set(extension.excludeFilter)
-        onlyAnalyze.set(extension.onlyAnalyze)
-        projectName.set(extension.projectName.map({p -> String.format("%s (%s)", p, getName())}))
-        release.set(extension.release)
-        jvmArgs.set(extension.jvmArgs)
-        extraArgs.set(extension.extraArgs)
-        maxHeapSize.set(extension.maxHeapSize)
+        reportsDir.convention(extension.reportsDir)
+        includeFilter.convention(extension.includeFilter)
+        excludeFilter.convention(extension.excludeFilter)
+        onlyAnalyze.convention(extension.onlyAnalyze)
+        projectName.convention(extension.projectName.map({p -> String.format("%s (%s)", p, getName())}))
+        release.convention(extension.release)
+        jvmArgs.convention(extension.jvmArgs)
+        extraArgs.convention(extension.extraArgs)
+        maxHeapSize.convention(extension.maxHeapSize)
     }
 
     @TaskAction
