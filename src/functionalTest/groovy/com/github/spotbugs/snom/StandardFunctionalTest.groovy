@@ -366,12 +366,12 @@ public class Foo {
         when:
         BuildResult result =
                 GradleRunner.create()
-                        .withProjectDir(rootDir)
-                        .withArguments(":spotbugsMain")
-                        .withPluginClasspath()
-                        .forwardOutput()
-                        .withGradleVersion(version)
-                        .build()
+                .withProjectDir(rootDir)
+                .withArguments(":spotbugsMain")
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
 
         then:
         result.task(":classes").outcome == TaskOutcome.SUCCESS
