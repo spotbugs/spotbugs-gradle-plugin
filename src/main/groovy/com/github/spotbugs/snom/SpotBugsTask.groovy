@@ -248,7 +248,9 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
             if (getClassDirs() == null) {
                 throw new InvalidUserDataException("The classDirs property is not set")
             }
-            return getClassDirs().asFileTree
+            return getClassDirs().asFileTree.filter({ File file ->
+                file.name.endsWith(".class")
+            })
         } else {
             return classes
         }
