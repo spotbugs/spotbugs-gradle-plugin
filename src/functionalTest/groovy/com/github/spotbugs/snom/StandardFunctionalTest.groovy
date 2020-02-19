@@ -353,4 +353,28 @@ public class Foo {
         then:
         TaskOutcome.SUCCESS == result.task(':spotbugsAnother').outcome
     }
+
+    def "can pass the analysis when classDirs contain no .class file"() {
+        setup:
+        File sourceDir = rootDir.toPath().resolve("src").resolve("main").resolve("java").toFile()
+        File sourceFile = new File(sourceDir, "Foo.java")
+        sourceFile.delete()
+        File resourceDir = rootDir.toPath().resolve("src").resolve("main").resolve("resources").toFile()
+        resourceDir.mkdir()
+        File xml = new File(resourceDir, "bar.xml")
+        xml << "<!-- I am not .class file -->"
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                        .withProjectDir(rootDir)
+                        .withArguments(":spotbugsMain")
+                        .withPluginClasspath()
+                        .forwardOutput()
+                        .withGradleVersion(version)
+                        .build()
+
+        then:
+        result.task(":classes").outcome == TaskOutcome.SUCCESS
+        result.task(":spotbugsMain").outcome == TaskOutcome.NO_SOURCE
+    }
 }
