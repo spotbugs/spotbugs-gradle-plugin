@@ -5,6 +5,7 @@ This is an unofficial Gradle Plugin to run SpotBugs on Java and Android project.
 ![](https://github.com/KengoTODA/spotbugs-gradle-plugin-v2/workflows/Java%20CI/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KengoTODA_spotbugs-gradle-plugin-v2&metric=alert_status)](https://sonarcloud.io/dashboard?id=KengoTODA_spotbugs-gradle-plugin-v2)
 [![](https://img.shields.io/badge/groovydoc-latest-blightgreen?logo=groovy)](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/package-summary.html)
+[![Issue Hunt](./.github/issuehunt-shield-v1.svg)](https://issuehunt.io/r/spotbugs/spotbugs-gradle-plugin)
 
 ## Goal
 
