@@ -91,6 +91,16 @@ spotbugsMain {
 }
 ```
 
+## SpotBugs version mapping
+
+By default, this Gradle Plugin uses the SpotBugs version listed in this table.
+
+You can change SpotBugs version by [the `toolVersion` property of the spotbugs extension](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/spotbugsextension#toolVersion) or the `spotbugs` configuration.
+
+|Gradle Plugin|SpotBugs|
+|-----:|-----:|
+| 5.0.0| 4.0.0|
+
 ## Copyright
 
 Copyright &copy; 2019-present SpotBugs Team
