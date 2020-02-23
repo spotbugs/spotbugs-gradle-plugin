@@ -24,11 +24,11 @@ buildscript {
     mavenLocal()
   }
   dependencies {
-    classpath "com.github.spotbugs.snom:spotbugs-gradle-plugin-v2:0.1.1"
+    classpath "com.github.spotbugs.snom:spotbugs-gradle-plugin:(YOUR_VERSION)"
   }
 }
 
-apply plugin: "jp.skypencil.spotbugs.snom"
+apply plugin: "com.github.spotbugs.snom"
 ```
 
 ## Before reporting a problem

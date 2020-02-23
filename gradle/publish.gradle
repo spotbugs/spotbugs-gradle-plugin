@@ -2,8 +2,8 @@
 // https://guides.gradle.org/publishing-plugins-to-gradle-plugin-portal/
 
 pluginBundle {
-    website = 'https://github.com/KengoTODA/spotbugs-gradle-plugin-v2'
-    vcsUrl = 'https://github.com/KengoTODA/spotbugs-gradle-plugin-v2'
+    website = 'https://github.com/spotbugs/spotbugs-gradle-plugin'
+    vcsUrl = 'https://github.com/spotbugs/spotbugs-gradle-plugin'
     tags = [
         'spotbugs',
         'static analysis',
@@ -14,14 +14,14 @@ pluginBundle {
 gradlePlugin {
     plugins {
         spotbugsGradleBasePlugin {
-            id = 'jp.skypencil.spotbugs.snom-base'
-            displayName = 'Unofficial SpotBugs Gradle Base Plugin'
+            id = 'com.github.spotbugs-base'
+            displayName = 'Official SpotBugs Gradle Base Plugin'
             description = 'A base Gradle plugin that runs static bytecode analysis by SpotBugs'
             implementationClass = 'com.github.spotbugs.snom.SpotBugsBasePlugin'
         }
         spotbugsGradlePlugin {
-            id = 'jp.skypencil.spotbugs.snom'
-            displayName = 'Unofficial SpotBugs Gradle Plugin'
+            id = 'com.github.spotbugs'
+            displayName = 'Official SpotBugs Gradle Plugin'
             description = 'A Gradle plugin that runs static bytecode analysis by SpotBugs'
             implementationClass = 'com.github.spotbugs.snom.SpotBugsPlugin'
         }

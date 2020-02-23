@@ -22,7 +22,7 @@ This Gradle plugin is designed to solve the following problems in the official o
 ### Apply to your project
 
 Apply the plugin to your project.
-Refer [the Gradle Plugin portal](https://plugins.gradle.org/plugin/jp.skypencil.spotbugs.snom) about the detail of installation procedure.
+Refer [the Gradle Plugin portal](https://plugins.gradle.org/plugin/com.github.spotbugs) about the detail of installation procedure.
 
 ### Configure SpotBugs Plugin
 
@@ -67,7 +67,7 @@ dependencies {
 Apply this plugin with [the `java` plugin](https://docs.gradle.org/current/userguide/java_plugin.html) to your project,
 then [`SpotBugsTask`](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/spotbugstask) will be generated for each existing sourceSet.
 
-If you want to create and configure `SpotBugsTask` by own, apply the base plugin (`jp.skypencil.spotbugs.snom-base`) instead, then it won't create tasks automatically.
+If you want to create and configure `SpotBugsTask` by own, apply the base plugin (`com.github.spotbugs-base`) instead, then it won't create tasks automatically.
 
 ### Apply to Android project
 

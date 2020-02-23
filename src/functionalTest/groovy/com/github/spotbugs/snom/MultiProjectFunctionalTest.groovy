@@ -39,7 +39,7 @@ class MultiProjectFunctionalTest extends Specification {
         buildFile << """
 plugins {
     id 'java'
-    id 'jp.skypencil.spotbugs.snom'
+    id 'com.github.spotbugs'
 }
         """
 
@@ -63,7 +63,7 @@ public class Foo {
         subBuildFile = new File(subProject, "build.gradle")
         subBuildFile << """
 apply plugin: 'java'
-apply plugin: 'jp.skypencil.spotbugs.snom'
+apply plugin: 'com.github.spotbugs'
 version = 1.0
 
 repositories {

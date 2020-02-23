@@ -40,7 +40,7 @@ class BasePluginFunctionalTest extends Specification {
         buildFile << """
 plugins {
     id 'java'
-    id 'jp.skypencil.spotbugs.snom-base'
+    id 'com.github.spotbugs-base'
 }
 
 version = 1.0
