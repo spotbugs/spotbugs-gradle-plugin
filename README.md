@@ -1,15 +1,16 @@
 # Newly Organized SpotBugs Gradle Plugin
 
-This is an unofficial Gradle Plugin to run SpotBugs on Java and Android project.
+This is the official Gradle Plugin to run SpotBugs on Java and Android project.
 
-![](https://github.com/KengoTODA/spotbugs-gradle-plugin-v2/workflows/Java%20CI/badge.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KengoTODA_spotbugs-gradle-plugin-v2&metric=alert_status)](https://sonarcloud.io/dashboard?id=KengoTODA_spotbugs-gradle-plugin-v2)
+![](https://github.com/spotbugs/spotbugs-gradle-plugin/workflows/Java%20CI/badge.svg)
+[![Coverage Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.spotbugs.gradle&metric=coverage)](https://sonarcloud.io/component_measures?id=com.github.spotbugs.gradle&metric=coverage)
+[![Debt](https://sonarcloud.io/api/project_badges/measure?project=com.github.spotbugs.gradle&metric=sqale_index)](https://sonarcloud.io/component_measures/domain/Maintainability?id=com.github.spotbugs.gradle)
 [![](https://img.shields.io/badge/groovydoc-latest-blightgreen?logo=groovy)](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/package-summary.html)
 [![Issue Hunt](./.github/issuehunt-shield-v1.svg)](https://issuehunt.io/r/spotbugs/spotbugs-gradle-plugin)
 
 ## Goal
 
-This Gradle plugin is designed to solve the following problems in the official one:
+This Gradle plugin is designed to solve the following problems in the legacy plugin:
 
 - [x] Remove any dependency on the Gradle's internal API
 - [x] Solve mutability problem for the build contains multiple projects and/or sourceSet
