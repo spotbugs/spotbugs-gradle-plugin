@@ -41,7 +41,7 @@ groovydoc {
     docTitle 'SpotBugs Gradle Plugin'
     link 'https://docs.gradle.org/current/javadoc/', 'org.gradle.api.'
     link 'https://docs.oracle.com/en/java/javase/11/docs/api/', 'java.'
-    link 'http://docs.groovy-lang.org/latest/html/gapi/', 'groovy.', 'org.codehaus.groovy.'
+    link 'https://docs.groovy-lang.org/latest/html/gapi/', 'groovy.', 'org.codehaus.groovy.'
 }
 
 task processVersionFile(type: WriteProperties) {
