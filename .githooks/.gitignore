@@ -17,3 +17,4 @@ prepare-commit-msg
 push-to-checkout
 sendemail-validate
 update
+husky.*

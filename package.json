@@ -13,12 +13,12 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "./gradlew spotlessApply",
+      "pre-commit": "lint-staged && ./gradlew spotlessApply",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
-    "*.{md,json}": [
+    "*.md,package.json": [
       "prettier --write",
       "git add"
     ],
