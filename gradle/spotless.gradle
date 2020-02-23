@@ -1,7 +1,0 @@
-spotless {
-  java {
-    removeUnusedImports()
-    trimTrailingWhitespace()
-    indentWithSpaces()
-  }
-}
