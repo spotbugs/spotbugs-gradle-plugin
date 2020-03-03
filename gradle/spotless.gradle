@@ -1,7 +1,21 @@
+// configuration for spotless
+// https://github.com/diffplug/spotless/tree/master/plugin-gradle
+
 spotless {
-  java {
-    removeUnusedImports()
-    trimTrailingWhitespace()
-    indentWithSpaces()
-  }
+    java {
+        licenseHeaderFile 'gradle/HEADER.txt'
+        removeUnusedImports()
+        googleJavaFormat()
+    }
+    groovy {
+        licenseHeaderFile 'gradle/HEADER.txt'
+        target '**/*.groovy'
+        greclipse()
+        indentWithSpaces()
+    }
+    groovyGradle {
+        target '**/*.gradle'
+        greclipse()
+        indentWithSpaces()
+    }
 }

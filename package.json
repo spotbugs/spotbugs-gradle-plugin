@@ -1,0 +1,44 @@
+{
+  "devDependencies": {
+    "commitlint": "^8.3.5",
+    "conventional-changelog-conventionalcommits": "^4.2.3",
+    "gradle-semantic-release-plugin": "1.4.0",
+    "husky": "^4.2.1",
+    "lint-staged": "^10.0.7",
+    "prettier": "^1.19.1",
+    "semantic-release": "17.0.4"
+  },
+  "scripts": {
+    "semantic-release": "semantic-release"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "gradle/spotless.sh && lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.md,package.json": [
+      "prettier --write"
+    ]
+  },
+  "release": {
+    "tagFormat": "${version}",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "gradle-semantic-release-plugin",
+      [
+        "@semantic-release/github",
+        {
+          "assets": [
+            "build/libs/*.jar"
+          ]
+        }
+      ]
+    ]
+  },
+  "engines": {
+    "node": "^12.12.0"
+  }
+}

@@ -1,72 +1,61 @@
-plugins{
-  id 'groovy'
-  id 'java-gradle-plugin'
-  id "com.gradle.plugin-publish" version "0.10.1"
-  id 'org.sonarqube' version '2.8'
-  id 'com.diffplug.gradle.spotless' version '3.27.1'
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'jacoco'
+    id 'com.gradle.plugin-publish' version '0.10.1'
+    id 'com.diffplug.gradle.spotless' version '3.27.1'
+    id 'net.ltgt.errorprone' version '1.1.1'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.13'
+    id 'com.github.ben-manes.versions' version '0.27.0'
+    id 'org.sonarqube' version '2.8'
+    id 'com.gtramontina.ghooks.gradle' version '1.1.1'
 }
 
-apply from: "$rootDir/gradle/checkstyle.gradle"
-apply from: "$rootDir/gradle/jacoco.gradle"
-apply from: "$rootDir/gradle/java.gradle"
-apply from: "$rootDir/gradle/sonar.gradle"
-apply from: "$rootDir/gradle/deploy.gradle"
-apply from: "$rootDir/gradle/spotless.gradle"
-
-version = '3.0.1-SNAPSHOT'
-group = "com.github.spotbugs"
-def spotBugsVersion = '3.1.12'
-def slf4jVersion = '1.8.0-beta4'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+group = 'com.github.spotbugs.snom'
 
 repositories {
-  jcenter()
+    // To download the Android Gradle Plugin
+    google()
+    // To download trove4j required by the Android Gradle Plugin
+    jcenter()
+}
+
+ext {
+    errorproneVersion = '2.3.4'
+    spotBugsVersion = '4.0.0'
+    slf4jVersion = '1.8.0-beta4'
+    androidGradlePluginVersion = '3.5.3'
 }
 
 dependencies {
-    implementation gradleApi()
-    implementation localGroovy()
+    errorprone "com.google.errorprone:error_prone_core:${errorproneVersion}"
+    compileOnly localGroovy()
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
-
-    testImplementation gradleTestKit()
-    testImplementation 'junit:junit:4.13'//, 'org.spockframework:spock-core:1.0-groovy-2.4'
+    compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
+    testImplementation 'com.tngtech.archunit:archunit:0.13.1'
 }
 
-test {
-  // show test output
-  testLogging.showStandardStreams = true
-}
-
-// The configuration example below shows the minimum required properties
-// configured to publish your plugin to the plugin portal
-pluginBundle {
-  website = 'https://spotbugs.github.io/'
-  vcsUrl = 'https://github.com/spotbugs/spotbugs-gradle-plugin'
-  description = "Performs quality checks on your project's Java source files using SpotBugs and generates reports from these checks"
-  tags = ['spotbugs', 'findbugs', 'code quality']
-
-  plugins {
-    spotbugsPlugin {
-      id = 'com.github.spotbugs'
-      displayName = 'SpotBugs Gradle plugin'
-    }
-  }
+groovydoc {
+    docTitle 'SpotBugs Gradle Plugin'
+    link 'https://docs.gradle.org/current/javadoc/', 'org.gradle.api.'
+    link 'https://docs.oracle.com/en/java/javase/11/docs/api/', 'java.'
+    link 'https://docs.groovy-lang.org/latest/html/gapi/', 'groovy.', 'org.codehaus.groovy.'
 }
 
 task processVersionFile(type: WriteProperties) {
-  outputFile file('src/main/resources/spotbugs-gradle-plugin.properties')
+    outputFile file('src/main/resources/spotbugs-gradle-plugin.properties')
 
-  property 'spotbugs-version', spotBugsVersion
-  property 'slf4j-version', slf4jVersion
+    property 'slf4j-version', slf4jVersion
+    property 'spotbugs-version', spotBugsVersion
 }
 tasks.processResources.dependsOn processVersionFile
 
-tasks.publishPlugins.doFirst {
-  if (version.endsWith('-SNAPSHOT')) {
-    throw new StopExecutionException("Skip publishing Gradle plugin because its version is not stable: ${version}")
-  }
-  if (spotBugsVersion.endsWith('-SNAPSHOT')) {
-    throw new StopExecutionException("Skip publishing Gradle plugin because SpotBugs version is not stable: ${spotBugsVersion}")
-  }
-}
+apply from: "$rootDir/gradle/test.gradle"
+apply from: "$rootDir/gradle/functional-test.gradle"
+apply from: "$rootDir/gradle/spotless.gradle"
+apply from: "$rootDir/gradle/errorprone.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
+
+defaultTasks 'spotlessApply', 'build'

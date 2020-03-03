@@ -1,0 +1,29 @@
+// configuration to publish gradle plugin to plugin portal
+// https://guides.gradle.org/publishing-plugins-to-gradle-plugin-portal/
+
+pluginBundle {
+    website = 'https://github.com/spotbugs/spotbugs-gradle-plugin'
+    vcsUrl = 'https://github.com/spotbugs/spotbugs-gradle-plugin'
+    tags = [
+        'spotbugs',
+        'static analysis',
+        'code quality'
+    ]
+}
+
+gradlePlugin {
+    plugins {
+        spotbugsGradleBasePlugin {
+            id = 'com.github.spotbugs-base'
+            displayName = 'Official SpotBugs Gradle Base Plugin'
+            description = 'A base Gradle plugin that runs static bytecode analysis by SpotBugs'
+            implementationClass = 'com.github.spotbugs.snom.SpotBugsBasePlugin'
+        }
+        spotbugsGradlePlugin {
+            id = 'com.github.spotbugs'
+            displayName = 'Official SpotBugs Gradle Plugin'
+            description = 'A Gradle plugin that runs static bytecode analysis by SpotBugs'
+            implementationClass = 'com.github.spotbugs.snom.SpotBugsPlugin'
+        }
+    }
+}
