@@ -47,7 +47,7 @@ public class SpotBugsTaskFactory {
                         log.debug("Creating SpotBugsTaskForJava for {}", sourceSet);
                         project
                             .getTasks()
-                            .register(
+                            .create(
                                 name,
                                 SpotBugsTask.class,
                                 task -> {
