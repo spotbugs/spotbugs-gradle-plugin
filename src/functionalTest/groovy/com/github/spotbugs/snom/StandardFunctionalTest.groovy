@@ -377,4 +377,19 @@ public class Foo {
         result.task(":classes").outcome == TaskOutcome.SUCCESS
         result.task(":spotbugsMain").outcome == TaskOutcome.NO_SOURCE
     }
+
+    def "can run analysis when check task is triggered"() {
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments("clean", "check")
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+    }
 }
