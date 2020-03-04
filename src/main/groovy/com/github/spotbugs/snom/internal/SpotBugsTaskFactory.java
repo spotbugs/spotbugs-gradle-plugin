@@ -44,7 +44,7 @@ public class SpotBugsTaskFactory {
                   .all(
                       sourceSet -> {
                         String name = sourceSet.getTaskName("spotbugs", null);
-                        log.debug("Creating SpotBugsTaskForJava for {}", sourceSet);
+                        log.debug("Creating SpotBugsTask for {}", sourceSet);
                         project
                             .getTasks()
                             .create(
@@ -74,7 +74,7 @@ public class SpotBugsTaskFactory {
                   .all(
                       task -> {
                         String name = GUtil.toLowerCamelCase("spotbugs " + task.getVariantName());
-                        log.debug("Creating SpotBugsTaskForAndroid for {}", task);
+                        log.debug("Creating SpotBugsTask for {}", task);
                         project
                             .getTasks()
                             .register(

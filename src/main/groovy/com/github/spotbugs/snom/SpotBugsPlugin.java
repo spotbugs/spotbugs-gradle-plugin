@@ -18,12 +18,16 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpotBugsPlugin implements Plugin<Project> {
   public static final String CONFIG_NAME = "spotbugs";
   public static final String PLUGINS_CONFIG_NAME = "spotbugsPlugins";
   public static final String SLF4J_CONFIG_NAME = "spotbugsSlf4j";
   public static final String EXTENSION_NAME = "spotbugs";
+
+  private final Logger log = LoggerFactory.getLogger(SpotBugsPlugin.class);
 
   @Override
   public void apply(Project project) {
@@ -34,6 +38,7 @@ public class SpotBugsPlugin implements Plugin<Project> {
 
   private void createTasks(Project project, SpotBugsExtension extension) {
     @Nullable Task check = project.getTasks().findByName("check");
+    log.debug("check task {}", check == null ? "not found" : "found");
     new SpotBugsTaskFactory()
         .generate(
             project,
