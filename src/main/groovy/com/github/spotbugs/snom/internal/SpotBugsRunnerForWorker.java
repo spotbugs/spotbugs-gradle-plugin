@@ -96,7 +96,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
           }
         }
       } catch (Exception e) {
-        if (params.getIgnoreFailures().getOrElse(Boolean.FALSE)) {
+        if (params.getIgnoreFailures().getOrElse(Boolean.FALSE).booleanValue()) {
           log.warn("SpotBugs reported failures", e);
         } else {
           throw new GradleException("Verification failed: SpotBugs execution thrown exception", e);

@@ -48,7 +48,7 @@ public abstract class SpotBugsHtmlReport extends SpotBugsReport {
     if (stylesheet == null) {
       return Optional.of("-html");
     } else {
-      return Optional.of("-html:" + getStylesheet().asFile().getAbsolutePath());
+      return Optional.of("-html:" + stylesheet.asFile().getAbsolutePath());
     }
   }
 
