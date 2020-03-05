@@ -27,7 +27,7 @@ public class SpotBugsPlugin implements Plugin<Project> {
   public static final String SLF4J_CONFIG_NAME = "spotbugsSlf4j";
   public static final String EXTENSION_NAME = "spotbugs";
 
-  private final Logger log = LoggerFactory.getLogger(SpotBugsPlugin.class);
+  private final Logger log = LoggerFactory.getLogger(getClass());
 
   @Override
   public void apply(Project project) {
