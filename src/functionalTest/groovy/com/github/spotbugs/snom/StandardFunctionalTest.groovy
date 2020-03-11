@@ -392,4 +392,63 @@ public class Foo {
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
     }
+
+    def "can apply plugin"() {
+        given:
+        buildFile << """
+dependencies{
+  spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
+}"""
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments("spotbugsMain", "--debug")
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
+        !result.output.contains("Trying to add already registered factory")
+    }
+
+    def "can apply plugin to multiple tasks"() {
+        given:
+        buildFile << """
+spotbugs {
+  ignoreFailures = true
+}
+dependencies {
+  spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
+}"""
+
+        File testDir = rootDir.toPath().resolve(Paths.get("src", "test", "java")).toFile()
+        testDir.mkdirs()
+        File testFile = new File(testDir, "FooTest.java")
+        testFile << """
+public class FooTest {
+    public static void main(String... args) {
+        System.out.println("Hello, SpotBugs!");
+    }
+}"""
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments("spotbugsMain", "spotbugsTest", "--debug")
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.task(":spotbugsTest").outcome == TaskOutcome.SUCCESS
+        result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
+        result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to FooTest")
+        !result.output.contains("Trying to add already registered factory")
+    }
 }
