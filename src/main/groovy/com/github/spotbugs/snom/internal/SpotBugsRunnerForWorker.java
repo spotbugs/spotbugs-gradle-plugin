@@ -14,6 +14,7 @@
 package com.github.spotbugs.snom.internal;
 
 import com.github.spotbugs.snom.SpotBugsTask;
+import edu.umd.cs.findbugs.DetectorFactoryCollection;
 import edu.umd.cs.findbugs.FindBugs;
 import edu.umd.cs.findbugs.FindBugs2;
 import edu.umd.cs.findbugs.TextUICommandLine;
@@ -80,6 +81,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
     public void execute() {
       SpotBugsWorkParameters params = getParameters();
       String[] args = params.getArguments().get().toArray(new String[0]);
+      DetectorFactoryCollection.resetInstance(new DetectorFactoryCollection());
 
       try {
         edu.umd.cs.findbugs.Version.printVersion(false);
