@@ -58,7 +58,7 @@ public class Foo {
 """
     }
 
-    def "do not generate reports by default"() {
+    def "generate XML report by default"() {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(rootDir)
@@ -69,8 +69,8 @@ public class Foo {
 
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        File reportsDir = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").toFile()
-        assertFalse(reportsDir.isDirectory())
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.xml").toFile()
+        report.isFile()
     }
 
     def "can generate spotbugs.txt"() {
