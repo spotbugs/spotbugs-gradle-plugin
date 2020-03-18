@@ -363,7 +363,15 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Optional
     @Nested
     SpotBugsReport getFirstEnabledReport() {
-        return reports.stream().filter({report -> report.enabled}).findFirst().orElse(null)
+        // use XML report by default, only when SpotBugs plugin is applied
+        boolean isSpotBugsPluingApplied = project.pluginManager.hasPlugin("com.github.spotbugs")
+
+        java.util.Optional<SpotBugsReport> report = reports.stream().filter({ report -> report.enabled}).findFirst()
+        if (isSpotBugsPluingApplied) {
+            return report.orElse(reports.create("xml"))
+        } else {
+            return report.orElse(null)
+        }
     }
 
     void setReportLevel(@Nullable String name) {
