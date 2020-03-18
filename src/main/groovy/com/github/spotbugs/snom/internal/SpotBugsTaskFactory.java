@@ -67,27 +67,26 @@ public class SpotBugsTaskFactory {
         .getPlugins()
         .withId(
             "com.android.application",
-            plugin -> {
-              project
-                  .getTasks()
-                  .withType(AndroidJavaCompile.class)
-                  .all(
-                      task -> {
-                        String name = GUtil.toLowerCamelCase("spotbugs " + task.getVariantName());
-                        log.debug("Creating SpotBugsTask for {}", task);
-                        project
-                            .getTasks()
-                            .register(
-                                name,
-                                SpotBugsTask.class,
-                                spotbugsTask -> {
-                                  spotbugsTask.setSourceDirs(task.getSource());
-                                  spotbugsTask.setClassDirs(
-                                      task.getOutputDirectory().getAsFileTree());
-                                  spotbugsTask.setAuxClassPaths(task.getClasspath());
-                                  configurationAction.execute(spotbugsTask);
-                                });
-                      });
-            });
+            plugin ->
+                project
+                    .getTasks()
+                    .withType(AndroidJavaCompile.class)
+                    .all(
+                        task -> {
+                          String name = GUtil.toLowerCamelCase("spotbugs " + task.getVariantName());
+                          log.debug("Creating SpotBugsTask for {}", task);
+                          project
+                              .getTasks()
+                              .register(
+                                  name,
+                                  SpotBugsTask.class,
+                                  spotbugsTask -> {
+                                    spotbugsTask.setSourceDirs(task.getSource());
+                                    spotbugsTask.setClassDirs(
+                                        task.getOutputDirectory().getAsFileTree());
+                                    spotbugsTask.setAuxClassPaths(task.getClasspath());
+                                    configurationAction.execute(spotbugsTask);
+                                  });
+                        }));
   }
 }

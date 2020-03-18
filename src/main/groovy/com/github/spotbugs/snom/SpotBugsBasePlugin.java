@@ -42,13 +42,7 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
     SpotBugsExtension extension = createExtension(project);
     createConfiguration(project, extension);
     createPluginConfiguration(project);
-    project
-        .getTasks()
-        .withType(SpotBugsTask.class)
-        .configureEach(
-            (task) -> {
-              task.init(extension);
-            });
+    project.getTasks().withType(SpotBugsTask.class).configureEach(task -> task.init(extension));
   }
 
   private SpotBugsExtension createExtension(Project project) {
