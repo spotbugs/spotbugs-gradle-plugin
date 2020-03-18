@@ -30,7 +30,7 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotation/2.3.4/7db2cc604372fa92c10b490f54b7e9e87ac44299/error_prone_annotation-2.3.4.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.checkerframework/javacutil/3.0.0/7d9a30c5e9552be08ca575b98cb187d26342e588/javacutil-3.0.0.jar" />
         </processorPath>
-        <module name="spotbugs-gradle-plugin-v2.functionalTest" />
+        <module name="spotbugs-gradle-plugin.functionalTest" />
       </profile>
     </annotationProcessing>
   </component>

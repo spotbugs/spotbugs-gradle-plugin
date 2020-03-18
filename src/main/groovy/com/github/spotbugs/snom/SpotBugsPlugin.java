@@ -14,10 +14,11 @@
 package com.github.spotbugs.snom;
 
 import com.github.spotbugs.snom.internal.SpotBugsTaskFactory;
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpotBugsPlugin implements Plugin<Project> {
   public static final String CONFIG_NAME = "spotbugs";
@@ -25,23 +26,26 @@ public class SpotBugsPlugin implements Plugin<Project> {
   public static final String SLF4J_CONFIG_NAME = "spotbugsSlf4j";
   public static final String EXTENSION_NAME = "spotbugs";
 
+  private final Logger log = LoggerFactory.getLogger(getClass());
+
   @Override
   public void apply(Project project) {
     project.getPluginManager().apply(SpotBugsBasePlugin.class);
     SpotBugsExtension extension = project.getExtensions().findByType(SpotBugsExtension.class);
+    project
+        .getPluginManager()
+        .withPlugin(
+            "java-base",
+            javaBase -> {
+              log.debug(
+                  "The javaBase plugin has been applied, so making the check task depending on all of SpotBugsTask");
+              Task check = project.getTasks().getByName("check");
+              project.getTasks().withType(SpotBugsTask.class, check::dependsOn);
+            });
     createTasks(project, extension);
   }
 
   private void createTasks(Project project, SpotBugsExtension extension) {
-    @Nullable Task check = project.getTasks().findByName("check");
-    new SpotBugsTaskFactory()
-        .generate(
-            project,
-            task -> {
-              if (check != null) {
-                check.dependsOn(task);
-              }
-              task.init(extension);
-            });
+    new SpotBugsTaskFactory().generate(project, task -> task.init(extension));
   }
 }
