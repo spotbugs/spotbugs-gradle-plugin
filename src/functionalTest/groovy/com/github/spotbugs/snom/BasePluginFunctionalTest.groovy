@@ -99,4 +99,28 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
         result.task(":classes").outcome == TaskOutcome.SUCCESS
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
     }
+
+    def "SpotBugsTask does not create report by default"() {
+        setup:
+        buildFile << """
+task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
+    dependsOn 'classes'
+    classDirs = sourceSets.main.output
+}
+"""
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(":spotbugsMain")
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.xml").toFile()
+        !report.isFile()
+    }
 }
