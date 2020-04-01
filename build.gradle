@@ -26,7 +26,7 @@ ext {
     errorproneVersion = '2.3.4'
     spotBugsVersion = '4.0.0'
     slf4jVersion = '1.8.0-beta4'
-    androidGradlePluginVersion = '3.5.3'
+    androidGradlePluginVersion = '3.6.2'
 }
 
 dependencies {
