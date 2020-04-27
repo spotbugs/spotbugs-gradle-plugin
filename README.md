@@ -104,6 +104,16 @@ You can change SpotBugs version by [the `toolVersion` property of the spotbugs e
 | 4.0.7| 4.0.2|
 | 4.0.0| 4.0.0|
 
+### Refer the version in the build script
+
+From v4, the `spotbugs.toolVersion` is changed from `String` to [`Provider<String>`](https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html), so use `get()` or other methods to refer the actual version.
+
+```groovy
+dependencies {
+    compileOnly "com.github.spotbugs:spotbugs-annotations:${spotbugs.toolVersion.get()}"
+}
+```
+
 ## Copyright
 
 Copyright &copy; 2019-present SpotBugs Team

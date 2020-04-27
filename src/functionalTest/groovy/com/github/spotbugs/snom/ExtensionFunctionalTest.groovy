@@ -239,4 +239,28 @@ spotbugs {
         assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.output.contains("SpotBugs 4.0.0-beta4"))
     }
+
+    def "can use toolVersion to get the SpotBugs version"() {
+        setup:
+        buildFile << """
+spotbugs {
+    toolVersion = "4.0.2"
+}
+dependencies {
+    compileOnly "com.github.spotbugs:spotbugs-annotations:\${spotbugs.toolVersion.get()}"
+}"""
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(":spotbugsMain", "--debug")
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.output.contains("com.github.spotbugs:spotbugs-annotations:4.0.2")
+    }
 }
