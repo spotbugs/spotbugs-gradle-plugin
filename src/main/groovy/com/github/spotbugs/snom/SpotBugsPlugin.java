@@ -16,7 +16,7 @@ package com.github.spotbugs.snom;
 import com.github.spotbugs.snom.internal.SpotBugsTaskFactory;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
+import org.gradle.api.plugins.JavaBasePlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +39,11 @@ public class SpotBugsPlugin implements Plugin<Project> {
             javaBase -> {
               log.debug(
                   "The javaBase plugin has been applied, so making the check task depending on all of SpotBugsTask");
-              Task check = project.getTasks().getByName("check");
-              project.getTasks().withType(SpotBugsTask.class, check::dependsOn);
+              project
+                  .getTasks()
+                  .named(JavaBasePlugin.CHECK_TASK_NAME)
+                  .configure(
+                      task -> task.dependsOn(project.getTasks().withType(SpotBugsTask.class)));
             });
     createTasks(project, extension);
   }
