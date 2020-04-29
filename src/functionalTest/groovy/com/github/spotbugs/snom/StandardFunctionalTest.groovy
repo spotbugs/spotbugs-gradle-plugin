@@ -380,6 +380,29 @@ public class Foo {
         SUCCESS == result.task(':spotbugsAnother').outcome
     }
 
+    /*
+     * https://github.com/spotbugs/spotbugs-gradle-plugin/issues/235
+     */
+    def 'can chain reports configuration'() {
+        given:
+        buildFile << """
+spotbugsMain.reports.xml.enabled = false
+"""
+
+        when:
+        def runner = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(':spotbugsMain')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+
+        def result = runner.build()
+
+        then:
+        TaskOutcome.SUCCESS == result.task(':spotbugsMain').outcome
+    }
+
     def "can pass the analysis when classDirs contain no .class file"() {
         setup:
         File sourceDir = rootDir.toPath().resolve("src").resolve("main").resolve("java").toFile()
