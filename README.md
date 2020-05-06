@@ -106,7 +106,7 @@ You can change SpotBugs version by [the `toolVersion` property of the spotbugs e
 
 ### Refer the version in the build script
 
-From v4, the `spotbugs.toolVersion` is changed from `String` to [`Provider<String>`](https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html), so use `get()` or other methods to refer the actual version.
+From v4, the `spotbugs.toolVersion` is changed from `String` to [`Provider<String>`](https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html), so use `get()` or other methods to refer to the actual version.
 
 ```groovy
 dependencies {
