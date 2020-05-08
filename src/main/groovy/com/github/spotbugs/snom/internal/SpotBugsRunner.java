@@ -17,6 +17,7 @@ import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -49,8 +50,15 @@ public abstract class SpotBugsRunner {
     args.add("-sortByClass");
     args.add("-timestampNow");
     if (!task.getAuxClassPaths().isEmpty()) {
-      args.add("-auxclasspath");
-      args.add(join(task.getAuxClassPaths().getFiles()));
+      if (task.getUseAuxclasspathFile().get()) {
+        args.add("-auxclasspathFromFile");
+        String auxClasspathFile = createFileForAuxClasspath(task.getAuxClassPaths().getFiles());
+        log.debug("Using auxclasspath file: {}", auxClasspathFile);
+        args.add(auxClasspathFile);
+      } else {
+        args.add("-auxclasspath");
+        args.add(join(task.getAuxClassPaths().getFiles()));
+      }
     }
     if (!task.getSourceDirs().isEmpty()) {
       args.add("-sourcepath");
@@ -106,6 +114,22 @@ public abstract class SpotBugsRunner {
     args.addAll(task.getExtraArgs().getOrElse(Collections.emptyList()));
     log.debug("Arguments for SpotBugs are generated: {}", args);
     return args;
+  }
+
+  private String createFileForAuxClasspath(Set<File> auxClasspathFiles) {
+    String auxClasspath =
+        auxClasspathFiles.stream().map(File::getAbsolutePath).collect(Collectors.joining("\n"));
+    try {
+      File tempFile = File.createTempFile("temp", "-spotbugs-auxclasspath");
+      FileWriter tempFileWriter = new FileWriter(tempFile);
+      tempFileWriter.write(auxClasspath);
+      tempFileWriter.close();
+      tempFile.deleteOnExit();
+      return tempFile.getAbsolutePath();
+    } catch (Exception e) {
+      // oops
+      throw new GradleException("Could not create auxiliary classpath file for SpotBugsTask");
+    }
   }
 
   private File generateFile(FileCollection files) {

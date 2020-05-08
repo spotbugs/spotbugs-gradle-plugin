@@ -144,6 +144,9 @@ class SpotBugsExtension {
     @NonNull
     final Property<String> toolVersion
 
+    @NonNull
+    final Property<Boolean> useAuxclasspathFile;
+
     @Inject
     SpotBugsExtension(Project project, ObjectFactory objects) {
         ignoreFailures = objects.property(Boolean).convention(false);
@@ -173,6 +176,7 @@ class SpotBugsExtension {
         extraArgs = objects.listProperty(String);
         maxHeapSize = objects.property(String);
         toolVersion = objects.property(String)
+        useAuxclasspathFile = objects.property(Boolean).convention(false)
     }
 
     void setReportLevel(@Nullable String name) {
