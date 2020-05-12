@@ -3,7 +3,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'jacoco'
     id 'com.gradle.plugin-publish' version '0.11.0'
-    id 'com.diffplug.gradle.spotless' version '3.29.0'
+    id 'com.diffplug.gradle.spotless' version '3.30.0'
     id 'net.ltgt.errorprone' version '1.1.1'
     id 'se.patrikerdes.use-latest-versions' version '0.2.13'
     id 'com.github.ben-manes.versions' version '0.28.0'
