@@ -491,5 +491,40 @@ public class MyFoo {
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
         result.output.contains("Using auxclasspath file")
+        result.output.contains("/build/spotbugs/spotbugs-auxclasspath")
+    }
+
+    @Unroll
+    def 'shows report path when failures are found (Worker API? #isWorkerApi)'() {
+        given:
+        def badCode = new File(rootDir, 'src/main/java/Bar.java')
+        badCode << '''
+        |public class Bar {
+        |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
+        |}
+        |'''.stripMargin()
+
+        when:
+        def arguments = [':spotbugsMain']
+        if(!isWorkerApi) {
+            arguments.add('-Pcom.github.spotbugs.snom.worker=false')
+        }
+        def runner = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .withDebug(true)
+
+        def result = runner.buildAndFail()
+
+        then:
+        result.task(':spotbugsMain').outcome == TaskOutcome.FAILED
+        result.output.contains('SpotBugs report can be found in')
+        result.output.contains('build/reports/spotbugs/main.xml')
+
+        where:
+        isWorkerApi << [true, false]
     }
 }

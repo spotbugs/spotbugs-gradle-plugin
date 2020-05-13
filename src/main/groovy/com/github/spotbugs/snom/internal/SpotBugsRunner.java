@@ -17,10 +17,11 @@ import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,7 +53,7 @@ public abstract class SpotBugsRunner {
     if (!task.getAuxClassPaths().isEmpty()) {
       if (task.getUseAuxclasspathFile().get()) {
         args.add("-auxclasspathFromFile");
-        String auxClasspathFile = createFileForAuxClasspath(task.getAuxClassPaths().getFiles());
+        String auxClasspathFile = createFileForAuxClasspath(task);
         log.debug("Using auxclasspath file: {}", auxClasspathFile);
         args.add(auxClasspathFile);
       } else {
@@ -116,16 +117,21 @@ public abstract class SpotBugsRunner {
     return args;
   }
 
-  private String createFileForAuxClasspath(Set<File> auxClasspathFiles) {
+  private String createFileForAuxClasspath(SpotBugsTask task) {
     String auxClasspath =
-        auxClasspathFiles.stream().map(File::getAbsolutePath).collect(Collectors.joining("\n"));
+        task.getAuxClassPaths().getFiles().stream()
+            .map(File::getAbsolutePath)
+            .collect(Collectors.joining("\n"));
     try {
-      File tempFile = File.createTempFile("temp", "-spotbugs-auxclasspath");
-      FileWriter tempFileWriter = new FileWriter(tempFile);
-      tempFileWriter.write(auxClasspath);
-      tempFileWriter.close();
-      tempFile.deleteOnExit();
-      return tempFile.getAbsolutePath();
+      Path auxClasspathFile =
+          Paths.get(
+              task.getProject().getBuildDir().getAbsolutePath(),
+              "spotbugs",
+              "spotbugs-auxclasspath");
+      Files.createDirectories(auxClasspathFile.getParent());
+      Files.createFile(auxClasspathFile);
+      Files.write(auxClasspathFile, auxClasspath.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+      return auxClasspathFile.normalize().toString();
     } catch (Exception e) {
       // oops
       throw new GradleException("Could not create auxiliary classpath file for SpotBugsTask");

@@ -19,6 +19,7 @@ import edu.umd.cs.findbugs.FindBugs;
 import edu.umd.cs.findbugs.FindBugs2;
 import edu.umd.cs.findbugs.TextUICommandLine;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import java.util.List;
 import java.util.Objects;
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
@@ -91,18 +92,36 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
           findBugs2.execute();
           if (findBugs2.getErrorCount() > 0) {
             throw new GradleException(
-                "Verification failed: SpotBugs error found: " + findBugs2.getErrorCount());
+                "Verification failed: SpotBugs error found: "
+                    + findBugs2.getErrorCount()
+                    + ". SpotBugs report can be found in "
+                    + findReportPath());
           } else if (findBugs2.getBugCount() > 0) {
             throw new GradleException(
-                "Verification failed: SpotBugs violation found: " + findBugs2.getBugCount());
+                "Verification failed: SpotBugs violation found: "
+                    + findBugs2.getBugCount()
+                    + ". SpotBugs report can be found in "
+                    + findReportPath());
           }
         }
-      } catch (Exception e) {
+      } catch (GradleException e) {
         if (params.getIgnoreFailures().getOrElse(Boolean.FALSE).booleanValue()) {
           log.warn("SpotBugs reported failures", e);
         } else {
-          throw new GradleException("Verification failed: SpotBugs execution thrown exception", e);
+          throw e;
         }
+      } catch (Exception e) {
+        throw new GradleException("Verification failed: SpotBugs execution thrown exception", e);
+      }
+    }
+
+    private String findReportPath() {
+      List<String> arguments = getParameters().getArguments().get();
+      int outputFileParameterIndex = arguments.indexOf("-outputFile");
+      if (outputFileParameterIndex > 0) {
+        return arguments.get(outputFileParameterIndex + 1);
+      } else {
+        return null;
       }
     }
   }
