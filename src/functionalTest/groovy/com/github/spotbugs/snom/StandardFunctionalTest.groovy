@@ -451,4 +451,38 @@ public class FooTest {
         result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to FooTest")
         !result.output.contains("Trying to add already registered factory")
     }
+
+    @Unroll
+    def 'shows report path when failures are found (Worker API? #isWorkerApi)'() {
+        given:
+        def badCode = new File(rootDir, 'src/main/java/Bar.java')
+        badCode << '''
+        |public class Bar {
+        |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
+        |}
+        |'''.stripMargin()
+
+        when:
+        def arguments = [':spotbugsMain']
+        if(!isWorkerApi) {
+            arguments.add('-Pcom.github.spotbugs.snom.worker=false')
+        }
+        def runner = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .withDebug(true)
+
+        def result = runner.buildAndFail()
+
+        then:
+        result.task(':spotbugsMain').outcome == TaskOutcome.FAILED
+        result.output.contains('SpotBugs report can be found in')
+        result.output.contains('build/reports/spotbugs/main.xml')
+
+        where:
+        isWorkerApi << [true, false]
+    }
 }
