@@ -18,7 +18,7 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
 import org.junit.jupiter.api.BeforeEach
-import spock.lang.Ignore
+import spock.lang.Requires
 import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -35,8 +35,8 @@ class AndroidFunctionalTest extends Specification {
         buildFile = new File(rootDir, 'build.gradle')
     }
 
-    @Ignore("need to install Android SDK")
-    def "can generate spotbugsMain depending on classes task"() {
+    @Requires({env['ANDROID_SDK_ROOT']})
+    def "can generate spotbugsRelease depending on variant compilation task"() {
         given: "a Gradle project to build an Android app"
         GradleRunner runner =
                 GradleRunner.create()
@@ -57,7 +57,7 @@ buildscript {
 """
         runner.pluginClasspath.forEach({ file ->
             buildFile << """
-        classpath '${file.absolutePath}'
+        classpath files('${file.absolutePath}')
 """
         })
         buildFile << """
@@ -83,7 +83,7 @@ android {
 }
 """
 
-        File sourceDir = rootDir.toPath().resolve("src").resolve("main").resolve("java").toFile()
+        File sourceDir = new File(rootDir, "src/main/java")
         sourceDir.mkdirs()
         File sourceFile = new File(sourceDir, "Foo.java")
         sourceFile << """
@@ -93,14 +93,18 @@ public class Foo {
     }
 }
 """
+        File manifestFile = new File(rootDir, "src/main/AndroidManifest.xml")
+        manifestFile << """
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="test.spotbugs" />
+"""
 
-        when: "the spotbugsMain task is executed"
+        when: "the spotbugsRelease task is executed"
         BuildResult result = runner
-                .withArguments(":spotbugsMain")
+                .withArguments(":spotbugsRelease", '-s')
                 .withGradleVersion(version)
                 .build()
 
         then: "gradle runs spotbugsMain successfully"
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
     }
 }
