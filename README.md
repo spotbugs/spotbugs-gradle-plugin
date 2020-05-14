@@ -116,4 +116,4 @@ dependencies {
 
 ## Copyright
 
-Copyright &copy; 2019-present SpotBugs Team
+Copyright &copy; 2019-2020 SpotBugs Team
