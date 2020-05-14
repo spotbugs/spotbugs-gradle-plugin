@@ -40,8 +40,8 @@ import org.gradle.api.provider.Property;
  * &nbsp;&nbsp;&nbsp;&nbsp;visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;omitVisitors = [ 'FindNonShortCircuit' ]<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;reportsDir = file("$buildDir/reports/spotbugs")<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;includeFilter = file('spotbugs-include.xml')<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;excludeFilter = file('spotbugs-exclude.xml')<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;includeFilter = file('spotbugs-include.xml') or new URL('http://sonar?findbugs-include.xml')<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;excludeFilter = file('spotbugs-exclude.xml') or new URL('http://sonar?findbugs-exclude.xml')<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;projectName = name<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;release = version<br>
@@ -89,6 +89,7 @@ class SpotBugsExtension {
      */
     @NonNull
     final DirectoryProperty reportsDir;
+    
     /**
      * Property to set the filter file to limit which bug should be reported.
      *
@@ -98,7 +99,8 @@ class SpotBugsExtension {
      * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
      */
     @NonNull
-    final RegularFileProperty includeFilter;
+    final Property<Object> includeFilter;
+    
     /**
      * Property to set the filter file to limit which bug should be reported.
      *
@@ -108,7 +110,8 @@ class SpotBugsExtension {
      * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
      */
     @NonNull
-    final RegularFileProperty excludeFilter;
+    final Property<Object> excludeFilter;
+    
     /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */
@@ -156,8 +159,8 @@ class SpotBugsExtension {
         visitors = objects.listProperty(String);
         omitVisitors = objects.listProperty(String);
         reportsDir = objects.directoryProperty()
-        includeFilter = objects.fileProperty()
-        excludeFilter = objects.fileProperty()
+        includeFilter = objects.property(Object)
+        excludeFilter = objects.property(Object)
         onlyAnalyze = objects.listProperty(String);
         projectName = objects.property(String);
         release = objects.property(String);

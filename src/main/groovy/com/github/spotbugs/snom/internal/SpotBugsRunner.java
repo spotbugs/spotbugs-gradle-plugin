@@ -51,7 +51,7 @@ public abstract class SpotBugsRunner {
     args.add("-sortByClass");
     args.add("-timestampNow");
     if (!task.getAuxClassPaths().isEmpty()) {
-      if (task.getUseAuxclasspathFile().get()) {
+      if (Boolean.TRUE.equals(task.getUseAuxclasspathFile().get())) {
         args.add("-auxclasspathFromFile");
         String auxClasspathFile = createFileForAuxClasspath(task);
         log.debug("Using auxclasspath file: {}", auxClasspathFile);
@@ -92,13 +92,13 @@ public abstract class SpotBugsRunner {
       args.add("-omitVisitors");
       args.add(task.getOmitVisitors().get().stream().collect(Collectors.joining(",")));
     }
-    if (task.getIncludeFilter().isPresent() && task.getIncludeFilter().get() != null) {
+    if (task.getIncludeFilterFile().isPresent() && task.getIncludeFilterFile().get() != null) {
       args.add("-include");
-      args.add(task.getIncludeFilter().get().getAsFile().getAbsolutePath());
+      args.add(task.getIncludeFilterFile().get().getAsFile().getAbsolutePath());
     }
-    if (task.getExcludeFilter().isPresent() && task.getExcludeFilter().get() != null) {
+    if (task.getExcludeFilterFile().isPresent() && task.getExcludeFilterFile().get() != null) {
       args.add("-exclude");
-      args.add(task.getExcludeFilter().get().getAsFile().getAbsolutePath());
+      args.add(task.getExcludeFilterFile().get().getAsFile().getAbsolutePath());
     }
     if (task.getOnlyAnalyze().isPresent() && !task.getOnlyAnalyze().get().isEmpty()) {
       args.add("-onlyAnalyze");

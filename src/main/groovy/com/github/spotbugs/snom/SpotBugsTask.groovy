@@ -32,6 +32,7 @@ import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.FileCollection;
+import org.gradle.api.file.RegularFile
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
@@ -70,8 +71,8 @@ import javax.inject.Inject
  * &nbsp;&nbsp;&nbsp;&nbsp;visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;omitVisitors = [ 'FindNonShortCircuit' ]<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;reportsDir = file("$buildDir/reports/spotbugs")<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;includeFilter = file('spotbugs-include.xml')<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;excludeFilter = file('spotbugs-exclude.xml')<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;includeFilter = file('spotbugs-include.xml') or new URL('http://sonar?findbugs-include.xml')<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;excludeFilter = file('spotbugs-exclude.xml') or new URL('http://sonar?findbugs-exclude.xml')<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;projectName = name<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;release = version<br>
@@ -138,7 +139,24 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Internal
     @NonNull
     final NamedDomainObjectContainer<SpotBugsReport> reports;
+    
+    /**
+     * Property to set the filter file to limit which bug should be reported.
+     *
+     * <p>Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze, use {@link #onlyAnalyze} instead.
+     * To limit the visitors (detectors) to run, use {@link #visitors} and {@link #omitVisitors} instead.</p>
+     *
+     * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
+     */
+    @Optional
+    @Input
+    @NonNull
+    final Property<Object> includeFilter;
 
+    @Internal
+    @NonNull
+    final RegularFileProperty includeFilterFile;
+    
     /**
      * Property to set the filter file to limit which bug should be reported.
      *
@@ -148,23 +166,14 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
      * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
      */
     @Optional
-    @InputFile
-    @PathSensitive(PathSensitivity.RELATIVE)
+    @Input
     @NonNull
-    final RegularFileProperty includeFilter;
-    /**
-     * Property to set the filter file to limit which bug should be reported.
-     *
-     * <p>Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze, use {@link #onlyAnalyze} instead.
-     * To limit the visitors (detectors) to run, use {@link #visitors} and {@link #omitVisitors} instead.</p>
-     *
-     * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
-     */
-    @Optional
-    @InputFile
-    @PathSensitive(PathSensitivity.RELATIVE)
+    final Property<Object> excludeFilter;
+    
+    @Internal
     @NonNull
-    final RegularFileProperty excludeFilter;
+    final RegularFileProperty excludeFilterFile;
+    
     /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */
@@ -267,16 +276,16 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     @Inject
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
-        this.workerExecutor = Objects.requireNonNull(workerExecutor);
+        this.workerExecutor = Objects.requireNonNull(workerExecutor)
 
         sourceDirs = objects.fileCollection()
         auxClassPaths = objects.fileCollection()
         ignoreFailures = objects.property(Boolean)
-        showProgress = objects.property(Boolean);
-        reportLevel = objects.property(Confidence);
-        effort = objects.property(Effort);
-        visitors = objects.listProperty(String);
-        omitVisitors = objects.listProperty(String);
+        showProgress = objects.property(Boolean)
+        reportLevel = objects.property(Confidence)
+        effort = objects.property(Effort)
+        visitors = objects.listProperty(String)
+        omitVisitors = objects.listProperty(String)
         reportsDir = objects.directoryProperty()
         reports =
                 objects.domainObjectContainer(
@@ -292,14 +301,16 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
                             throw new InvalidUserDataException(name + " is invalid as the report name");
                     }
                 });
-        includeFilter = objects.fileProperty()
-        excludeFilter = objects.fileProperty()
-        onlyAnalyze = objects.listProperty(String);
-        projectName = objects.property(String);
-        release = objects.property(String);
-        jvmArgs = objects.listProperty(String);
-        extraArgs = objects.listProperty(String);
-        maxHeapSize = objects.property(String);
+        includeFilter = objects.property(Object)
+        includeFilterFile = objects.fileProperty()
+        excludeFilter = objects.property(Object)
+        excludeFilterFile = objects.fileProperty()
+        onlyAnalyze = objects.listProperty(String)
+        projectName = objects.property(String)
+        release = objects.property(String)
+        jvmArgs = objects.listProperty(String)
+        extraArgs = objects.listProperty(String)
+        maxHeapSize = objects.property(String)
         useAuxclasspathFile = objects.property(Boolean)
     }
 
@@ -318,8 +329,10 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         omitVisitors.convention(extension.omitVisitors)
         // the default reportsDir is "$buildDir/reports/spotbugs/"
         reportsDir.convention(extension.reportsDir)
-        includeFilter.convention(extension.includeFilter)
-        excludeFilter.convention(extension.excludeFilter)
+
+        processFilterFile(extension.includeFilter, includeFilterFile, "includeFilter")
+        processFilterFile(extension.excludeFilter, excludeFilterFile, "excludeFilter")
+
         onlyAnalyze.convention(extension.onlyAnalyze)
         projectName.convention(extension.projectName.map({p -> String.format("%s (%s)", p, getName())}))
         release.convention(extension.release)
@@ -328,6 +341,8 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         maxHeapSize.convention(extension.maxHeapSize)
         useAuxclasspathFile.convention(extension.useAuxclasspathFile)
     }
+
+    
 
     @TaskAction
     void run() {
@@ -415,5 +430,29 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
             prunedName = task.getName()
         }
         return new StringBuilder().append(Character.toLowerCase(prunedName.charAt(0))).append(prunedName.substring(1)).toString()
+    }
+    
+    private processFilterFile(Property<Object> filterProperty,
+            RegularFileProperty filterFileProperty, String filterName) {
+        if (filterProperty.isPresent()) {
+            def filter = filterProperty.get()
+    
+            if (filter instanceof File) {
+                filterFileProperty.set(filter)
+            }
+            else if (filter instanceof URL) {
+                def tempFile = File.createTempFile("spotBugs-$filterName", ".xml")
+                tempFile.deleteOnExit()
+    
+                tempFile.withOutputStream { out ->
+                    out << filter.openStream()
+                }
+    
+                filterFileProperty.set(tempFile)
+            }
+            else {
+                throw new IllegalArgumentException("The '$filterName' property must be a File or URL.")
+            }
+        }
     }
 }

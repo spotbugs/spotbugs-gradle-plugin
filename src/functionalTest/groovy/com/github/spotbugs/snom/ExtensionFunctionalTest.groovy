@@ -13,6 +13,8 @@
  */
 package com.github.spotbugs.snom
 
+import java.nio.file.Paths
+
 import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
@@ -58,7 +60,7 @@ public class Foo {
 """
     }
 
-    def "can use includeFilter"() {
+    def "can use includeFilter with file"() {
         setup:
         File filter = new File(rootDir, "include.xml")
         buildFile << """
@@ -81,8 +83,37 @@ spotbugs {
         assertTrue(result.getOutput().contains("-include"))
         assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
     }
+    
+    def "can use includeFilter with URL"() {
+        setup:
+        File filter = new File(rootDir, "include.xml")
+        URL filterUrl = filter.toURI().toURL()
+        buildFile << """
+spotbugs {
+    includeFilter = new URL('$filterUrl')
+}"""
+        filter << """
+<FindBugsFilter></FindBugsFilter>
+"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
 
-    def "can use excludeFilter"() {
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        assertTrue(result.getOutput().contains("-include"))
+        
+        def filterPath = Paths.get(System.getProperty("java.io.tmpdir"), "spotBugs-includeFilter.xml").toString()
+        def partialFilterPath = filterPath.replace('.xml','')
+        
+        assertTrue(result.getOutput().contains(partialFilterPath))
+    }
+
+    def "can use excludeFilter with file"() {
         setup:
         File filter = new File(rootDir, "exclude.xml")
         buildFile << """
@@ -104,6 +135,35 @@ spotbugs {
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-exclude"))
         assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
+    }
+    
+    def "can use excludeFilter with URL"() {
+        setup:
+        File filter = new File(rootDir, "exclude.xml")
+        URL filterUrl = filter.toURI().toURL()
+        buildFile << """
+spotbugs {
+    excludeFilter = new URL('$filterUrl')
+}"""
+        filter << """
+<FindBugsFilter></FindBugsFilter>
+"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        assertTrue(result.getOutput().contains("-exclude"))
+        
+        def filterPath = Paths.get(System.getProperty("java.io.tmpdir"), "spotBugs-excludeFilter.xml").toString()
+        def partialFilterPath = filterPath.replace('.xml','')
+        
+        assertTrue(result.getOutput().contains(partialFilterPath))
     }
 
     def "can use visitors"() {
