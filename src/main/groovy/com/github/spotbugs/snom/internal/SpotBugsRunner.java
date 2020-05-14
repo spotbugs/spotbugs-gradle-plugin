@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,8 +51,15 @@ public abstract class SpotBugsRunner {
     args.add("-sortByClass");
     args.add("-timestampNow");
     if (!task.getAuxClassPaths().isEmpty()) {
-      args.add("-auxclasspath");
-      args.add(join(task.getAuxClassPaths().getFiles()));
+      if (task.getUseAuxclasspathFile().get()) {
+        args.add("-auxclasspathFromFile");
+        String auxClasspathFile = createFileForAuxClasspath(task);
+        log.debug("Using auxclasspath file: {}", auxClasspathFile);
+        args.add(auxClasspathFile);
+      } else {
+        args.add("-auxclasspath");
+        args.add(join(task.getAuxClassPaths().getFiles()));
+      }
     }
     if (!task.getSourceDirs().isEmpty()) {
       args.add("-sourcepath");
@@ -106,6 +115,27 @@ public abstract class SpotBugsRunner {
     args.addAll(task.getExtraArgs().getOrElse(Collections.emptyList()));
     log.debug("Arguments for SpotBugs are generated: {}", args);
     return args;
+  }
+
+  private String createFileForAuxClasspath(SpotBugsTask task) {
+    String auxClasspath =
+        task.getAuxClassPaths().getFiles().stream()
+            .map(File::getAbsolutePath)
+            .collect(Collectors.joining("\n"));
+    try {
+      Path auxClasspathFile =
+          Paths.get(
+              task.getProject().getBuildDir().getAbsolutePath(),
+              "spotbugs",
+              "spotbugs-auxclasspath");
+      Files.createDirectories(auxClasspathFile.getParent());
+      Files.createFile(auxClasspathFile);
+      Files.write(auxClasspathFile, auxClasspath.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+      return auxClasspathFile.normalize().toString();
+    } catch (Exception e) {
+      // oops
+      throw new GradleException("Could not create auxiliary classpath file for SpotBugsTask");
+    }
   }
 
   private File generateFile(FileCollection files) {

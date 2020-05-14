@@ -452,6 +452,48 @@ public class FooTest {
         !result.output.contains("Trying to add already registered factory")
     }
 
+    def "can apply plugin using useAuxclasspathFile flag"() {
+        given:
+        buildFile << """
+spotbugs {
+  useAuxclasspathFile = true
+}
+dependencies {
+  implementation 'com.google.guava:guava:19.0'
+}"""
+
+        File sourceDir = rootDir.toPath().resolve(Paths.get("src", "main", "java")).toFile()
+        sourceDir.mkdirs()
+        File sourceFile = new File(sourceDir, "MyFoo.java")
+        sourceFile << """
+public class MyFoo {
+    public static void main(String... args) {
+        java.util.Map items = com.google.common.collect.ImmutableMap.of("coin", 3, "glass", 4, "pencil", 1);
+                
+                        items.entrySet()
+                                .stream()
+                                .forEach(System.out::println);
+    }
+}
+"""
+
+
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments("spotbugsMain", '--debug')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.output.contains("Using auxclasspath file")
+        result.output.contains("/build/spotbugs/spotbugs-auxclasspath")
+    }
+
     @Unroll
     def 'shows report path when failures are found (Worker API? #isWorkerApi)'() {
         given:

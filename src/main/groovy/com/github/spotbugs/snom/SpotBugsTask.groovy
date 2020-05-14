@@ -229,6 +229,15 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @PathSensitive(PathSensitivity.RELATIVE)
     FileCollection auxClassPaths;
 
+    /**
+     * Property to enable auxclasspathFromFile and prevent Argument List Too Long issues in java processes.
+     * Default value is {@code false}.
+     */
+    @Input
+    @Optional
+    @NonNull
+    final Property<Boolean> useAuxclasspathFile
+
     private FileCollection classes;
 
     void setClasses(FileCollection fileCollection) {
@@ -291,6 +300,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         jvmArgs = objects.listProperty(String);
         extraArgs = objects.listProperty(String);
         maxHeapSize = objects.property(String);
+        useAuxclasspathFile = objects.property(Boolean)
     }
 
     /**
@@ -316,6 +326,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         jvmArgs.convention(extension.jvmArgs)
         extraArgs.convention(extension.extraArgs)
         maxHeapSize.convention(extension.maxHeapSize)
+        useAuxclasspathFile.convention(extension.useAuxclasspathFile)
     }
 
     @TaskAction
