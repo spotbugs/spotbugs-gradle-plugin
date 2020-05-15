@@ -89,7 +89,7 @@ class SpotBugsExtension {
      */
     @NonNull
     final DirectoryProperty reportsDir;
-    
+
     /**
      * Property to set the filter file to limit which bug should be reported.
      *
@@ -100,7 +100,7 @@ class SpotBugsExtension {
      */
     @NonNull
     final Property<Object> includeFilter;
-    
+
     /**
      * Property to set the filter file to limit which bug should be reported.
      *
@@ -111,7 +111,7 @@ class SpotBugsExtension {
      */
     @NonNull
     final Property<Object> excludeFilter;
-    
+
     /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */

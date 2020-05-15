@@ -139,7 +139,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Internal
     @NonNull
     final NamedDomainObjectContainer<SpotBugsReport> reports;
-    
+
     /**
      * Property to set the filter file to limit which bug should be reported.
      *
@@ -156,7 +156,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Internal
     @NonNull
     final RegularFileProperty includeFilterFile;
-    
+
     /**
      * Property to set the filter file to limit which bug should be reported.
      *
@@ -169,11 +169,11 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Input
     @NonNull
     final Property<Object> excludeFilter;
-    
+
     @Internal
     @NonNull
     final RegularFileProperty excludeFilterFile;
-    
+
     /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */

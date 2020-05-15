@@ -83,7 +83,7 @@ spotbugs {
         assertTrue(result.getOutput().contains("-include"))
         assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
     }
-    
+
     def "can use includeFilter with URL"() {
         setup:
         File filter = new File(rootDir, "include.xml")
@@ -136,7 +136,7 @@ spotbugs {
         assertTrue(result.getOutput().contains("-exclude"))
         assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
     }
-    
+
     def "can use excludeFilter with URL"() {
         setup:
         File filter = new File(rootDir, "exclude.xml")
