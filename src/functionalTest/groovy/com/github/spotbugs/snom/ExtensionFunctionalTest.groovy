@@ -106,10 +106,10 @@ spotbugs {
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-include"))
-        
+
         def filterPath = Paths.get(System.getProperty("java.io.tmpdir"), "spotBugs-includeFilter.xml").toString()
         def partialFilterPath = filterPath.replace('.xml','')
-        
+
         assertTrue(result.getOutput().contains(partialFilterPath))
     }
 
@@ -159,10 +159,10 @@ spotbugs {
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-exclude"))
-        
+
         def filterPath = Paths.get(System.getProperty("java.io.tmpdir"), "spotBugs-excludeFilter.xml").toString()
         def partialFilterPath = filterPath.replace('.xml','')
-        
+
         assertTrue(result.getOutput().contains(partialFilterPath))
     }
 

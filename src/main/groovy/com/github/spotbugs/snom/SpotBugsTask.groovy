@@ -342,8 +342,6 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         useAuxclasspathFile.convention(extension.useAuxclasspathFile)
     }
 
-    
-
     @TaskAction
     void run() {
         if (getProject().hasProperty(FEATURE_FLAG_WORKER_API)
@@ -431,23 +429,23 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         }
         return new StringBuilder().append(Character.toLowerCase(prunedName.charAt(0))).append(prunedName.substring(1)).toString()
     }
-    
+
     private processFilterFile(Property<Object> filterProperty,
             RegularFileProperty filterFileProperty, String filterName) {
         if (filterProperty.isPresent()) {
             def filter = filterProperty.get()
-    
+
             if (filter instanceof File) {
                 filterFileProperty.set(filter)
             }
             else if (filter instanceof URL) {
                 def tempFile = File.createTempFile("spotBugs-$filterName", ".xml")
                 tempFile.deleteOnExit()
-    
+
                 tempFile.withOutputStream { out ->
                     out << filter.openStream()
                 }
-    
+
                 filterFileProperty.set(tempFile)
             }
             else {
