@@ -123,4 +123,42 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.xml").toFile()
         !report.isFile()
     }
+
+    @Unroll
+    def 'shows suggestion to enable report when failures are found (Worker API? #isWorkerApi)'() {
+        given:
+        def badCode = new File(rootDir, 'src/main/java/Bar.java')
+        badCode << '''
+        |public class Bar {
+        |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
+        |}
+        |'''.stripMargin()
+        buildFile << """
+task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
+    dependsOn 'classes'
+    classDirs = sourceSets.main.output
+}
+"""
+        when:
+        def arguments = [':spotbugsMain']
+        if(!isWorkerApi) {
+            arguments.add('-Pcom.github.spotbugs.snom.worker=false')
+        }
+        def runner = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .withDebug(true)
+
+        def result = runner.buildAndFail()
+
+        then:
+        result.task(':spotbugsMain').outcome == TaskOutcome.FAILED
+        !result.output.contains('SpotBugs report can be found in null')
+
+        where:
+        isWorkerApi << [true, false]
+    }
 }
