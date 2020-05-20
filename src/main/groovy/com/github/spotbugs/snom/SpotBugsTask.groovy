@@ -35,6 +35,7 @@ import org.gradle.api.file.FileCollection;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.InputFiles;
@@ -82,6 +83,8 @@ import javax.inject.Inject
  *
  * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p>
  */
+
+@CacheableTask
 class SpotBugsTask extends DefaultTask implements VerificationTask {
     private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
@@ -174,8 +177,12 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     /**
      * Property to specify the name of project. Some reporting formats use this property.
      * Default value is {@code "${project.name} (${task.name})"}.
+     * <br>
+     * Note that this property, if treated as a task input, can break cacheability.<br>
+     * As such, it has been marked {@link Internal} to exclude it from task up-to-date and
+     * cacheability checks.
      */
-    @Input
+    @Internal
     @NonNull
     final Property<String> projectName;
     /**
