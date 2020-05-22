@@ -141,7 +141,7 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
 """
         when:
         def arguments = [':spotbugsMain']
-        if(!isWorkerApi) {
+        if (!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
         def runner = GradleRunner.create()
@@ -159,6 +159,7 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
         !result.output.contains('SpotBugs report can be found in null')
 
         where:
+        // Each SpotBugsRunner has code to handle report, so test both SpotBugsRunnerForWorker and SpotBugsRunnerForJavaExec
         isWorkerApi << [true, false]
     }
 }
