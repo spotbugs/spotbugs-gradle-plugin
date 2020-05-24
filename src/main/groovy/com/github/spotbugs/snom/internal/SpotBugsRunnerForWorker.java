@@ -18,6 +18,7 @@ import edu.umd.cs.findbugs.DetectorFactoryCollection;
 import edu.umd.cs.findbugs.FindBugs;
 import edu.umd.cs.findbugs.FindBugs2;
 import edu.umd.cs.findbugs.TextUICommandLine;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.List;
 import java.util.Objects;
@@ -94,14 +95,14 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
             throw new GradleException(
                 "Verification failed: SpotBugs error found: "
                     + findBugs2.getErrorCount()
-                    + ". SpotBugs report can be found in "
-                    + findReportPath());
+                    + ". "
+                    + buildMessageAboutReport());
           } else if (findBugs2.getBugCount() > 0) {
             throw new GradleException(
                 "Verification failed: SpotBugs violation found: "
                     + findBugs2.getBugCount()
-                    + ". SpotBugs report can be found in "
-                    + findReportPath());
+                    + ". "
+                    + buildMessageAboutReport());
           }
         }
       } catch (GradleException e) {
@@ -115,6 +116,16 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
       }
     }
 
+    private String buildMessageAboutReport() {
+      String reportPath = findReportPath();
+      if (reportPath != null) {
+        return "SpotBugs report can be found in " + reportPath;
+      } else {
+        return "";
+      }
+    }
+
+    @CheckForNull
     private String findReportPath() {
       List<String> arguments = getParameters().getArguments().get();
       int outputFileParameterIndex = arguments.indexOf("-outputFile");
