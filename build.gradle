@@ -47,8 +47,8 @@ groovydoc {
 }
 
 signing {
-    def signingKey = findProperty("secrets.SIGNING_KEY_ID")
-    def signingPassword = findProperty("secrets.SIGNING_PASSWORD")
+    def signingKey = findProperty("SIGNING_KEY")
+    def signingPassword = findProperty("SIGNING_PASSWORD")
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign configurations.archives
 }
