@@ -121,13 +121,13 @@ Before github workflow can sign the artifacts generated during build, we first n
 
 That means github needs the following secrets:
 ```
-secrets.SIGNING_KEY_ID = A85D790D
-secrets.SIGNING_PASSWORD = password
+SIGNING_KEY = "-----BEGIN PGP PRIVATE KEY BLOCK-----..."
+SIGNING_PASSWORD = password
 ```
-where `secrets.SIGNING_KEY_ID` is the last 8 characters of your generated ID
+where `secrets.SIGNING_KEY` is the in-memory ascii-armored keys (you get this by running `gpg --armor --export-secret-keys <EMAIL>`)
 and `secrets.SIGNING_PASSWORD` is the password you used when generating the key.
 
-Gradle is configured to use these to generate the private key in memory so as to minimize our
+Gradle is configured to use these to generate the private key in memory so as to minimize our risk of the keys being found and used by someone else.
 
 ## Copyright
 
