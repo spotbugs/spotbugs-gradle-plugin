@@ -115,7 +115,7 @@ dependencies {
 ```
 
 ## Development
-Since version 4.3, when we publish artifacts we now sign them. 
+Since version 4.3, when we publish artifacts we now sign them. This is designed so that the build will still pass if you don't have the signing keys available, this way pull requests and forked repos will still work as before.
 
 Before github workflow can sign the artifacts generated during build, we first need to generate pgp keys (you will have to do this again when the key expires. once a year is a good timeframe) and upload them to the servers. See https://www.gnupg.org/faq/gnupg-faq.html#starting_out for more details.
 
