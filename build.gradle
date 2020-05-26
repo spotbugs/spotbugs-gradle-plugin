@@ -44,10 +44,8 @@ groovydoc {
     link 'https://docs.groovy-lang.org/latest/html/gapi/', 'groovy.', 'org.codehaus.groovy.'
 }
 
-//def signingKey = System.getenv("SIGNING_KEY")
-def signingKey = ""
-//def signingPassword = System.getenv("SIGNING_PASSWORD")
-def signingPassword = ""
+def signingKey = System.getenv("SIGNING_KEY")
+def signingPassword = System.getenv("SIGNING_PASSWORD")
 
 signing {
     if(signingKey != null &&
