@@ -116,11 +116,11 @@ dependencies {
 
 ## Development
 ### Setup
-* development requires java 11 to be installed
-* development assumes you are running on Ubuntu, while you may be able to use other operating systems they are not supported for developement.
+* development requires java 11 or higher to be installed
+* The CI server uses `ubuntu-latest` docker image, but you should be able to develop on any linux/unix based OS.
 * before creating commits
   * read https://www.conventionalcommits.org/en
-  * create the following script in your .git/hooks directory and name it commit.msg
+  * Optionally create the following script in your .git/hooks directory and name it commit.msg. This will ensure that your commits follow the covential commits pattern.
 ```python
   #!/usr/bin/env python
 import re, sys, os
