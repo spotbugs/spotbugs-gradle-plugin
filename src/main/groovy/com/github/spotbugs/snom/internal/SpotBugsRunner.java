@@ -128,13 +128,22 @@ public abstract class SpotBugsRunner {
               task.getProject().getBuildDir().getAbsolutePath(),
               "spotbugs",
               "spotbugs-auxclasspath-for-" + task.getName());
-      Files.createDirectories(auxClasspathFile.getParent());
-      Files.createFile(auxClasspathFile);
-      Files.write(auxClasspathFile, auxClasspath.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
-      return auxClasspathFile.normalize().toString();
+      try {
+        Files.createDirectories(auxClasspathFile.getParent());
+        if (Files.exists(auxClasspathFile)) {
+          Files.delete(auxClasspathFile);
+        }
+        Files.createFile(auxClasspathFile);
+        Files.write(auxClasspathFile, auxClasspath.getBytes(), StandardOpenOption.WRITE);
+        return auxClasspathFile.normalize().toString();
+      } catch (Exception e) {
+        throw new GradleException(
+            "Could not create auxiliary classpath file for SpotBugsTask at "
+                + auxClasspathFile.normalize().toString(),
+            e);
+      }
     } catch (Exception e) {
-      // oops
-      throw new GradleException("Could not create auxiliary classpath file for SpotBugsTask");
+      throw new GradleException("Could not create auxiliary classpath file for SpotBugsTask", e);
     }
   }
 
