@@ -2,6 +2,7 @@ plugins {
     id 'groovy'
     id 'java-gradle-plugin'
     id 'jacoco'
+    id 'signing'
     id 'com.gradle.plugin-publish' version '0.11.0'
     id 'com.diffplug.gradle.spotless' version '4.0.0'
     id 'net.ltgt.errorprone' version '1.1.1'
@@ -42,6 +43,24 @@ groovydoc {
     link 'https://docs.oracle.com/en/java/javase/11/docs/api/', 'java.'
     link 'https://docs.groovy-lang.org/latest/html/gapi/', 'groovy.', 'org.codehaus.groovy.'
 }
+
+def signingKey = System.getenv("SIGNING_KEY")
+def signingPassword = System.getenv("SIGNING_PASSWORD")
+
+signing {
+    if(signingKey != null &&
+    signingPassword != null &&
+    !signingKey.isEmpty() &&
+    !signingPassword.isEmpty()){
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign configurations.archives
+    }
+    else{
+        logger.warn('The signing key and password are null. This can be ignored if this is a pull request.')
+    }
+}
+
+
 
 task processVersionFile(type: WriteProperties) {
     outputFile file('src/main/resources/spotbugs-gradle-plugin.properties')

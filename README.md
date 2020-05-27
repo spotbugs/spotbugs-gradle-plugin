@@ -114,6 +114,21 @@ dependencies {
 }
 ```
 
+## Development
+Since version 4.3, when we publish artifacts we now sign them. This is designed so that the build will still pass if you don't have the signing keys available, this way pull requests and forked repos will still work as before.
+
+Before github workflow can sign the artifacts generated during build, we first need to generate pgp keys (you will have to do this again when the key expires. once a year is a good timeframe) and upload them to the servers. See https://www.gnupg.org/faq/gnupg-faq.html#starting_out for more details.
+
+That means github needs the following secrets:
+```
+SIGNING_KEY = "-----BEGIN PGP PRIVATE KEY BLOCK-----..."
+SIGNING_PASSWORD = password
+```
+where `secrets.SIGNING_KEY` is the in-memory ascii-armored keys (you get this by running `gpg --armor --export-secret-keys <EMAIL>`)
+and `secrets.SIGNING_PASSWORD` is the password you used when generating the key.
+
+Gradle is configured to use these to generate the private key in memory so as to minimize our risk of the keys being found and used by someone else.
+
 ## Copyright
 
 Copyright &copy; 2019-present SpotBugs Team
