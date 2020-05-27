@@ -491,7 +491,7 @@ public class MyFoo {
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
         result.output.contains("Using auxclasspath file")
-        result.output.contains("/build/spotbugs/spotbugs-auxclasspath-for-spotbugsMain")
+        result.output.contains("/build/spotbugs/auxclasspath/spotbugsMain")
     }
 
     def "can apply plugin using useAuxclasspathFile flag in parallel"() {
@@ -551,8 +551,8 @@ public class SimpleTest {
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
         result.output.contains("Using auxclasspath file")
-        result.output.contains("/build/spotbugs/spotbugs-auxclasspath-for-spotbugsMain")
-        result.output.contains("/build/spotbugs/spotbugs-auxclasspath-for-spotbugsTest")
+        result.output.contains("/build/spotbugs/auxclasspath/spotbugsMain")
+        result.output.contains("/build/spotbugs/auxclasspath/spotbugsTest")
     }
 
     @Unroll

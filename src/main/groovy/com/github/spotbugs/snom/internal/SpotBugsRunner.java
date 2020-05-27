@@ -127,7 +127,8 @@ public abstract class SpotBugsRunner {
           Paths.get(
               task.getProject().getBuildDir().getAbsolutePath(),
               "spotbugs",
-              "spotbugs-auxclasspath-for-" + task.getName());
+              "auxclasspath",
+              task.getName());
       try {
         Files.createDirectories(auxClasspathFile.getParent());
         if (Files.exists(auxClasspathFile)) {
