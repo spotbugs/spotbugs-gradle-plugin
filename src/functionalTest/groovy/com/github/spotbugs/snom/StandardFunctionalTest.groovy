@@ -477,7 +477,6 @@ public class MyFoo {
 }
 """
 
-
         when:
         BuildResult result =
                 GradleRunner.create()
@@ -492,6 +491,19 @@ public class MyFoo {
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
         result.output.contains("Using auxclasspath file")
         result.output.contains("/build/spotbugs/auxclasspath/spotbugsMain")
+
+        when:
+        BuildResult repeatedResult =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments("spotbugsMain", '--rerun-tasks', '-s')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        repeatedResult.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
     }
 
     def "can apply plugin using useAuxclasspathFile flag in parallel"() {

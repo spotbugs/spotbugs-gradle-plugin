@@ -131,11 +131,11 @@ public abstract class SpotBugsRunner {
               task.getName());
       try {
         Files.createDirectories(auxClasspathFile.getParent());
-        if (Files.exists(auxClasspathFile)) {
-          Files.delete(auxClasspathFile);
+        if (!Files.exists(auxClasspathFile)) {
+          Files.createFile(auxClasspathFile);
         }
-        Files.createFile(auxClasspathFile);
-        Files.write(auxClasspathFile, auxClasspath.getBytes(), StandardOpenOption.WRITE);
+        Files.write(
+            auxClasspathFile, auxClasspath.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
         return auxClasspathFile.normalize().toString();
       } catch (Exception e) {
         throw new GradleException(
