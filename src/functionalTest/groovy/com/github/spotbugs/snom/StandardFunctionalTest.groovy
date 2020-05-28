@@ -477,7 +477,6 @@ public class MyFoo {
 }
 """
 
-
         when:
         BuildResult result =
                 GradleRunner.create()
@@ -491,7 +490,81 @@ public class MyFoo {
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
         result.output.contains("Using auxclasspath file")
-        result.output.contains("/build/spotbugs/spotbugs-auxclasspath")
+        result.output.contains("/build/spotbugs/auxclasspath/spotbugsMain")
+
+        when:
+        BuildResult repeatedResult =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments("spotbugsMain", '--rerun-tasks', '-s')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        repeatedResult.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+    }
+
+    def "can apply plugin using useAuxclasspathFile flag in parallel"() {
+        given:
+        buildFile << """
+spotbugs {
+  useAuxclasspathFile = true
+}
+dependencies {
+  implementation 'com.google.guava:guava:19.0'
+  testImplementation 'junit:junit:4.12'
+}"""
+
+        File sourceDir = rootDir.toPath().resolve(Paths.get("src", "main", "java")).toFile()
+        sourceDir.mkdirs()
+        File sourceFile = new File(sourceDir, "MyFoo.java")
+        sourceFile << """
+public class MyFoo {
+    public static void main(String... args) {
+        java.util.Map items = com.google.common.collect.ImmutableMap.of("coin", 3, "glass", 4, "pencil", 1);
+                
+                        items.entrySet()
+                                .stream()
+                                .forEach(System.out::println);
+    }
+}
+"""
+
+        File testSourceDir = rootDir.toPath().resolve(Paths.get("src", "test", "java")).toFile()
+        testSourceDir.mkdirs()
+        File testSourceFile = new File(testSourceDir, "SimpleTest.java")
+        testSourceFile << """
+import org.junit.*;
+import static org.junit.Assert.*;
+ 
+import java.util.*;
+ 
+public class SimpleTest {
+    @Test
+    public void testEmptyCollection() {
+        Collection collection = new ArrayList();
+        assertTrue(collection.isEmpty());
+    }
+}
+"""
+
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments("spotbugsMain", "spotbugsTest", '--parallel', '--debug')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.output.contains("Using auxclasspath file")
+        result.output.contains("/build/spotbugs/auxclasspath/spotbugsMain")
+        result.output.contains("/build/spotbugs/auxclasspath/spotbugsTest")
     }
 
     @Unroll
