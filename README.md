@@ -33,6 +33,7 @@ Configure `spotbugs` extension to configure the behaviour of tasks:
 ```groovy
 spotbugs {
     ignoreFailures = false
+    showStackTraces = true
     showProgress = true
     effort = 'default'
     reportLevel = 'default'
