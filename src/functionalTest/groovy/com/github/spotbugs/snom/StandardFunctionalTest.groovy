@@ -490,7 +490,8 @@ public class MyFoo {
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
         result.output.contains("Using auxclasspath file")
-        result.output.contains("/build/spotbugs/auxclasspath/spotbugsMain")
+        def expectedOutput = File.separator + "build" + File.separator + "spotbugs" + File.separator + "auxclasspath" + File.separator + "spotbugsMain"
+        result.output.contains(expectedOutput)
 
         when:
         BuildResult repeatedResult =
@@ -563,8 +564,10 @@ public class SimpleTest {
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
         result.output.contains("Using auxclasspath file")
-        result.output.contains("/build/spotbugs/auxclasspath/spotbugsMain")
-        result.output.contains("/build/spotbugs/auxclasspath/spotbugsTest")
+        def expectedOutputMain = File.separator + "build" + File.separator + "spotbugs" + File.separator + "auxclasspath" + File.separator + "spotbugsMain"
+        result.output.contains(expectedOutputMain)
+        def expectedOutputTest = File.separator + "build" + File.separator + "spotbugs" + File.separator + "auxclasspath" + File.separator + "spotbugsTest"
+        result.output.contains(expectedOutputTest)
     }
 
     @Unroll
@@ -595,7 +598,8 @@ public class SimpleTest {
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.FAILED
         result.output.contains('SpotBugs report can be found in')
-        result.output.contains('build/reports/spotbugs/main.xml')
+        def expectedOutput = File.separator + "build" + File.separator + "reports" + File.separator + "spotbugs" + File.separator + "main.xml"
+        result.output.contains(expectedOutput)
 
         where:
         isWorkerApi << [true, false]
