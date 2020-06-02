@@ -22,6 +22,7 @@ import spock.lang.Requires
 import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static org.junit.Assume.assumeTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 class AndroidFunctionalTest extends Specification {
@@ -127,6 +128,82 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.3'
+"""
+        runner.pluginClasspath.forEach({ file ->
+            buildFile << """
+        classpath files('${file.absolutePath}')
+"""
+        })
+        buildFile << """
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.github.spotbugs'
+
+repositories {
+    google()
+    jcenter()
+}
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+"""
+
+        File sourceDir = new File(rootDir, "src/main/java")
+        sourceDir.mkdirs()
+        File sourceFile = new File(sourceDir, "Foo.java")
+        sourceFile << """
+public class Foo {
+    public static void main(String... args) {
+        System.out.println("Hello, SpotBugs!");
+    }
+}
+"""
+        File manifestFile = new File(rootDir, "src/main/AndroidManifest.xml")
+        manifestFile << """
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="test.spotbugs" />
+"""
+
+        when: "the spotbugsRelease task is executed"
+        BuildResult result = runner
+                .withArguments(":spotbugsRelease", '-s')
+                .withGradleVersion(version)
+                .build()
+
+        then: "gradle runs spotbugsRelease successfully"
+        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
+    }
+
+    @Requires({env['ANDROID_SDK_ROOT']})
+    def "can generate spotbugsRelease depending on variant compilation task with AGP 4.0.0"() {
+        assumeTrue("AGP 4.0.0 is only supported by Gradle 6.1.1 and up",
+                GradleVersion.version(version) >= GradleVersion.version("6.1.1"))
+
+        given: "a Gradle project to build an Android app"
+        GradleRunner runner =
+                GradleRunner.create()
+                        .withProjectDir(rootDir)
+                        .withPluginClasspath()
+                        .forwardOutput()
+                        .withGradleVersion(version)
+
+        buildFile << """
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.0'
 """
         runner.pluginClasspath.forEach({ file ->
             buildFile << """
