@@ -23,6 +23,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.umd.cs.findbugs.annotations.OverrideMustInvoke
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.model.ReplacedBy
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SkipWhenEmpty
 
@@ -235,6 +236,27 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
     FileCollection auxClassPaths;
+
+    /**
+     * Backwards-compatibility for the v3 task and prior.
+     *
+     * @return value of {@link #getAuxClassPaths()}
+     * @deprecated use {@link #getAuxClassPaths()} instead
+     */
+    @ReplacedBy('auxClassPaths')
+    FileCollection getClasspath() {
+        return auxClassPaths
+    }
+
+    /**
+     * Backwards-compatibility for the v3 task and prior.
+     *
+     * @param classpath sets value of {@link #setAuxClassPaths(org.gradle.api.file.FileCollection)}
+     * @deprecated use {@link #setAuxClassPaths(org.gradle.api.file.FileCollection)} instead
+     */
+    void setClasspath(FileCollection classpath) {
+        this.auxClassPaths = classpath
+    }
 
     /**
      * Property to enable auxclasspathFromFile and prevent Argument List Too Long issues in java processes.
