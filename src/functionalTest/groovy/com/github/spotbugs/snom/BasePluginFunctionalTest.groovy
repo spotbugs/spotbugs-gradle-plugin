@@ -124,6 +124,36 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
         !report.isFile()
     }
 
+    def "can create spotbugsMain task manually with HTML report"() {
+        setup:
+        buildFile << """
+task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
+    dependsOn 'classes'
+    classDirs = sourceSets.main.output
+    reports {
+      html {
+        enabled = true
+      }
+    }
+}
+"""
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(":spotbugsMain")
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":classes").outcome == TaskOutcome.SUCCESS
+        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        !rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.xml").toFile().isFile()
+        rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.html").toFile().isFile()
+    }
+
     @Unroll
     def 'shows suggestion to enable report when failures are found (Worker API? #isWorkerApi)'() {
         given:
