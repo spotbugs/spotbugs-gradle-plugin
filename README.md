@@ -122,7 +122,7 @@ dependencies {
   * read https://www.conventionalcommits.org/en
   * Optionally create the following script in your .git/hooks directory and name it commit.msg. This will ensure that your commits follow the covential commits pattern.
 ```python
-  #!/usr/bin/env python
+#!/usr/bin/env python
 import re, sys, os
 
 #turn off the traceback as it doesn't help readability
