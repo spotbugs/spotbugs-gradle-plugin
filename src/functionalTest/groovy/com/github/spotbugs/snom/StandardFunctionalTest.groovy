@@ -258,7 +258,7 @@ spotbugs {
     }
 
     @Unroll
-    def 'build does not show stack traces when bugs are found with `showStacktraces = true` (Worker API? #isWorkerApi)'() {
+    def 'build does not show stack traces when bugs are found with `showStacktraces = false` (Worker API? #isWorkerApi)'() {
         given:
         def badCode = new File(rootDir, 'src/main/java/Bar.java')
         badCode << '''
