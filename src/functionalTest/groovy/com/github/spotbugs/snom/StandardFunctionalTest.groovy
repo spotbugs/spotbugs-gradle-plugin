@@ -289,6 +289,7 @@ spotbugs {
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
         !(result.output.contains('\tat '))
+        result.output.contains('SpotBugs report can be found in')
 
         where:
         isWorkerApi << [true, false]
