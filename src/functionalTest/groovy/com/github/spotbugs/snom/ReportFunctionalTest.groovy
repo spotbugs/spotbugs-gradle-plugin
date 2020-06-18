@@ -115,7 +115,7 @@ buildDir = 'new-build-dir'
         File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main.txt").toFile()
         assertTrue(report.isFile())
     }
-    
+
     def "prints reports location when stacktrace is suppressed"() {
         buildFile << """
 spotbugsMain {
@@ -133,7 +133,7 @@ buildDir = 'new-build-dir'
         |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
         |}
         |'''.stripMargin()
-        
+
         when:
         def result = GradleRunner.create()
                 .withProjectDir(rootDir)
