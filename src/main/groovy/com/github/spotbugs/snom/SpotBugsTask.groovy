@@ -65,6 +65,7 @@ import javax.inject.Inject
  * &nbsp;&nbsp;&nbsp;&nbsp;auxClassPaths = sourceSets.main.compileClasspath<br>
  * <br>
  * &nbsp;&nbsp;&nbsp;&nbsp;ignoreFailures = false<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;showStackTraces = true<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;showProgress = false<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;reportLevel = 'default'<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;effort = 'default'<br>
@@ -92,6 +93,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     private final WorkerExecutor workerExecutor;
 
     @NonNull final Property<Boolean> ignoreFailures;
+    @NonNull final Property<Boolean> showStackTraces;
     /**
      * Property to enable progress reporting during the analysis. Default value is {@code false}.
      */
@@ -279,6 +281,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         sourceDirs = objects.fileCollection()
         auxClassPaths = objects.fileCollection()
         ignoreFailures = objects.property(Boolean)
+        showStackTraces = objects.property(Boolean)
         showProgress = objects.property(Boolean);
         reportLevel = objects.property(Confidence);
         effort = objects.property(Effort);
@@ -318,6 +321,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
      */
     void init(SpotBugsExtension extension) {
         ignoreFailures.convention(extension.ignoreFailures)
+        showStackTraces.convention(extension.showStackTraces)
         showProgress.convention(extension.showProgress)
         reportLevel.convention(extension.reportLevel)
         effort.convention(extension.effort)
@@ -410,9 +414,22 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         ignoreFailures.set(b);
     }
 
+    void setShowStackTraces(Provider<Boolean> b) {
+        showStackTraces.set(b);
+    }
+
+    void setShowStackTraces(boolean b) {
+        showStackTraces.set(b)
+    }
+
     @Input
     boolean getIgnoreFailures() {
         ignoreFailures.get();
+    }
+
+    @Input
+    boolean getShowStackTraces() {
+        showStackTraces.get();
     }
 
     @Internal

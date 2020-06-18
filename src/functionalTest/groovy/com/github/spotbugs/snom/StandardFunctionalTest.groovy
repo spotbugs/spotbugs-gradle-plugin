@@ -251,6 +251,44 @@ spotbugs {
 
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+        result.output.contains('\tat ')
+
+        where:
+        isWorkerApi << [true, false]
+    }
+
+    @Unroll
+    def 'build does not show stack traces when bugs are found with `showStacktraces = false` (Worker API? #isWorkerApi)'() {
+        given:
+        def badCode = new File(rootDir, 'src/main/java/Bar.java')
+        badCode << '''
+        |public class Bar {
+        |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
+        |}
+        |'''.stripMargin()
+
+        buildFile << """
+spotbugs {
+    ignoreFailures = true
+    showStackTraces = false
+}"""
+        when:
+        def arguments = [':spotbugsMain', '-is']
+        if(!isWorkerApi) {
+            arguments.add('-Pcom.github.spotbugs.snom.worker=false')
+        }
+        def runner = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+
+        def result = runner. build()
+
+        then:
+        result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+        !(result.output.contains('\tat '))
 
         where:
         isWorkerApi << [true, false]

@@ -67,6 +67,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
     return params -> {
       params.getArguments().addAll(buildArguments(task));
       params.getIgnoreFailures().set(task.getIgnoreFailures());
+      params.getShowStackTraces().set(task.getShowStackTraces());
     };
   }
 
@@ -74,6 +75,8 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
     ListProperty<String> getArguments();
 
     Property<Boolean> getIgnoreFailures();
+
+    Property<Boolean> getShowStackTraces();
   }
 
   public abstract static class SpotBugsExecutor implements WorkAction<SpotBugsWorkParameters> {
@@ -107,7 +110,9 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
         }
       } catch (GradleException e) {
         if (params.getIgnoreFailures().getOrElse(Boolean.FALSE).booleanValue()) {
-          log.warn("SpotBugs reported failures", e);
+          final boolean showStackTraces =
+              params.getShowStackTraces().getOrElse(Boolean.TRUE).booleanValue();
+          log.warn("SpotBugs reported failures", showStackTraces ? e : null);
         } else {
           throw e;
         }
