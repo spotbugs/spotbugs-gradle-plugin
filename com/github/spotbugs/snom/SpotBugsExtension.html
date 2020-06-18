@@ -106,6 +106,7 @@ if (location.href.indexOf('is-external=true') == -1) {
  <p>After you apply the SpotBugs Gradle plugin to project, write extension like below:<div><code>
  spotbugs {<br>
  &nbsp;&nbsp;&nbsp;&nbsp;ignoreFailures = false<br>
+ &nbsp;&nbsp;&nbsp;&nbsp;showStackTraces = true<br>
  &nbsp;&nbsp;&nbsp;&nbsp;showProgress = false<br>
  &nbsp;&nbsp;&nbsp;&nbsp;reportLevel = 'default'<br>
  &nbsp;&nbsp;&nbsp;&nbsp;effort = 'default'<br>
@@ -230,16 +231,21 @@ if (location.href.indexOf('is-external=true') == -1) {
                         </tr>
                         
                         <tr class="rowColor">
+                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colLast"><code><a href="#showStackTraces">showStackTraces</a></code><br></td>
+                        </tr>
+                        
+                        <tr class="altColor">
                             <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#toolVersion">toolVersion</a></code><br></td>
                         </tr>
                         
-                        <tr class="altColor">
+                        <tr class="rowColor">
                             <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#useAuxclasspathFile">useAuxclasspathFile</a></code><br></td>
                         </tr>
                         
-                        <tr class="rowColor">
+                        <tr class="altColor">
                             <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#visitors">visitors</a></code><br>Property to enable visitors (detectors) for analysis. </td>
                         </tr>
@@ -504,6 +510,15 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
 final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>showProgress</strong></h4>
                                 <p> Property to enable progress reporting during the analysis. Default value is <CODE>false</CODE>.
      </p>
+                            </li>
+                        </ul>
+                    
+                        <a name="showStackTraces"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>@edu.umd.cs.findbugs.annotations.NonNull
+final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>showStackTraces</strong></h4>
+                                <p></p>
                             </li>
                         </ul>
                     
