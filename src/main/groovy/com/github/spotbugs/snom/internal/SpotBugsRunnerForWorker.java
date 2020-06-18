@@ -112,7 +112,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
         if (params.getIgnoreFailures().getOrElse(Boolean.FALSE).booleanValue()) {
           final boolean showStackTraces =
               params.getShowStackTraces().getOrElse(Boolean.TRUE).booleanValue();
-          log.warn("SpotBugs reported failures", showStackTraces ? e : null);
+          log.warn("SpotBugs reported failures", showStackTraces ? e : e.getMessage());
         } else {
           throw e;
         }
