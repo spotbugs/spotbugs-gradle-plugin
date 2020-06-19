@@ -116,9 +116,40 @@ buildDir = 'new-build-dir'
         assertTrue(report.isFile())
     }
 
+    def "prints reports location when stacktrace is suppressed"() {
+        buildFile << """
+spotbugsMain {
+    showStackTraces = false
+    reports {
+        text.enabled = true
+    }
+}
+buildDir = 'new-build-dir'
+"""
+        given:
+        def badCode = new File(rootDir, 'src/main/java/Bar.java')
+        badCode << '''
+        |public class Bar {
+        |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
+        |}
+        |'''.stripMargin()
+
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .buildAndFail()
+
+        then:
+        //issue 284 - information on where the report should still be printed even if suppressing stack traces.
+        result.output.contains('SpotBugs report can be found in')
+    }
+
     def "can generate spotbugs.html in configured buildDir"() {
         buildFile << """
 spotbugsMain {
+    showStackTraces = false
     reports {
         html.enabled = true
     }
