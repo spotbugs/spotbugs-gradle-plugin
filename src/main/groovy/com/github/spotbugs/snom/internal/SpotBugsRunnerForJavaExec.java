@@ -16,6 +16,8 @@ package com.github.spotbugs.snom.internal;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,10 +43,12 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
         String errorMessage = "Verification failed: SpotBugs execution thrown exception.";
         List<String> reportPaths =
             task.getReportsDir().getAsFileTree().getFiles().stream()
-                .map(File::getAbsolutePath)
+                .map(File::toPath)
+                .map(Path::toUri)
+                .map(URI::toString)
                 .collect(Collectors.toList());
         if (!reportPaths.isEmpty()) {
-          errorMessage += "SpotBugs report can be found in " + String.join(",", reportPaths);
+          errorMessage += "See the report at: " + String.join(",", reportPaths);
         }
         throw new GradleException(errorMessage, e);
       }

@@ -20,6 +20,7 @@ import edu.umd.cs.findbugs.FindBugs2;
 import edu.umd.cs.findbugs.TextUICommandLine;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import org.gradle.api.Action;
@@ -96,15 +97,13 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
           findBugs2.execute();
           if (findBugs2.getErrorCount() > 0) {
             throw new GradleException(
-                "Verification failed: SpotBugs error found: "
-                    + findBugs2.getErrorCount()
-                    + ". "
+                findBugs2.getErrorCount()
+                    + " SpotBugs errors were found. "
                     + buildMessageAboutReport());
           } else if (findBugs2.getBugCount() > 0) {
             throw new GradleException(
-                "Verification failed: SpotBugs violation found: "
-                    + findBugs2.getBugCount()
-                    + ". "
+                findBugs2.getBugCount()
+                    + " SpotBugs violations were found. "
                     + buildMessageAboutReport());
           }
         }
@@ -112,7 +111,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
         if (params.getIgnoreFailures().getOrElse(Boolean.FALSE).booleanValue()) {
           final boolean showStackTraces =
               params.getShowStackTraces().getOrElse(Boolean.TRUE).booleanValue();
-          log.warn("SpotBugs reported failures", showStackTraces ? e : e.getMessage());
+          log.warn(e.getMessage(), showStackTraces ? e : null);
         } else {
           throw e;
         }
@@ -124,7 +123,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
     private String buildMessageAboutReport() {
       String reportPath = findReportPath();
       if (reportPath != null) {
-        return "SpotBugs report can be found in " + reportPath;
+        return "See the report at: " + Paths.get(reportPath).toUri();
       } else {
         return "";
       }
