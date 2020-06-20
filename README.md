@@ -140,7 +140,7 @@ def main():
 if __name__ == "__main__":
     main()
   ```
-* when running gradle, do so using the `.gradlew` script in this directory
+* when running gradle, do so using the `gradlew` script in this directory
 
 ### Signing Artifacts
 Since version 4.3, when we publish artifacts we now sign them. This is designed so that the build will still pass if you don't have the signing keys available, this way pull requests and forked repos will still work as before.
