@@ -95,37 +95,39 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
           TextUICommandLine commandLine = new TextUICommandLine();
           FindBugs.processCommandLine(commandLine, args, findBugs2);
           findBugs2.execute();
+
+          StringBuilder message = new StringBuilder();
           if (findBugs2.getErrorCount() > 0) {
-            throw new GradleException(
-                findBugs2.getErrorCount()
-                    + " SpotBugs errors were found. "
-                    + buildMessageAboutReport());
-          } else if (findBugs2.getBugCount() > 0) {
-            throw new GradleException(
-                findBugs2.getBugCount()
-                    + " SpotBugs violations were found. "
-                    + buildMessageAboutReport());
+            message.append(findBugs2.getErrorCount()).append(" SpotBugs errors were found.");
+          }
+          if (findBugs2.getBugCount() > 0) {
+            if (message.length() > 0) {
+              message.append(' ');
+            }
+            message.append(findBugs2.getBugCount()).append(" SpotBugs violations were found.");
+          }
+          if (message.length() > 0) {
+            String reportPath = findReportPath();
+            if (reportPath != null) {
+              message.append(" See the report at: ").append(Paths.get(reportPath).toUri());
+            }
+
+            GradleException e = new GradleException(message.toString());
+
+            if (params.getIgnoreFailures().getOrElse(Boolean.FALSE).booleanValue()) {
+              log.warn(message.toString());
+              if (params.getShowStackTraces().getOrElse(Boolean.TRUE).booleanValue()) {
+                log.warn("", e);
+              }
+            } else {
+              throw e;
+            }
           }
         }
       } catch (GradleException e) {
-        if (params.getIgnoreFailures().getOrElse(Boolean.FALSE).booleanValue()) {
-          final boolean showStackTraces =
-              params.getShowStackTraces().getOrElse(Boolean.TRUE).booleanValue();
-          log.warn(e.getMessage(), showStackTraces ? e : null);
-        } else {
-          throw e;
-        }
+        throw e;
       } catch (Exception e) {
         throw new GradleException("Verification failed: SpotBugs execution thrown exception", e);
-      }
-    }
-
-    private String buildMessageAboutReport() {
-      String reportPath = findReportPath();
-      if (reportPath != null) {
-        return "See the report at: " + Paths.get(reportPath).toUri();
-      } else {
-        return "";
       }
     }
 
