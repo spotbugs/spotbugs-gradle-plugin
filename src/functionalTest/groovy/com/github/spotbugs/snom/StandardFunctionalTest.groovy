@@ -635,7 +635,7 @@ public class SimpleTest {
 
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.FAILED
-        result.output.contains('SpotBugs report can be found in')
+        result.output.contains('See the report at')
         def expectedOutput = File.separator + "build" + File.separator + "reports" + File.separator + "spotbugs" + File.separator + "main.xml"
         result.output.contains(expectedOutput)
 

@@ -143,7 +143,7 @@ buildDir = 'new-build-dir'
 
         then:
         //issue 284 - information on where the report should still be printed even if suppressing stack traces.
-        result.output.contains('SpotBugs report can be found in')
+        result.output.contains('See the report at')
     }
 
     def "can generate spotbugs.html in configured buildDir"() {
