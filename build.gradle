@@ -4,7 +4,7 @@ plugins {
     id 'jacoco'
     id 'signing'
     id 'com.gradle.plugin-publish' version '0.11.0'
-    id 'com.diffplug.gradle.spotless' version '4.0.0'
+    id 'com.diffplug.gradle.spotless' version '4.5.1'
     id 'net.ltgt.errorprone' version '1.2.1'
     id 'se.patrikerdes.use-latest-versions' version '0.2.13'
     id 'com.github.ben-manes.versions' version '0.28.0'
