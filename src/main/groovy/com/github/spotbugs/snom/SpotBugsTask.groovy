@@ -36,6 +36,7 @@ import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.InputFiles;
@@ -235,7 +236,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
      * Default value is the compile-scope dependencies of the target sourceSet.
      */
     @InputFiles
-    @PathSensitive(PathSensitivity.RELATIVE)
+    @Classpath
     FileCollection auxClassPaths;
 
     /**
