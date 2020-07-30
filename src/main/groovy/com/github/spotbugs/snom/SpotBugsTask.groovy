@@ -15,12 +15,12 @@ package com.github.spotbugs.snom;
 
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
-import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
+import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker
+import com.github.spotbugs.snom.internal.SpotBugsSarifReport;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
 import edu.umd.cs.findbugs.annotations.NonNull
 import edu.umd.cs.findbugs.annotations.Nullable;
-import edu.umd.cs.findbugs.annotations.OverrideMustInvoke
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Provider;
@@ -299,6 +299,8 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
                             return objects.newInstance(SpotBugsXmlReport.class, objects, this)
                         case "text":
                             return objects.newInstance(SpotBugsTextReport.class, objects, this)
+                        case "sarif":
+                            return objects.newInstance(SpotBugsSarifReport.class, objects, this)
                         default:
                             throw new InvalidUserDataException(name + " is invalid as the report name");
                     }
