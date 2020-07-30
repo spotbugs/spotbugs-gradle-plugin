@@ -102,6 +102,7 @@ You can change SpotBugs version by [the `toolVersion` property of the spotbugs e
 
 |Gradle Plugin|SpotBugs|
 |-----:|-----:|
+| 4.5.0| 4.1.0|
 | 4.4.4| 4.0.6|
 | 4.4.2| 4.0.5|
 | 4.0.7| 4.0.2|
