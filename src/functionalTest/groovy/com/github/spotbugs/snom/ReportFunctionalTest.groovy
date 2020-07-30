@@ -447,4 +447,25 @@ reporting {
         File report = reportsDir.toPath().resolve("main.txt").toFile()
         assertTrue(report.isFile())
     }
+
+    def "can generate spotbugs.sarif"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        sarif.enabled = true
+    }
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.sarif").toFile()
+        assertTrue(report.isFile())
+    }
 }
