@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "commitlint": "^9.1.0",
-    "conventional-changelog-conventionalcommits": "^4.3.0",
+    "conventional-changelog-conventionalcommits": "^4.3.1",
     "gradle-semantic-release-plugin": "1.4.6",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
