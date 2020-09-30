@@ -235,7 +235,6 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
      * Property to specify the aux class paths that contains the libraries to refer during analysis.
      * Default value is the compile-scope dependencies of the target sourceSet.
      */
-    @InputFiles
     @Classpath
     FileCollection auxClassPaths;
 
