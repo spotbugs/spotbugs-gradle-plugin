@@ -70,7 +70,10 @@ public abstract class SpotBugsHtmlReport extends SpotBugsReport {
 
   private TextResource resolve(String path) {
     Optional<File> spotbugsJar =
-        getTask().getProject().getConfigurations().getByName("spotbugs")
+        getTask()
+            .getProject()
+            .getConfigurations()
+            .getByName("spotbugs")
             .files(
                 dependency ->
                     dependency.getGroup().equals("com.github.spotbugs")
