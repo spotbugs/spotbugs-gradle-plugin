@@ -172,6 +172,15 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @NonNull
     final RegularFileProperty excludeFilter;
     /**
+     * Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file will not be
+     * reported in the final output.
+     */
+    @Optional
+    @InputFile
+    @PathSensitive(PathSensitivity.RELATIVE)
+    @NonNull
+    final RegularFileProperty baselineFile;
+    /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */
     @Input
@@ -306,6 +315,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
                 });
         includeFilter = objects.fileProperty()
         excludeFilter = objects.fileProperty()
+        baselineFile = objects.fileProperty()
         onlyAnalyze = objects.listProperty(String);
         projectName = objects.property(String);
         release = objects.property(String);
@@ -333,6 +343,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         reportsDir.convention(extension.reportsDir)
         includeFilter.convention(extension.includeFilter)
         excludeFilter.convention(extension.excludeFilter)
+        baselineFile.convention(extension.baselineFile)
         onlyAnalyze.convention(extension.onlyAnalyze)
         projectName.convention(extension.projectName.map({p -> String.format("%s (%s)", p, getName())}))
         release.convention(extension.release)
