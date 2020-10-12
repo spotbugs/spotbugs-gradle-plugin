@@ -113,6 +113,12 @@ class SpotBugsExtension {
     @NonNull
     final RegularFileProperty excludeFilter;
     /**
+     * Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file will not be
+     * reported in the final output.
+     */
+    @NonNull
+    final RegularFileProperty baselineFile;
+    /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */
     @NonNull
@@ -162,6 +168,7 @@ class SpotBugsExtension {
         reportsDir = objects.directoryProperty()
         includeFilter = objects.fileProperty()
         excludeFilter = objects.fileProperty()
+        baselineFile = objects.fileProperty()
         onlyAnalyze = objects.listProperty(String);
         projectName = objects.property(String);
         release = objects.property(String);

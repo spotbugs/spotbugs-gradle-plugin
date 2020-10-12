@@ -106,6 +106,30 @@ spotbugs {
         assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
     }
 
+    def "can use baselineFile"() {
+        setup:
+        File baseline = new File(rootDir, "baseline.xml")
+        buildFile << """
+spotbugs {
+    baselineFile = file('baseline.xml')
+}"""
+        baseline << """
+<BugCollection></BugCollection>
+"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        assertTrue(result.getOutput().contains("-excludeBugs"))
+        assertTrue(result.getOutput().contains(baseline.getAbsolutePath()))
+    }
+
     def "can use visitors"() {
         setup:
         buildFile << """

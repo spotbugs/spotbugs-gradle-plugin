@@ -100,6 +100,10 @@ public abstract class SpotBugsRunner {
       args.add("-exclude");
       args.add(task.getExcludeFilter().get().getAsFile().getAbsolutePath());
     }
+    if (task.getBaselineFile().isPresent() && task.getBaselineFile().get() != null) {
+      args.add("-excludeBugs");
+      args.add(task.getBaselineFile().get().getAsFile().getAbsolutePath());
+    }
     if (task.getOnlyAnalyze().isPresent() && !task.getOnlyAnalyze().get().isEmpty()) {
       args.add("-onlyAnalyze");
       args.add(task.getOnlyAnalyze().get().stream().collect(Collectors.joining(",")));
