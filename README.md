@@ -42,6 +42,7 @@ spotbugs {
     reportsDir = file("$buildDir/spotbugs")
     includeFilter = file("include.xml")
     excludeFilter = file("exclude.xml")
+    baselineFile = file("baseline.xml")
     onlyAnalyze = [ 'com.foobar.MyClass', 'com.foobar.mypkg.*' ]
     maxHeapSize = '1g'
     extraArgs = [ '-nested:false' ]
