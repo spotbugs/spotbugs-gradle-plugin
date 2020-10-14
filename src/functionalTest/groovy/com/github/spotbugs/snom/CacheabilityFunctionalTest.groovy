@@ -93,6 +93,11 @@ class CacheabilityFunctionalTest extends Specification {
             |repositories {
             |    mavenCentral()
             |}
+            |spotbugsMain {
+            |    reports {
+            |        text.enabled = true
+            |    }
+            |}
             |'''.stripMargin()
 
         File sourceDir = buildDir.toPath().resolve('src').resolve('main').resolve('java').toFile()

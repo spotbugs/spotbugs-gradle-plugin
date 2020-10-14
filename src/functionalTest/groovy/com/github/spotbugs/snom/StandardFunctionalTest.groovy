@@ -611,6 +611,13 @@ public class SimpleTest {
     @Unroll
     def 'shows report path when failures are found (Worker API? #isWorkerApi)'() {
         given:
+        buildFile << """
+spotbugsMain {
+    reports {
+        xml.enabled = true
+    }
+}"""
+
         def badCode = new File(rootDir, 'src/main/java/Bar.java')
         badCode << '''
         |public class Bar {
