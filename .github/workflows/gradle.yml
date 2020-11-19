@@ -16,7 +16,7 @@ jobs:
       matrix:
         gradle: ['5.6.4', '6.0', '6.3', '6.4']
     steps:
-    - uses: actions/checkout@722adc6
+    - uses: actions/checkout@5a4ac90
       with:
         fetch-depth: 0
     - name: Set up JDK 11
