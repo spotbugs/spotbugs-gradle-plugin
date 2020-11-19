@@ -27,7 +27,7 @@ jobs:
       uses: actions/setup-node@56899e0
       with:
         node-version: 12
-    - uses: actions/cache@cffae95
+    - uses: actions/cache@0781355
       with:
         path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
