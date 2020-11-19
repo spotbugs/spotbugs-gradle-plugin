@@ -24,7 +24,7 @@ jobs:
       with:
         java-version: 11
     - name: Set up Node.js 12
-      uses: actions/setup-node@8de2f9f
+      uses: actions/setup-node@56899e0
       with:
         node-version: 12
     - uses: actions/cache@cffae95
