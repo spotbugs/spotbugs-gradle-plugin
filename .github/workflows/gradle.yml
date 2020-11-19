@@ -59,7 +59,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
-    - uses: actions/upload-artifact@3446296
+    - uses: actions/upload-artifact@726a6dc
       if: always()
       with:
         name: reports
