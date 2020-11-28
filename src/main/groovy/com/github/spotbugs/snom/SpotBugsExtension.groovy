@@ -191,13 +191,11 @@ class SpotBugsExtension {
     }
 
     void setReportLevel(@Nullable String name) {
-        Confidence confidence = name == null ? null : Confidence.valueOf(name.toUpperCase())
-        getReportLevel().set(confidence)
+        getReportLevel().set(Confidence.values().find { it.name() == name.toUpperCase() })
     }
 
     void setEffort(@Nullable String name) {
-        Effort effort = name == null ? null : Effort.valueOf(name.toUpperCase())
-        getEffort().set(effort)
+        getEffort().set(Effort.values().find { it.name() == name.toUpperCase() })
     }
 
     private void configureFromProject(Project project, Action<Project> action) {
