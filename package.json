@@ -3,7 +3,7 @@
     "commitlint": "^11.0.0",
     "conventional-changelog-conventionalcommits": "^4.5.0",
     "gradle-semantic-release-plugin": "1.4.13",
-    "husky": "^4.3.5",
+    "husky": "^4.3.6",
     "lint-staged": "^10.5.3",
     "prettier": "^2.2.1",
     "semantic-release": "17.3.1"
