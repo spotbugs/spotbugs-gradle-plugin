@@ -164,4 +164,4 @@ Gradle is configured to use these to generate the private key in memory so as to
 
 ## Copyright
 
-Copyright &copy; 2019-2020 SpotBugs Team
+Copyright &copy; 2019-2021 SpotBugs Team
