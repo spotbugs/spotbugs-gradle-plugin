@@ -15,12 +15,12 @@ package com.github.spotbugs.snom;
 
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
-import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
+import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker
+import com.github.spotbugs.snom.internal.SpotBugsSarifReport;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
 import edu.umd.cs.findbugs.annotations.NonNull
 import edu.umd.cs.findbugs.annotations.Nullable;
-import edu.umd.cs.findbugs.annotations.OverrideMustInvoke
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Provider;
@@ -36,6 +36,7 @@ import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.InputFiles;
@@ -65,6 +66,7 @@ import javax.inject.Inject
  * &nbsp;&nbsp;&nbsp;&nbsp;auxClassPaths = sourceSets.main.compileClasspath<br>
  * <br>
  * &nbsp;&nbsp;&nbsp;&nbsp;ignoreFailures = false<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;showStackTraces = true<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;showProgress = false<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;reportLevel = 'default'<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;effort = 'default'<br>
@@ -73,6 +75,7 @@ import javax.inject.Inject
  * &nbsp;&nbsp;&nbsp;&nbsp;reportsDir = file("$buildDir/reports/spotbugs")<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;includeFilter = file('spotbugs-include.xml')<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;excludeFilter = file('spotbugs-exclude.xml')<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;baselineFile = file('spotbugs-baseline.xml')<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;projectName = name<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;release = version<br>
@@ -92,6 +95,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     private final WorkerExecutor workerExecutor;
 
     @NonNull final Property<Boolean> ignoreFailures;
+    @NonNull final Property<Boolean> showStackTraces;
     /**
      * Property to enable progress reporting during the analysis. Default value is {@code false}.
      */
@@ -169,6 +173,15 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @NonNull
     final RegularFileProperty excludeFilter;
     /**
+     * Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file will not be
+     * reported in the final output.
+     */
+    @Optional
+    @InputFile
+    @PathSensitive(PathSensitivity.RELATIVE)
+    @NonNull
+    final RegularFileProperty baselineFile;
+    /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */
     @Input
@@ -232,8 +245,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
      * Property to specify the aux class paths that contains the libraries to refer during analysis.
      * Default value is the compile-scope dependencies of the target sourceSet.
      */
-    @InputFiles
-    @PathSensitive(PathSensitivity.RELATIVE)
+    @Classpath
     FileCollection auxClassPaths;
 
     /**
@@ -279,6 +291,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         sourceDirs = objects.fileCollection()
         auxClassPaths = objects.fileCollection()
         ignoreFailures = objects.property(Boolean)
+        showStackTraces = objects.property(Boolean)
         showProgress = objects.property(Boolean);
         reportLevel = objects.property(Confidence);
         effort = objects.property(Effort);
@@ -295,12 +308,15 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
                             return objects.newInstance(SpotBugsXmlReport.class, objects, this)
                         case "text":
                             return objects.newInstance(SpotBugsTextReport.class, objects, this)
+                        case "sarif":
+                            return objects.newInstance(SpotBugsSarifReport.class, objects, this)
                         default:
                             throw new InvalidUserDataException(name + " is invalid as the report name");
                     }
                 });
         includeFilter = objects.fileProperty()
         excludeFilter = objects.fileProperty()
+        baselineFile = objects.fileProperty()
         onlyAnalyze = objects.listProperty(String);
         projectName = objects.property(String);
         release = objects.property(String);
@@ -318,6 +334,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
      */
     void init(SpotBugsExtension extension) {
         ignoreFailures.convention(extension.ignoreFailures)
+        showStackTraces.convention(extension.showStackTraces)
         showProgress.convention(extension.showProgress)
         reportLevel.convention(extension.reportLevel)
         effort.convention(extension.effort)
@@ -327,6 +344,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         reportsDir.convention(extension.reportsDir)
         includeFilter.convention(extension.includeFilter)
         excludeFilter.convention(extension.excludeFilter)
+        baselineFile.convention(extension.baselineFile)
         onlyAnalyze.convention(extension.onlyAnalyze)
         projectName.convention(extension.projectName.map({p -> String.format("%s (%s)", p, getName())}))
         release.convention(extension.release)
@@ -410,9 +428,22 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         ignoreFailures.set(b);
     }
 
+    void setShowStackTraces(Provider<Boolean> b) {
+        showStackTraces.set(b);
+    }
+
+    void setShowStackTraces(boolean b) {
+        showStackTraces.set(b)
+    }
+
     @Input
     boolean getIgnoreFailures() {
         ignoreFailures.get();
+    }
+
+    @Input
+    boolean getShowStackTraces() {
+        showStackTraces.get();
     }
 
     @Internal

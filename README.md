@@ -33,6 +33,7 @@ Configure `spotbugs` extension to configure the behaviour of tasks:
 ```groovy
 spotbugs {
     ignoreFailures = false
+    showStackTraces = true
     showProgress = true
     effort = 'default'
     reportLevel = 'default'
@@ -41,6 +42,7 @@ spotbugs {
     reportsDir = file("$buildDir/spotbugs")
     includeFilter = file("include.xml")
     excludeFilter = file("exclude.xml")
+    baselineFile = file("baseline.xml")
     onlyAnalyze = [ 'com.foobar.MyClass', 'com.foobar.mypkg.*' ]
     maxHeapSize = '1g'
     extraArgs = [ '-nested:false' ]
@@ -101,6 +103,9 @@ You can change SpotBugs version by [the `toolVersion` property of the spotbugs e
 
 |Gradle Plugin|SpotBugs|
 |-----:|-----:|
+| 4.5.0| 4.1.1|
+| 4.4.4| 4.0.6|
+| 4.4.2| 4.0.5|
 | 4.0.7| 4.0.2|
 | 4.0.0| 4.0.0|
 
@@ -113,6 +118,49 @@ dependencies {
     compileOnly "com.github.spotbugs:spotbugs-annotations:${spotbugs.toolVersion.get()}"
 }
 ```
+
+## Development
+### Setup
+* development requires java 11 or higher to be installed
+* The CI server uses `ubuntu-latest` docker image, but you should be able to develop on any linux/unix based OS.
+* before creating commits
+  * read https://www.conventionalcommits.org/en
+  * Optionally create the following script in your .git/hooks directory and name it commit.msg. This will ensure that your commits follow the covential commits pattern.
+```python
+#!/usr/bin/env python
+import re, sys, os
+
+#turn off the traceback as it doesn't help readability
+sys.tracebacklimit = 0
+
+def main():
+    # example:
+    # feat(apikey): added the ability to add api key to configuration
+    pattern = r'(build|ci|docs|feat|fix|perf|refactor|style|test|chore|revert)(\([\w\-]+\))?:\s.*'
+    filename = sys.argv[1]
+    ss = open(filename, 'r').read()
+    m = re.match(pattern, ss)
+    if m == None: raise Exception("Conventional commit validation failed. Did you forget to add one of the allowed prefixes? (build|ci|docs|feat|fix|perf|refactor|style|test|chore|revert)")
+
+if __name__ == "__main__":
+    main()
+  ```
+* when running gradle, do so using the `gradlew` script in this directory
+
+### Signing Artifacts
+Since version 4.3, when we publish artifacts we now sign them. This is designed so that the build will still pass if you don't have the signing keys available, this way pull requests and forked repos will still work as before.
+
+Before github workflow can sign the artifacts generated during build, we first need to generate pgp keys (you will have to do this again when the key expires. once a year is a good timeframe) and upload them to the servers. See https://www.gnupg.org/faq/gnupg-faq.html#starting_out for more details.
+
+That means github needs the following secrets:
+```
+SIGNING_KEY = "-----BEGIN PGP PRIVATE KEY BLOCK-----..."
+SIGNING_PASSWORD = password
+```
+where `secrets.SIGNING_KEY` is the in-memory ascii-armored keys (you get this by running `gpg --armor --export-secret-keys <EMAIL>`)
+and `secrets.SIGNING_PASSWORD` is the password you used when generating the key.
+
+Gradle is configured to use these to generate the private key in memory so as to minimize our risk of the keys being found and used by someone else.
 
 ## Copyright
 

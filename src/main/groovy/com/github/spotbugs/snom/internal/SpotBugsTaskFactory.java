@@ -13,12 +13,19 @@
  */
 package com.github.spotbugs.snom.internal;
 
-import com.android.build.gradle.tasks.AndroidJavaCompile;
+import com.android.build.gradle.AppExtension;
+import com.android.build.gradle.BaseExtension;
+import com.android.build.gradle.LibraryExtension;
+import com.android.build.gradle.api.BaseVariant;
 import com.github.spotbugs.snom.SpotBugsTask;
 import org.gradle.api.Action;
+import org.gradle.api.DomainObjectSet;
+import org.gradle.api.GradleException;
+import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.tasks.compile.JavaCompile;
 import org.gradle.util.GUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,30 +70,45 @@ public class SpotBugsTaskFactory {
 
   private void generateForAndroid(
       Project project, Action<? super SpotBugsTask> configurationAction) {
-    project
-        .getPlugins()
-        .withId(
-            "com.android.application",
-            plugin ->
-                project
-                    .getTasks()
-                    .withType(AndroidJavaCompile.class)
-                    .all(
-                        task -> {
-                          String name = GUtil.toLowerCamelCase("spotbugs " + task.getVariantName());
-                          log.debug("Creating SpotBugsTask for {}", task);
-                          project
-                              .getTasks()
-                              .register(
-                                  name,
-                                  SpotBugsTask.class,
-                                  spotbugsTask -> {
-                                    spotbugsTask.setSourceDirs(task.getSource());
-                                    spotbugsTask.setClassDirs(
-                                        task.getOutputDirectory().getAsFileTree());
-                                    spotbugsTask.setAuxClassPaths(task.getClasspath());
-                                    configurationAction.execute(spotbugsTask);
-                                  });
-                        }));
+
+    @SuppressWarnings("rawtypes")
+    final Action<? super Plugin> action =
+        (Action<Plugin>)
+            plugin -> {
+              final BaseExtension baseExtension =
+                  project.getExtensions().getByType(BaseExtension.class);
+              DomainObjectSet<? extends BaseVariant> variants;
+              if (baseExtension instanceof AppExtension) {
+                variants = ((AppExtension) baseExtension).getApplicationVariants();
+              } else if (baseExtension instanceof LibraryExtension) {
+                variants = ((LibraryExtension) baseExtension).getLibraryVariants();
+              } else {
+                throw new GradleException("Unrecognized Android extension " + baseExtension);
+              }
+              variants.all(
+                  (BaseVariant variant) -> {
+                    String spotbugsTaskName =
+                        GUtil.toLowerCamelCase("spotbugs " + variant.getName());
+                    log.debug("Creating SpotBugsTask for {}", variant.getName());
+                    project
+                        .getTasks()
+                        .register(
+                            spotbugsTaskName,
+                            SpotBugsTask.class,
+                            spotbugsTask -> {
+                              final JavaCompile javaCompile =
+                                  variant.getJavaCompileProvider().get();
+                              spotbugsTask.setSourceDirs(javaCompile.getSource());
+                              spotbugsTask.setClassDirs(
+                                  project.files(javaCompile.getDestinationDir()));
+                              spotbugsTask.setAuxClassPaths(javaCompile.getClasspath());
+                              spotbugsTask.dependsOn(javaCompile);
+                              configurationAction.execute(spotbugsTask);
+                            });
+                  });
+            };
+
+    project.getPlugins().withId("com.android.application", action);
+    project.getPlugins().withId("com.android.library", action);
   }
 }

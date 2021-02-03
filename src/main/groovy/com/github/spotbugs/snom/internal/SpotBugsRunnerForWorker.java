@@ -20,6 +20,7 @@ import edu.umd.cs.findbugs.FindBugs2;
 import edu.umd.cs.findbugs.TextUICommandLine;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import org.gradle.api.Action;
@@ -67,6 +68,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
     return params -> {
       params.getArguments().addAll(buildArguments(task));
       params.getIgnoreFailures().set(task.getIgnoreFailures());
+      params.getShowStackTraces().set(task.getShowStackTraces());
     };
   }
 
@@ -74,6 +76,8 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
     ListProperty<String> getArguments();
 
     Property<Boolean> getIgnoreFailures();
+
+    Property<Boolean> getShowStackTraces();
   }
 
   public abstract static class SpotBugsExecutor implements WorkAction<SpotBugsWorkParameters> {
@@ -91,37 +95,39 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
           TextUICommandLine commandLine = new TextUICommandLine();
           FindBugs.processCommandLine(commandLine, args, findBugs2);
           findBugs2.execute();
+
+          StringBuilder message = new StringBuilder();
           if (findBugs2.getErrorCount() > 0) {
-            throw new GradleException(
-                "Verification failed: SpotBugs error found: "
-                    + findBugs2.getErrorCount()
-                    + ". "
-                    + buildMessageAboutReport());
-          } else if (findBugs2.getBugCount() > 0) {
-            throw new GradleException(
-                "Verification failed: SpotBugs violation found: "
-                    + findBugs2.getBugCount()
-                    + ". "
-                    + buildMessageAboutReport());
+            message.append(findBugs2.getErrorCount()).append(" SpotBugs errors were found.");
+          }
+          if (findBugs2.getBugCount() > 0) {
+            if (message.length() > 0) {
+              message.append(' ');
+            }
+            message.append(findBugs2.getBugCount()).append(" SpotBugs violations were found.");
+          }
+          if (message.length() > 0) {
+            String reportPath = findReportPath();
+            if (reportPath != null) {
+              message.append(" See the report at: ").append(Paths.get(reportPath).toUri());
+            }
+
+            GradleException e = new GradleException(message.toString());
+
+            if (params.getIgnoreFailures().getOrElse(Boolean.FALSE).booleanValue()) {
+              log.warn(message.toString());
+              if (params.getShowStackTraces().getOrElse(Boolean.TRUE).booleanValue()) {
+                log.warn("", e);
+              }
+            } else {
+              throw e;
+            }
           }
         }
       } catch (GradleException e) {
-        if (params.getIgnoreFailures().getOrElse(Boolean.FALSE).booleanValue()) {
-          log.warn("SpotBugs reported failures", e);
-        } else {
-          throw e;
-        }
+        throw e;
       } catch (Exception e) {
         throw new GradleException("Verification failed: SpotBugs execution thrown exception", e);
-      }
-    }
-
-    private String buildMessageAboutReport() {
-      String reportPath = findReportPath();
-      if (reportPath != null) {
-        return "SpotBugs report can be found in " + reportPath;
-      } else {
-        return "";
       }
     }
 

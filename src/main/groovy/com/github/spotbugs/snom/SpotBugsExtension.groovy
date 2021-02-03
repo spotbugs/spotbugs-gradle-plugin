@@ -34,6 +34,7 @@ import org.gradle.api.provider.Property;
  * <p>After you apply the SpotBugs Gradle plugin to project, write extension like below:<div><code>
  * spotbugs {<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;ignoreFailures = false<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;showStackTraces = true<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;showProgress = false<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;reportLevel = 'default'<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;effort = 'default'<br>
@@ -57,6 +58,8 @@ class SpotBugsExtension {
 
     @NonNull
     final Property<Boolean> ignoreFailures;
+    @NonNull
+    final Property<Boolean> showStackTraces;
     /**
      * Property to enable progress reporting during the analysis. Default value is {@code false}.
      */
@@ -110,6 +113,12 @@ class SpotBugsExtension {
     @NonNull
     final RegularFileProperty excludeFilter;
     /**
+     * Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file will not be
+     * reported in the final output.
+     */
+    @NonNull
+    final RegularFileProperty baselineFile;
+    /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */
     @NonNull
@@ -150,6 +159,7 @@ class SpotBugsExtension {
     @Inject
     SpotBugsExtension(Project project, ObjectFactory objects) {
         ignoreFailures = objects.property(Boolean).convention(false);
+        showStackTraces = objects.property(Boolean).convention(true);
         showProgress = objects.property(Boolean);
         reportLevel = objects.property(Confidence);
         effort = objects.property(Effort);
@@ -158,6 +168,7 @@ class SpotBugsExtension {
         reportsDir = objects.directoryProperty()
         includeFilter = objects.fileProperty()
         excludeFilter = objects.fileProperty()
+        baselineFile = objects.fileProperty()
         onlyAnalyze = objects.listProperty(String);
         projectName = objects.property(String);
         release = objects.property(String);

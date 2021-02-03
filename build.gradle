@@ -2,12 +2,13 @@ plugins {
     id 'groovy'
     id 'java-gradle-plugin'
     id 'jacoco'
-    id 'com.gradle.plugin-publish' version '0.11.0'
-    id 'com.diffplug.gradle.spotless' version '4.0.0'
-    id 'net.ltgt.errorprone' version '1.1.1'
-    id 'se.patrikerdes.use-latest-versions' version '0.2.13'
-    id 'com.github.ben-manes.versions' version '0.28.0'
-    id 'org.sonarqube' version '2.8'
+    id 'signing'
+    id 'com.gradle.plugin-publish' version '0.12.0'
+    id 'com.diffplug.spotless' version '5.9.0'
+    id 'net.ltgt.errorprone' version '1.3.0'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.15'
+    id 'com.github.ben-manes.versions' version '0.36.0'
+    id 'org.sonarqube' version '3.1.1'
 }
 
 sourceCompatibility = 1.8
@@ -22,10 +23,10 @@ repositories {
 }
 
 ext {
-    errorproneVersion = '2.3.4'
-    spotBugsVersion = '4.0.2'
+    errorproneVersion = '2.5.1'
+    spotBugsVersion = '4.1.1'
     slf4jVersion = '1.8.0-beta4'
-    androidGradlePluginVersion = '3.5.3'
+    androidGradlePluginVersion = '4.1.2'
 }
 
 dependencies {
@@ -33,7 +34,7 @@ dependencies {
     compileOnly localGroovy()
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
     compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
-    testImplementation 'com.tngtech.archunit:archunit:0.13.1'
+    testImplementation 'com.tngtech.archunit:archunit:0.16.0'
 }
 
 groovydoc {
@@ -42,6 +43,24 @@ groovydoc {
     link 'https://docs.oracle.com/en/java/javase/11/docs/api/', 'java.'
     link 'https://docs.groovy-lang.org/latest/html/gapi/', 'groovy.', 'org.codehaus.groovy.'
 }
+
+def signingKey = System.getenv("SIGNING_KEY")
+def signingPassword = System.getenv("SIGNING_PASSWORD")
+
+signing {
+    if(signingKey != null &&
+    signingPassword != null &&
+    !signingKey.isEmpty() &&
+    !signingPassword.isEmpty()){
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign configurations.archives
+    }
+    else{
+        logger.warn('The signing key and password are null. This can be ignored if this is a pull request.')
+    }
+}
+
+
 
 task processVersionFile(type: WriteProperties) {
     outputFile file('src/main/resources/spotbugs-gradle-plugin.properties')

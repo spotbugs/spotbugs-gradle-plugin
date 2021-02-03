@@ -17,34 +17,143 @@ import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
-import spock.lang.Ignore
+import spock.lang.Requires
 import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static org.junit.Assume.assumeTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 class AndroidFunctionalTest extends Specification {
     File rootDir
-    File buildFile
     String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     @BeforeEach
     def setup() {
         rootDir = Files.createTempDir()
-        buildFile = new File(rootDir, 'build.gradle')
     }
 
-    @Ignore("need to install Android SDK")
-    def "can generate spotbugsMain depending on classes task"() {
+    @AfterEach
+    void cleanup() {
+        rootDir.deleteDir()
+    }
+
+    @Requires({env['ANDROID_SDK_ROOT']})
+    def "can generate spotbugsRelease depending on app variant compilation task with AGP 3.5.3"() {
         given: "a Gradle project to build an Android app"
+        GradleRunner runner = getGradleRunner()
+        writeAppBuildFile(runner, '3.5.3')
+        writeSourceFile()
+        writeManifestFile()
+
+        when: "the spotbugsRelease task is executed"
+        BuildResult result = build(runner)
+
+        then: "gradle runs spotbugsRelease successfully"
+        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
+    }
+
+    @Requires({env['ANDROID_SDK_ROOT']})
+    def "can generate spotbugsRelease depending on library variant compilation task with AGP 3.5.3"() {
+        given: "a Gradle project to build an Android library"
+        GradleRunner runner = getGradleRunner()
+        writeLibraryBuildFile(runner, '3.5.3')
+        writeSourceFile()
+        writeManifestFile()
+
+        when: "the spotbugsRelease task is executed"
+        BuildResult result = build(runner)
+
+        then: "gradle runs spotbugsRelease successfully"
+        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
+    }
+
+    @Requires({env['ANDROID_SDK_ROOT']})
+    def "can generate spotbugsRelease depending on app variant compilation task with AGP 3.6.3"() {
+        given: "a Gradle project to build an Android app"
+        GradleRunner runner = getGradleRunner()
+        writeAppBuildFile(runner, '3.6.3')
+        writeSourceFile()
+        writeManifestFile()
+
+        when: "the spotbugsRelease task is executed"
+        BuildResult result = build(runner)
+
+        then: "gradle runs spotbugsRelease successfully"
+        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
+    }
+
+    @Requires({env['ANDROID_SDK_ROOT']})
+    def "can generate spotbugsRelease depending on library variant compilation task with AGP 3.6.3"() {
+        given: "a Gradle project to build an Android library"
+        GradleRunner runner = getGradleRunner()
+        writeLibraryBuildFile(runner, '3.6.3')
+        writeSourceFile()
+        writeManifestFile()
+
+        when: "the spotbugsRelease task is executed"
+        BuildResult result = build(runner)
+
+        then: "gradle runs spotbugsRelease successfully"
+        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
+    }
+
+    @Requires({env['ANDROID_SDK_ROOT']})
+    def "can generate spotbugsRelease depending on app variant compilation task with AGP 4.0.0"() {
+        assumeTrue("AGP 4.0.0 is only supported by Gradle 6.1.1 and up",
+                GradleVersion.version(version) >= GradleVersion.version("6.1.1"))
+
+        given: "a Gradle project to build an Android app"
+        GradleRunner runner = getGradleRunner()
+        writeAppBuildFile(runner, '4.0.0')
+        writeSourceFile()
+        writeManifestFile()
+
+        when: "the spotbugsRelease task is executed"
+        BuildResult result = build(runner)
+
+        then: "gradle runs spotbugsRelease successfully"
+        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
+    }
+
+    @Requires({env['ANDROID_SDK_ROOT']})
+    def "can generate spotbugsRelease depending on library variant compilation task with AGP 4.0.0"() {
+        assumeTrue("AGP 4.0.0 is only supported by Gradle 6.1.1 and up",
+                GradleVersion.version(version) >= GradleVersion.version("6.1.1"))
+
+        given: "a Gradle project to build an Android library"
+        GradleRunner runner = getGradleRunner()
+        writeLibraryBuildFile(runner, '4.0.0')
+        writeSourceFile()
+        writeManifestFile()
+
+        when: "the spotbugsRelease task is executed"
+        BuildResult result = build(runner)
+
+        then: "gradle runs spotbugsRelease successfully"
+        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
+    }
+
+    private BuildResult build(GradleRunner runner) {
+        runner.withArguments(":spotbugsRelease", '-s')
+                .withGradleVersion(version)
+                .build()
+    }
+
+    private GradleRunner getGradleRunner() {
         GradleRunner runner =
                 GradleRunner.create()
                 .withProjectDir(rootDir)
                 .withPluginClasspath()
                 .forwardOutput()
                 .withGradleVersion(version)
+        runner
+    }
 
+    def writeAppBuildFile(runner, agpVersion) {
+        File buildFile = new File(rootDir, 'build.gradle')
         buildFile << """
 buildscript {
     repositories {
@@ -53,11 +162,11 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:$agpVersion'
 """
         runner.pluginClasspath.forEach({ file ->
             buildFile << """
-        classpath '${file.absolutePath}'
+        classpath files('${file.absolutePath}')
 """
         })
         buildFile << """
@@ -82,10 +191,47 @@ android {
     }
 }
 """
+    }
 
-        File sourceDir = rootDir.toPath().resolve("src").resolve("main").resolve("java").toFile()
-        sourceDir.mkdirs()
-        File sourceFile = new File(sourceDir, "Foo.java")
+    def writeLibraryBuildFile(runner, agpVersion) {
+        File buildFile = new File(rootDir, 'build.gradle')
+        buildFile << """
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:$agpVersion'
+"""
+        runner.pluginClasspath.forEach({ file ->
+            buildFile << """
+        classpath files('${file.absolutePath}')
+"""
+        })
+        buildFile << """
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.spotbugs'
+
+repositories {
+    google()
+    jcenter()
+}
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
+}
+"""
+    }
+
+    void writeSourceFile() {
+        File sourceFile = new File(rootDir, "src/main/java/Foo.java")
+        sourceFile.parentFile.mkdirs()
         sourceFile << """
 public class Foo {
     public static void main(String... args) {
@@ -93,14 +239,13 @@ public class Foo {
     }
 }
 """
+    }
 
-        when: "the spotbugsMain task is executed"
-        BuildResult result = runner
-                .withArguments(":spotbugsMain")
-                .withGradleVersion(version)
-                .build()
-
-        then: "gradle runs spotbugsMain successfully"
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+    void writeManifestFile() {
+        File manifestFile = new File(rootDir, "src/main/AndroidManifest.xml")
+        manifestFile.parentFile.mkdirs()
+        manifestFile << """
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="test.spotbugs" />
+"""
     }
 }

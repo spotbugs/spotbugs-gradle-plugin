@@ -251,6 +251,44 @@ spotbugs {
 
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+        result.output.contains('\tat ')
+
+        where:
+        isWorkerApi << [true, false]
+    }
+
+    @Unroll
+    def 'build does not show stack traces when bugs are found with `showStacktraces = false` (Worker API? #isWorkerApi)'() {
+        given:
+        def badCode = new File(rootDir, 'src/main/java/Bar.java')
+        badCode << '''
+        |public class Bar {
+        |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
+        |}
+        |'''.stripMargin()
+
+        buildFile << """
+spotbugs {
+    ignoreFailures = true
+    showStackTraces = false
+}"""
+        when:
+        def arguments = [':spotbugsMain', '-is']
+        if(!isWorkerApi) {
+            arguments.add('-Pcom.github.spotbugs.snom.worker=false')
+        }
+        def runner = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+
+        def result = runner. build()
+
+        then:
+        result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+        !(result.output.contains('\tat '))
 
         where:
         isWorkerApi << [true, false]
@@ -477,7 +515,6 @@ public class MyFoo {
 }
 """
 
-
         when:
         BuildResult result =
                 GradleRunner.create()
@@ -491,7 +528,84 @@ public class MyFoo {
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
         result.output.contains("Using auxclasspath file")
-        result.output.contains("/build/spotbugs/spotbugs-auxclasspath")
+        def expectedOutput = File.separator + "build" + File.separator + "spotbugs" + File.separator + "auxclasspath" + File.separator + "spotbugsMain"
+        result.output.contains(expectedOutput)
+
+        when:
+        BuildResult repeatedResult =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments("spotbugsMain", '--rerun-tasks', '-s')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        repeatedResult.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+    }
+
+    def "can apply plugin using useAuxclasspathFile flag in parallel"() {
+        given:
+        buildFile << """
+spotbugs {
+  useAuxclasspathFile = true
+}
+dependencies {
+  implementation 'com.google.guava:guava:19.0'
+  testImplementation 'junit:junit:4.12'
+}"""
+
+        File sourceDir = rootDir.toPath().resolve(Paths.get("src", "main", "java")).toFile()
+        sourceDir.mkdirs()
+        File sourceFile = new File(sourceDir, "MyFoo.java")
+        sourceFile << """
+public class MyFoo {
+    public static void main(String... args) {
+        java.util.Map items = com.google.common.collect.ImmutableMap.of("coin", 3, "glass", 4, "pencil", 1);
+                
+                        items.entrySet()
+                                .stream()
+                                .forEach(System.out::println);
+    }
+}
+"""
+
+        File testSourceDir = rootDir.toPath().resolve(Paths.get("src", "test", "java")).toFile()
+        testSourceDir.mkdirs()
+        File testSourceFile = new File(testSourceDir, "SimpleTest.java")
+        testSourceFile << """
+import org.junit.*;
+import static org.junit.Assert.*;
+ 
+import java.util.*;
+ 
+public class SimpleTest {
+    @Test
+    public void testEmptyCollection() {
+        Collection collection = new ArrayList();
+        assertTrue(collection.isEmpty());
+    }
+}
+"""
+
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments("spotbugsMain", "spotbugsTest", '--parallel', '--debug')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.output.contains("Using auxclasspath file")
+        def expectedOutputMain = File.separator + "build" + File.separator + "spotbugs" + File.separator + "auxclasspath" + File.separator + "spotbugsMain"
+        result.output.contains(expectedOutputMain)
+        def expectedOutputTest = File.separator + "build" + File.separator + "spotbugs" + File.separator + "auxclasspath" + File.separator + "spotbugsTest"
+        result.output.contains(expectedOutputTest)
     }
 
     @Unroll
@@ -521,8 +635,78 @@ public class MyFoo {
 
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.FAILED
-        result.output.contains('SpotBugs report can be found in')
-        result.output.contains('build/reports/spotbugs/main.xml')
+        result.output.contains('See the report at')
+        def expectedOutput = File.separator + "build" + File.separator + "reports" + File.separator + "spotbugs" + File.separator + "main.xml"
+        result.output.contains(expectedOutput)
+
+        where:
+        isWorkerApi << [true, false]
+    }
+
+    @Unroll
+    def 'ignore bugs from baseline file (Worker API? #isWorkerApi)'() {
+        given:
+        def badCode = new File(rootDir, 'src/main/java/Bar.java')
+        badCode << '''
+        |public class Bar {
+        |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
+        |}
+        |'''.stripMargin()
+        def baseline = new File(rootDir, 'baseline.xml')
+        baseline << '''
+        <BugCollection version="4.1.1" sequence="0" timestamp="1602489053934" analysisTimestamp="1602489053968" release="1.0">
+            <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="2" rank="18" abbrev="UrF" category="STYLE" instanceHash="94edf310851e6a92f2c3f91d60450ae9" instanceOccurrenceNum="0" instanceOccurrenceMax="0">
+                <ShortMessage>Unread public/protected field</ShortMessage>
+                <LongMessage>Unread public/protected field: Bar.unreadField</LongMessage>
+                <Class classname="Bar" primary="true">
+                    <SourceLine classname="Bar" start="2" end="3" sourcefile="Bar.java" sourcepath="Bar.java" relSourcepath="java/Bar.java">
+                        <Message>At Bar.java:[lines 2-3]</Message>
+                    </SourceLine>
+                    <Message>In class Bar</Message>
+                </Class>
+                <Field classname="Bar" name="unreadField" signature="I" isStatic="false" primary="true">
+                    <SourceLine classname="Bar" sourcefile="Bar.java" sourcepath="Bar.java" relSourcepath="java/Bar.java">
+                        <Message>In Bar.java</Message>
+                    </SourceLine>
+                    <Message>Field Bar.unreadField</Message>
+                </Field>
+                <SourceLine classname="Bar" primary="true" start="3" end="3" startBytecode="7" endBytecode="7" sourcefile="Bar.java" sourcepath="Bar.java" relSourcepath="java/Bar.java">
+                    <Message>At Bar.java:[line 3]</Message>
+                </SourceLine>
+            </BugInstance>
+            <BugCategory category="STYLE">
+                <Description>Dodgy code</Description>
+            </BugCategory>
+            <BugPattern type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" abbrev="UrF" category="STYLE">
+                <ShortDescription>Unread public/protected field</ShortDescription>
+            </BugPattern>
+            <BugCode abbrev="UrF">
+                <Description>Champ non lu</Description>
+            </BugCode>
+            <Errors errors="0" missingClasses="0"></Errors>
+        </BugCollection>'''.stripMargin()
+        buildFile << """
+spotbugs {
+  baselineFile = file('baseline.xml')
+}"""
+
+        when:
+        def arguments = [':spotbugsMain']
+        if(!isWorkerApi) {
+            arguments.add('-Pcom.github.spotbugs.snom.worker=false')
+        }
+        def runner = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .withDebug(true)
+
+        def result = runner.build()
+
+        then:
+        result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
 
         where:
         isWorkerApi << [true, false]
