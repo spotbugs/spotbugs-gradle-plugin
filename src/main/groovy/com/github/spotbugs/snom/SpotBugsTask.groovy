@@ -15,7 +15,7 @@ package com.github.spotbugs.snom;
 
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
-import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker
+import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
 import com.github.spotbugs.snom.internal.SpotBugsSarifReport;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;

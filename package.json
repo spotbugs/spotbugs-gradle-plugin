@@ -1,4 +1,5 @@
 {
+  "name": "spotbugs-gradle-plugin",
   "devDependencies": {
     "commitlint": "^11.0.0",
     "conventional-changelog-conventionalcommits": "^4.5.0",
