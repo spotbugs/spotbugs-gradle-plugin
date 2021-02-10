@@ -12,11 +12,11 @@ jobs:
         with:
           persist-credentials: false
       - name: Set up JDK 11
-        uses: actions/setup-java@081536e
+        uses: actions/setup-java@d202f5d
         with:
           java-version: 11
       - name: Set up Node.js 12
-        uses: actions/setup-node@8de2f9f
+        uses: actions/setup-node@56899e0
         with:
           node-version: 12
       - name: Generate Groovydoc

@@ -15,7 +15,7 @@ package com.github.spotbugs.snom;
 
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
-import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker
+import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
 import com.github.spotbugs.snom.internal.SpotBugsSarifReport;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
@@ -75,6 +75,7 @@ import javax.inject.Inject
  * &nbsp;&nbsp;&nbsp;&nbsp;reportsDir = file("$buildDir/reports/spotbugs")<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;includeFilter = file('spotbugs-include.xml')<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;excludeFilter = file('spotbugs-exclude.xml')<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;baselineFile = file('spotbugs-baseline.xml')<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;projectName = name<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;release = version<br>
@@ -171,6 +172,15 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @PathSensitive(PathSensitivity.RELATIVE)
     @NonNull
     final RegularFileProperty excludeFilter;
+    /**
+     * Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file will not be
+     * reported in the final output.
+     */
+    @Optional
+    @InputFile
+    @PathSensitive(PathSensitivity.RELATIVE)
+    @NonNull
+    final RegularFileProperty baselineFile;
     /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */
@@ -306,6 +316,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
                 });
         includeFilter = objects.fileProperty()
         excludeFilter = objects.fileProperty()
+        baselineFile = objects.fileProperty()
         onlyAnalyze = objects.listProperty(String);
         projectName = objects.property(String);
         release = objects.property(String);
@@ -333,6 +344,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         reportsDir.convention(extension.reportsDir)
         includeFilter.convention(extension.includeFilter)
         excludeFilter.convention(extension.excludeFilter)
+        baselineFile.convention(extension.baselineFile)
         onlyAnalyze.convention(extension.onlyAnalyze)
         projectName.convention(extension.projectName.map({p -> String.format("%s (%s)", p, getName())}))
         release.convention(extension.release)
