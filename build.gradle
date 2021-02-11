@@ -37,7 +37,7 @@ tasks.withType(JavaCompile).configureEach {
     options.release = 8
 }
 
-groovydoc {
+tasks.named('groovydoc') {
     docTitle 'SpotBugs Gradle Plugin'
     link 'https://docs.gradle.org/current/javadoc/', 'org.gradle.api.'
     link 'https://docs.oracle.com/en/java/javase/11/docs/api/', 'java.'
@@ -60,15 +60,15 @@ signing {
     }
 }
 
-
-
-task processVersionFile(type: WriteProperties) {
+def processVersionFile = tasks.register('processVersionFile', WriteProperties) {
     outputFile file('src/main/resources/spotbugs-gradle-plugin.properties')
 
     property 'slf4j-version', slf4jVersion
     property 'spotbugs-version', spotBugsVersion
 }
-tasks.processResources.dependsOn processVersionFile
+tasks.named('processResources').configure {
+    dependsOn processVersionFile
+}
 
 apply from: "$rootDir/gradle/test.gradle"
 apply from: "$rootDir/gradle/functional-test.gradle"
