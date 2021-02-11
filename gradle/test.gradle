@@ -32,7 +32,7 @@ sonarqube {
         property "sonar.projectKey", "com.github.spotbugs.gradle"
         property "sonar.organization", "spotbugs"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.destination
+        property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.map { it.reports.xml.destination }
     }
 }
 tasks.named('sonarqube').configure {
