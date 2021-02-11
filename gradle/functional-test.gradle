@@ -20,7 +20,7 @@ gradlePlugin {
     testSourceSets sourceSets.functionalTest
 }
 
-task functionalTest(type: Test) {
+def functionalTest = tasks.register('functionalTest', Test) {
     description = 'Runs the functional tests.'
     group = 'verification'
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
@@ -29,4 +29,6 @@ task functionalTest(type: Test) {
     systemProperty 'snom.test.functional.gradle', System.getProperty('snom.test.functional.gradle', gradle.gradleVersion)
 }
 
-check.dependsOn functionalTest
+tasks.named('check').configure {
+    dependsOn functionalTest
+}
