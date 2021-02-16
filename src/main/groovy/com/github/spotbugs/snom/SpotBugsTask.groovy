@@ -13,7 +13,8 @@
  */
 package com.github.spotbugs.snom;
 
-import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
+import com.github.spotbugs.snom.internal.SpotBugsHtmlReport
+import com.github.spotbugs.snom.internal.SpotBugsRunnerForHybrid;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
 import com.github.spotbugs.snom.internal.SpotBugsSarifReport;
@@ -47,7 +48,8 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask;
-import org.gradle.util.ClosureBackedAction;
+import org.gradle.util.ClosureBackedAction
+import org.gradle.util.GradleVersion;
 import org.gradle.workers.WorkerExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory
@@ -362,8 +364,12 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         .toString() == "false") {
             log.info("Running SpotBugs by JavaExec...");
             new SpotBugsRunnerForJavaExec().run(this);
+        } else if (GradleVersion.current() >= GradleVersion.version("6.0")) {
+            // ExecOperations is supported from Gradle 6.0
+            log.info("Running SpotBugs by Gradle no-isolated Worker...");
+            new SpotBugsRunnerForHybrid(workerExecutor).run(this);
         } else {
-            log.info("Running SpotBugs by Gradle Worker...");
+            log.info("Running SpotBugs by Gradle process-isolated Worker...");
             new SpotBugsRunnerForWorker(workerExecutor).run(this);
         }
     }
