@@ -95,7 +95,7 @@ dependencies {
 
         then:
         assertEquals(TaskOutcome.SUCCESS, result.task(":classes").outcome)
-        assertTrue(result.output.contains("spotbugs-4.0.0-beta4.jar"))
+        assertTrue(result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar"))
     }
 
     def "can skip analysis when no class file we have"() {

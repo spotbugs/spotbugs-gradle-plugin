@@ -92,6 +92,7 @@ import javax.inject.Inject
 @CacheableTask
 class SpotBugsTask extends DefaultTask implements VerificationTask {
     private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
+    private static final String FEATURE_FLAG_HYBRID_WORKER = "com.github.spotbugs.snom.javaexec-in-worker";
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
 
     private final WorkerExecutor workerExecutor;
@@ -358,13 +359,13 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     @TaskAction
     void run() {
-        if (getProject().hasProperty(FEATURE_FLAG_WORKER_API)
-        && getProject()
-        .property(FEATURE_FLAG_WORKER_API)
-        .toString() == "false") {
+        String enableWorkerApi = project.providers.gradleProperty(FEATURE_FLAG_WORKER_API).getOrElse("true")
+        String enableHybridWorker = project.providers.gradleProperty(FEATURE_FLAG_HYBRID_WORKER).getOrElse("false")
+
+        if (enableWorkerApi == "false") {
             log.info("Running SpotBugs by JavaExec...");
             new SpotBugsRunnerForJavaExec().run(this);
-        } else if (GradleVersion.current() >= GradleVersion.version("6.0")) {
+        } else if (enableHybridWorker == "true" && GradleVersion.current() >= GradleVersion.version("6.0")) {
             // ExecOperations is supported from Gradle 6.0
             log.info("Running SpotBugs by Gradle no-isolated Worker...");
             new SpotBugsRunnerForHybrid(workerExecutor).run(this);
