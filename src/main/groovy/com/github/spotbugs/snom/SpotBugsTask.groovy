@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 SpotBugs team
+ * Copyright 2021 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of the License at
@@ -15,7 +15,7 @@ package com.github.spotbugs.snom;
 
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
-import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker
+import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
 import com.github.spotbugs.snom.internal.SpotBugsSarifReport;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
