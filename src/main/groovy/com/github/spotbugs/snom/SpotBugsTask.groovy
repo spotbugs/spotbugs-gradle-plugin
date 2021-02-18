@@ -359,8 +359,8 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     @TaskAction
     void run() {
-        String enableWorkerApi = project.providers.gradleProperty(FEATURE_FLAG_WORKER_API).getOrElse("true")
-        String enableHybridWorker = project.providers.gradleProperty(FEATURE_FLAG_HYBRID_WORKER).getOrElse("false")
+        String enableWorkerApi = project.properties.getOrDefault(FEATURE_FLAG_WORKER_API, "true")
+        String enableHybridWorker = project.properties.getOrDefault(FEATURE_FLAG_HYBRID_WORKER, "false")
 
         if (enableWorkerApi == "false") {
             log.info("Running SpotBugs by JavaExec...");
