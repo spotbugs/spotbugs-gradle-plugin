@@ -8,7 +8,7 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 }
 
-test {
+tasks.named('test', Test) {
     useJUnitPlatform()
     maxParallelForks = Runtime.runtime.availableProcessors()
 }
@@ -16,21 +16,25 @@ test {
 jacoco {
     toolVersion = "0.8.5"
 }
-jacocoTestReport {
+def jacocoTestReport = tasks.named('jacocoTestReport') {
     reports {
         xml {
             enabled true
         }
     }
 }
-tasks.check.dependsOn 'jacocoTestReport'
+tasks.named('check').configure {
+    dependsOn jacocoTestReport
+}
 
 sonarqube {
     properties {
         property "sonar.projectKey", "com.github.spotbugs.gradle"
         property "sonar.organization", "spotbugs"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.reports.xml.destination
+        property "sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.map { it.reports.xml.destination }
     }
 }
-tasks.sonarqube.mustRunAfter jacocoTestReport
+tasks.named('sonarqube').configure {
+    mustRunAfter jacocoTestReport
+}
