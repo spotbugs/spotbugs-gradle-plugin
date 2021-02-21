@@ -41,6 +41,7 @@ jobs:
         SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
       run: |
         ./gradlew build --no-daemon -Dsnom.test.functional.gradle=${{ matrix.gradle }}
+        echo Verifying the java version used in class files...
         cd build/classes/groovy/main
         javap -v com.github.spotbugs.snom.SpotBugsPlugin | grep -q 'major version: 52'
     - name: Run Semantic Release
