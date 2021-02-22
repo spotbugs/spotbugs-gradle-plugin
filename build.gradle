@@ -9,6 +9,8 @@ plugins {
     id 'org.sonarqube' version '3.1.1'
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 group = 'com.github.spotbugs.snom'
 
 repositories {
@@ -20,7 +22,7 @@ repositories {
 
 ext {
     errorproneVersion = '2.5.1'
-    spotBugsVersion = '4.1.1'
+    spotBugsVersion = '4.2.1'
     slf4jVersion = '1.8.0-beta4'
     androidGradlePluginVersion = '4.1.2'
 }
@@ -31,10 +33,6 @@ dependencies {
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
     compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
     testImplementation 'com.tngtech.archunit:archunit:0.16.0'
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.release = 8
 }
 
 tasks.named('groovydoc') {
