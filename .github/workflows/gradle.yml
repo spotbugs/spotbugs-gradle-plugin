@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        gradle: ['5.6.4', '6.0', '6.7', '7.0-milestone-1']
+        gradle: ['5.6.4', '6.0', '6.7', '7.0-milestone-2']
     steps:
     - uses: actions/checkout@v2
       with:
@@ -39,7 +39,7 @@ jobs:
       env:
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-      run: ./gradlew build --no-daemon -Dsnom.test.functional.gradle=${{ matrix.gradle }}
+      run: ./gradlew build --no-daemon -Dsnom.test.functional.gradle=${{ matrix.gradle }} --debug
     - name: Run Semantic Release
       run: |
         echo "gradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY }}" > ~/.gradle/gradle.properties
