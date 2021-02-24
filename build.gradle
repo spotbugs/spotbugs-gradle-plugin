@@ -3,7 +3,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'jacoco'
     id 'signing'
-    id 'com.gradle.plugin-publish' version '0.12.0'
+    id 'com.gradle.plugin-publish' version '0.13.0'
     id 'com.diffplug.spotless' version '5.10.2'
     id 'net.ltgt.errorprone' version '1.3.0'
     id 'org.sonarqube' version '3.1.1'
@@ -32,7 +32,7 @@ dependencies {
     compileOnly localGroovy()
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
     compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
-    testImplementation 'com.tngtech.archunit:archunit:0.16.0'
+    testImplementation 'com.tngtech.archunit:archunit:0.17.0'
 }
 
 tasks.named('groovydoc') {
