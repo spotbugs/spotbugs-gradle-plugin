@@ -125,7 +125,7 @@ subprojects {
 
         then:
         assertEquals(SUCCESS, result.task(":sub:spotbugsMain").outcome)
-        assertTrue(result.output.contains("SpotBugs 4.0.0-RC1"))
+        assertTrue(result.output.contains("spotbugs-4.0.0-RC1.jar"))
     }
 
     def "can use toolVersion in the subproject"() {
@@ -147,6 +147,6 @@ spotbugs {
 
         then:
         assertEquals(SUCCESS, result.task(":sub:spotbugsMain").outcome)
-        assertTrue(result.output.contains("SpotBugs 4.0.0-RC1"))
+        assertTrue(result.output.contains("spotbugs-4.0.0-RC1.jar"))
     }
 }

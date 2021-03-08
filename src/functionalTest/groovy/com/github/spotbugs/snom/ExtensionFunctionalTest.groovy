@@ -261,7 +261,7 @@ spotbugs {
 
         then:
         assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.output.contains("SpotBugs 4.0.0-beta4"))
+        assertTrue(result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar"))
     }
 
     def "can use toolVersion to get the SpotBugs version"() {

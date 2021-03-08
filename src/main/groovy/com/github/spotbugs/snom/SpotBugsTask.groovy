@@ -13,7 +13,8 @@
  */
 package com.github.spotbugs.snom;
 
-import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
+import com.github.spotbugs.snom.internal.SpotBugsHtmlReport
+import com.github.spotbugs.snom.internal.SpotBugsRunnerForHybrid;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
 import com.github.spotbugs.snom.internal.SpotBugsSarifReport;
@@ -47,7 +48,8 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask;
-import org.gradle.util.ClosureBackedAction;
+import org.gradle.util.ClosureBackedAction
+import org.gradle.util.GradleVersion;
 import org.gradle.workers.WorkerExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory
@@ -90,6 +92,7 @@ import javax.inject.Inject
 @CacheableTask
 class SpotBugsTask extends DefaultTask implements VerificationTask {
     private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
+    private static final String FEATURE_FLAG_HYBRID_WORKER = "com.github.spotbugs.snom.javaexec-in-worker";
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
 
     private final WorkerExecutor workerExecutor;
@@ -356,14 +359,18 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     @TaskAction
     void run() {
-        if (getProject().hasProperty(FEATURE_FLAG_WORKER_API)
-        && getProject()
-        .property(FEATURE_FLAG_WORKER_API)
-        .toString() == "false") {
+        String enableWorkerApi = project.properties.getOrDefault(FEATURE_FLAG_WORKER_API, "true")
+        String enableHybridWorker = project.properties.getOrDefault(FEATURE_FLAG_HYBRID_WORKER, "false")
+
+        if (enableWorkerApi == "false") {
             log.info("Running SpotBugs by JavaExec...");
             new SpotBugsRunnerForJavaExec().run(this);
+        } else if (enableHybridWorker == "true" && GradleVersion.current() >= GradleVersion.version("6.0")) {
+            // ExecOperations is supported from Gradle 6.0
+            log.info("Running SpotBugs by Gradle no-isolated Worker...");
+            new SpotBugsRunnerForHybrid(workerExecutor).run(this);
         } else {
-            log.info("Running SpotBugs by Gradle Worker...");
+            log.info("Running SpotBugs by Gradle process-isolated Worker...");
             new SpotBugsRunnerForWorker(workerExecutor).run(this);
         }
     }

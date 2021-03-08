@@ -357,7 +357,7 @@ spotbugsMain {
 
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("Running SpotBugs by Gradle Worker..."));
+        assertTrue(result.output.contains("Running SpotBugs by Gradle no-isolated Worker...") || result.output.contains("Running SpotBugs by Gradle process-isolated Worker..."));
     }
 
     def "can run task by JavaExec by gradle.properties"() {

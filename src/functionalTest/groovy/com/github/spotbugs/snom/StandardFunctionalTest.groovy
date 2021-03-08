@@ -95,7 +95,7 @@ dependencies {
 
         then:
         assertEquals(TaskOutcome.SUCCESS, result.task(":classes").outcome)
-        assertTrue(result.output.contains("SpotBugs 4.0.0-beta4"))
+        assertTrue(result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar"))
     }
 
     def "can skip analysis when no class file we have"() {
@@ -449,7 +449,9 @@ dependencies{
 
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
-        result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
+        if (GradleVersion.current() >= GradleVersion.version("6.0")) {
+            result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
+        }
         !result.output.contains("Trying to add already registered factory")
     }
 
@@ -485,8 +487,10 @@ public class FooTest {
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
         result.task(":spotbugsTest").outcome == TaskOutcome.SUCCESS
-        result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
-        result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to FooTest")
+        if (GradleVersion.current() >= GradleVersion.version("6.0")) {
+            result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
+            result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to FooTest")
+        }
         !result.output.contains("Trying to add already registered factory")
     }
 
