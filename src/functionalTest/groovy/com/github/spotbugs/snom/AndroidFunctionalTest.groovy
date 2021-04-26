@@ -23,8 +23,8 @@ import spock.lang.Requires
 import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static org.junit.Assume.assumeTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assumptions.assumeTrue
 
 class AndroidFunctionalTest extends Specification {
     File rootDir
