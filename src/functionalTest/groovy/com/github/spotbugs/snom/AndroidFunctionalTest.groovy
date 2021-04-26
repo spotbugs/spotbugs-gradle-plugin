@@ -158,7 +158,7 @@ class AndroidFunctionalTest extends Specification {
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -178,7 +178,7 @@ apply plugin: 'com.github.spotbugs'
 
 repositories {
     google()
-    jcenter()
+    mavenCentral()
 }
 
 android {
@@ -199,7 +199,7 @@ android {
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -219,7 +219,7 @@ apply plugin: 'com.github.spotbugs'
 
 repositories {
     google()
-    jcenter()
+    mavenCentral()
 }
 
 android {
