@@ -54,7 +54,7 @@ jobs:
         echo "gradle.publish.secret=${{ secrets.GRADLE_PUBLISH_SECRET }}" >> ~/.gradle/gradle.properties
         rm -rf build/libs/*.jar
         npm ci
-        npm run semantic-release
+        npx semantic-release
       if: matrix.gradle == '6.0'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
