@@ -12,7 +12,6 @@
     "semantic-release": "17.4.2"
   },
   "scripts": {
-    "semantic-release": "semantic-release",
     "prepare": "husky install"
   },
   "lint-staged": {
