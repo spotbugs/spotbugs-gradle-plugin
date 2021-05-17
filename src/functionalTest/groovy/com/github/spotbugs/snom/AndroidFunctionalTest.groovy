@@ -23,7 +23,6 @@ import spock.lang.Requires
 import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static org.junit.Assume.assumeTrue
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 class AndroidFunctionalTest extends Specification {
@@ -101,10 +100,8 @@ class AndroidFunctionalTest extends Specification {
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
+    @Requires({GradleVersion.version(version) >= GradleVersion.version("6.1.1")}) // AGP 4.0.0 is only supported by Gradle 6.1.1 and up
     def "can generate spotbugsRelease depending on app variant compilation task with AGP 4.0.0"() {
-        assumeTrue("AGP 4.0.0 is only supported by Gradle 6.1.1 and up",
-                GradleVersion.version(version) >= GradleVersion.version("6.1.1"))
-
         given: "a Gradle project to build an Android app"
         GradleRunner runner = getGradleRunner()
         writeAppBuildFile(runner, '4.0.0')
@@ -119,10 +116,8 @@ class AndroidFunctionalTest extends Specification {
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
+    @Requires({GradleVersion.version(version) >= GradleVersion.version("6.1.1")}) // AGP 4.0.0 is only supported by Gradle 6.1.1 and up
     def "can generate spotbugsRelease depending on library variant compilation task with AGP 4.0.0"() {
-        assumeTrue("AGP 4.0.0 is only supported by Gradle 6.1.1 and up",
-                GradleVersion.version(version) >= GradleVersion.version("6.1.1"))
-
         given: "a Gradle project to build an Android library"
         GradleRunner runner = getGradleRunner()
         writeLibraryBuildFile(runner, '4.0.0')
