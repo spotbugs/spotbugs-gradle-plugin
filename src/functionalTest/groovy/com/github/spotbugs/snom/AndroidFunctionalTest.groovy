@@ -26,8 +26,16 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 class AndroidFunctionalTest extends Specification {
+    static String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+
+    /**
+     * AGP 4.0.0 is only supported by Gradle 6.1.1 and up
+     */
+    private static boolean supportsAGP4() {
+        GradleVersion.version(version) >= GradleVersion.version("6.1.1")
+    }
+
     File rootDir
-    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     @BeforeEach
     def setup() {
@@ -100,7 +108,7 @@ class AndroidFunctionalTest extends Specification {
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
-    @Requires({GradleVersion.version(version) >= GradleVersion.version("6.1.1")}) // AGP 4.0.0 is only supported by Gradle 6.1.1 and up
+    @Requires({AndroidFunctionalTest.supportsAGP4()})
     def "can generate spotbugsRelease depending on app variant compilation task with AGP 4.0.0"() {
         given: "a Gradle project to build an Android app"
         GradleRunner runner = getGradleRunner()
@@ -116,7 +124,7 @@ class AndroidFunctionalTest extends Specification {
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
-    @Requires({GradleVersion.version(version) >= GradleVersion.version("6.1.1")}) // AGP 4.0.0 is only supported by Gradle 6.1.1 and up
+    @Requires({AndroidFunctionalTest.supportsAGP4()})
     def "can generate spotbugsRelease depending on library variant compilation task with AGP 4.0.0"() {
         given: "a Gradle project to build an Android library"
         GradleRunner runner = getGradleRunner()
