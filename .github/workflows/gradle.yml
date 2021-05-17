@@ -70,5 +70,5 @@ jobs:
     - uses: actions/upload-artifact@v2
       if: always()
       with:
-        name: reports
+        name: reports (Gradle ${{ matrix.gradle }})
         path: build/reports
