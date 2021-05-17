@@ -29,7 +29,6 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
-          distribution: 'adopt'
       - uses: actions/cache@v2
         with:
           path: ~/.gradle/caches
