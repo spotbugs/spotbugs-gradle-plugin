@@ -29,10 +29,26 @@ class AndroidFunctionalTest extends Specification {
     static String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     /**
-     * AGP 4.0.0 is only supported by Gradle 6.1.1 and up
+     * AGP 4.2 is only supported by Gradle 6.7.1 and up
+     * @see <a href="https://developer.android.com/studio/releases/gradle-plugin#updating-gradle">Android Gradle plugin release notes</a>
      */
-    private static boolean supportsAGP4() {
-        GradleVersion.version(version) >= GradleVersion.version("6.1.1")
+    private static boolean supportsAGP42() {
+        GradleVersion.version(version) >= GradleVersion.version("6.7.1")
+    }
+
+    /**
+     * AGP 4.0 is only supported by Gradle 6.1.1 and up
+     * @see <a href="https://developer.android.com/studio/releases/gradle-plugin#updating-gradle">Android Gradle plugin release notes</a>
+     */
+    private static boolean supportsAGP40() {
+        GradleVersion.version("7.0") > GradleVersion.version(version) && GradleVersion.version(version) >= GradleVersion.version("6.1.1")
+    }
+
+    /**
+     * AGP 3 does not work with Gradle 7
+     */
+    private static boolean supportsAGP3() {
+        GradleVersion.version("7.0") > GradleVersion.version(version)
     }
 
     File rootDir
@@ -48,6 +64,7 @@ class AndroidFunctionalTest extends Specification {
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
+    @Requires({AndroidFunctionalTest.supportsAGP3()})
     def "can generate spotbugsRelease depending on app variant compilation task with AGP 3.5.3"() {
         given: "a Gradle project to build an Android app"
         GradleRunner runner = getGradleRunner()
@@ -63,6 +80,7 @@ class AndroidFunctionalTest extends Specification {
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
+    @Requires({AndroidFunctionalTest.supportsAGP3()})
     def "can generate spotbugsRelease depending on library variant compilation task with AGP 3.5.3"() {
         given: "a Gradle project to build an Android library"
         GradleRunner runner = getGradleRunner()
@@ -78,6 +96,7 @@ class AndroidFunctionalTest extends Specification {
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
+    @Requires({AndroidFunctionalTest.supportsAGP3()})
     def "can generate spotbugsRelease depending on app variant compilation task with AGP 3.6.3"() {
         given: "a Gradle project to build an Android app"
         GradleRunner runner = getGradleRunner()
@@ -93,6 +112,7 @@ class AndroidFunctionalTest extends Specification {
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
+    @Requires({AndroidFunctionalTest.supportsAGP3()})
     def "can generate spotbugsRelease depending on library variant compilation task with AGP 3.6.3"() {
         given: "a Gradle project to build an Android library"
         GradleRunner runner = getGradleRunner()
@@ -108,7 +128,7 @@ class AndroidFunctionalTest extends Specification {
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
-    @Requires({AndroidFunctionalTest.supportsAGP4()})
+    @Requires({AndroidFunctionalTest.supportsAGP40()})
     def "can generate spotbugsRelease depending on app variant compilation task with AGP 4.0.0"() {
         given: "a Gradle project to build an Android app"
         GradleRunner runner = getGradleRunner()
@@ -124,11 +144,43 @@ class AndroidFunctionalTest extends Specification {
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
-    @Requires({AndroidFunctionalTest.supportsAGP4()})
+    @Requires({AndroidFunctionalTest.supportsAGP40()})
     def "can generate spotbugsRelease depending on library variant compilation task with AGP 4.0.0"() {
         given: "a Gradle project to build an Android library"
         GradleRunner runner = getGradleRunner()
         writeLibraryBuildFile(runner, '4.0.0')
+        writeSourceFile()
+        writeManifestFile()
+
+        when: "the spotbugsRelease task is executed"
+        BuildResult result = build(runner)
+
+        then: "gradle runs spotbugsRelease successfully"
+        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
+    }
+
+    @Requires({env['ANDROID_SDK_ROOT']})
+    @Requires({AndroidFunctionalTest.supportsAGP42()})
+    def "can generate spotbugsRelease depending on app variant compilation task with AGP 4.2.0"() {
+        given: "a Gradle project to build an Android app"
+        GradleRunner runner = getGradleRunner()
+        writeAppBuildFile(runner, '4.2.0')
+        writeSourceFile()
+        writeManifestFile()
+
+        when: "the spotbugsRelease task is executed"
+        BuildResult result = build(runner)
+
+        then: "gradle runs spotbugsRelease successfully"
+        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
+    }
+
+    @Requires({env['ANDROID_SDK_ROOT']})
+    @Requires({AndroidFunctionalTest.supportsAGP42()})
+    def "can generate spotbugsRelease depending on library variant compilation task with AGP 4.2.0"() {
+        given: "a Gradle project to build an Android library"
+        GradleRunner runner = getGradleRunner()
+        writeLibraryBuildFile(runner, '4.2.0')
         writeSourceFile()
         writeManifestFile()
 
