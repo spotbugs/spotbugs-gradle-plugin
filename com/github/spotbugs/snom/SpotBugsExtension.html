@@ -98,6 +98,12 @@ if (location.href.indexOf('is-external=true') == -1) {
         <li class="blockList">
 
 
+            <!-- todo: direct known subclasses -->
+            <hr>
+            <br>
+
+<pre>class SpotBugsExtension
+extends <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Object.html' title='Object'>Object</a></pre>
 
     <p> The extension to configure the SpotBugs Gradle plugin. Most of properties in this extension will be used as the default property of all <a href='../../../../com/github/spotbugs/snom/SpotBugsTask.html' title='SpotBugsTask'>SpotBugsTask</a>.
  All properties are optional.
@@ -123,8 +129,7 @@ if (location.href.indexOf('is-external=true') == -1) {
  &nbsp;&nbsp;&nbsp;&nbsp;maxHeapSize = '512m'<br>
 }</code></div>
 
- <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p>
- </p>
+ <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p></p>
 
           </li>
     </ul>
@@ -165,7 +170,7 @@ if (location.href.indexOf('is-external=true') == -1) {
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='../../../../com/github/spotbugs/snom/Effort.html' title='Effort'>Effort</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='../../../../com/github/spotbugs/snom/Effort.html' title='Effort'>Effort</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#effort">effort</a></code><br>Property to adjust SpotBugs detectors. </td>
                         </tr>
                         
@@ -175,12 +180,12 @@ if (location.href.indexOf('is-external=true') == -1) {
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#extraArgs">extraArgs</a></code><br>Property to specify the extra arguments for SpotBugs. </td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#ignoreFailures">ignoreFailures</a></code><br></td>
                         </tr>
                         
@@ -190,38 +195,38 @@ if (location.href.indexOf('is-external=true') == -1) {
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#jvmArgs">jvmArgs</a></code><br>Property to specify the extra arguments for JVM process. </td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#maxHeapSize">maxHeapSize</a></code><br>Property to specify the max heap size (<CODE>-Xmx</CODE> option) of JVM process.
  </td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#omitVisitors">omitVisitors</a></code><br>Property to disable visitors (detectors) for analysis. </td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#onlyAnalyze">onlyAnalyze</a></code><br>Property to specify the target classes for analysis. </td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#projectName">projectName</a></code><br>Property to specify the name of project. </td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#release">release</a></code><br>Property to specify the release identifier of project. </td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='../../../../com/github/spotbugs/snom/Confidence.html' title='Confidence'>Confidence</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;com.github.spotbugs.snom.Confidence&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#reportLevel">reportLevel</a></code><br>Property to specify the level to report bugs. </td>
                         </tr>
                         
@@ -231,27 +236,27 @@ if (location.href.indexOf('is-external=true') == -1) {
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#showProgress">showProgress</a></code><br>Property to enable progress reporting during the analysis. </td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#showStackTraces">showStackTraces</a></code><br></td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#toolVersion">toolVersion</a></code><br></td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#useAuxclasspathFile">useAuxclasspathFile</a></code><br></td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#visitors">visitors</a></code><br>Property to enable visitors (detectors) for analysis. </td>
                         </tr>
                         
@@ -372,8 +377,7 @@ if (location.href.indexOf('is-external=true') == -1) {
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
 final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/RegularFileProperty.html' title='RegularFileProperty'>RegularFileProperty</a> <strong>baselineFile</strong></h4>
                                 <p> Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file will not be
- reported in the final output.
-     </p>
+ reported in the final output.</p>
                             </li>
                         </ul>
                     
@@ -381,9 +385,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='../../../../com/github/spotbugs/snom/Effort.html' title='Effort'>Effort</a>&gt; <strong>effort</strong></h4>
-                                <p> Property to adjust SpotBugs detectors. Default value is <a href='../../../../com/github/spotbugs/snom/Effort.html#DEFAULT' title='Effort.DEFAULT'>Effort.DEFAULT</a>.
-     </p>
+final&nbsp;Property&lt;<a href='../../../../com/github/spotbugs/snom/Effort.html' title='Effort'>Effort</a>&gt; <strong>effort</strong></h4>
+                                <p> Property to adjust SpotBugs detectors. Default value is <a href='../../../../com/github/spotbugs/snom/Effort.html#DEFAULT' title='Effort.DEFAULT'>Effort.DEFAULT</a>.</p>
                             </li>
                         </ul>
                     
@@ -397,8 +400,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
  <p>Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze, use <a href='#onlyAnalyze'>onlyAnalyze</a> instead.
  To limit the visitors (detectors) to run, use <a href='#visitors'>visitors</a> and <a href='#omitVisitors'>omitVisitors</a> instead.</p>
 
- <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
-     </p>
+ <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p></p>
                             </li>
                         </ul>
                     
@@ -406,9 +408,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>extraArgs</strong></h4>
-                                <p> Property to specify the extra arguments for SpotBugs. Default value is empty so SpotBugs will get no extra argument.
-     </p>
+final&nbsp;ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>extraArgs</strong></h4>
+                                <p> Property to specify the extra arguments for SpotBugs. Default value is empty so SpotBugs will get no extra argument.</p>
                             </li>
                         </ul>
                     
@@ -416,7 +417,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>ignoreFailures</strong></h4>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>ignoreFailures</strong></h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -431,8 +432,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
  <p>Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze, use <a href='#onlyAnalyze'>onlyAnalyze</a> instead.
  To limit the visitors (detectors) to run, use <a href='#visitors'>visitors</a> and <a href='#omitVisitors'>omitVisitors</a> instead.</p>
 
- <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
-     </p>
+ <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p></p>
                             </li>
                         </ul>
                     
@@ -440,9 +440,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>jvmArgs</strong></h4>
-                                <p> Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.
-     </p>
+final&nbsp;ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>jvmArgs</strong></h4>
+                                <p> Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.</p>
                             </li>
                         </ul>
                     
@@ -450,10 +449,9 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>maxHeapSize</strong></h4>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>maxHeapSize</strong></h4>
                                 <p> Property to specify the max heap size (<CODE>-Xmx</CODE> option) of JVM process.
- Default value is empty so the default configuration made by Gradle will be used.
-     </p>
+ Default value is empty so the default configuration made by Gradle will be used.</p>
                             </li>
                         </ul>
                     
@@ -461,9 +459,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>omitVisitors</strong></h4>
-                                <p> Property to disable visitors (detectors) for analysis. Default is empty that means SpotBugs omits no visitor.
-     </p>
+final&nbsp;ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>omitVisitors</strong></h4>
+                                <p> Property to disable visitors (detectors) for analysis. Default is empty that means SpotBugs omits no visitor.</p>
                             </li>
                         </ul>
                     
@@ -471,9 +468,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>onlyAnalyze</strong></h4>
-                                <p> Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
-     </p>
+final&nbsp;ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>onlyAnalyze</strong></h4>
+                                <p> Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.</p>
                             </li>
                         </ul>
                     
@@ -481,9 +477,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>projectName</strong></h4>
-                                <p> Property to specify the name of project. Some reporting formats use this property. Default value is the name of your Gradle project.
-     </p>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>projectName</strong></h4>
+                                <p> Property to specify the name of project. Some reporting formats use this property. Default value is the name of your Gradle project.</p>
                             </li>
                         </ul>
                     
@@ -491,9 +486,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>release</strong></h4>
-                                <p> Property to specify the release identifier of project. Some reporting formats use this property. Default value is the version of your Gradle project.
-     </p>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>release</strong></h4>
+                                <p> Property to specify the release identifier of project. Some reporting formats use this property. Default value is the version of your Gradle project.</p>
                             </li>
                         </ul>
                     
@@ -501,9 +495,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='../../../../com/github/spotbugs/snom/Confidence.html' title='Confidence'>Confidence</a>&gt; <strong>reportLevel</strong></h4>
-                                <p> Property to specify the level to report bugs. Default value is <a href='../../../../com/github/spotbugs/snom/Confidence.html#DEFAULT' title='Confidence.DEFAULT'>Confidence.DEFAULT</a>.
-     </p>
+final&nbsp;Property&lt;com.github.spotbugs.snom.Confidence&gt; <strong>reportLevel</strong></h4>
+                                <p> Property to specify the level to report bugs. Default value is com.github.spotbugs.snom.Confidence#DEFAULT.</p>
                             </li>
                         </ul>
                     
@@ -514,8 +507,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
 final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/DirectoryProperty.html' title='DirectoryProperty'>DirectoryProperty</a> <strong>reportsDir</strong></h4>
                                 <p> Property to set the directory to generate report files. Default is <CODE>"$buildDir/reports/spotbugs"</CODE>.
 
- <p>Note that each <a href='../../../../com/github/spotbugs/snom/SpotBugsTask.html' title='SpotBugsTask'>SpotBugsTask</a> creates own sub-directory in this directory.</p>
-     </p>
+ <p>Note that each <a href='../../../../com/github/spotbugs/snom/SpotBugsTask.html' title='SpotBugsTask'>SpotBugsTask</a> creates own sub-directory in this directory.</p></p>
                             </li>
                         </ul>
                     
@@ -523,9 +515,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>showProgress</strong></h4>
-                                <p> Property to enable progress reporting during the analysis. Default value is <CODE>false</CODE>.
-     </p>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>showProgress</strong></h4>
+                                <p> Property to enable progress reporting during the analysis. Default value is <CODE>false</CODE>.</p>
                             </li>
                         </ul>
                     
@@ -533,7 +524,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>showStackTraces</strong></h4>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>showStackTraces</strong></h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -542,7 +533,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>toolVersion</strong></h4>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>toolVersion</strong></h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -551,7 +542,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>useAuxclasspathFile</strong></h4>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>useAuxclasspathFile</strong></h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -560,9 +551,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>visitors</strong></h4>
-                                <p> Property to enable visitors (detectors) for analysis. Default is empty that means all visitors run analysis.
-     </p>
+final&nbsp;ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>visitors</strong></h4>
+                                <p> Property to enable visitors (detectors) for analysis. Default is empty that means all visitors run analysis.</p>
                             </li>
                         </ul>
                     
@@ -605,7 +595,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <a name="setEffort(java.lang.String)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>void <strong>setEffort</strong>(@edu.umd.cs.findbugs.annotations.Nullable <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> name)</h4>
+                                <h4>void <strong>setEffort</strong>(@javax.annotation.Nullable <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> name)</h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -613,7 +603,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <a name="setReportLevel(java.lang.String)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>void <strong>setReportLevel</strong>(@edu.umd.cs.findbugs.annotations.Nullable <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> name)</h4>
+                                <h4>void <strong>setReportLevel</strong>(@javax.annotation.Nullable <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> name)</h4>
                                 <p></p>
                             </li>
                         </ul>

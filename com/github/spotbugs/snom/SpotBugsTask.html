@@ -101,16 +101,16 @@ if (location.href.indexOf('is-external=true') == -1) {
                 <dt>All Implemented Interfaces and Traits:</dt>
                 <dd><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/VerificationTask.html' title='VerificationTask'>VerificationTask</a></dd>
             </dl>
+    
+
             <!-- todo: direct known subclasses -->
             <hr>
             <br>
+
 <pre>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/CacheableTask.html' title='CacheableTask'>CacheableTask</a>
 class SpotBugsTask
 extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html' title='DefaultTask'>DefaultTask</a>
-
-</pre>
-
-
+implements <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/VerificationTask.html' title='VerificationTask'>VerificationTask</a></pre>
 
     <p> The Gradle task to run the SpotBugs analysis. All properties are optional.
 
@@ -141,8 +141,7 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
  &nbsp;&nbsp;&nbsp;&nbsp;maxHeapSize = '512m'<br>
 }</code></div>
 
- <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p>
- </p>
+ <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p></p>
 
           </li>
     </ul>
@@ -215,7 +214,7 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='../../../../com/github/spotbugs/snom/Effort.html' title='Effort'>Effort</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='../../../../com/github/spotbugs/snom/Effort.html' title='Effort'>Effort</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#effort">effort</a></code><br>Property to adjust SpotBugs detectors. </td>
                         </tr>
                         
@@ -225,12 +224,12 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#extraArgs">extraArgs</a></code><br>Property to specify the extra arguments for SpotBugs. </td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#ignoreFailures">ignoreFailures</a></code><br></td>
                         </tr>
                         
@@ -240,43 +239,43 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#jvmArgs">jvmArgs</a></code><br>Property to specify the extra arguments for JVM process. </td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#maxHeapSize">maxHeapSize</a></code><br>Property to specify the max heap size (<CODE>-Xmx</CODE> option) of JVM process.
  </td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#omitVisitors">omitVisitors</a></code><br>Property to disable visitors (detectors) for analysis. </td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#onlyAnalyze">onlyAnalyze</a></code><br>Property to specify the target classes for analysis. </td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#projectName">projectName</a></code><br>Property to specify the name of project. </td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#release">release</a></code><br>Property to specify the release identifier of project. </td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='../../../../com/github/spotbugs/snom/Confidence.html' title='Confidence'>Confidence</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;com.github.spotbugs.snom.Confidence&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#reportLevel">reportLevel</a></code><br>Property to specify the level to report bugs. </td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/NamedDomainObjectContainer.html' title='NamedDomainObjectContainer'>NamedDomainObjectContainer</a>&lt;<a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>NamedDomainObjectContainer&lt;<a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#reports">reports</a></code><br>Property to specify which report you need.</td>
                         </tr>
                         
@@ -286,12 +285,12 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#showProgress">showProgress</a></code><br>Property to enable progress reporting during the analysis. </td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#showStackTraces">showStackTraces</a></code><br></td>
                         </tr>
                         
@@ -302,13 +301,13 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#useAuxclasspathFile">useAuxclasspathFile</a></code><br>Property to enable auxclasspathFromFile and prevent Argument List Too Long issues in java processes.
  </td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
+                            <td class="colFirst"><code><strong>ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt;</strong></code>&nbsp;</td>
                             <td class="colLast"><code><a href="#visitors">visitors</a></code><br>Property to enable visitors (detectors) for analysis. </td>
                         </tr>
                         
@@ -411,14 +410,14 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/NamedDomainObjectContainer.html' title='NamedDomainObjectContainer'>NamedDomainObjectContainer</a>&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#reports(Closure<NamedDomainObjectContainer<? extends SpotBugsReport>>)">reports</a></strong>(<a href='https://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html' title='Closure'>Closure</a>&lt;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/NamedDomainObjectContainer.html' title='NamedDomainObjectContainer'>NamedDomainObjectContainer</a>&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;&gt; closure)</code><br></td>
+                            <td class="colLast"><code>final&nbsp;NamedDomainObjectContainer&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;</code></td>
+                            <td class="colLast"><code><strong><a href="#reports(Closure)">reports</a></strong>(<a href='https://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html' title='Closure'>Closure</a>&lt;NamedDomainObjectContainer&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;&gt; closure)</code><br></td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
-                            <td class="colLast"><code><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/NamedDomainObjectContainer.html' title='NamedDomainObjectContainer'>NamedDomainObjectContainer</a>&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;</code></td>
-                            <td class="colLast"><code><strong><a href="#reports(Action<NamedDomainObjectContainer<? extends SpotBugsReport>>)">reports</a></strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/Action.html' title='Action'>Action</a>&lt;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/NamedDomainObjectContainer.html' title='NamedDomainObjectContainer'>NamedDomainObjectContainer</a>&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;&gt; configureAction)</code><br></td>
+                            <td class="colLast"><code>final&nbsp;NamedDomainObjectContainer&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;</code></td>
+                            <td class="colLast"><code><strong><a href="#reports(Action)">reports</a></strong>(Action&lt;NamedDomainObjectContainer&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;&gt; configureAction)</code><br></td>
                         </tr>
                         
                         <tr class="altColor">
@@ -442,7 +441,7 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#setIgnoreFailures(Provider<Boolean>)">setIgnoreFailures</a></strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Provider.html' title='Provider'>Provider</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; b)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#setIgnoreFailures(Provider)">setIgnoreFailures</a></strong>(Provider&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; b)</code><br></td>
                         </tr>
                         
                         <tr class="altColor">
@@ -460,7 +459,7 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>void</code></td>
-                            <td class="colLast"><code><strong><a href="#setShowStackTraces(Provider<Boolean>)">setShowStackTraces</a></strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Provider.html' title='Provider'>Provider</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; b)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#setShowStackTraces(Provider)">setShowStackTraces</a></strong>(Provider&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; b)</code><br></td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -485,7 +484,7 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
                         
                         <tr class="altColor">
                             <td class="colFirst"><code>class <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html' title='DefaultTask'>DefaultTask</a></code></td>
-                            <td class="colLast"><code><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getExtensions()' title='getExtensions'>getExtensions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTimeout()' title='getTimeout'>getTimeout</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getProject()' title='getProject'>getProject</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setDescription(java.lang.String)' title='setDescription'>setDescription</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setGroup(java.lang.String)' title='setGroup'>setGroup</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getAnt()' title='getAnt'>getAnt</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getLogging()' title='getLogging'>getLogging</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getLogging()' title='getLogging'>getLogging</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getDidWork()' title='getDidWork'>getDidWork</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setActions(java.util.List)' title='setActions'>setActions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getDependsOn()' title='getDependsOn'>getDependsOn</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setDependsOn(java.lang.Iterable)' title='setDependsOn'>setDependsOn</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#dependsOn([Ljava.lang.Object;)' title='dependsOn'>dependsOn</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#onlyIf(groovy.lang.Closure)' title='onlyIf'>onlyIf</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#onlyIf(org.gradle.api.specs.Spec)' title='onlyIf'>onlyIf</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setOnlyIf(org.gradle.api.specs.Spec)' title='setOnlyIf'>setOnlyIf</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setOnlyIf(groovy.lang.Closure)' title='setOnlyIf'>setOnlyIf</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setDidWork(boolean)' title='setDidWork'>setDidWork</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doFirst(groovy.lang.Closure)' title='doFirst'>doFirst</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doFirst(org.gradle.api.Action)' title='doFirst'>doFirst</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doFirst(java.lang.String, org.gradle.api.Action)' title='doFirst'>doFirst</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doLast(groovy.lang.Closure)' title='doLast'>doLast</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doLast(java.lang.String, org.gradle.api.Action)' title='doLast'>doLast</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doLast(org.gradle.api.Action)' title='doLast'>doLast</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getEnabled()' title='getEnabled'>getEnabled</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getOutputs()' title='getOutputs'>getOutputs</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getOutputs()' title='getOutputs'>getOutputs</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getDestroyables()' title='getDestroyables'>getDestroyables</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getLocalState()' title='getLocalState'>getLocalState</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTemporaryDir()' title='getTemporaryDir'>getTemporaryDir</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#mustRunAfter([Ljava.lang.Object;)' title='mustRunAfter'>mustRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setMustRunAfter(java.lang.Iterable)' title='setMustRunAfter'>setMustRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getMustRunAfter()' title='getMustRunAfter'>getMustRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#finalizedBy([Ljava.lang.Object;)' title='finalizedBy'>finalizedBy</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setFinalizedBy(java.lang.Iterable)' title='setFinalizedBy'>setFinalizedBy</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getFinalizedBy()' title='getFinalizedBy'>getFinalizedBy</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#shouldRunAfter([Ljava.lang.Object;)' title='shouldRunAfter'>shouldRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setShouldRunAfter(java.lang.Iterable)' title='setShouldRunAfter'>setShouldRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getShouldRunAfter()' title='getShouldRunAfter'>getShouldRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#usesService(org.gradle.api.provider.Provider)' title='usesService'>usesService</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTaskDependencies()' title='getTaskDependencies'>getTaskDependencies</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTaskDependencies()' title='getTaskDependencies'>getTaskDependencies</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#configure(groovy.lang.Closure)' title='configure'>configure</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#configure(groovy.lang.Closure)' title='configure'>configure</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getDescription()' title='getDescription'>getDescription</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setEnabled(boolean)' title='setEnabled'>setEnabled</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#property(java.lang.String)' title='property'>property</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#hasProperty(java.lang.String)' title='hasProperty'>hasProperty</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getGroup()' title='getGroup'>getGroup</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getInputs()' title='getInputs'>getInputs</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getInputs()' title='getInputs'>getInputs</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#compareTo(java.lang.Object)' title='compareTo'>compareTo</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#compareTo(org.gradle.api.Task)' title='compareTo'>compareTo</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getName()' title='getName'>getName</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setProperty(java.lang.String, java.lang.Object)' title='setProperty'>setProperty</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getLogger()' title='getLogger'>getLogger</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getActions()' title='getActions'>getActions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getState()' title='getState'>getState</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getState()' title='getState'>getState</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getPath()' title='getPath'>getPath</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getIdentityPath()' title='getIdentityPath'>getIdentityPath</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getStandardOutputCapture()' title='getStandardOutputCapture'>getStandardOutputCapture</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getConvention()' title='getConvention'>getConvention</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getAsDynamicObject()' title='getAsDynamicObject'>getAsDynamicObject</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTaskIdentity()' title='getTaskIdentity'>getTaskIdentity</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getOnlyIf()' title='getOnlyIf'>getOnlyIf</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getImpliesSubProjects()' title='getImpliesSubProjects'>getImpliesSubProjects</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setImpliesSubProjects(boolean)' title='setImpliesSubProjects'>setImpliesSubProjects</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setLoggerMessageRewriter(org.gradle.internal.logging.slf4j.ContextAwareTaskLogger$MessageRewriter)' title='setLoggerMessageRewriter'>setLoggerMessageRewriter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTemporaryDirFactory()' title='getTemporaryDirFactory'>getTemporaryDirFactory</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#prependParallelSafeAction(org.gradle.api.Action)' title='prependParallelSafeAction'>prependParallelSafeAction</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#appendParallelSafeAction(org.gradle.api.Action)' title='appendParallelSafeAction'>appendParallelSafeAction</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#isHasCustomActions()' title='isHasCustomActions'>isHasCustomActions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getRequiredServices()' title='getRequiredServices'>getRequiredServices</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getSharedResources()' title='getSharedResources'>getSharedResources</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#injectIntoNewInstance(org.gradle.api.internal.project.ProjectInternal, org.gradle.api.internal.project.taskfactory.TaskIdentity, java.util.concurrent.Callable)' title='injectIntoNewInstance'>injectIntoNewInstance</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTaskActions()' title='getTaskActions'>getTaskActions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#hasTaskActions()' title='hasTaskActions'>hasTaskActions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#isEnabled()' title='isEnabled'>isEnabled</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#wait(long)' title='wait'>wait</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#wait(long, int)' title='wait'>wait</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#wait()' title='wait'>wait</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#equals(java.lang.Object)' title='equals'>equals</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#toString()' title='toString'>toString</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#hashCode()' title='hashCode'>hashCode</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getClass()' title='getClass'>getClass</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#notify()' title='notify'>notify</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#notifyAll()' title='notifyAll'>notifyAll</a></code></td>
+                            <td class="colLast"><code><a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getExtensions()' title='getExtensions'>getExtensions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTimeout()' title='getTimeout'>getTimeout</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getProject()' title='getProject'>getProject</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setDescription(java.lang.String)' title='setDescription'>setDescription</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setGroup(java.lang.String)' title='setGroup'>setGroup</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getAnt()' title='getAnt'>getAnt</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getLogging()' title='getLogging'>getLogging</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getDidWork()' title='getDidWork'>getDidWork</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setDependsOn(java.lang.Iterable)' title='setDependsOn'>setDependsOn</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#dependsOn([Ljava.lang.Object;)' title='dependsOn'>dependsOn</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#onlyIf(groovy.lang.Closure)' title='onlyIf'>onlyIf</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#onlyIf(org.gradle.api.specs.Spec)' title='onlyIf'>onlyIf</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setOnlyIf(groovy.lang.Closure)' title='setOnlyIf'>setOnlyIf</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setOnlyIf(org.gradle.api.specs.Spec)' title='setOnlyIf'>setOnlyIf</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setDidWork(boolean)' title='setDidWork'>setDidWork</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doFirst(java.lang.String, org.gradle.api.Action)' title='doFirst'>doFirst</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doFirst(org.gradle.api.Action)' title='doFirst'>doFirst</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doFirst(groovy.lang.Closure)' title='doFirst'>doFirst</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doLast(java.lang.String, org.gradle.api.Action)' title='doLast'>doLast</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doLast(org.gradle.api.Action)' title='doLast'>doLast</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#doLast(groovy.lang.Closure)' title='doLast'>doLast</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getEnabled()' title='getEnabled'>getEnabled</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getOutputs()' title='getOutputs'>getOutputs</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getOutputs()' title='getOutputs'>getOutputs</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getDestroyables()' title='getDestroyables'>getDestroyables</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getLocalState()' title='getLocalState'>getLocalState</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTemporaryDir()' title='getTemporaryDir'>getTemporaryDir</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#mustRunAfter([Ljava.lang.Object;)' title='mustRunAfter'>mustRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setMustRunAfter(java.lang.Iterable)' title='setMustRunAfter'>setMustRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getMustRunAfter()' title='getMustRunAfter'>getMustRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#finalizedBy([Ljava.lang.Object;)' title='finalizedBy'>finalizedBy</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setFinalizedBy(java.lang.Iterable)' title='setFinalizedBy'>setFinalizedBy</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getFinalizedBy()' title='getFinalizedBy'>getFinalizedBy</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#shouldRunAfter([Ljava.lang.Object;)' title='shouldRunAfter'>shouldRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setShouldRunAfter(java.lang.Iterable)' title='setShouldRunAfter'>setShouldRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getShouldRunAfter()' title='getShouldRunAfter'>getShouldRunAfter</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#usesService(org.gradle.api.provider.Provider)' title='usesService'>usesService</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setActions(java.util.List)' title='setActions'>setActions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getDependsOn()' title='getDependsOn'>getDependsOn</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTaskDependencies()' title='getTaskDependencies'>getTaskDependencies</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTaskDependencies()' title='getTaskDependencies'>getTaskDependencies</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#compareTo(java.lang.Object)' title='compareTo'>compareTo</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#compareTo(org.gradle.api.Task)' title='compareTo'>compareTo</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getName()' title='getName'>getName</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setProperty(java.lang.String, java.lang.Object)' title='setProperty'>setProperty</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getLogger()' title='getLogger'>getLogger</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getActions()' title='getActions'>getActions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getState()' title='getState'>getState</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getState()' title='getState'>getState</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getPath()' title='getPath'>getPath</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setEnabled(boolean)' title='setEnabled'>setEnabled</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#configure(groovy.lang.Closure)' title='configure'>configure</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#configure(groovy.lang.Closure)' title='configure'>configure</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getDescription()' title='getDescription'>getDescription</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#property(java.lang.String)' title='property'>property</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#hasProperty(java.lang.String)' title='hasProperty'>hasProperty</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getGroup()' title='getGroup'>getGroup</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getInputs()' title='getInputs'>getInputs</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getInputs()' title='getInputs'>getInputs</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getIdentityPath()' title='getIdentityPath'>getIdentityPath</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getStandardOutputCapture()' title='getStandardOutputCapture'>getStandardOutputCapture</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getConvention()' title='getConvention'>getConvention</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getAsDynamicObject()' title='getAsDynamicObject'>getAsDynamicObject</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getOnlyIf()' title='getOnlyIf'>getOnlyIf</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTaskIdentity()' title='getTaskIdentity'>getTaskIdentity</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#injectIntoNewInstance(org.gradle.api.internal.project.ProjectInternal, org.gradle.api.internal.project.taskfactory.TaskIdentity, java.util.concurrent.Callable)' title='injectIntoNewInstance'>injectIntoNewInstance</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTaskActions()' title='getTaskActions'>getTaskActions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#hasTaskActions()' title='hasTaskActions'>hasTaskActions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getImpliesSubProjects()' title='getImpliesSubProjects'>getImpliesSubProjects</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#setImpliesSubProjects(boolean)' title='setImpliesSubProjects'>setImpliesSubProjects</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getTemporaryDirFactory()' title='getTemporaryDirFactory'>getTemporaryDirFactory</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#prependParallelSafeAction(org.gradle.api.Action)' title='prependParallelSafeAction'>prependParallelSafeAction</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#appendParallelSafeAction(org.gradle.api.Action)' title='appendParallelSafeAction'>appendParallelSafeAction</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#isHasCustomActions()' title='isHasCustomActions'>isHasCustomActions</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getRequiredServices()' title='getRequiredServices'>getRequiredServices</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getSharedResources()' title='getSharedResources'>getSharedResources</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#isEnabled()' title='isEnabled'>isEnabled</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#wait(long)' title='wait'>wait</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#wait(long, int)' title='wait'>wait</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#wait()' title='wait'>wait</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#equals(java.lang.Object)' title='equals'>equals</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#toString()' title='toString'>toString</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#hashCode()' title='hashCode'>hashCode</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#getClass()' title='getClass'>getClass</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#notify()' title='notify'>notify</a>, <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultTask.html#notifyAll()' title='notifyAll'>notifyAll</a></code></td>
                         </tr>
                     </table>
                    </ul>
@@ -518,8 +517,7 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Classpath.html' title='Classpath'>Classpath</a>
 <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/FileCollection.html' title='FileCollection'>FileCollection</a> <strong>auxClassPaths</strong></h4>
                                 <p> Property to specify the aux class paths that contains the libraries to refer during analysis.
- Default value is the compile-scope dependencies of the target sourceSet.
-     </p>
+ Default value is the compile-scope dependencies of the target sourceSet.</p>
                             </li>
                         </ul>
                     
@@ -528,12 +526,11 @@ extends <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/DefaultT
                             <li class="blockList">
                                 <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/util/Optional.html' title='Optional'>Optional</a>
 @<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/InputFile.html' title='InputFile'>InputFile</a>
-@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/PathSensitive.html' title='PathSensitive'>PathSensitive</a>(PathSensitivity.RELATIVE)
+@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/PathSensitive.html' title='PathSensitive'>PathSensitive</a>(value: PathSensitivity.RELATIVE)
 @edu.umd.cs.findbugs.annotations.NonNull
 final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/RegularFileProperty.html' title='RegularFileProperty'>RegularFileProperty</a> <strong>baselineFile</strong></h4>
                                 <p> Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file will not be
- reported in the final output.
-     </p>
+ reported in the final output.</p>
                             </li>
                         </ul>
                     
@@ -543,8 +540,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Internal.html' title='Internal'>Internal</a>
 <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/FileCollection.html' title='FileCollection'>FileCollection</a> <strong>classDirs</strong></h4>
                                 <p> Property to specify the directories that contains the target classes to analyze.
- Default value is the output directory of the target sourceSet.
-     </p>
+ Default value is the output directory of the target sourceSet.</p>
                             </li>
                         </ul>
                     
@@ -562,9 +558,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 @<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/util/Optional.html' title='Optional'>Optional</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='../../../../com/github/spotbugs/snom/Effort.html' title='Effort'>Effort</a>&gt; <strong>effort</strong></h4>
-                                <p> Property to adjust SpotBugs detectors. Default value is <a href='../../../../com/github/spotbugs/snom/Effort.html#DEFAULT' title='Effort.DEFAULT'>Effort.DEFAULT</a>.
-     </p>
+final&nbsp;Property&lt;<a href='../../../../com/github/spotbugs/snom/Effort.html' title='Effort'>Effort</a>&gt; <strong>effort</strong></h4>
+                                <p> Property to adjust SpotBugs detectors. Default value is <a href='../../../../com/github/spotbugs/snom/Effort.html#DEFAULT' title='Effort.DEFAULT'>Effort.DEFAULT</a>.</p>
                             </li>
                         </ul>
                     
@@ -573,7 +568,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                             <li class="blockList">
                                 <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/util/Optional.html' title='Optional'>Optional</a>
 @<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/InputFile.html' title='InputFile'>InputFile</a>
-@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/PathSensitive.html' title='PathSensitive'>PathSensitive</a>(PathSensitivity.RELATIVE)
+@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/PathSensitive.html' title='PathSensitive'>PathSensitive</a>(value: PathSensitivity.RELATIVE)
 @edu.umd.cs.findbugs.annotations.NonNull
 final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/RegularFileProperty.html' title='RegularFileProperty'>RegularFileProperty</a> <strong>excludeFilter</strong></h4>
                                 <p> Property to set the filter file to limit which bug should be reported.
@@ -581,8 +576,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
  <p>Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze, use <a href='#onlyAnalyze'>onlyAnalyze</a> instead.
  To limit the visitors (detectors) to run, use <a href='#visitors'>visitors</a> and <a href='#omitVisitors'>omitVisitors</a> instead.</p>
 
- <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
-     </p>
+ <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p></p>
                             </li>
                         </ul>
                     
@@ -592,9 +586,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
                                 <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/util/Optional.html' title='Optional'>Optional</a>
 @<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>extraArgs</strong></h4>
-                                <p> Property to specify the extra arguments for SpotBugs. Default value is empty so SpotBugs will get no extra argument.
-     </p>
+final&nbsp;ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>extraArgs</strong></h4>
+                                <p> Property to specify the extra arguments for SpotBugs. Default value is empty so SpotBugs will get no extra argument.</p>
                             </li>
                         </ul>
                     
@@ -602,7 +595,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>ignoreFailures</strong></h4>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>ignoreFailures</strong></h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -612,7 +605,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                             <li class="blockList">
                                 <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/util/Optional.html' title='Optional'>Optional</a>
 @<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/InputFile.html' title='InputFile'>InputFile</a>
-@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/PathSensitive.html' title='PathSensitive'>PathSensitive</a>(PathSensitivity.RELATIVE)
+@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/PathSensitive.html' title='PathSensitive'>PathSensitive</a>(value: PathSensitivity.RELATIVE)
 @edu.umd.cs.findbugs.annotations.NonNull
 final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/RegularFileProperty.html' title='RegularFileProperty'>RegularFileProperty</a> <strong>includeFilter</strong></h4>
                                 <p> Property to set the filter file to limit which bug should be reported.
@@ -620,8 +613,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
  <p>Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze, use <a href='#onlyAnalyze'>onlyAnalyze</a> instead.
  To limit the visitors (detectors) to run, use <a href='#visitors'>visitors</a> and <a href='#omitVisitors'>omitVisitors</a> instead.</p>
 
- <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p>
-     </p>
+ <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/filter.html">SpotBugs Manual about Filter file</a>.</p></p>
                             </li>
                         </ul>
                     
@@ -631,9 +623,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
                                 <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/util/Optional.html' title='Optional'>Optional</a>
 @<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>jvmArgs</strong></h4>
-                                <p> Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.
-     </p>
+final&nbsp;ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>jvmArgs</strong></h4>
+                                <p> Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.</p>
                             </li>
                         </ul>
                     
@@ -643,10 +634,9 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                                 <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/util/Optional.html' title='Optional'>Optional</a>
 @<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>maxHeapSize</strong></h4>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>maxHeapSize</strong></h4>
                                 <p> Property to specify the max heap size (<CODE>-Xmx</CODE> option) of JVM process.
- Default value is empty so the default configuration made by Gradle will be used.
-     </p>
+ Default value is empty so the default configuration made by Gradle will be used.</p>
                             </li>
                         </ul>
                     
@@ -655,9 +645,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                             <li class="blockList">
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>omitVisitors</strong></h4>
-                                <p> Property to disable visitors (detectors) for analysis. Default is empty that means SpotBugs omits no visitor.
-     </p>
+final&nbsp;ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>omitVisitors</strong></h4>
+                                <p> Property to disable visitors (detectors) for analysis. Default is empty that means SpotBugs omits no visitor.</p>
                             </li>
                         </ul>
                     
@@ -666,9 +655,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                             <li class="blockList">
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>onlyAnalyze</strong></h4>
-                                <p> Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
-     </p>
+final&nbsp;ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>onlyAnalyze</strong></h4>
+                                <p> Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.</p>
                             </li>
                         </ul>
                     
@@ -677,14 +665,13 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                             <li class="blockList">
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Internal.html' title='Internal'>Internal</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>projectName</strong></h4>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>projectName</strong></h4>
                                 <p> Property to specify the name of project. Some reporting formats use this property.
  Default value is <CODE>"${project.name</CODE> (${task.name})"}.
  <br>
  Note that this property, if treated as a task input, can break cacheability.<br>
- As such, it has been marked <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Internal.html' title='Internal'>Internal</a> to exclude it from task up-to-date and
- cacheability checks.
-     </p>
+ As such, it has been marked Internal to exclude it from task up-to-date and
+ cacheability checks.</p>
                             </li>
                         </ul>
                     
@@ -693,9 +680,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                             <li class="blockList">
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>release</strong></h4>
-                                <p> Property to specify the release identifier of project. Some reporting formats use this property. Default value is the version of your Gradle project.
-     </p>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>release</strong></h4>
+                                <p> Property to specify the release identifier of project. Some reporting formats use this property. Default value is the version of your Gradle project.</p>
                             </li>
                         </ul>
                     
@@ -705,9 +691,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 @<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/util/Optional.html' title='Optional'>Optional</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='../../../../com/github/spotbugs/snom/Confidence.html' title='Confidence'>Confidence</a>&gt; <strong>reportLevel</strong></h4>
-                                <p> Property to specify the level to report bugs. Default value is <a href='../../../../com/github/spotbugs/snom/Confidence.html#DEFAULT' title='Confidence.DEFAULT'>Confidence.DEFAULT</a>.
-     </p>
+final&nbsp;Property&lt;com.github.spotbugs.snom.Confidence&gt; <strong>reportLevel</strong></h4>
+                                <p> Property to specify the level to report bugs. Default value is com.github.spotbugs.snom.Confidence#DEFAULT.</p>
                             </li>
                         </ul>
                     
@@ -716,20 +701,18 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                             <li class="blockList">
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Internal.html' title='Internal'>Internal</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/NamedDomainObjectContainer.html' title='NamedDomainObjectContainer'>NamedDomainObjectContainer</a>&lt;<a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt; <strong>reports</strong></h4>
-                                <p> Property to specify which report you need.
-     <DL><DT><B>See Also:</B></DT><DD><a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a></DD></DL></p>
+final&nbsp;NamedDomainObjectContainer&lt;<a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt; <strong>reports</strong></h4>
+                                <p> Property to specify which report you need. <DL><DT><B>See Also:</B></DT><DD><a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a></DD></DL></p>
                             </li>
                         </ul>
                     
                         <a name="reportsDir"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Internal.html' title='Internal'>Internal</a>("Refer the destination of each report instead.")
+                                <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Internal.html' title='Internal'>Internal</a>(value: Refer the destination of each report instead.)
 @edu.umd.cs.findbugs.annotations.NonNull
 final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/DirectoryProperty.html' title='DirectoryProperty'>DirectoryProperty</a> <strong>reportsDir</strong></h4>
-                                <p> Property to set the directory to generate report files. Default is <CODE>"$buildDir/reports/spotbugs/$taskName"</CODE>.
-     </p>
+                                <p> Property to set the directory to generate report files. Default is <CODE>"$buildDir/reports/spotbugs/$taskName"</CODE>.</p>
                             </li>
                         </ul>
                     
@@ -739,9 +722,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 @<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/util/Optional.html' title='Optional'>Optional</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>showProgress</strong></h4>
-                                <p> Property to enable progress reporting during the analysis. Default value is <CODE>false</CODE>.
-     </p>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>showProgress</strong></h4>
+                                <p> Property to enable progress reporting during the analysis. Default value is <CODE>false</CODE>.</p>
                             </li>
                         </ul>
                     
@@ -749,7 +731,7 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>showStackTraces</strong></h4>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>showStackTraces</strong></h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -758,11 +740,10 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/InputFiles.html' title='InputFiles'>InputFiles</a>
-@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/PathSensitive.html' title='PathSensitive'>PathSensitive</a>(PathSensitivity.RELATIVE)
+@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/PathSensitive.html' title='PathSensitive'>PathSensitive</a>(value: PathSensitivity.RELATIVE)
 <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/FileCollection.html' title='FileCollection'>FileCollection</a> <strong>sourceDirs</strong></h4>
                                 <p> Property to specify the directories that contain the source of target classes to analyze.
- Default value is the source directory of the target sourceSet.
-     </p>
+ Default value is the source directory of the target sourceSet.</p>
                             </li>
                         </ul>
                     
@@ -772,10 +753,9 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 @<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/util/Optional.html' title='Optional'>Optional</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>useAuxclasspathFile</strong></h4>
+final&nbsp;Property&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>useAuxclasspathFile</strong></h4>
                                 <p> Property to enable auxclasspathFromFile and prevent Argument List Too Long issues in java processes.
- Default value is <CODE>false</CODE>.
-     </p>
+ Default value is <CODE>false</CODE>.</p>
                             </li>
                         </ul>
                     
@@ -784,9 +764,8 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                             <li class="blockList">
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 @edu.umd.cs.findbugs.annotations.NonNull
-final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/ListProperty.html' title='ListProperty'>ListProperty</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>visitors</strong></h4>
-                                <p> Property to enable visitors (detectors) for analysis. Default is empty that means all visitors run analysis.
-     </p>
+final&nbsp;ListProperty&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a>&gt; <strong>visitors</strong></h4>
+                                <p> Property to enable visitors (detectors) for analysis. Default is empty that means all visitors run analysis.</p>
                             </li>
                         </ul>
                     
@@ -839,20 +818,19 @@ final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provi
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/InputFiles.html' title='InputFiles'>InputFiles</a>
-@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/PathSensitive.html' title='PathSensitive'>PathSensitive</a>(PathSensitivity.RELATIVE)
+@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/PathSensitive.html' title='PathSensitive'>PathSensitive</a>(value: PathSensitivity.RELATIVE)
 @<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/SkipWhenEmpty.html' title='SkipWhenEmpty'>SkipWhenEmpty</a>
 @edu.umd.cs.findbugs.annotations.NonNull
 <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/FileCollection.html' title='FileCollection'>FileCollection</a> <strong>getClasses</strong>()</h4>
                                 <p> Property to specify the target classes to analyse by SpotBugs.
- Default value is the all existing <CODE>.class</CODE> files in <a href='#getClassDirs'>getClassDirs</a>.
-     </p>
+ Default value is the all existing <CODE>.class</CODE> files in <a href='#getClassDirs'>getClassDirs</a>.</p>
                             </li>
                         </ul>
                     
                         <a name="getFirstEnabledReport()"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>@edu.umd.cs.findbugs.annotations.Nullable
+                                <h4>@javax.annotation.Nullable
 @<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/util/Optional.html' title='Optional'>Optional</a>
 @<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Nested.html' title='Nested'>Nested</a>
 <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html'>SpotBugsReport</a> <strong>getFirstEnabledReport</strong>()</h4>
@@ -903,23 +881,22 @@ boolean <strong>getShowStackTraces</strong>()</h4>
                             <li class="blockList">
                                 <h4>void <strong>init</strong>(<a href='../../../../com/github/spotbugs/snom/SpotBugsExtension.html'>SpotBugsExtension</a> extension)</h4>
                                 <p> Set properties from extension right after the task creation. User may overwrite these
- properties by build script.
-     <DL><DT><B>Parameters:</B></DT><DD><code>extension</code> -  the source extension to copy the properties.</DD></DL></p>
+ properties by build script. <DL><DT><B>Parameters:</B></DT><DD><code>extension</code> -  the source extension to copy the properties.</DD></DL></p>
                             </li>
                         </ul>
                     
-                        <a name="reports(Closure<NamedDomainObjectContainer<? extends SpotBugsReport>>)"><!-- --></a>
+                        <a name="reports(Closure)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/NamedDomainObjectContainer.html' title='NamedDomainObjectContainer'>NamedDomainObjectContainer</a>&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt; <strong>reports</strong>(<a href='https://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html' title='Closure'>Closure</a>&lt;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/NamedDomainObjectContainer.html' title='NamedDomainObjectContainer'>NamedDomainObjectContainer</a>&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;&gt; closure)</h4>
+                                <h4>final&nbsp;NamedDomainObjectContainer&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt; <strong>reports</strong>(<a href='https://docs.groovy-lang.org/latest/html/gapi/groovy/lang/Closure.html' title='Closure'>Closure</a>&lt;NamedDomainObjectContainer&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;&gt; closure)</h4>
                                 <p></p>
                             </li>
                         </ul>
                     
-                        <a name="reports(Action<NamedDomainObjectContainer<? extends SpotBugsReport>>)"><!-- --></a>
+                        <a name="reports(Action)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>final&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/NamedDomainObjectContainer.html' title='NamedDomainObjectContainer'>NamedDomainObjectContainer</a>&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt; <strong>reports</strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/Action.html' title='Action'>Action</a>&lt;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/NamedDomainObjectContainer.html' title='NamedDomainObjectContainer'>NamedDomainObjectContainer</a>&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;&gt; configureAction)</h4>
+                                <h4>final&nbsp;NamedDomainObjectContainer&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt; <strong>reports</strong>(Action&lt;NamedDomainObjectContainer&lt;? extends <a href='../../../../com/github/spotbugs/snom/SpotBugsReport.html' title='SpotBugsReport'>SpotBugsReport</a>&gt;&gt; configureAction)</h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -944,15 +921,15 @@ void <strong>run</strong>()</h4>
                         <a name="setEffort(java.lang.String)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>void <strong>setEffort</strong>(@edu.umd.cs.findbugs.annotations.Nullable <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> name)</h4>
+                                <h4>void <strong>setEffort</strong>(@javax.annotation.Nullable <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> name)</h4>
                                 <p></p>
                             </li>
                         </ul>
                     
-                        <a name="setIgnoreFailures(Provider<Boolean>)"><!-- --></a>
+                        <a name="setIgnoreFailures(Provider)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>void <strong>setIgnoreFailures</strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Provider.html' title='Provider'>Provider</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; b)</h4>
+                                <h4>void <strong>setIgnoreFailures</strong>(Provider&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; b)</h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -968,15 +945,15 @@ void <strong>run</strong>()</h4>
                         <a name="setReportLevel(java.lang.String)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>void <strong>setReportLevel</strong>(@edu.umd.cs.findbugs.annotations.Nullable <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> name)</h4>
+                                <h4>void <strong>setReportLevel</strong>(@javax.annotation.Nullable <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> name)</h4>
                                 <p></p>
                             </li>
                         </ul>
                     
-                        <a name="setShowStackTraces(Provider<Boolean>)"><!-- --></a>
+                        <a name="setShowStackTraces(Provider)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>void <strong>setShowStackTraces</strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Provider.html' title='Provider'>Provider</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; b)</h4>
+                                <h4>void <strong>setShowStackTraces</strong>(Provider&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; b)</h4>
                                 <p></p>
                             </li>
                         </ul>

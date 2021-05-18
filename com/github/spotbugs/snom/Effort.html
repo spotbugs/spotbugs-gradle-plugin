@@ -70,11 +70,11 @@ if (location.href.indexOf('is-external=true') == -1) {
     <div>
         <ul class="subNavList">
             <li>Summary:&nbsp;</li>
-            Nested&nbsp;&nbsp;&nbsp;<li><a href="#enum_constant_summary">Enum constants</a></li>&nbsp;&nbsp;&nbsp;Field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;&nbsp;&nbsp;
+            Nested&nbsp;&nbsp;&nbsp;Enum constants&nbsp;&nbsp;&nbsp;<li><a href="#field_summary">Field</a></li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li><a href="#method_summary">Method</a></li>&nbsp;&nbsp;&nbsp;
         </ul>
         <ul class="subNavList">
             <li>&nbsp;|&nbsp;Detail:&nbsp;</li>
-            <li><a href="#enum_constant_detail">Enum constants</a></li>&nbsp;&nbsp;&nbsp;Field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;&nbsp;&nbsp;
+            Enum constants&nbsp;&nbsp;&nbsp;<li><a href="#field_detail">Field</a></li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li><a href="#method_detail">Method</a></li>&nbsp;&nbsp;&nbsp;
         </ul>
     </div>
     <a name="skip-navbar_top">
@@ -98,6 +98,12 @@ if (location.href.indexOf('is-external=true') == -1) {
         <li class="blockList">
 
 
+            <!-- todo: direct known subclasses -->
+            <hr>
+            <br>
+
+<pre>final&nbsp;enum Effort
+extends <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html' title='Enum'>Enum</a>&lt;E&lt;E&gt;&gt;</pre>
 
     <p> The <CODE>Effort</CODE> is configuration to adjust SpotBugs detectors. Use lower effort to reduce
  computation cost.
@@ -114,8 +120,7 @@ if (location.href.indexOf('is-external=true') == -1) {
  &nbsp;&nbsp;&nbsp;&nbsp;effort = 'max'<br>
  }</code></div>
 
- <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/effort.html">SpotBugs Manual</a>.</p>
- </p>
+ <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/effort.html">SpotBugs Manual</a>.</p></p>
 
           </li>
     </ul>
@@ -129,48 +134,67 @@ if (location.href.indexOf('is-external=true') == -1) {
 
         <!-- =========== ENUM CONSTANT SUMMARY =========== -->
         
+        <!-- =========== FIELD SUMMARY =========== -->
+        
             <ul class="blockList">
-                <li class="blockList"><a name="enum_constant_summary"><!--   --></a>
-                    <h3>Enum Constants Summary</h3>
+                <li class="blockList"><a name="field_summary"><!--   --></a>
+                    <h3>Field Summary</h3>
                     <ul class="blockList">
                     <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Enum constants summary table">
-                        <caption><span>Enum constants classes</span><span class="tabEnd">&nbsp;</span></caption>
+                        <caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
                         <tr>
-                            <th class="colFirst" scope="col">Enum constant</th>
+                            <th class="colFirst" scope="col">Modifiers</th>
+                            <th class="colLast" scope="col">Name</th>
                             <th class="colLast" scope="col">Description</th>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href="#DEFAULT">DEFAULT</a></strong></code></td>
+                            <td class="colFirst"><code><strong>static&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a></strong></code>&nbsp;</td>
+                            <td class="colLast"><code><a href="#DEFAULT">DEFAULT</a></code></td>
                             <td class="colLast">The default level that provides the same feature with <a href='#MORE'>MORE</a>.</td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href="#LESS">LESS</a></strong></code></td>
+                            <td class="colFirst"><code><strong>static&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a></strong></code>&nbsp;</td>
+                            <td class="colLast"><code><a href="#LESS">LESS</a></code></td>
                             <td class="colLast">The effort level to reduce the computation cost.</td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href="#MAX">MAX</a></strong></code></td>
+                            <td class="colFirst"><code><strong>static&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a></strong></code>&nbsp;</td>
+                            <td class="colLast"><code><a href="#MAX">MAX</a></code></td>
                             <td class="colLast">The effort level that maximize the computation cost. </td>
                         </tr>
                         
                         <tr class="rowColor">
-                            <td class="colFirst"><code><strong><a href="#MIN">MIN</a></strong></code></td>
-                            <td class="colLast">The effort level to minimize the computation cost. </td>
+                            <td class="colFirst"><code><strong>static&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a></strong></code>&nbsp;</td>
+                            <td class="colLast"><code><a href="#MAX_VALUE">MAX_VALUE</a></code></td>
+                            <td class="colLast"></td>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code><strong><a href="#MORE">MORE</a></strong></code></td>
+                            <td class="colFirst"><code><strong>static&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a></strong></code>&nbsp;</td>
+                            <td class="colLast"><code><a href="#MIN">MIN</a></code></td>
+                            <td class="colLast">The effort level to minimize the computation cost. </td>
+                        </tr>
+                        
+                        <tr class="rowColor">
+                            <td class="colFirst"><code><strong>static&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a></strong></code>&nbsp;</td>
+                            <td class="colLast"><code><a href="#MIN_VALUE">MIN_VALUE</a></code></td>
+                            <td class="colLast"></td>
+                        </tr>
+                        
+                        <tr class="altColor">
+                            <td class="colFirst"><code><strong>static&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a></strong></code>&nbsp;</td>
+                            <td class="colLast"><code><a href="#MORE">MORE</a></code></td>
                             <td class="colLast">The effort level that uses more computation cost. </td>
                         </tr>
                         
                     </table>
                    </ul>
                 </li>
+                
             </ul>
-        
-        <!-- =========== FIELD SUMMARY =========== -->
         
 
         <!-- =========== PROPERTY SUMMARY =========== -->
@@ -186,23 +210,44 @@ if (location.href.indexOf('is-external=true') == -1) {
         <ul class="blockList">
             
             <li class="blockList"><a name="method_summary"><!--   --></a>
-                    <h3>Inherited Methods Summary</h3>
+                    <h3>Methods Summary</h3>
                     <ul class="blockList">
-                    <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Inherited Methods Summary table">
-                        <caption><span>Inherited Methods</span><span class="tabEnd">&nbsp;</span></caption>
+                    <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Methods Summary table">
+                        <caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
                         <tr>
-                            <th class="colFirst" scope="col">Methods inherited from class</th>
-                            <th class="colLast" scope="col">Name</th>
+                            <th class="colFirst" scope="col">Type Params</th>
+                            <th class="colLast" scope="col">Return Type</th>
+                            <th class="colLast" scope="col">Name and description</th>
                         </tr>
                         
                         <tr class="altColor">
-                            <td class="colFirst"><code>class <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html' title='Enum'>Enum</a></code></td>
-                            <td class="colLast"><code><a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#name()' title='name'>name</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#equals(java.lang.Object)' title='equals'>equals</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#toString()' title='toString'>toString</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#hashCode()' title='hashCode'>hashCode</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#compareTo(java.lang.Object)' title='compareTo'>compareTo</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#compareTo(java.lang.Enum)' title='compareTo'>compareTo</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#valueOf(java.lang.Class, java.lang.String)' title='valueOf'>valueOf</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#getDeclaringClass()' title='getDeclaringClass'>getDeclaringClass</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#ordinal()' title='ordinal'>ordinal</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#wait(long)' title='wait'>wait</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#wait(long, int)' title='wait'>wait</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#wait()' title='wait'>wait</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#getClass()' title='getClass'>getClass</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#notify()' title='notify'>notify</a>, <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Enum.html#notifyAll()' title='notifyAll'>notifyAll</a></code></td>
+                            <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code><a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a></code></td>
+                            <td class="colLast"><code><strong><a href="#next()">next</a></strong>()</code><br></td>
                         </tr>
+                        
+                        <tr class="rowColor">
+                            <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code><a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a></code></td>
+                            <td class="colLast"><code><strong><a href="#previous()">previous</a></strong>()</code><br></td>
+                        </tr>
+                        
+                        <tr class="altColor">
+                            <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code>static&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a></code></td>
+                            <td class="colLast"><code><strong><a href="#valueOf(java.lang.String)">valueOf</a></strong>(<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> name)</code><br></td>
+                        </tr>
+                        
+                        <tr class="rowColor">
+                            <td class="colFirst"><code></code></td>
+                            <td class="colLast"><code>static&nbsp;final&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a>[]</code></td>
+                            <td class="colLast"><code><strong><a href="#values()">values</a></strong>()</code><br></td>
+                        </tr>
+                        
                     </table>
                    </ul>
               </li>
-                
+            
         </ul>
         
     </li>
@@ -213,56 +258,71 @@ if (location.href.indexOf('is-external=true') == -1) {
     <ul class="blockList">
         <li class="blockList">
            
-            <!-- ============ ENUM CONSTANT DETAIL ========== -->
+
+            
+            <!-- =========== FIELD DETAIL =========== -->
             <ul class="blockList">
-                <li class="blockList"><a name="enum_constant_detail">
+                <li class="blockList"><a name="field_detail">
                     <!--   -->
                 </a>
-                    <h3>Enum Constant Detail</h3>
+                    <h3>Field Detail</h3>
                     
                         <a name="DEFAULT"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4><a href="../../../../com/github/spotbugs/snom/Effort.html">Effort</a> <strong>DEFAULT</strong></h4>
-                                <p> The default level that provides the same feature with <a href='#MORE'>MORE</a>. </p>
+                                <h4>public&nbsp;static&nbsp;final&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a> <strong>DEFAULT</strong></h4>
+                                <p>The default level that provides the same feature with <a href='#MORE'>MORE</a>.</p>
                             </li>
                         </ul>
                     
                         <a name="LESS"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4><a href="../../../../com/github/spotbugs/snom/Effort.html">Effort</a> <strong>LESS</strong></h4>
-                                <p> The effort level to reduce the computation cost. </p>
+                                <h4>public&nbsp;static&nbsp;final&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a> <strong>LESS</strong></h4>
+                                <p>The effort level to reduce the computation cost.</p>
                             </li>
                         </ul>
                     
                         <a name="MAX"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4><a href="../../../../com/github/spotbugs/snom/Effort.html">Effort</a> <strong>MAX</strong></h4>
+                                <h4>public&nbsp;static&nbsp;final&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a> <strong>MAX</strong></h4>
                                 <p> The effort level that maximize the computation cost. SpotBugs will run Interprocedural Analysis
- of Referenced Classes.
-     </p>
+ of Referenced Classes.</p>
+                            </li>
+                        </ul>
+                    
+                        <a name="MAX_VALUE"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>public&nbsp;static&nbsp;final&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a> <strong>MAX_VALUE</strong></h4>
+                                <p></p>
                             </li>
                         </ul>
                     
                         <a name="MIN"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4><a href="../../../../com/github/spotbugs/snom/Effort.html">Effort</a> <strong>MIN</strong></h4>
+                                <h4>public&nbsp;static&nbsp;final&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a> <strong>MIN</strong></h4>
                                 <p> The effort level to minimize the computation cost. SpotBugs will try to conserve space at the
- expense of precision.
-     </p>
+ expense of precision.</p>
+                            </li>
+                        </ul>
+                    
+                        <a name="MIN_VALUE"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>public&nbsp;static&nbsp;final&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a> <strong>MIN_VALUE</strong></h4>
+                                <p></p>
                             </li>
                         </ul>
                     
                         <a name="MORE"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4><a href="../../../../com/github/spotbugs/snom/Effort.html">Effort</a> <strong>MORE</strong></h4>
+                                <h4>public&nbsp;static&nbsp;final&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a> <strong>MORE</strong></h4>
                                 <p> The effort level that uses more computation cost. SpotBugs will try to detect more problems by
- Interprocedural Analysis and Null Pointer Analysis.
-     </p>
+ Interprocedural Analysis and Null Pointer Analysis.</p>
                             </li>
                         </ul>
                     
@@ -276,9 +336,53 @@ if (location.href.indexOf('is-external=true') == -1) {
 
             
 
+
             
-
-
+            <!-- =========== METHOD DETAIL =========== -->
+            <ul class="blockList">
+                <li class="blockList"><a name="method_detail">
+                    <!--   -->
+                </a>
+                    <h3>Method Detail</h3>
+                    
+                        <a name="next()"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>@<a href='https://docs.groovy-lang.org/latest/html/gapi/groovy/transform/Generated.html' title='Generated'>Generated</a>
+<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a> <strong>next</strong>()</h4>
+                                <p></p>
+                            </li>
+                        </ul>
+                    
+                        <a name="previous()"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>@<a href='https://docs.groovy-lang.org/latest/html/gapi/groovy/transform/Generated.html' title='Generated'>Generated</a>
+<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a> <strong>previous</strong>()</h4>
+                                <p></p>
+                            </li>
+                        </ul>
+                    
+                        <a name="valueOf(java.lang.String)"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>@<a href='https://docs.groovy-lang.org/latest/html/gapi/groovy/transform/Generated.html' title='Generated'>Generated</a>
+static&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a> <strong>valueOf</strong>(<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> name)</h4>
+                                <p></p>
+                            </li>
+                        </ul>
+                    
+                        <a name="values()"><!-- --></a>
+                        <ul class="blockListLast">
+                            <li class="blockList">
+                                <h4>@<a href='https://docs.groovy-lang.org/latest/html/gapi/groovy/transform/Generated.html' title='Generated'>Generated</a>
+static&nbsp;final&nbsp;<a href='../../../../com/github/spotbugs/snom/Effort.html'>Effort</a>[] <strong>values</strong>()</h4>
+                                <p></p>
+                            </li>
+                        </ul>
+                    
+                </li>
+            </ul>
             
         </li>
     </ul>
@@ -311,11 +415,11 @@ if (location.href.indexOf('is-external=true') == -1) {
     <div>
         <ul class="subNavList">
             <li>Summary:&nbsp;</li>
-            Nested&nbsp;&nbsp;&nbsp;<li><a href="#enum_constant_summary">Enum constants</a></li>&nbsp;&nbsp;&nbsp;Field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;&nbsp;&nbsp;
+            Nested&nbsp;&nbsp;&nbsp;Enum constants&nbsp;&nbsp;&nbsp;<li><a href="#field_summary">Field</a></li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li><a href="#method_summary">Method</a></li>&nbsp;&nbsp;&nbsp;
         </ul>
         <ul class="subNavList">
             <li>&nbsp;|&nbsp;Detail:&nbsp;</li>
-            <li><a href="#enum_constant_detail">Enum constants</a></li>&nbsp;&nbsp;&nbsp;Field&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;&nbsp;&nbsp;
+            Enum constants&nbsp;&nbsp;&nbsp;<li><a href="#field_detail">Field</a></li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li><a href="#method_detail">Method</a></li>&nbsp;&nbsp;&nbsp;
         </ul>
     </div>
     <p>Groovy Documentation</p>
