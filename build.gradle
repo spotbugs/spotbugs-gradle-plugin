@@ -48,9 +48,9 @@ def signingPassword = System.getenv("SIGNING_PASSWORD")
 
 signing {
     if(signingKey != null &&
-    signingPassword != null &&
-    !signingKey.isEmpty() &&
-    !signingPassword.isEmpty()){
+            signingPassword != null &&
+            !signingKey.isEmpty() &&
+            !signingPassword.isEmpty()){
         useInMemoryPgpKeys(signingKey, signingPassword)
         sign configurations.archives
     }
