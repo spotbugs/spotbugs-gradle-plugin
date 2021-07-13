@@ -24,6 +24,7 @@ import edu.umd.cs.findbugs.annotations.NonNull
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SkipWhenEmpty
 
@@ -47,7 +48,9 @@ import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.VerificationTask;
+import org.gradle.api.tasks.VerificationTask
+import org.gradle.jvm.toolchain.JavaLauncher
+import org.gradle.jvm.toolchain.JavaToolchainService;
 import org.gradle.util.ClosureBackedAction
 import org.gradle.util.GradleVersion;
 import org.gradle.workers.WorkerExecutor;
@@ -90,7 +93,7 @@ import javax.inject.Inject
  */
 
 @CacheableTask
-class SpotBugsTask extends DefaultTask implements VerificationTask {
+abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
     private static final String FEATURE_FLAG_HYBRID_WORKER = "com.github.spotbugs.snom.javaexec-in-worker";
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
@@ -287,6 +290,10 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         }
     }
 
+    @Nested
+    @Optional
+    abstract Property<JavaLauncher> getLauncher()
+
     @Inject
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
         this.workerExecutor = Objects.requireNonNull(workerExecutor);
@@ -355,6 +362,21 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         extraArgs.convention(extension.extraArgs)
         maxHeapSize.convention(extension.maxHeapSize)
         useAuxclasspathFile.convention(extension.useAuxclasspathFile)
+
+        if(extension.useJavaToolchains.isPresent() && extension.useJavaToolchains.get()) {
+            configureJavaLauncher()
+        }
+    }
+
+
+    /**
+     * Set convention for default java launcher based on Toolchain configuration
+     */
+    private void configureJavaLauncher() {
+        def toolchain = project.getExtensions().getByType(JavaPluginExtension.class).toolchain
+        JavaToolchainService service = project.getExtensions().getByType(JavaToolchainService.class)
+        Provider<JavaLauncher> defaultLauncher = service.launcherFor(toolchain)
+        launcher.convention(defaultLauncher)
     }
 
     @TaskAction
@@ -364,14 +386,14 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
 
         if (enableWorkerApi == "false") {
             log.info("Running SpotBugs by JavaExec...");
-            new SpotBugsRunnerForJavaExec().run(this);
+            new SpotBugsRunnerForJavaExec(launcher).run(this);
         } else if (enableHybridWorker == "true" && GradleVersion.current() >= GradleVersion.version("6.0")) {
             // ExecOperations is supported from Gradle 6.0
             log.info("Running SpotBugs by Gradle no-isolated Worker...");
-            new SpotBugsRunnerForHybrid(workerExecutor).run(this);
+            new SpotBugsRunnerForHybrid(workerExecutor, launcher).run(this);
         } else {
             log.info("Running SpotBugs by Gradle process-isolated Worker...");
-            new SpotBugsRunnerForWorker(workerExecutor).run(this);
+            new SpotBugsRunnerForWorker(workerExecutor, launcher).run(this);
         }
     }
 
