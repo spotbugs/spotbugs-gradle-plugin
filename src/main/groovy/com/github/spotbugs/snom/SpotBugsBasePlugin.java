@@ -29,10 +29,10 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
   /**
    * Supported Gradle version described at <a
    * href="http://spotbugs.readthedocs.io/en/latest/gradle.html">official manual site</a>. <a
-   * href="https://guides.gradle.org/using-the-worker-api/">The Gradle Worker API</a> needs 5.6 or
-   * later, so we use this value as minimal required version.
+   * href="https://docs.gradle.org/current/userguide/toolchains.html">Toolchains for JVM
+   * projects</a> needs 7.0 or later, so we use this value as minimal required version.
    */
-  private static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("5.6");
+  private static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("7.0");
 
   @Override
   public void apply(Project project) {
