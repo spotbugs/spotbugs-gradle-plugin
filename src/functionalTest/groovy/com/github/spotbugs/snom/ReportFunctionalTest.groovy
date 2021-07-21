@@ -19,6 +19,7 @@ import spock.lang.Specification
 
 import org.gradle.testkit.runner.GradleRunner
 
+import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertFalse
@@ -58,19 +59,26 @@ public class Foo {
 """
     }
 
-    def "generate XML report by default"() {
+    def "generate console report by default"() {
+        given:
+        def badCode = new File(rootDir, 'src/main/java/Bar.java')
+        badCode << '''
+        |public class Bar {
+        |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
+        |}
+        |'''.stripMargin()
         when:
         def result = GradleRunner.create()
                 .withProjectDir(rootDir)
                 .withArguments('spotbugsMain')
                 .withPluginClasspath()
                 .withGradleVersion(version)
-                .build()
+                .buildAndFail()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.xml").toFile()
-        report.isFile()
+        assertEquals(FAILED, result.task(":spotbugsMain").outcome)
+        assertTrue(result.output.contains("M D UrF: Unread public/protected field: Bar.unreadField  At Bar.java:[line 3]"))
+        assertFalse(rootDir.toPath().resolve("build").toFile().list().contains("reports"))
     }
 
     def "can generate spotbugs.txt"() {
