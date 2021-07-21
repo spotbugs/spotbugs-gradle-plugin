@@ -77,7 +77,7 @@ public class Foo {
         buildFile << """
 spotbugsMain {
     reports {
-        text.enabled = true
+        text.required = true
     }
 }"""
         when:
@@ -98,7 +98,7 @@ spotbugsMain {
         buildFile << """
 spotbugsMain {
     reports {
-        text.enabled = true
+        text.required = true
     }
 }
 buildDir = 'new-build-dir'
@@ -121,7 +121,7 @@ buildDir = 'new-build-dir'
 spotbugsMain {
     showStackTraces = false
     reports {
-        text.enabled = true
+        text.required = true
     }
 }
 buildDir = 'new-build-dir'
@@ -151,7 +151,7 @@ buildDir = 'new-build-dir'
 spotbugsMain {
     showStackTraces = false
     reports {
-        html.enabled = true
+        html.required = true
     }
 }
 buildDir = 'new-build-dir'
@@ -173,7 +173,7 @@ buildDir = 'new-build-dir'
         buildFile << """
 spotbugsMain {
     reports {
-        xml.enabled = true
+        xml.required = true
     }
 }
 buildDir = 'new-build-dir'
@@ -195,7 +195,7 @@ buildDir = 'new-build-dir'
         buildFile << """
 spotbugsMain {
     reports {
-        html.enabled = true
+        html.required = true
     }
 }"""
         when:
@@ -227,7 +227,7 @@ dependencies { spotbugsStylesheets 'com.github.spotbugs:spotbugs:3.1.10' }
 spotbugsMain {
     reports {
         html {
-            enabled = true
+            required = true
             stylesheet = resources.text.fromArchiveEntry(configurations.spotbugsStylesheets, 'fancy-hist.xsl')
         }
     }
@@ -257,7 +257,7 @@ spotbugsMain {
 spotbugsMain {
     reports {
         html {
-            enabled = true
+            required = true
             stylesheet = 'fancy-hist.xsl'
         }
     }
@@ -281,7 +281,7 @@ spotbugsMain {
         buildFile << """
 spotbugsMain {
     reports {
-        xml.enabled = true
+        xml.required = true
     }
 }"""
         when:
@@ -329,7 +329,7 @@ spotbugsMain {
         buildFile << """
 spotbugsMain {
     reports {
-        unknown.enabled = true
+        unknown.required = true
     }
 }"""
         when:
@@ -426,7 +426,7 @@ configurations.spotbugs {
         buildFile << """
 spotbugsMain {
     reports {
-        text.enabled = true
+        text.required = true
     }
 }
 reporting {
@@ -452,7 +452,7 @@ reporting {
         buildFile << """
 spotbugsMain {
     reports {
-        sarif.enabled = true
+        sarif.required = true
     }
 }"""
         when:

@@ -166,7 +166,7 @@ spotbugsMain {
         buildFile << """
 spotbugsMain {
     reports {
-        text.enabled = true
+        text.required = true
     }
 }"""
 
@@ -364,7 +364,7 @@ sourceSets {
 }
 spotbugsAnother {
     reports {
-        text.enabled = true
+        text.required = true
     }
 }"""
         File sourceDir = rootDir.toPath().resolve(Paths.get("src", "another", "java")).toFile()

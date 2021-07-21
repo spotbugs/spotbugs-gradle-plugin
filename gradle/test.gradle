@@ -16,7 +16,7 @@ tasks.withType(Test).configureEach {
 def jacocoTestReport = tasks.named('jacocoTestReport') {
     reports {
         xml {
-            enabled true
+            required = true
         }
     }
 }

@@ -87,7 +87,7 @@ to set task-specific properties.
 spotbugsMain {
     reports {
         html {
-            enabled = true
+            required = true
             destination = file("$buildDir/reports/spotbugs/main/spotbugs.html")
             stylesheet = 'fancy-hist.xsl'
         }

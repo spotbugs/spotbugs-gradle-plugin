@@ -65,7 +65,7 @@ spotbugs {
 spotbugsMain {
     reports {
         sarif {
-            enabled = true
+            required = true
         }
     }
 }
