@@ -2,7 +2,7 @@
   "name": "spotbugs-gradle-plugin",
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
-    "@commitlint/config-conventional": "^12.1.4",
+    "@commitlint/config-conventional": "^13.1.0",
     "conventional-changelog-conventionalcommits": "^4.6.0",
     "gradle-semantic-release-plugin": "1.4.23",
     "husky": "^7.0.1",
