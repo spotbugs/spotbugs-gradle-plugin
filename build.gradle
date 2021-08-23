@@ -33,7 +33,7 @@ dependencies {
     compileOnly localGroovy()
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
     compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
-    testImplementation 'com.tngtech.archunit:archunit:0.20.1'
+    testImplementation 'com.tngtech.archunit:archunit:0.21.0'
 }
 
 tasks.named('groovydoc') {
