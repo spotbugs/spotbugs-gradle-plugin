@@ -29,12 +29,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
-      - uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          cache: gradle
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1
 
