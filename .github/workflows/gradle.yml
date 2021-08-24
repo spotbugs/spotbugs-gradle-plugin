@@ -24,6 +24,7 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: 11
+        cache: gradle
     - name: Read .nvmrc
       run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
       id: nvm
@@ -31,12 +32,7 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '${{ steps.nvm.outputs.NVMRC }}'
-    - uses: actions/cache@v2
-      with:
-        path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+        cache: npm
     - name: Gradle Wrapper Validation
       uses: gradle/wrapper-validation-action@v1
     - name: Build with Gradle
