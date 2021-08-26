@@ -33,6 +33,7 @@ jobs:
       with:
         node-version: '${{ steps.nvm.outputs.NVMRC }}'
         cache: npm
+      if: matrix.gradle == '6.9'
     - name: Gradle Wrapper Validation
       uses: gradle/wrapper-validation-action@v1
     - name: Build with Gradle
