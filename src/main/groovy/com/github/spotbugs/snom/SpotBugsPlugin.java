@@ -31,7 +31,6 @@ public class SpotBugsPlugin implements Plugin<Project> {
   @Override
   public void apply(Project project) {
     project.getPluginManager().apply(SpotBugsBasePlugin.class);
-    SpotBugsExtension extension = project.getExtensions().findByType(SpotBugsExtension.class);
     project
         .getPluginManager()
         .withPlugin(
@@ -45,10 +44,10 @@ public class SpotBugsPlugin implements Plugin<Project> {
                   .configure(
                       task -> task.dependsOn(project.getTasks().withType(SpotBugsTask.class)));
             });
-    createTasks(project, extension);
+    createTasks(project);
   }
 
-  private void createTasks(Project project, SpotBugsExtension extension) {
+  private void createTasks(Project project) {
     new SpotBugsTaskFactory().generate(project);
   }
 }
