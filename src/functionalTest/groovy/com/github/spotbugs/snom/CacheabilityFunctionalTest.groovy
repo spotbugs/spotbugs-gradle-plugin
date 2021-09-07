@@ -62,7 +62,7 @@ class CacheabilityFunctionalTest extends Specification {
         BuildResult result2 =
                 GradleRunner.create()
                 .withProjectDir(buildDir2)
-                .withArguments(':spotbugsMain')
+                .withArguments(':spotbugsMain', '--scan')
                 .withPluginClasspath()
                 .forwardOutput()
                 .withGradleVersion(version)
@@ -80,6 +80,7 @@ class CacheabilityFunctionalTest extends Specification {
 
     private static void initializeBuildFile(File buildDir) {
         File buildFile = new File(buildDir, 'build.gradle')
+        File settingsFile = new File(buildDir, 'settings.gradle')
         File propertiesFile = new File(buildDir, 'gradle.properties')
 
         buildFile << '''
@@ -95,6 +96,17 @@ class CacheabilityFunctionalTest extends Specification {
             |}
             |'''.stripMargin()
 
+        settingsFile << '''
+            |plugins {
+            |    id "com.gradle.enterprise" version "3.6.4"
+            |}
+            |gradleEnterprise {
+            |    buildScan {
+            |        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+            |        termsOfServiceAgree = "yes"
+            |    }
+            |}
+            '''.stripMargin()
         File sourceDir = buildDir.toPath().resolve('src').resolve('main').resolve('java').toFile()
         sourceDir.mkdirs()
         File sourceFile = new File(sourceDir, 'Foo.java')
