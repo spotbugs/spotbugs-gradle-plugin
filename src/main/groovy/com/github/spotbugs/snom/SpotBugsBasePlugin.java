@@ -40,6 +40,7 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
 
   @Override
   public void apply(Project project) {
+    // use XML report by default, only when SpotBugs plugin is applied
     boolean isSpotBugsPluginApplied = project.getPluginManager().hasPlugin("com.github.spotbugs");
     verifyGradleVersion(GradleVersion.current());
     project.getPluginManager().apply(ReportingBasePlugin.class);
