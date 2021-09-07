@@ -49,24 +49,6 @@ public class SpotBugsPlugin implements Plugin<Project> {
   }
 
   private void createTasks(Project project, SpotBugsExtension extension) {
-    String enableWorkerApi =
-        getPropertyOrDefault(project, SpotBugsBasePlugin.FEATURE_FLAG_WORKER_API, "true");
-    String enableHybridWorker =
-        getPropertyOrDefault(project, SpotBugsBasePlugin.FEATURE_FLAG_HYBRID_WORKER, "false");
-
-    new SpotBugsTaskFactory()
-        .generate(
-            project,
-            task ->
-                task.init(
-                    extension,
-                    Boolean.parseBoolean(enableWorkerApi),
-                    Boolean.parseBoolean(enableHybridWorker)));
-  }
-
-  private String getPropertyOrDefault(Project project, String propertyName, String defaultValue) {
-    return project.hasProperty(propertyName)
-        ? project.property(propertyName).toString()
-        : defaultValue;
+    new SpotBugsTaskFactory().generate(project);
   }
 }

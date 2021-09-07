@@ -26,8 +26,9 @@ import org.gradle.api.plugins.ReportingBasePlugin;
 import org.gradle.util.GradleVersion;
 
 public class SpotBugsBasePlugin implements Plugin<Project> {
-  static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
-  static final String FEATURE_FLAG_HYBRID_WORKER = "com.github.spotbugs.snom.javaexec-in-worker";
+  private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
+  private static final String FEATURE_FLAG_HYBRID_WORKER =
+      "com.github.spotbugs.snom.javaexec-in-worker";
 
   /**
    * Supported Gradle version described at <a
