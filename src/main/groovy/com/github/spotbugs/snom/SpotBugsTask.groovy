@@ -262,6 +262,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     private boolean enableWorkerApi;
     private boolean enableHybridWorker;
+    private boolean isSpotBugsPluginApplied;
 
     void setClasses(FileCollection fileCollection) {
         this.classes = fileCollection
@@ -336,7 +337,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
      *
      * @param extension the source extension to copy the properties.
      */
-    void init(SpotBugsExtension extension, boolean enableWorkerApi, boolean enableHybridWorker) {
+    void init(SpotBugsExtension extension, boolean isSpotBugsPluginApplied, boolean enableWorkerApi, boolean enableHybridWorker) {
         ignoreFailures.convention(extension.ignoreFailures)
         showStackTraces.convention(extension.showStackTraces)
         showProgress.convention(extension.showProgress)
@@ -356,6 +357,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         extraArgs.convention(extension.extraArgs)
         maxHeapSize.convention(extension.maxHeapSize)
         useAuxclasspathFile.convention(extension.useAuxclasspathFile)
+        this.isSpotBugsPluginApplied = isSpotBugsPluginApplied
         this.enableWorkerApi = enableWorkerApi
         this.enableHybridWorker = enableHybridWorker
     }
@@ -406,11 +408,8 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Optional
     @Nested
     SpotBugsReport getFirstEnabledReport() {
-        // use XML report by default, only when SpotBugs plugin is applied
-        boolean isSpotBugsPluingApplied = project.pluginManager.hasPlugin("com.github.spotbugs")
-
         java.util.Optional<SpotBugsReport> report = reports.stream().filter({ report -> report.enabled}).findFirst()
-        if (isSpotBugsPluingApplied) {
+        if (isSpotBugsPluginApplied) {
             return report.orElse(reports.create("xml"))
         } else {
             return report.orElse(null)

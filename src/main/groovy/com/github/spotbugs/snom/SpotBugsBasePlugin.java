@@ -40,6 +40,7 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
 
   @Override
   public void apply(Project project) {
+    boolean isSpotBugsPluginApplied = project.getPluginManager().hasPlugin("com.github.spotbugs");
     verifyGradleVersion(GradleVersion.current());
     project.getPluginManager().apply(ReportingBasePlugin.class);
 
@@ -56,6 +57,7 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
             task ->
                 task.init(
                     extension,
+                    isSpotBugsPluginApplied,
                     Boolean.parseBoolean(enableWorkerApi),
                     Boolean.parseBoolean(enableHybridWorker)));
   }
