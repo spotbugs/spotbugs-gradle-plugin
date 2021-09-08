@@ -1,5 +1,4 @@
-// configuration to publish gradle plugin to plugin portal
-// https://guides.gradle.org/publishing-plugins-to-gradle-plugin-portal/
+apply plugin: 'maven-publish'
 
 pluginBundle {
     website = 'https://github.com/spotbugs/spotbugs-gradle-plugin'
@@ -12,6 +11,7 @@ pluginBundle {
 }
 
 gradlePlugin {
+    testSourceSets project.sourceSets.functionalTest
     plugins {
         spotbugsGradleBasePlugin {
             id = 'com.github.spotbugs-base'
@@ -24,6 +24,17 @@ gradlePlugin {
             displayName = 'Official SpotBugs Gradle Plugin'
             description = 'A Gradle plugin that runs static bytecode analysis by SpotBugs'
             implementationClass = 'com.github.spotbugs.snom.SpotBugsPlugin'
+        }
+    }
+}
+
+publishing.publications.all {
+    pom {
+        licenses {
+            license {
+                name = 'Apache License 2.0'
+                url = 'https://spdx.org/licenses/Apache-2.0.html'
+            }
         }
     }
 }
