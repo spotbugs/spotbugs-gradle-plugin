@@ -409,11 +409,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Nested
     SpotBugsReport getFirstEnabledReport() {
         java.util.Optional<SpotBugsReport> report = reports.stream().filter({ report -> report.enabled}).findFirst()
-        if (isSpotBugsPluginApplied) {
-            return report.orElse(reports.create("xml"))
-        } else {
-            return report.orElse(null)
-        }
+        return report.orElse(null)
     }
 
     void setReportLevel(@Nullable String name) {
