@@ -35,13 +35,6 @@ dependencies {
     testImplementation 'com.tngtech.archunit:archunit:0.21.0'
 }
 
-tasks.named('groovydoc') {
-    docTitle 'SpotBugs Gradle Plugin'
-    link 'https://docs.gradle.org/current/javadoc/', 'org.gradle.api.'
-    link 'https://docs.oracle.com/en/java/javase/11/docs/api/', 'java.'
-    link 'https://docs.groovy-lang.org/latest/html/gapi/', 'groovy.', 'org.codehaus.groovy.'
-}
-
 def signingKey = System.getenv("SIGNING_KEY")
 def signingPassword = System.getenv("SIGNING_PASSWORD")
 
