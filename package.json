@@ -21,6 +21,15 @@
   },
   "release": {
     "tagFormat": "${version}",
+    "branches": [
+      {
+        "name": "master"
+      },
+      {
+        "name": "beta",
+        "prerelease": "beta"
+      }
+    ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
