@@ -77,6 +77,23 @@ public class Foo {
         assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").outcome)
     }
 
+    def "can be listed in the task list"() {
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(":tasks")
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":tasks").outcome == TaskOutcome.SUCCESS
+        result.output.contains("spotbugsMain - Run SpotBugs analysis for the source set 'main'")
+        result.output.contains("spotbugsTest - Run SpotBugs analysis for the source set 'test'")
+    }
+
     def "can use the specified SpotBugs version"() {
         setup:
         buildFile << """
