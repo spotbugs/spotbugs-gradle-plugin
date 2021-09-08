@@ -42,6 +42,7 @@ spotbugs {
     reportsDir = file("$buildDir/spotbugs")
     includeFilter = file("include.xml")
     excludeFilter = file("exclude.xml")
+    baselineFile = file("baseline.xml")
     onlyAnalyze = [ 'com.foobar.MyClass', 'com.foobar.mypkg.*' ]
     maxHeapSize = '1g'
     extraArgs = [ '-nested:false' ]
@@ -102,6 +103,9 @@ You can change SpotBugs version by [the `toolVersion` property of the spotbugs e
 
 |Gradle Plugin|SpotBugs|
 |-----:|-----:|
+| 4.7.3| 4.4.0|
+| 4.7.2| 4.3.0|
+| 4.6.1| 4.2.1|
 | 4.5.0| 4.1.1|
 | 4.4.4| 4.0.6|
 | 4.4.2| 4.0.5|

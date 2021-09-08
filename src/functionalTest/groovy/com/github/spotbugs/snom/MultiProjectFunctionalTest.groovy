@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 SpotBugs team
+ * Copyright 2021 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of the License at
@@ -125,7 +125,7 @@ subprojects {
 
         then:
         assertEquals(SUCCESS, result.task(":sub:spotbugsMain").outcome)
-        assertTrue(result.output.contains("SpotBugs 4.0.0-RC1"))
+        assertTrue(result.output.contains("spotbugs-4.0.0-RC1.jar"))
     }
 
     def "can use toolVersion in the subproject"() {
@@ -147,6 +147,6 @@ spotbugs {
 
         then:
         assertEquals(SUCCESS, result.task(":sub:spotbugsMain").outcome)
-        assertTrue(result.output.contains("SpotBugs 4.0.0-RC1"))
+        assertTrue(result.output.contains("spotbugs-4.0.0-RC1.jar"))
     }
 }

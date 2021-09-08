@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 SpotBugs team
+ * Copyright 2021 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of the License at
@@ -13,9 +13,10 @@
  */
 package com.github.spotbugs.snom;
 
-import com.github.spotbugs.snom.internal.SpotBugsHtmlReport;
+import com.github.spotbugs.snom.internal.SpotBugsHtmlReport
+import com.github.spotbugs.snom.internal.SpotBugsRunnerForHybrid;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
-import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker
+import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker;
 import com.github.spotbugs.snom.internal.SpotBugsSarifReport;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
@@ -47,7 +48,8 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask;
-import org.gradle.util.ClosureBackedAction;
+import org.gradle.util.ClosureBackedAction
+import org.gradle.util.GradleVersion;
 import org.gradle.workers.WorkerExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory
@@ -75,6 +77,7 @@ import javax.inject.Inject
  * &nbsp;&nbsp;&nbsp;&nbsp;reportsDir = file("$buildDir/reports/spotbugs")<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;includeFilter = file('spotbugs-include.xml')<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;excludeFilter = file('spotbugs-exclude.xml')<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;baselineFile = file('spotbugs-baseline.xml')<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;projectName = name<br>
  * &nbsp;&nbsp;&nbsp;&nbsp;release = version<br>
@@ -88,7 +91,6 @@ import javax.inject.Inject
 
 @CacheableTask
 class SpotBugsTask extends DefaultTask implements VerificationTask {
-    private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
 
     private final WorkerExecutor workerExecutor;
@@ -172,6 +174,15 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @NonNull
     final RegularFileProperty excludeFilter;
     /**
+     * Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file will not be
+     * reported in the final output.
+     */
+    @Optional
+    @InputFile
+    @PathSensitive(PathSensitivity.RELATIVE)
+    @NonNull
+    final RegularFileProperty baselineFile;
+    /**
      * Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.
      */
     @Input
@@ -249,6 +260,10 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     private FileCollection classes;
 
+    private boolean enableWorkerApi;
+    private boolean enableHybridWorker;
+    private boolean isSpotBugsPluginApplied;
+
     void setClasses(FileCollection fileCollection) {
         this.classes = fileCollection
     }
@@ -306,6 +321,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
                 });
         includeFilter = objects.fileProperty()
         excludeFilter = objects.fileProperty()
+        baselineFile = objects.fileProperty()
         onlyAnalyze = objects.listProperty(String);
         projectName = objects.property(String);
         release = objects.property(String);
@@ -321,7 +337,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
      *
      * @param extension the source extension to copy the properties.
      */
-    void init(SpotBugsExtension extension) {
+    void init(SpotBugsExtension extension, boolean isSpotBugsPluginApplied, boolean enableWorkerApi, boolean enableHybridWorker) {
         ignoreFailures.convention(extension.ignoreFailures)
         showStackTraces.convention(extension.showStackTraces)
         showProgress.convention(extension.showProgress)
@@ -333,6 +349,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         reportsDir.convention(extension.reportsDir)
         includeFilter.convention(extension.includeFilter)
         excludeFilter.convention(extension.excludeFilter)
+        baselineFile.convention(extension.baselineFile)
         onlyAnalyze.convention(extension.onlyAnalyze)
         projectName.convention(extension.projectName.map({p -> String.format("%s (%s)", p, getName())}))
         release.convention(extension.release)
@@ -340,18 +357,22 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         extraArgs.convention(extension.extraArgs)
         maxHeapSize.convention(extension.maxHeapSize)
         useAuxclasspathFile.convention(extension.useAuxclasspathFile)
+        this.isSpotBugsPluginApplied = isSpotBugsPluginApplied
+        this.enableWorkerApi = enableWorkerApi
+        this.enableHybridWorker = enableHybridWorker
     }
 
     @TaskAction
     void run() {
-        if (getProject().hasProperty(FEATURE_FLAG_WORKER_API)
-        && getProject()
-        .property(FEATURE_FLAG_WORKER_API)
-        .toString() == "false") {
+        if (!enableWorkerApi) {
             log.info("Running SpotBugs by JavaExec...");
             new SpotBugsRunnerForJavaExec().run(this);
+        } else if (enableHybridWorker && GradleVersion.current() >= GradleVersion.version("6.0")) {
+            // ExecOperations is supported from Gradle 6.0
+            log.info("Running SpotBugs by Gradle no-isolated Worker...");
+            new SpotBugsRunnerForHybrid(workerExecutor).run(this);
         } else {
-            log.info("Running SpotBugs by Gradle Worker...");
+            log.info("Running SpotBugs by Gradle process-isolated Worker...");
             new SpotBugsRunnerForWorker(workerExecutor).run(this);
         }
     }
@@ -388,7 +409,11 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Nested
     SpotBugsReport getFirstEnabledReport() {
         java.util.Optional<SpotBugsReport> report = reports.stream().filter({ report -> report.enabled}).findFirst()
-        return report.orElse(null)
+        if (isSpotBugsPluginApplied) {
+            return report.orElse(reports.create("xml"))
+        } else {
+            return report.orElse(null)
+        }
     }
 
     void setReportLevel(@Nullable String name) {

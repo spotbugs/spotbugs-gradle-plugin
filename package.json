@@ -1,21 +1,18 @@
 {
+  "name": "spotbugs-gradle-plugin",
   "devDependencies": {
-    "commitlint": "^11.0.0",
-    "conventional-changelog-conventionalcommits": "^4.4.0",
-    "gradle-semantic-release-plugin": "1.4.10",
-    "husky": "^4.3.0",
-    "lint-staged": "^10.4.0",
-    "prettier": "^2.1.2",
-    "semantic-release": "17.2.1"
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "conventional-changelog-conventionalcommits": "^4.6.0",
+    "gradle-semantic-release-plugin": "1.4.23",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
+    "pinst": "^2.1.6",
+    "prettier": "^2.3.2",
+    "semantic-release": "17.4.7"
   },
   "scripts": {
-    "semantic-release": "semantic-release"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "gradle/spotless.sh && lint-staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.md,package.json": [
@@ -39,6 +36,6 @@
     ]
   },
   "engines": {
-    "node": "^12.12.0"
+    "node": "^14.16.0"
   }
 }

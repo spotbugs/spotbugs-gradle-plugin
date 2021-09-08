@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 SpotBugs team
+ * Copyright 2021 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of the License at
@@ -31,7 +31,6 @@ public class SpotBugsPlugin implements Plugin<Project> {
   @Override
   public void apply(Project project) {
     project.getPluginManager().apply(SpotBugsBasePlugin.class);
-    SpotBugsExtension extension = project.getExtensions().findByType(SpotBugsExtension.class);
     project
         .getPluginManager()
         .withPlugin(
@@ -45,10 +44,10 @@ public class SpotBugsPlugin implements Plugin<Project> {
                   .configure(
                       task -> task.dependsOn(project.getTasks().withType(SpotBugsTask.class)));
             });
-    createTasks(project, extension);
+    createTasks(project);
   }
 
-  private void createTasks(Project project, SpotBugsExtension extension) {
-    new SpotBugsTaskFactory().generate(project, task -> task.init(extension));
+  private void createTasks(Project project) {
+    new SpotBugsTaskFactory().generate(project);
   }
 }

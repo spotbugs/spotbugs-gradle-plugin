@@ -4,7 +4,7 @@ configurations {
     }
 }
 dependencies {
-    functionalTestImplementation 'org.spockframework:spock-core:1.3-groovy-2.5'
+    functionalTestImplementation 'org.spockframework:spock-core:2.0-M5-groovy-3.0'
 }
 
 sourceSets {
@@ -20,7 +20,7 @@ gradlePlugin {
     testSourceSets sourceSets.functionalTest
 }
 
-task functionalTest(type: Test) {
+def functionalTest = tasks.register('functionalTest', Test) {
     description = 'Runs the functional tests.'
     group = 'verification'
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
@@ -29,4 +29,6 @@ task functionalTest(type: Test) {
     systemProperty 'snom.test.functional.gradle', System.getProperty('snom.test.functional.gradle', gradle.gradleVersion)
 }
 
-check.dependsOn functionalTest
+tasks.named('check').configure {
+    dependsOn functionalTest
+}

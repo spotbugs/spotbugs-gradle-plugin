@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 SpotBugs team
+ * Copyright 2021 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of the License at
@@ -104,6 +104,30 @@ spotbugs {
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-exclude"))
         assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
+    }
+
+    def "can use baselineFile"() {
+        setup:
+        File baseline = new File(rootDir, "baseline.xml")
+        buildFile << """
+spotbugs {
+    baselineFile = file('baseline.xml')
+}"""
+        baseline << """
+<BugCollection></BugCollection>
+"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain', '--debug')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        assertTrue(result.getOutput().contains("-excludeBugs"))
+        assertTrue(result.getOutput().contains(baseline.getAbsolutePath()))
     }
 
     def "can use visitors"() {
@@ -237,7 +261,7 @@ spotbugs {
 
         then:
         assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.output.contains("SpotBugs 4.0.0-beta4"))
+        assertTrue(result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar"))
     }
 
     def "can use toolVersion to get the SpotBugs version"() {

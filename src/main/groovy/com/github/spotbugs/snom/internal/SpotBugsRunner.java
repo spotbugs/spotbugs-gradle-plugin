@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 SpotBugs team
+ * Copyright 2021 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of the License at
@@ -99,6 +99,10 @@ public abstract class SpotBugsRunner {
     if (task.getExcludeFilter().isPresent() && task.getExcludeFilter().get() != null) {
       args.add("-exclude");
       args.add(task.getExcludeFilter().get().getAsFile().getAbsolutePath());
+    }
+    if (task.getBaselineFile().isPresent() && task.getBaselineFile().get() != null) {
+      args.add("-excludeBugs");
+      args.add(task.getBaselineFile().get().getAsFile().getAbsolutePath());
     }
     if (task.getOnlyAnalyze().isPresent() && !task.getOnlyAnalyze().get().isEmpty()) {
       args.add("-onlyAnalyze");

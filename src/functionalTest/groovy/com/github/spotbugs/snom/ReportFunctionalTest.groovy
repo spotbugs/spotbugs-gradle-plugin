@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 SpotBugs team
+ * Copyright 2021 SpotBugs team
  *
  * <p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of the License at
@@ -365,7 +365,7 @@ spotbugsMain {
 
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("Running SpotBugs by Gradle Worker..."));
+        assertTrue(result.output.contains("Running SpotBugs by Gradle no-isolated Worker...") || result.output.contains("Running SpotBugs by Gradle process-isolated Worker..."));
     }
 
     def "can run task by JavaExec by gradle.properties"() {
