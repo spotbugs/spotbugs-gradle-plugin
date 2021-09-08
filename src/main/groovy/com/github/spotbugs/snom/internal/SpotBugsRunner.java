@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.gradle.api.GradleException;
+import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,7 +115,7 @@ public abstract class SpotBugsRunner {
     args.add("-release");
     args.add(task.getRelease().get());
     args.add("-analyzeFromFile");
-    args.add(generateFile(task.getClasses()).getAbsolutePath());
+    args.add(generateFile(task.getClasses(), task).getAbsolutePath());
 
     args.addAll(task.getExtraArgs().getOrElse(Collections.emptyList()));
     log.debug("Arguments for SpotBugs are generated: {}", args);
@@ -152,9 +153,9 @@ public abstract class SpotBugsRunner {
     }
   }
 
-  private File generateFile(FileCollection files) {
+  private File generateFile(FileCollection files, Task task) {
     try {
-      File file = File.createTempFile("spotbugs-gradle-plugin", ".txt");
+      File file = File.createTempFile("spotbugs-gradle-plugin", ".txt", task.getTemporaryDir());
       Iterable<String> lines =
           files.filter(File::exists).getFiles().stream().map(File::getAbsolutePath)::iterator;
       Files.write(file.toPath(), lines, StandardCharsets.UTF_8, StandardOpenOption.WRITE);
