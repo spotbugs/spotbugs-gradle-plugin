@@ -6,9 +6,6 @@ plugins {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    sourceCompatibility = JavaVersion.VERSION_1_8.toString()
-    targetCompatibility = JavaVersion.VERSION_1_8.toString()
-
     // disable warnings in generated code by immutables
     // https://github.com/google/error-prone/issues/329
     options.errorprone.disableWarningsInGeneratedCode.set(true)

@@ -9,6 +9,8 @@ plugins {
     id 'com.github.spotbugs' version '4.7.3'
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 group = 'com.github.spotbugs.snom'
 
 repositories {
