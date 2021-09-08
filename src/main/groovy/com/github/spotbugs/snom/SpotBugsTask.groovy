@@ -24,6 +24,7 @@ import edu.umd.cs.findbugs.annotations.NonNull
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SkipWhenEmpty
 
@@ -329,6 +330,8 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         extraArgs = objects.listProperty(String);
         maxHeapSize = objects.property(String);
         useAuxclasspathFile = objects.property(Boolean)
+        setDescription("Run SpotBugs analysis.")
+        setGroup(JavaBasePlugin.VERIFICATION_GROUP)
     }
 
     /**
