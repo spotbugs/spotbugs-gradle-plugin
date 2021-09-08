@@ -5,13 +5,15 @@ plugins {
     id("net.ltgt.errorprone")
 }
 
-tasks.withType<JavaCompile>().configureEach {
-    options.release.set(8)
-
-    if (GradleVersion.current() < GradleVersion.version("6.0")) {
+if (GradleVersion.current() < GradleVersion.version("6.0")) {
+    tasks.withType<JavaCompile>().configureEach {
         sourceCompatibility = JavaVersion.VERSION_1_8.toString()
         targetCompatibility = JavaVersion.VERSION_1_8.toString()
     }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(8)
 
     // disable warnings in generated code by immutables
     // https://github.com/google/error-prone/issues/329
