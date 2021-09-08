@@ -62,6 +62,11 @@ public class SpotBugsTaskFactory {
                                       sourceSet.getAllSource().getSourceDirectories());
                                   task.setClassDirs(sourceSet.getOutput());
                                   task.setAuxClassPaths(sourceSet.getCompileClasspath());
+                                  String description =
+                                      String.format(
+                                          "Run SpotBugs analysis for the source set '%s'",
+                                          sourceSet.getName());
+                                  task.setDescription(description);
                                 });
                       });
             });
