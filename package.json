@@ -1,15 +1,15 @@
 {
   "name": "spotbugs-gradle-plugin",
   "devDependencies": {
-    "@commitlint/cli": "^12.1.4",
-    "@commitlint/config-conventional": "^12.1.4",
-    "conventional-changelog-conventionalcommits": "^4.6.0",
-    "gradle-semantic-release-plugin": "1.4.23",
-    "husky": "^7.0.1",
-    "lint-staged": "^11.0.0",
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "conventional-changelog-conventionalcommits": "^4.6.1",
+    "gradle-semantic-release-plugin": "1.4.24",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
     "pinst": "^2.1.6",
-    "prettier": "^2.3.2",
-    "semantic-release": "17.4.4"
+    "prettier": "^2.4.1",
+    "semantic-release": "17.4.7"
   },
   "scripts": {
     "prepare": "husky install"
@@ -21,6 +21,15 @@
   },
   "release": {
     "tagFormat": "${version}",
+    "branches": [
+      {
+        "name": "master"
+      },
+      {
+        "name": "beta",
+        "prerelease": "beta"
+      }
+    ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",

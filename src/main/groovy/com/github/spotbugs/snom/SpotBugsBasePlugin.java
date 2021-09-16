@@ -26,6 +26,10 @@ import org.gradle.api.plugins.ReportingBasePlugin;
 import org.gradle.util.GradleVersion;
 
 public class SpotBugsBasePlugin implements Plugin<Project> {
+  private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
+  private static final String FEATURE_FLAG_HYBRID_WORKER =
+      "com.github.spotbugs.snom.javaexec-in-worker";
+
   /**
    * Supported Gradle version described at <a
    * href="http://spotbugs.readthedocs.io/en/latest/gradle.html">official manual site</a>. <a
@@ -36,13 +40,27 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
 
   @Override
   public void apply(Project project) {
+    // use XML report by default, only when SpotBugs plugin is applied
+    boolean isSpotBugsPluginApplied = project.getPluginManager().hasPlugin("com.github.spotbugs");
     verifyGradleVersion(GradleVersion.current());
     project.getPluginManager().apply(ReportingBasePlugin.class);
 
     SpotBugsExtension extension = createExtension(project);
     createConfiguration(project, extension);
     createPluginConfiguration(project);
-    project.getTasks().withType(SpotBugsTask.class).configureEach(task -> task.init(extension));
+
+    String enableWorkerApi = getPropertyOrDefault(project, FEATURE_FLAG_WORKER_API, "true");
+    String enableHybridWorker = getPropertyOrDefault(project, FEATURE_FLAG_HYBRID_WORKER, "false");
+    project
+        .getTasks()
+        .withType(SpotBugsTask.class)
+        .configureEach(
+            task ->
+                task.init(
+                    extension,
+                    isSpotBugsPluginApplied,
+                    Boolean.parseBoolean(enableWorkerApi),
+                    Boolean.parseBoolean(enableHybridWorker)));
   }
 
   private SpotBugsExtension createExtension(Project project) {
@@ -116,5 +134,11 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
               version, SUPPORTED_VERSION);
       throw new IllegalArgumentException(message);
     }
+  }
+
+  private String getPropertyOrDefault(Project project, String propertyName, String defaultValue) {
+    return project.hasProperty(propertyName)
+        ? project.property(propertyName).toString()
+        : defaultValue;
   }
 }

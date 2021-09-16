@@ -3,11 +3,10 @@ plugins {
     id 'java-gradle-plugin'
     id 'jacoco'
     id 'signing'
-    id 'com.gradle.plugin-publish' version '0.15.0'
-    id 'com.diffplug.spotless' version '5.14.1'
-    id 'net.ltgt.errorprone' version '2.0.2'
+    id 'com.gradle.plugin-publish' version '0.16.0'
+    id 'com.github.spotbugs.gradle-plugin'
     id 'org.sonarqube' version '3.3'
-    id 'com.github.spotbugs' version '4.7.1'
+    id 'com.github.spotbugs' version '4.7.5'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -22,8 +21,8 @@ repositories {
 }
 
 ext {
-    errorproneVersion = '2.7.1'
-    spotBugsVersion = '4.3.0'
+    errorproneVersion = '2.9.0'
+    spotBugsVersion = '4.4.1'
     slf4jVersion = '1.8.0-beta4'
     androidGradlePluginVersion = '4.2.2'
 }
@@ -33,14 +32,7 @@ dependencies {
     compileOnly localGroovy()
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
     compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
-    testImplementation 'com.tngtech.archunit:archunit:0.20.0'
-}
-
-tasks.named('groovydoc') {
-    docTitle 'SpotBugs Gradle Plugin'
-    link 'https://docs.gradle.org/current/javadoc/', 'org.gradle.api.'
-    link 'https://docs.oracle.com/en/java/javase/11/docs/api/', 'java.'
-    link 'https://docs.groovy-lang.org/latest/html/gapi/', 'groovy.', 'org.codehaus.groovy.'
+    testImplementation 'com.tngtech.archunit:archunit:0.21.0'
 }
 
 def signingKey = System.getenv("SIGNING_KEY")
@@ -82,8 +74,6 @@ tasks.named('processResources').configure {
 
 apply from: "$rootDir/gradle/test.gradle"
 apply from: "$rootDir/gradle/functional-test.gradle"
-apply from: "$rootDir/gradle/spotless.gradle"
-apply from: "$rootDir/gradle/errorprone.gradle"
 apply from: "$rootDir/gradle/publish.gradle"
 
 defaultTasks 'spotlessApply', 'build'

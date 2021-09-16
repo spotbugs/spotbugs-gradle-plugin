@@ -25,6 +25,7 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SkipWhenEmpty
 
@@ -96,6 +97,7 @@ import javax.inject.Inject
 abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
     private static final String FEATURE_FLAG_HYBRID_WORKER = "com.github.spotbugs.snom.javaexec-in-worker";
+
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
 
     private final WorkerExecutor workerExecutor;
@@ -265,6 +267,10 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     private FileCollection classes;
 
+    private boolean enableWorkerApi;
+    private boolean enableHybridWorker;
+    private boolean isSpotBugsPluginApplied;
+
     void setClasses(FileCollection fileCollection) {
         this.classes = fileCollection
     }
@@ -334,6 +340,8 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         extraArgs = objects.listProperty(String);
         maxHeapSize = objects.property(String);
         useAuxclasspathFile = objects.property(Boolean)
+        setDescription("Run SpotBugs analysis.")
+        setGroup(JavaBasePlugin.VERIFICATION_GROUP)
     }
 
     /**
@@ -342,7 +350,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
      *
      * @param extension the source extension to copy the properties.
      */
-    void init(SpotBugsExtension extension) {
+    void init(SpotBugsExtension extension, boolean isSpotBugsPluginApplied, boolean enableWorkerApi, boolean enableHybridWorker) {
         ignoreFailures.convention(extension.ignoreFailures)
         showStackTraces.convention(extension.showStackTraces)
         showProgress.convention(extension.showProgress)
@@ -366,6 +374,10 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         if(extension.useJavaToolchains.isPresent() && extension.useJavaToolchains.get()) {
             configureJavaLauncher()
         }
+
+        this.isSpotBugsPluginApplied = isSpotBugsPluginApplied
+        this.enableWorkerApi = enableWorkerApi
+        this.enableHybridWorker = enableHybridWorker
     }
 
 
@@ -381,13 +393,10 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     @TaskAction
     void run() {
-        String enableWorkerApi = project.properties.getOrDefault(FEATURE_FLAG_WORKER_API, "true")
-        String enableHybridWorker = project.properties.getOrDefault(FEATURE_FLAG_HYBRID_WORKER, "false")
-
-        if (enableWorkerApi == "false") {
+        if (!enableWorkerApi) {
             log.info("Running SpotBugs by JavaExec...");
             new SpotBugsRunnerForJavaExec(launcher).run(this);
-        } else if (enableHybridWorker == "true" && GradleVersion.current() >= GradleVersion.version("6.0")) {
+        } else if (enableHybridWorker && GradleVersion.current() >= GradleVersion.version("6.0")) {
             // ExecOperations is supported from Gradle 6.0
             log.info("Running SpotBugs by Gradle no-isolated Worker...");
             new SpotBugsRunnerForHybrid(workerExecutor, launcher).run(this);
@@ -428,11 +437,8 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Optional
     @Nested
     SpotBugsReport getFirstEnabledReport() {
-        // use XML report by default, only when SpotBugs plugin is applied
-        boolean isSpotBugsPluingApplied = project.pluginManager.hasPlugin("com.github.spotbugs")
-
         java.util.Optional<SpotBugsReport> report = reports.stream().filter({ report -> report.enabled}).findFirst()
-        if (isSpotBugsPluingApplied) {
+        if (isSpotBugsPluginApplied) {
             return report.orElse(reports.create("xml"))
         } else {
             return report.orElse(null)

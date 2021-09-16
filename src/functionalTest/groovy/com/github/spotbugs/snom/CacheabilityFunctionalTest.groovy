@@ -16,6 +16,7 @@ package com.github.spotbugs.snom
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
+import spock.lang.Requires
 import spock.lang.Specification
 
 import java.nio.file.Files
@@ -41,8 +42,8 @@ class CacheabilityFunctionalTest extends Specification {
 
         def version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
-        initializeBuildFile(buildDir1)
-        initializeBuildFile(buildDir2)
+        initializeBuildFile(buildDir1, !version.startsWith('5'))
+        initializeBuildFile(buildDir2, !version.startsWith('5'))
 
         when:
         BuildResult result1 =
@@ -62,7 +63,7 @@ class CacheabilityFunctionalTest extends Specification {
         BuildResult result2 =
                 GradleRunner.create()
                 .withProjectDir(buildDir2)
-                .withArguments(':spotbugsMain')
+                .withArguments(':spotbugsMain', '--scan')
                 .withPluginClasspath()
                 .forwardOutput()
                 .withGradleVersion(version)
@@ -78,8 +79,9 @@ class CacheabilityFunctionalTest extends Specification {
         return result.output.find('Build cache key for task \':spotbugsMain\' is .*')
     }
 
-    private static void initializeBuildFile(File buildDir) {
+    private static void initializeBuildFile(File buildDir, boolean runScan) {
         File buildFile = new File(buildDir, 'build.gradle')
+        File settingsFile = new File(buildDir, 'settings.gradle')
         File propertiesFile = new File(buildDir, 'gradle.properties')
 
         buildFile << '''
@@ -95,6 +97,19 @@ class CacheabilityFunctionalTest extends Specification {
             |}
             |'''.stripMargin()
 
+        if (runScan) {
+            settingsFile << '''
+                |plugins {
+                |    id "com.gradle.enterprise" version "3.6.4"
+                |}
+                |gradleEnterprise {
+                |    buildScan {
+                |        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+                |        termsOfServiceAgree = "yes"
+                |    }
+                |}
+                '''.stripMargin()
+        }
         File sourceDir = buildDir.toPath().resolve('src').resolve('main').resolve('java').toFile()
         sourceDir.mkdirs()
         File sourceFile = new File(sourceDir, 'Foo.java')

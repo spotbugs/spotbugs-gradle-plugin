@@ -33,12 +33,12 @@ import org.slf4j.LoggerFactory;
 public class SpotBugsTaskFactory {
   private final Logger log = LoggerFactory.getLogger(SpotBugsTaskFactory.class);
 
-  public void generate(Project project, Action<? super SpotBugsTask> configurationAction) {
-    generateForJava(project, configurationAction);
-    generateForAndroid(project, configurationAction);
+  public void generate(Project project) {
+    generateForJava(project);
+    generateForAndroid(project);
   }
 
-  private void generateForJava(Project project, Action<? super SpotBugsTask> configurationAction) {
+  private void generateForJava(Project project) {
     project
         .getPlugins()
         .withType(JavaBasePlugin.class)
@@ -62,14 +62,17 @@ public class SpotBugsTaskFactory {
                                       sourceSet.getAllSource().getSourceDirectories());
                                   task.setClassDirs(sourceSet.getOutput());
                                   task.setAuxClassPaths(sourceSet.getCompileClasspath());
-                                  configurationAction.execute(task);
+                                  String description =
+                                      String.format(
+                                          "Run SpotBugs analysis for the source set '%s'",
+                                          sourceSet.getName());
+                                  task.setDescription(description);
                                 });
                       });
             });
   }
 
-  private void generateForAndroid(
-      Project project, Action<? super SpotBugsTask> configurationAction) {
+  private void generateForAndroid(Project project) {
 
     @SuppressWarnings("rawtypes")
     final Action<? super Plugin> action =
@@ -103,7 +106,6 @@ public class SpotBugsTaskFactory {
                                   project.files(javaCompile.getDestinationDir()));
                               spotbugsTask.setAuxClassPaths(javaCompile.getClasspath());
                               spotbugsTask.dependsOn(javaCompile);
-                              configurationAction.execute(spotbugsTask);
                             });
                   });
             };
