@@ -4,7 +4,7 @@
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
     "conventional-changelog-conventionalcommits": "^4.6.1",
-    "gradle-semantic-release-plugin": "1.4.23",
+    "gradle-semantic-release-plugin": "1.4.24",
     "husky": "^7.0.2",
     "lint-staged": "^11.1.2",
     "pinst": "^2.1.6",
