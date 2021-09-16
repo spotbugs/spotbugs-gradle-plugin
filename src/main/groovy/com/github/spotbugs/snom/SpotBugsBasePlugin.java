@@ -36,12 +36,10 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
    * href="https://guides.gradle.org/using-the-worker-api/">The Gradle Worker API</a> needs 5.6 or
    * later, so we use this value as minimal required version.
    */
-  private static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("5.6");
+  private static final GradleVersion SUPPORTED_VERSION = GradleVersion.version("7.0");
 
   @Override
   public void apply(Project project) {
-    // use XML report by default, only when SpotBugs plugin is applied
-    boolean isSpotBugsPluginApplied = project.getPluginManager().hasPlugin("com.github.spotbugs");
     verifyGradleVersion(GradleVersion.current());
     project.getPluginManager().apply(ReportingBasePlugin.class);
 
@@ -58,7 +56,6 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
             task ->
                 task.init(
                     extension,
-                    isSpotBugsPluginApplied,
                     Boolean.parseBoolean(enableWorkerApi),
                     Boolean.parseBoolean(enableHybridWorker)));
   }
