@@ -27,6 +27,7 @@ import org.gradle.api.Action;
 import org.gradle.api.GradleException;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
+import org.gradle.jvm.toolchain.JavaLauncher;
 import org.gradle.workers.ProcessWorkerSpec;
 import org.gradle.workers.WorkAction;
 import org.gradle.workers.WorkParameters;
@@ -36,10 +37,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SpotBugsRunnerForWorker extends SpotBugsRunner {
+  private final Logger log = LoggerFactory.getLogger(SpotBugsRunnerForWorker.class);
   private final WorkerExecutor workerExecutor;
+  private final Property<JavaLauncher> javaLauncher;
 
-  public SpotBugsRunnerForWorker(@NonNull WorkerExecutor workerExecutor) {
+  public SpotBugsRunnerForWorker(
+      @NonNull WorkerExecutor workerExecutor, Property<JavaLauncher> javaLauncher) {
     this.workerExecutor = Objects.requireNonNull(workerExecutor);
+    this.javaLauncher = javaLauncher;
   }
 
   @Override
@@ -59,6 +64,14 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
             String maxHeapSize = task.getMaxHeapSize().getOrNull();
             if (maxHeapSize != null) {
               option.setMaxHeapSize(maxHeapSize);
+            }
+            if (javaLauncher.isPresent()) {
+              log.info(
+                  "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
+                  javaLauncher.get().getMetadata().getVendor(),
+                  javaLauncher.get().getMetadata().getLanguageVersion().asInt());
+              option.setExecutable(
+                  javaLauncher.get().getExecutablePath().getAsFile().getAbsolutePath());
             }
           });
     };
