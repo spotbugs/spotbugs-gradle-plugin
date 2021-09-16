@@ -269,7 +269,6 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     private boolean enableWorkerApi;
     private boolean enableHybridWorker;
-    private boolean isSpotBugsPluginApplied;
 
     void setClasses(FileCollection fileCollection) {
         this.classes = fileCollection
@@ -350,7 +349,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
      *
      * @param extension the source extension to copy the properties.
      */
-    void init(SpotBugsExtension extension, boolean isSpotBugsPluginApplied, boolean enableWorkerApi, boolean enableHybridWorker) {
+    void init(SpotBugsExtension extension, boolean enableWorkerApi, boolean enableHybridWorker) {
         ignoreFailures.convention(extension.ignoreFailures)
         showStackTraces.convention(extension.showStackTraces)
         showProgress.convention(extension.showProgress)
@@ -375,7 +374,6 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
             configureJavaLauncher()
         }
 
-        this.isSpotBugsPluginApplied = isSpotBugsPluginApplied
         this.enableWorkerApi = enableWorkerApi
         this.enableHybridWorker = enableHybridWorker
     }
