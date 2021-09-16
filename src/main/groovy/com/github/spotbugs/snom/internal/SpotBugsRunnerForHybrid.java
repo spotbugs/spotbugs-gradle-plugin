@@ -30,6 +30,7 @@ import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
+import org.gradle.jvm.toolchain.JavaLauncher;
 import org.gradle.process.ExecOperations;
 import org.gradle.process.JavaExecSpec;
 import org.gradle.process.internal.ExecException;
@@ -50,9 +51,12 @@ import org.slf4j.LoggerFactory;
  */
 class SpotBugsRunnerForHybrid extends SpotBugsRunner {
   private final WorkerExecutor workerExecutor;
+  private final Property<JavaLauncher> javaLauncher;
 
-  public SpotBugsRunnerForHybrid(@NonNull WorkerExecutor workerExecutor) {
+  public SpotBugsRunnerForHybrid(
+      @NonNull WorkerExecutor workerExecutor, Property<JavaLauncher> javaLauncher) {
     this.workerExecutor = Objects.requireNonNull(workerExecutor);
+    this.javaLauncher = javaLauncher;
   }
 
   @Override
@@ -75,6 +79,11 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
       params.getIgnoreFailures().set(task.getIgnoreFailures());
       params.getShowStackTraces().set(task.getShowStackTraces());
       params.getReportsDir().set(task.getReportsDir());
+      if (javaLauncher.isPresent()) {
+        params
+            .getJavaToolchainExecutablePath()
+            .set(javaLauncher.get().getExecutablePath().getAsFile().getAbsolutePath());
+      }
     };
   }
 
@@ -92,6 +101,8 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
     Property<Boolean> getShowStackTraces();
 
     DirectoryProperty getReportsDir();
+
+    Property<String> getJavaToolchainExecutablePath();
   }
 
   public abstract static class SpotBugsExecutor implements WorkAction<SpotBugsWorkParameters> {
@@ -139,6 +150,12 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
         String maxHeapSize = params.getMaxHeapSize().getOrNull();
         if (maxHeapSize != null) {
           spec.setMaxHeapSize(maxHeapSize);
+        }
+        if (params.getJavaToolchainExecutablePath().isPresent()) {
+          log.info(
+              "Spotbugs will be executed using Java Toolchain configuration: {}",
+              params.getJavaToolchainExecutablePath().get());
+          spec.setExecutable(params.getJavaToolchainExecutablePath().get());
         }
       };
     }
