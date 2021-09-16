@@ -4,13 +4,14 @@ on:
   push:
     branches:
       - master
+      - beta
   pull_request:
     branches:
       - master
+      - beta
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
