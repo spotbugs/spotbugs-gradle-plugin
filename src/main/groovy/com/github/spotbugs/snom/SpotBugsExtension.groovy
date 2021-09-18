@@ -175,10 +175,9 @@ class SpotBugsExtension {
         onlyAnalyze = objects.listProperty(String);
         projectName = objects.property(String);
         release = objects.property(String);
-        configureFromProject(project, { p ->
-            projectName.convention(p.getName())
-            release.convention(p.getVersion().toString())
-        })
+
+        projectName.convention(project.name)
+        release.convention(project.provider {project.version.toString()})
 
         // ReportingBasePlugin should be applied before we create this SpotBugsExtension instance
         DirectoryProperty baseReportsDir = project.extensions.getByType(ReportingExtension).baseDirectory
@@ -202,15 +201,5 @@ class SpotBugsExtension {
     void setEffort(@Nullable String name) {
         Effort effort = name == null ? null : Effort.valueOf(name.toUpperCase())
         getEffort().set(effort)
-    }
-
-    private void configureFromProject(Project project, Action<Project> action) {
-        if (project.state.executed && project.rootProject.state.executed) {
-            action.execute project
-        } else if (!project.rootProject.state.executed) {
-            project.rootProject.afterEvaluate action
-        } else {
-            project.afterEvaluate action
-        }
     }
 }
