@@ -71,6 +71,9 @@ def processVersionFile = tasks.register('processVersionFile', WriteProperties) {
 tasks.named('processResources').configure {
     dependsOn processVersionFile
 }
+tasks.withType(Jar).configureEach {
+    dependsOn processResources
+}
 
 apply from: "$rootDir/gradle/test.gradle"
 apply from: "$rootDir/gradle/functional-test.gradle"
