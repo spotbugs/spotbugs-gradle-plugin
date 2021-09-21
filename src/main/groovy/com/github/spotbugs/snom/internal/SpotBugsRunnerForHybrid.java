@@ -146,7 +146,7 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
         spec.setJvmArgs(params.getJvmArgs().get());
         spec.classpath(params.getClasspath());
         spec.setArgs(params.getArgs().get());
-        spec.setMain("edu.umd.cs.findbugs.FindBugs2");
+        spec.getMainClass().set("edu.umd.cs.findbugs.FindBugs2");
         String maxHeapSize = params.getMaxHeapSize().getOrNull();
         if (maxHeapSize != null) {
           spec.setMaxHeapSize(maxHeapSize);
