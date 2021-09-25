@@ -394,8 +394,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         if (!enableWorkerApi) {
             log.info("Running SpotBugs by JavaExec...");
             new SpotBugsRunnerForJavaExec(launcher).run(this);
-        } else if (enableHybridWorker && GradleVersion.current() >= GradleVersion.version("6.0")) {
-            // ExecOperations is supported from Gradle 6.0
+        } else if (enableHybridWorker) {
             log.info("Running SpotBugs by Gradle no-isolated Worker...");
             new SpotBugsRunnerForHybrid(workerExecutor, launcher).run(this);
         } else {
