@@ -251,6 +251,7 @@ spotbugsMain {
         buildFile << """
 spotbugs {
     ignoreFailures = true
+    showStackTraces = true
 }"""
         when:
         def arguments = [':spotbugsMain', '-is']
