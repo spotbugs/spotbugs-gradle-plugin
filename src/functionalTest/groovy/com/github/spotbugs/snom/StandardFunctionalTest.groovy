@@ -459,7 +459,7 @@ dependencies{
         BuildResult result =
                 GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments("spotbugsMain", "--debug")
+                .withArguments("spotbugsMain", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .withPluginClasspath()
                 .forwardOutput()
                 .withGradleVersion(version)
@@ -494,7 +494,7 @@ public class FooTest {
         BuildResult result =
                 GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments("spotbugsMain", "spotbugsTest", "--debug")
+                .withArguments("spotbugsMain", "spotbugsTest", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .withPluginClasspath()
                 .forwardOutput()
                 .withGradleVersion(version)
