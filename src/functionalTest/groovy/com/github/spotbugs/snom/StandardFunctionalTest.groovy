@@ -732,4 +732,27 @@ spotbugs {
         where:
         isWorkerApi << [true, false]
     }
+
+    def "can analyse classes when reportLevel = DEFAULT"() {
+        given:
+        buildFile << """
+spotbugs {
+    reportLevel = com.github.spotbugs.snom.Confidence.DEFAULT
+}
+"""
+
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments("build", "--stacktrace", "--debug")
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":compileJava").outcome == TaskOutcome.SUCCESS
+        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+    }
 }
