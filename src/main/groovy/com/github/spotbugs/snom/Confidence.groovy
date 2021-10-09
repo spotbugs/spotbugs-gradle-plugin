@@ -13,6 +13,7 @@
  */
 package com.github.spotbugs.snom;
 
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import org.gradle.api.tasks.Internal;
 
@@ -38,32 +39,32 @@ enum Confidence {
     /** The report level to report all detected bugs in the report. */
     LOW {
         @Override
-        String toCommandLineOption() {
-            return "-low"
+        Optional<String> toCommandLineOption() {
+            return Optional.of("-low");
         }
     },
     /** The report level to report medium and high priority detected bugs in the report. */
     MEDIUM {
         @Override
-        String toCommandLineOption() {
-            return "-medium"
+        Optional<String> toCommandLineOption() {
+            return Optional.of("-medium");
         }
     },
     /** The default level that provides the same feature with {@link #MEDIUM}. */
     DEFAULT {
         @Override
-        String toCommandLineOption() {
-            return ""
+        Optional<String> toCommandLineOption() {
+            return Optional.empty();
         }
     },
     /** The report level to report high priority detected bugs in the report. */
     HIGH {
         @Override
-        String toCommandLineOption() {
-            return "-high"
+        Optional<String> toCommandLineOption() {
+            return Optional.of("-high");
         }
     }
 
     @Internal("This is internally used property so no need to refer to judge out-of-date or not.")
-    abstract @Nonnull String toCommandLineOption()
+    abstract @Nonnull Optional<String> toCommandLineOption()
 }
