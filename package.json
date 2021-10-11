@@ -4,12 +4,12 @@
     "@commitlint/cli": "^13.2.0",
     "@commitlint/config-conventional": "^13.2.0",
     "conventional-changelog-conventionalcommits": "^4.6.1",
-    "gradle-semantic-release-plugin": "1.4.24",
+    "gradle-semantic-release-plugin": "1.5.0",
     "husky": "^7.0.2",
     "lint-staged": "^11.2.0",
     "pinst": "^2.1.6",
     "prettier": "^2.4.1",
-    "semantic-release": "17.4.7"
+    "semantic-release": "18.0.0"
   },
   "scripts": {
     "prepare": "husky install"
