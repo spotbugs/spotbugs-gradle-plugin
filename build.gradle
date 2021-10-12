@@ -6,7 +6,7 @@ plugins {
     id 'com.gradle.plugin-publish' version '0.16.0'
     id 'com.github.spotbugs.gradle-plugin'
     id 'org.sonarqube' version '3.3'
-    id 'com.github.spotbugs' version '4.7.5'
+    id 'com.github.spotbugs' version '5.0.0-beta.2'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -24,7 +24,7 @@ ext {
     errorproneVersion = '2.9.0'
     spotBugsVersion = '4.4.1'
     slf4jVersion = '1.8.0-beta4'
-    androidGradlePluginVersion = '4.2.2'
+    androidGradlePluginVersion = '7.0.2'
 }
 
 dependencies {
@@ -57,7 +57,7 @@ spotbugs {
 spotbugsMain {
     reports {
         sarif {
-            enabled = true
+            required = true
         }
     }
 }

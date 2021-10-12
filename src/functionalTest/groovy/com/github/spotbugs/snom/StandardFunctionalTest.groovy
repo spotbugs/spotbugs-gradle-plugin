@@ -251,6 +251,7 @@ spotbugsMain {
         buildFile << """
 spotbugs {
     ignoreFailures = true
+    showStackTraces = true
 }"""
         when:
         def arguments = [':spotbugsMain', '-is']
@@ -458,7 +459,7 @@ dependencies{
         BuildResult result =
                 GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments("spotbugsMain", "--debug")
+                .withArguments("spotbugsMain", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .withPluginClasspath()
                 .forwardOutput()
                 .withGradleVersion(version)
@@ -493,7 +494,7 @@ public class FooTest {
         BuildResult result =
                 GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments("spotbugsMain", "spotbugsTest", "--debug")
+                .withArguments("spotbugsMain", "spotbugsTest", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .withPluginClasspath()
                 .forwardOutput()
                 .withGradleVersion(version)
@@ -734,5 +735,28 @@ spotbugs {
 
         where:
         isWorkerApi << [true, false]
+    }
+
+    def "can analyse classes when reportLevel = DEFAULT"() {
+        given:
+        buildFile << """
+spotbugs {
+    reportLevel = com.github.spotbugs.snom.Confidence.DEFAULT
+}
+"""
+
+        when:
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments("build", "--stacktrace", "--debug")
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":compileJava").outcome == TaskOutcome.SUCCESS
+        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
     }
 }

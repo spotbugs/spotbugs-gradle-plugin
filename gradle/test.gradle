@@ -1,5 +1,5 @@
 ext {
-    junitVersion = '5.7.2'
+    junitVersion = '5.8.1'
 }
 dependencies {
     testImplementation gradleTestKit()

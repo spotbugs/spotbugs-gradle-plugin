@@ -37,7 +37,6 @@ import org.gradle.process.internal.ExecException;
 import org.gradle.workers.WorkAction;
 import org.gradle.workers.WorkParameters;
 import org.gradle.workers.WorkerExecutor;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +59,7 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
   }
 
   @Override
-  public void run(@NotNull SpotBugsTask task) {
+  public void run(@NonNull SpotBugsTask task) {
     workerExecutor.noIsolation().submit(SpotBugsExecutor.class, configureWorkerSpec(task));
   }
 

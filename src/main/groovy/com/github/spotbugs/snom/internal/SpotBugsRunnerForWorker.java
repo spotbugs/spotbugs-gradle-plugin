@@ -129,7 +129,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
 
             if (params.getIgnoreFailures().getOrElse(Boolean.FALSE).booleanValue()) {
               log.warn(message.toString());
-              if (params.getShowStackTraces().getOrElse(Boolean.TRUE).booleanValue()) {
+              if (params.getShowStackTraces().getOrElse(Boolean.FALSE).booleanValue()) {
                 log.warn("", e);
               }
             } else {

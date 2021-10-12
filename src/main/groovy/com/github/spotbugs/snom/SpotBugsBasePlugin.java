@@ -48,7 +48,7 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
     createPluginConfiguration(project);
 
     String enableWorkerApi = getPropertyOrDefault(project, FEATURE_FLAG_WORKER_API, "true");
-    String enableHybridWorker = getPropertyOrDefault(project, FEATURE_FLAG_HYBRID_WORKER, "false");
+    String enableHybridWorker = getPropertyOrDefault(project, FEATURE_FLAG_HYBRID_WORKER, "true");
     project
         .getTasks()
         .withType(SpotBugsTask.class)
