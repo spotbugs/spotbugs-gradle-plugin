@@ -632,7 +632,7 @@ public class SimpleTest {
     @Unroll
     def 'shows report path when failures are found (Worker API? #isWorkerApi)'() {
         given:
-        def badCode = new File(rootDir, 'src/main/java/Bar.java')
+        def badCode = rootDir.toPath().resolve(Paths.get("src", "main", "java", "Bar.java")).toFile()
         badCode << '''
         |public class Bar {
         |  public int unreadField = 42; // warning: URF_UNREAD_FIELD
@@ -657,7 +657,8 @@ public class SimpleTest {
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.FAILED
         result.output.contains('See the report at')
-        def expectedOutput = File.separator + "build" + File.separator + "reports" + File.separator + "spotbugs" + File.separator + "main.xml"
+        //def expectedOutput = File.separator + "build" + File.separator + "reports" + File.separator + "spotbugs" + File.separator + "main.xml"
+        def expectedOutput = rootDir.toPath().resolve(Paths.get("build", "reports", "spotbugs", "main.xml")).toUri().toString()
         result.output.contains(expectedOutput)
 
         where:
