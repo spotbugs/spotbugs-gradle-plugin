@@ -32,7 +32,6 @@ import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.process.ExecOperations;
 import org.gradle.process.JavaExecSpec;
-import org.gradle.process.internal.ExecException;
 import org.gradle.workers.WorkAction;
 import org.gradle.workers.WorkParameters;
 import org.gradle.workers.WorkerExecutor;
@@ -93,6 +92,15 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
     DirectoryProperty getReportsDir();
   }
 
+  /**
+   * Exit code which is set when classes needed for analysis were missing.
+   *
+   * @see <a
+   *     href="https://javadoc.io/static/com.github.spotbugs/spotbugs/4.4.2/constant-values.html#edu.umd.cs.findbugs.ExitCodes.MISSING_CLASS_FLAG">Constant
+   *     Field Values from javadoc of the SpotBugs</a>
+   */
+  private static final int MISSING_CLASS_FLAG = 2;
+
   public abstract static class SpotBugsExecutor implements WorkAction<SpotBugsWorkParameters> {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final ExecOperations execOperations;
@@ -106,27 +114,38 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
     public void execute() {
       // TODO print version of SpotBugs and Plugins
       SpotBugsWorkParameters params = getParameters();
-      try {
-        execOperations.javaexec(configureJavaExec(params)).rethrowFailure().assertNormalExitValue();
-      } catch (ExecException e) {
-        if (params.getIgnoreFailures().getOrElse(Boolean.FALSE)) {
-          log.warn(
-              "SpotBugs reported failures",
-              params.getShowStackTraces().getOrElse(Boolean.FALSE) ? e : null);
-        } else {
-          String errorMessage = "Verification failed: SpotBugs execution thrown exception.";
-          List<String> reportPaths =
-              params.getReportsDir().getAsFileTree().getFiles().stream()
-                  .map(File::toPath)
-                  .map(Path::toUri)
-                  .map(URI::toString)
-                  .collect(Collectors.toList());
-          if (!reportPaths.isEmpty()) {
-            errorMessage += "See the report at: " + String.join(",", reportPaths);
-          }
-          throw new GradleException(errorMessage, e);
-        }
+
+      final int exitValue =
+          execOperations.javaexec(configureJavaExec(params)).rethrowFailure().getExitValue();
+      if (ignoreMissingClassFlag(exitValue) == 0) {
+        return;
       }
+
+      if (params.getIgnoreFailures().getOrElse(Boolean.FALSE)) {
+        log.warn("SpotBugs ended with exit code " + exitValue);
+        return;
+      }
+
+      String errorMessage = "Verification failed: SpotBugs ended with exit code " + exitValue;
+      List<String> reportPaths =
+          params.getReportsDir().getAsFileTree().getFiles().stream()
+              .map(File::toPath)
+              .map(Path::toUri)
+              .map(URI::toString)
+              .collect(Collectors.toList());
+      if (!reportPaths.isEmpty()) {
+        errorMessage += "See the report at: " + String.join(",", reportPaths);
+      }
+      throw new GradleException(errorMessage);
+    }
+
+    private int ignoreMissingClassFlag(int exitValue) {
+      if ((exitValue & MISSING_CLASS_FLAG) == 0) {
+        return exitValue;
+      }
+      log.debug(
+          "MISSING_CLASS_FLAG (2) was set to the exit code, but ignore it to keep the task result stable.");
+      return (exitValue ^ MISSING_CLASS_FLAG);
     }
 
     private Action<? super JavaExecSpec> configureJavaExec(SpotBugsWorkParameters params) {
@@ -139,6 +158,7 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
         if (maxHeapSize != null) {
           spec.setMaxHeapSize(maxHeapSize);
         }
+        spec.setIgnoreExitValue(true);
       };
     }
   }
