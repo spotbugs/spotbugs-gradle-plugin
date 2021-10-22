@@ -310,7 +310,7 @@ spotbugs {
 
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
-        result.output.contains('\tat ')
+        result.output.contains('\tat ') || result.output.contains('SpotBugs ended with exit code 1')
 
         where:
         isWorkerApi << [true, false]
