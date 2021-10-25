@@ -251,6 +251,7 @@ spotbugsMain {
         buildFile << """
 spotbugs {
     ignoreFailures = true
+    showStackTraces = true
 }"""
         when:
         def arguments = [':spotbugsMain', '-is']
@@ -458,7 +459,7 @@ dependencies{
         BuildResult result =
                 GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments("spotbugsMain", "--debug")
+                .withArguments("spotbugsMain", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .withPluginClasspath()
                 .forwardOutput()
                 .withGradleVersion(version)
@@ -466,9 +467,7 @@ dependencies{
 
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
-        if (GradleVersion.current() >= GradleVersion.version("6.0")) {
-            result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
-        }
+        result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
         !result.output.contains("Trying to add already registered factory")
     }
 
@@ -495,7 +494,7 @@ public class FooTest {
         BuildResult result =
                 GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments("spotbugsMain", "spotbugsTest", "--debug")
+                .withArguments("spotbugsMain", "spotbugsTest", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .withPluginClasspath()
                 .forwardOutput()
                 .withGradleVersion(version)
@@ -504,10 +503,8 @@ public class FooTest {
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
         result.task(":spotbugsTest").outcome == TaskOutcome.SUCCESS
-        if (GradleVersion.current() >= GradleVersion.version("6.0")) {
-            result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
-            result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to FooTest")
-        }
+        result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
+        result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to FooTest")
         !result.output.contains("Trying to add already registered factory")
     }
 
@@ -632,6 +629,13 @@ public class SimpleTest {
     @Unroll
     def 'shows report path when failures are found (Worker API? #isWorkerApi)'() {
         given:
+        buildFile << """
+spotbugsMain {
+    reports {
+        xml.enabled = true
+    }
+}"""
+
         def badCode = rootDir.toPath().resolve(Paths.get("src", "main", "java", "Bar.java")).toFile()
         badCode << '''
         |public class Bar {

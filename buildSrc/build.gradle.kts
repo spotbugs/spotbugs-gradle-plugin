@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    id("com.diffplug.spotless") version "5.15.0"
+    id("com.diffplug.spotless") version "5.16.0"
 }
 
 repositories {
@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:5.14.3")
+    implementation("com.diffplug.spotless:spotless-plugin-gradle:5.16.0")
     implementation("net.ltgt.gradle:gradle-errorprone-plugin:2.0.2")
 }
 

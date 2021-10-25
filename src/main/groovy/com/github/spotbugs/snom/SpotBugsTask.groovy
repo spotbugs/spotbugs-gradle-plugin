@@ -24,6 +24,7 @@ import edu.umd.cs.findbugs.annotations.NonNull
 import edu.umd.cs.findbugs.annotations.Nullable;
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.SkipWhenEmpty
@@ -48,7 +49,9 @@ import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.VerificationTask;
+import org.gradle.api.tasks.VerificationTask
+import org.gradle.jvm.toolchain.JavaLauncher
+import org.gradle.jvm.toolchain.JavaToolchainService;
 import org.gradle.util.ClosureBackedAction
 import org.gradle.util.GradleVersion;
 import org.gradle.workers.WorkerExecutor;
@@ -91,7 +94,10 @@ import javax.inject.Inject
  */
 
 @CacheableTask
-class SpotBugsTask extends DefaultTask implements VerificationTask {
+abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
+    private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
+    private static final String FEATURE_FLAG_HYBRID_WORKER = "com.github.spotbugs.snom.javaexec-in-worker";
+
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
 
     private final WorkerExecutor workerExecutor;
@@ -263,7 +269,6 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     private boolean enableWorkerApi;
     private boolean enableHybridWorker;
-    private boolean isSpotBugsPluginApplied;
 
     void setClasses(FileCollection fileCollection) {
         this.classes = fileCollection
@@ -289,6 +294,10 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
             return classes
         }
     }
+
+    @Nested
+    @Optional
+    abstract Property<JavaLauncher> getLauncher()
 
     @Inject
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
@@ -340,7 +349,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
      *
      * @param extension the source extension to copy the properties.
      */
-    void init(SpotBugsExtension extension, boolean isSpotBugsPluginApplied, boolean enableWorkerApi, boolean enableHybridWorker) {
+    void init(SpotBugsExtension extension, boolean enableWorkerApi, boolean enableHybridWorker) {
         ignoreFailures.convention(extension.ignoreFailures)
         showStackTraces.convention(extension.showStackTraces)
         showProgress.convention(extension.showProgress)
@@ -360,23 +369,37 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
         extraArgs.convention(extension.extraArgs)
         maxHeapSize.convention(extension.maxHeapSize)
         useAuxclasspathFile.convention(extension.useAuxclasspathFile)
-        this.isSpotBugsPluginApplied = isSpotBugsPluginApplied
+
+        if(extension.useJavaToolchains.isPresent() && extension.useJavaToolchains.get()) {
+            configureJavaLauncher()
+        }
+
         this.enableWorkerApi = enableWorkerApi
         this.enableHybridWorker = enableHybridWorker
+    }
+
+
+    /**
+     * Set convention for default java launcher based on Toolchain configuration
+     */
+    private void configureJavaLauncher() {
+        def toolchain = project.getExtensions().getByType(JavaPluginExtension.class).toolchain
+        JavaToolchainService service = project.getExtensions().getByType(JavaToolchainService.class)
+        Provider<JavaLauncher> defaultLauncher = service.launcherFor(toolchain)
+        launcher.convention(defaultLauncher)
     }
 
     @TaskAction
     void run() {
         if (!enableWorkerApi) {
             log.info("Running SpotBugs by JavaExec...");
-            new SpotBugsRunnerForJavaExec().run(this);
-        } else if (enableHybridWorker && GradleVersion.current() >= GradleVersion.version("6.0")) {
-            // ExecOperations is supported from Gradle 6.0
+            new SpotBugsRunnerForJavaExec(launcher).run(this);
+        } else if (enableHybridWorker) {
             log.info("Running SpotBugs by Gradle no-isolated Worker...");
-            new SpotBugsRunnerForHybrid(workerExecutor).run(this);
+            new SpotBugsRunnerForHybrid(workerExecutor, launcher).run(this);
         } else {
             log.info("Running SpotBugs by Gradle process-isolated Worker...");
-            new SpotBugsRunnerForWorker(workerExecutor).run(this);
+            new SpotBugsRunnerForWorker(workerExecutor, launcher).run(this);
         }
     }
 
@@ -412,11 +435,7 @@ class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Nested
     SpotBugsReport getFirstEnabledReport() {
         java.util.Optional<SpotBugsReport> report = reports.stream().filter({ report -> report.enabled}).findFirst()
-        if (isSpotBugsPluginApplied) {
-            return report.orElse(reports.create("xml"))
-        } else {
-            return report.orElse(null)
-        }
+        return report.orElse(null)
     }
 
     void setReportLevel(@Nullable String name) {

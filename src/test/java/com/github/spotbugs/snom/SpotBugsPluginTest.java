@@ -36,9 +36,9 @@ class SpotBugsPluginTest {
     assertThrows(
         IllegalArgumentException.class,
         () -> {
-          new SpotBugsBasePlugin().verifyGradleVersion(GradleVersion.version("5.5"));
+          new SpotBugsBasePlugin().verifyGradleVersion(GradleVersion.version("6.9"));
         });
-    new SpotBugsBasePlugin().verifyGradleVersion(GradleVersion.version("5.6"));
+    new SpotBugsBasePlugin().verifyGradleVersion(GradleVersion.version("7.0"));
   }
 
   @Test

@@ -95,6 +95,11 @@ class CacheabilityFunctionalTest extends Specification {
             |repositories {
             |    mavenCentral()
             |}
+            |spotbugsMain {
+            |    reports {
+            |        text.enabled = true
+            |    }
+            |}
             |'''.stripMargin()
 
         if (runScan) {

@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
+import org.gradle.api.provider.Property;
+import org.gradle.jvm.toolchain.JavaLauncher;
 import org.gradle.process.JavaExecSpec;
 import org.gradle.process.internal.ExecException;
 import org.slf4j.Logger;
@@ -30,6 +32,11 @@ import org.slf4j.LoggerFactory;
 
 public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
   private final Logger log = LoggerFactory.getLogger(SpotBugsRunnerForJavaExec.class);
+  private final Property<JavaLauncher> javaLauncher;
+
+  public SpotBugsRunnerForJavaExec(Property<JavaLauncher> javaLauncher) {
+    this.javaLauncher = javaLauncher;
+  }
 
   @Override
   public void run(@NonNull SpotBugsTask task) {
@@ -67,6 +74,13 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
       String maxHeapSize = task.getMaxHeapSize().getOrNull();
       if (maxHeapSize != null) {
         spec.setMaxHeapSize(maxHeapSize);
+      }
+      if (javaLauncher.isPresent()) {
+        log.info(
+            "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
+            javaLauncher.get().getMetadata().getVendor(),
+            javaLauncher.get().getMetadata().getLanguageVersion().asInt());
+        spec.setExecutable(javaLauncher.get().getExecutablePath().getAsFile().getAbsolutePath());
       }
     };
   }
