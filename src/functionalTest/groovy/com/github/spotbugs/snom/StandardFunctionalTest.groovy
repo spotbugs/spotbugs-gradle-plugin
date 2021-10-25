@@ -657,7 +657,6 @@ public class SimpleTest {
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.FAILED
         result.output.contains('See the report at')
-        //def expectedOutput = File.separator + "build" + File.separator + "reports" + File.separator + "spotbugs" + File.separator + "main.xml"
         def expectedOutput = rootDir.toPath().resolve(Paths.get("build", "reports", "spotbugs", "main.xml")).toUri().toString()
         result.output.contains(expectedOutput)
 
