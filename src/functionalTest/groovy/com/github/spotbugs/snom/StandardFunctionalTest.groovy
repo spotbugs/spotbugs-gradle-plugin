@@ -207,6 +207,47 @@ spotbugsMain {
         assertEquals(TaskOutcome.UP_TO_DATE, result.task(":spotbugsMain").outcome)
     }
 
+    def 'ignore missing classes (Hybrid API? #isHybridApi)'() {
+        given:
+        def code = new File(rootDir, 'src/main/java/Bar.java')
+        code << '''
+        |public class Bar {
+        |  Foo test() {
+        |    return new Foo();
+        |  }
+        |}
+        |'''.stripMargin()
+
+        buildFile << '''
+        |task removeFoo(type: Delete) {
+        |  delete file('build/classes/java/main/Foo.class')
+        |}
+        |'''.stripMargin()
+
+        when:
+        def arguments = [
+            ':compileJava',
+            ':removeFoo',
+            ':spotbugsMain',
+            '-is'
+        ]
+        arguments.add('-Pcom.github.spotbugs.snom.javaexec-in-worker=' + isHybridApi)
+        def runner = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments(arguments)
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+
+        def result = runner.build()
+
+        then:
+        result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+
+        where:
+        isHybridApi << [true, false]
+    }
+
     @Unroll
     def 'build fails when bugs are found (Worker API? #isWorkerApi)'() {
         given:
@@ -269,7 +310,7 @@ spotbugs {
 
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
-        result.output.contains('\tat ')
+        result.output.contains('\tat ') || result.output.contains('SpotBugs ended with exit code 1')
 
         where:
         isWorkerApi << [true, false]
