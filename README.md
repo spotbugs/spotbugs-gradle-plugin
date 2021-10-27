@@ -50,21 +50,65 @@ spotbugs {
 }
 ```
 
+<details>
+<summary>with Kotlin DSL</summary>
+
+```kotlin
+spotbugs {
+    ignoreFailures.set(false)
+    showStackTraces.set(true)
+    showProgress.set(true)
+    effort.set(com.github.spotbugs.snom.Effort.DEFAULT)
+    reportLevel.set(com.github.spotbugs.snom.Confidence.DEFAULT)
+    visitors.set(listOf("FindSqlInjection", "SwitchFallthrough"))
+    omitVisitors.set(listOf("FindNonShortCircuit"))
+    reportsDir.set(file("$buildDir/spotbugs"))
+    includeFilter.set(file("include.xml"))
+    excludeFilter.set(file("exclude.xml"))
+    baselineFile.set(file("baseline.xml"))
+    onlyAnalyze.set(listOf("com.foobar.MyClass", "com.foobar.mypkg.*"))
+    maxHeapSize.set("1g")
+    extraArgs.set(listOf("-nested:false"))
+    jvmArgs.set(listOf("-Duser.language=ja"))
+}
+```
+</details>
+
 Configure `spotbugsPlugin` to apply any SpotBugs plugin:
 
 ```groovy
 dependencies {
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'
 }
 ```
+
+<details>
+<summary>with Kotlin DSL</summary>
+
+```kotlin
+dependencies {
+    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0")
+}
+```
+</details>
 
 Configure `spotbugs` to choose your favorite SpotBugs version:
 
 ```groovy
 dependencies {
-    spotbugs 'com.github.spotbugs:spotbugs:4.0.0'
+    spotbugs 'com.github.spotbugs:spotbugs:4.4.2'
 }
 ```
+
+<details>
+<summary>with Kotlin DSL</summary>
+
+```kotlin
+dependencies {
+    spotbugs("com.github.spotbugs:spotbugs:4.4.2")
+}
+```
+</details>
 
 ### Apply to Java project
 
@@ -95,6 +139,20 @@ spotbugsMain {
 }
 ```
 
+<details>
+<summary>with Kotlin DSL</summary>
+
+```kotlin
+tasks.spotbugsMain {
+    reports.create("html") {
+        isEnabled = true
+        setDestination(file("$buildDir/reports/spotbugs/main/spotbugs.html"))
+        setStylesheet("fancy-hist.xsl")
+    }
+}
+```
+</details>
+
 ## SpotBugs version mapping
 
 By default, this Gradle Plugin uses the SpotBugs version listed in this table.
@@ -122,6 +180,16 @@ dependencies {
     compileOnly "com.github.spotbugs:spotbugs-annotations:${spotbugs.toolVersion.get()}"
 }
 ```
+
+<details>
+<summary>with Kotlin DSL</summary>
+
+```kotlin
+dependencies {
+    compileOnly("com.github.spotbugs:spotbugs-annotations:${spotbugs.toolVersion.get()}")
+}
+```
+</details>
 
 ## Development
 ### Setup
