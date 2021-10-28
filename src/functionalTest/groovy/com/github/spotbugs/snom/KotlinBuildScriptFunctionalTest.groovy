@@ -104,7 +104,7 @@ dependencies {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(rootDir)
-                .withArguments('check', '--info')
+                .withArguments('check', '--debug', "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .withPluginClasspath()
                 .withGradleVersion(version)
                 .build()
@@ -136,12 +136,12 @@ dependencies {
         result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
     }
 
-    def "can generate spotbugs.html in configured destination"() {
+    def "can generate spotbugs.html in configured outputLocation"() {
         buildFile << """
 tasks.spotbugsMain {
     reports.create("html") {
-        isEnabled = true
-        setDestination(file("\$buildDir/reports/spotbugs.html"))
+        required.set(true)
+        outputLocation.set(file("\$buildDir/reports/spotbugs.html"))
         setStylesheet("fancy-hist.xsl")
     }
 }

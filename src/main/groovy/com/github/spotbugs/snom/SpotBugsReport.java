@@ -30,7 +30,6 @@ import org.gradle.api.reporting.SingleFileReport;
 import org.gradle.api.resources.TextResource;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Internal;
-import org.gradle.api.tasks.OutputFile;
 import org.gradle.util.ConfigureUtil;
 
 public abstract class SpotBugsReport
@@ -53,14 +52,14 @@ public abstract class SpotBugsReport
   @NonNull
   public abstract Optional<String> toCommandLineOption();
 
+  /** @deprecated use {@link #getOutputLocation()} instead. */
   @Override
-  @OutputFile
+  @Deprecated
   public File getDestination() {
     return destination.get().getAsFile();
   }
 
-  // @Override // New API from 6.1; see https://github.com/gradle/gradle/issues/11923
-  @OutputFile
+  @Override
   public RegularFileProperty getOutputLocation() {
     return destination;
   }
@@ -71,7 +70,7 @@ public abstract class SpotBugsReport
     return OutputType.FILE;
   }
 
-  // @Override // New API from 6.1; see https://github.com/gradle/gradle/issues/11923
+  @Override
   @Input
   public Property<Boolean> getRequired() {
     return isRequired;
@@ -98,11 +97,15 @@ public abstract class SpotBugsReport
     isEnabled.set(provider);
   }
 
+  /** @deprecated use {@code getOutputLocation().set(file)} instead. */
+  @Deprecated
   @Override
   public void setDestination(File file) {
     destination.set(file);
   }
 
+  /** @deprecated use {@code getOutputLocation().set(provider)} instead. */
+  @Deprecated
   @Override
   public void setDestination(Provider<File> provider) {
     destination.set(this.task.getProject().getLayout().file(provider));

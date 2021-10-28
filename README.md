@@ -131,8 +131,8 @@ to set task-specific properties.
 spotbugsMain {
     reports {
         html {
-            enabled = true
-            destination = file("$buildDir/reports/spotbugs/main/spotbugs.html")
+            required = true
+            outputLocation = file("$buildDir/reports/spotbugs/main/spotbugs.html")
             stylesheet = 'fancy-hist.xsl'
         }
     }
@@ -145,8 +145,8 @@ spotbugsMain {
 ```kotlin
 tasks.spotbugsMain {
     reports.create("html") {
-        isEnabled = true
-        setDestination(file("$buildDir/reports/spotbugs/main/spotbugs.html"))
+        required.set(true)
+        outputLocation.set(file("$buildDir/reports/spotbugs.html"))
         setStylesheet("fancy-hist.xsl")
     }
 }
