@@ -111,9 +111,7 @@ dependencies {
 
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
-        if (GradleVersion.version(version) >= GradleVersion.version("6.0")) {
-            result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
-        }
+        result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
         !result.output.contains("Trying to add already registered factory")
     }
 
