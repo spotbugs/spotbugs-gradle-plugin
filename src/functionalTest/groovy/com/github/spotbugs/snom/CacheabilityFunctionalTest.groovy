@@ -97,7 +97,7 @@ class CacheabilityFunctionalTest extends Specification {
             |}
             |spotbugsMain {
             |    reports {
-            |        text.enabled = true
+            |        text.required = true
             |    }
             |}
             |'''.stripMargin()

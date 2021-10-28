@@ -434,7 +434,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Optional
     @Nested
     SpotBugsReport getFirstEnabledReport() {
-        java.util.Optional<SpotBugsReport> report = reports.stream().filter({ report -> report.enabled}).findFirst()
+        java.util.Optional<SpotBugsReport> report = reports.stream().filter({ report -> report.enabled || report.required}).findFirst()
         return report.orElse(null)
     }
 

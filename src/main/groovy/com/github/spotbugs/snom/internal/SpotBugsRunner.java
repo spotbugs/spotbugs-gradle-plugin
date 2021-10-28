@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 import org.gradle.api.GradleException;
 import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
+import org.gradle.api.file.RegularFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,11 +73,12 @@ public abstract class SpotBugsRunner {
 
     SpotBugsReport report = task.getFirstEnabledReport();
     if (report != null) {
-      File dir = report.getDestination().getParentFile();
+      File outputLocation = report.getOutputLocation().map(RegularFile::getAsFile).get();
+      File dir = outputLocation.getParentFile();
       dir.mkdirs();
       report.toCommandLineOption().ifPresent(args::add);
       args.add("-outputFile");
-      args.add(report.getDestination().getAbsolutePath());
+      args.add(outputLocation.getAbsolutePath());
     }
 
     if (task.getEffort().isPresent()) {
