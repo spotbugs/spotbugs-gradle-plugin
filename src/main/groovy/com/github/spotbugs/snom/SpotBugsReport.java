@@ -77,17 +77,22 @@ public abstract class SpotBugsReport
     return isRequired;
   }
 
+  /** @deprecated use {@link #getRequired()} instead. */
+  @Deprecated
   @Override
-  @Input
   public boolean isEnabled() {
     return isEnabled.getOrElse(Boolean.TRUE);
   }
 
+  /** @deprecated use {@code getRequired().set(value)} instead. */
+  @Deprecated
   @Override
   public void setEnabled(boolean b) {
     isEnabled.set(b);
   }
 
+  /** @deprecated use {@code getRequired().set(provider)} instead. */
+  @Deprecated
   @Override
   public void setEnabled(Provider<Boolean> provider) {
     isEnabled.set(provider);
