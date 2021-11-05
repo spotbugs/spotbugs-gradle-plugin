@@ -21,7 +21,7 @@ repositories {
 }
 
 ext {
-    errorproneVersion = '2.9.0'
+    errorproneVersion = '2.10.0'
     spotBugsVersion = '4.4.2'
     slf4jVersion = '1.8.0-beta4'
     androidGradlePluginVersion = '7.0.3'
