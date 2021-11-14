@@ -18,16 +18,14 @@ import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Optional;
 import javax.inject.Inject;
-import org.gradle.api.file.RegularFile;
 import org.gradle.api.model.ObjectFactory;
 
-public class SpotBugsSarifReport extends SpotBugsReport {
+public abstract class SpotBugsSarifReport extends SpotBugsReport {
   @Inject
   public SpotBugsSarifReport(ObjectFactory objects, SpotBugsTask task) {
     super(objects, task);
     // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.sarif"
-    setDestination(
-        task.getReportsDir().file(task.getBaseName() + ".sarif").map(RegularFile::getAsFile));
+    getOutputLocation().convention(task.getReportsDir().file(task.getBaseName() + ".sarif"));
   }
 
   @NonNull

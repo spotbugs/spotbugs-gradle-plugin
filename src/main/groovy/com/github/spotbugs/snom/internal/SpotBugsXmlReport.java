@@ -18,7 +18,6 @@ import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.util.Optional;
 import javax.inject.Inject;
-import org.gradle.api.file.RegularFile;
 import org.gradle.api.model.ObjectFactory;
 
 public abstract class SpotBugsXmlReport extends SpotBugsReport {
@@ -27,8 +26,7 @@ public abstract class SpotBugsXmlReport extends SpotBugsReport {
   public SpotBugsXmlReport(ObjectFactory objects, SpotBugsTask task) {
     super(objects, task);
     // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.xml"
-    setDestination(
-        task.getReportsDir().file(task.getBaseName() + ".xml").map(RegularFile::getAsFile));
+    getOutputLocation().convention(task.getReportsDir().file(task.getBaseName() + ".xml"));
   }
 
   @NonNull

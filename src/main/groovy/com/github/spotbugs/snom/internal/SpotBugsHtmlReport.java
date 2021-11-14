@@ -21,7 +21,6 @@ import java.io.File;
 import java.util.Optional;
 import javax.inject.Inject;
 import org.gradle.api.InvalidUserDataException;
-import org.gradle.api.file.RegularFile;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.resources.TextResource;
@@ -34,8 +33,7 @@ public abstract class SpotBugsHtmlReport extends SpotBugsReport {
   public SpotBugsHtmlReport(ObjectFactory objects, SpotBugsTask task) {
     super(objects, task);
     // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.html"
-    setDestination(
-        task.getReportsDir().file(task.getBaseName() + ".html").map(RegularFile::getAsFile));
+    getOutputLocation().convention(task.getReportsDir().file(task.getBaseName() + ".html"));
     stylesheet = objects.property(TextResource.class);
     stylesheetPath = objects.property(String.class);
   }
