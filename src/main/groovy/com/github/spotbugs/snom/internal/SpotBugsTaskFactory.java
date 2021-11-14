@@ -28,7 +28,6 @@ import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.compile.JavaCompile;
-import org.gradle.util.GUtil;
 import org.gradle.util.GradleVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +79,15 @@ public class SpotBugsTaskFactory {
             });
   }
 
+  static String toLowerCamelCase(String head, String tail) {
+    if (tail == null || tail.isEmpty()) {
+      return head;
+    }
+    StringBuilder builder = new StringBuilder(head.length() + tail.length());
+    builder.append(head).append(Character.toUpperCase(tail.charAt(0))).append(tail.substring(1));
+    return builder.toString();
+  }
+
   private void generateForAndroid(Project project) {
 
     @SuppressWarnings("rawtypes")
@@ -98,8 +106,7 @@ public class SpotBugsTaskFactory {
               }
               variants.all(
                   (BaseVariant variant) -> {
-                    String spotbugsTaskName =
-                        GUtil.toLowerCamelCase("spotbugs " + variant.getName());
+                    String spotbugsTaskName = toLowerCamelCase("spotbugs", variant.getName());
                     log.debug("Creating SpotBugsTask for {}", variant.getName());
                     project
                         .getTasks()
