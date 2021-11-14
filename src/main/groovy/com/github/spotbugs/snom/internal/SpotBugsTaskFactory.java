@@ -25,8 +25,11 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaBasePlugin;
 import org.gradle.api.plugins.JavaPluginConvention;
+import org.gradle.api.plugins.JavaPluginExtension;
+import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.compile.JavaCompile;
 import org.gradle.util.GUtil;
+import org.gradle.util.GradleVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,16 +41,21 @@ public class SpotBugsTaskFactory {
     generateForAndroid(project);
   }
 
+  private SourceSetContainer getSourceSetContainer(Project project) {
+    if (GradleVersion.current().compareTo(GradleVersion.version("7.1")) < 0) {
+      return project.getConvention().getPlugin(JavaPluginConvention.class).getSourceSets();
+    } else {
+      return project.getExtensions().getByType(JavaPluginExtension.class).getSourceSets();
+    }
+  }
+
   private void generateForJava(Project project) {
     project
         .getPlugins()
         .withType(JavaBasePlugin.class)
         .configureEach(
             javaBasePlugin -> {
-              JavaPluginConvention convention =
-                  project.getConvention().getPlugin(JavaPluginConvention.class);
-              convention
-                  .getSourceSets()
+              getSourceSetContainer(project)
                   .all(
                       sourceSet -> {
                         String name = sourceSet.getTaskName("spotbugs", null);
