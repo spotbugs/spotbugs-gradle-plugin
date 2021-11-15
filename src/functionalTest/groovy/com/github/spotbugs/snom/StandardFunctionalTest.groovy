@@ -549,12 +549,9 @@ public class FooTest {
         !result.output.contains("Trying to add already registered factory")
     }
 
-    def "can apply plugin using useAuxclasspathFile flag"() {
+    def "can apply plugin using useAuxclasspathFile flag by default"() {
         given:
         buildFile << """
-spotbugs {
-  useAuxclasspathFile = true
-}
 dependencies {
   implementation 'com.google.guava:guava:19.0'
 }"""

@@ -189,7 +189,7 @@ class SpotBugsExtension {
         extraArgs = objects.listProperty(String);
         maxHeapSize = objects.property(String);
         toolVersion = objects.property(String)
-        useAuxclasspathFile = objects.property(Boolean).convention(false)
+        useAuxclasspathFile = objects.property(Boolean).convention(true)
         useJavaToolchains = objects.property(Boolean).convention(false)
     }
 
