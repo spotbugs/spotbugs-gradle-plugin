@@ -3,7 +3,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'jacoco'
     id 'signing'
-    id 'com.gradle.plugin-publish' version '0.16.0'
+    id 'com.gradle.plugin-publish' version '0.18.0'
     id 'com.github.spotbugs.gradle-plugin'
     id 'org.sonarqube' version '3.3'
     id 'com.github.spotbugs' version '5.0.0-beta.2'
@@ -21,8 +21,8 @@ repositories {
 }
 
 ext {
-    errorproneVersion = '2.9.0'
-    spotBugsVersion = '4.4.2'
+    errorproneVersion = '2.10.0'
+    spotBugsVersion = '4.5.0'
     slf4jVersion = '1.8.0-beta4'
     androidGradlePluginVersion = '7.0.3'
 }
@@ -32,7 +32,7 @@ dependencies {
     compileOnly localGroovy()
     compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
     compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
-    testImplementation 'com.tngtech.archunit:archunit:0.21.0'
+    testImplementation 'com.tngtech.archunit:archunit:0.22.0'
 }
 
 def signingKey = System.getenv("SIGNING_KEY")
