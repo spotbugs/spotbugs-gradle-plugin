@@ -50,7 +50,6 @@ public abstract class SpotBugsRunner {
       args.add(join(plugins));
     }
 
-    args.add("-sortByClass");
     args.add("-timestampNow");
     if (!task.getAuxClassPaths().isEmpty()) {
       if (task.getUseAuxclasspathFile().get()) {
