@@ -27,7 +27,7 @@
       },
       {
         "name": "beta",
-        "prerelease": "beta"
+        "prerelease": "rc"
       }
     ],
     "plugins": [
