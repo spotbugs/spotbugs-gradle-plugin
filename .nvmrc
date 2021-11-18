@@ -1,4 +1,4 @@
-14
+16
 
-# semantic-release 4.0 recommends to use 10 or above
-# https://github.com/commitizen/cz-cli/pull/649
+# semantic-release v18.0.0 recommends to use 14.17 or above
+# https://github.com/semantic-release/semantic-release/releases/tag/v18.0.0
