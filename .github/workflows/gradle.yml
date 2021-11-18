@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        gradle: ['7.0', '7.2']
+        gradle: ['7.0', '7.3']
     steps:
     - uses: actions/checkout@v2
       with:
