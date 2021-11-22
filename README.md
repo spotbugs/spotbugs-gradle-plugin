@@ -1,4 +1,4 @@
-# Newly Organized SpotBugs Gradle Plugin
+# SpotBugs Gradle Plugin
 
 This is the official Gradle Plugin to run SpotBugs on Java and Android project.
 
