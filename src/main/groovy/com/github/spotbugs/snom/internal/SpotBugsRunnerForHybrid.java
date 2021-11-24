@@ -13,6 +13,7 @@
  */
 package com.github.spotbugs.snom.internal;
 
+import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import groovy.lang.Closure;
@@ -27,7 +28,7 @@ import javax.inject.Inject;
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
 import org.gradle.api.file.ConfigurableFileCollection;
-import org.gradle.api.file.DirectoryProperty;
+import org.gradle.api.file.RegularFile;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.process.ExecOperations;
@@ -72,7 +73,9 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
       }
       params.getIgnoreFailures().set(task.getIgnoreFailures());
       params.getShowStackTraces().set(task.getShowStackTraces());
-      params.getReportsDir().set(task.getReportsDir());
+      task.getEnabledReports().stream()
+          .map(SpotBugsReport::getOutputLocation)
+          .forEach(params.getReports()::add);
     };
   }
 
@@ -89,7 +92,7 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
 
     Property<Boolean> getShowStackTraces();
 
-    DirectoryProperty getReportsDir();
+    ListProperty<RegularFile> getReports();
   }
 
   /**
@@ -128,7 +131,8 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
 
       String errorMessage = "Verification failed: SpotBugs ended with exit code " + exitValue;
       List<String> reportPaths =
-          params.getReportsDir().getAsFileTree().getFiles().stream()
+          params.getReports().get().stream()
+              .map(RegularFile::getAsFile)
               .map(File::toPath)
               .map(Path::toUri)
               .map(URI::toString)
