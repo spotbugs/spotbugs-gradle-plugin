@@ -213,7 +213,7 @@ spotbugsMain {
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.html").toFile()
         assertTrue(report.isFile())
-        assertTrue(result.getOutput().contains("-html,"))
+        assertTrue(result.getOutput().contains("-html="))
     }
 
     def "can generate spotbugs.html with stylesheet"() {
