@@ -34,7 +34,7 @@ public abstract class SpotBugsTextReport extends SpotBugsReport {
   @NonNull
   @Override
   public Optional<String> toCommandLineOption() {
-    return Optional.empty();
+    return Optional.of("-sortByClass");
   }
 
   @Override

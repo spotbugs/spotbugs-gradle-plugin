@@ -13,6 +13,7 @@
  */
 package com.github.spotbugs.snom.internal;
 
+import com.github.spotbugs.snom.SpotBugsPlugin;
 import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -27,10 +28,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.gradle.api.GradleException;
+import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.file.FileCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +44,30 @@ public abstract class SpotBugsRunner {
   private final Logger log = LoggerFactory.getLogger(SpotBugsRunner.class);
 
   public abstract void run(@NonNull SpotBugsTask task);
+
+  /**
+   * The multiple reports feature is available from SpotBugs 4.5.0
+   *
+   * @see <a href="https://github.com/spotbugs/spotbugs/releases/tag/4.5.0">GitHub Releases</a>
+   */
+  private boolean isSupportingMultipleReports(Project project) {
+    Configuration configuration = project.getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME);
+    configuration.resolve();
+    Optional<Dependency> spotbugs =
+        configuration.getDependencies().stream()
+            .filter(
+                dependency ->
+                    "com.github.spotbugs".equals(dependency.getGroup())
+                        && "spotbugs".equals(dependency.getName()))
+            .findFirst();
+    if (!spotbugs.isPresent()) {
+      log.warn("No spotbugs found in the {} configuration", SpotBugsPlugin.CONFIG_NAME);
+      return false;
+    }
+    SemanticVersion version = new SemanticVersion(spotbugs.get().getVersion());
+    log.debug("Using SpotBugs version {}", version);
+    return version.compareTo(new SemanticVersion("4.5.0")) >= 0;
+  }
 
   protected List<String> buildArguments(SpotBugsTask task) {
     List<String> args = new ArrayList<>();
@@ -69,13 +98,24 @@ public abstract class SpotBugsRunner {
       args.add("-progress");
     }
 
-    SpotBugsReport report = task.getFirstEnabledReport();
-    if (report != null) {
-      File dir = report.getDestination().getParentFile();
-      dir.mkdirs();
-      report.toCommandLineOption().ifPresent(args::add);
-      args.add("-outputFile");
-      args.add(report.getDestination().getAbsolutePath());
+    if (isSupportingMultipleReports(task.getProject())) {
+      for (SpotBugsReport report : task.getEnabledReports()) {
+        File dir = report.getDestination().getParentFile();
+        dir.mkdirs();
+        report
+            .toCommandLineOption()
+            .map(reportType -> reportType + "=" + report.getDestination().getAbsolutePath())
+            .ifPresent(args::add);
+      }
+    } else {
+      SpotBugsReport report = task.getFirstEnabledReport();
+      if (report != null) {
+        File dir = report.getDestination().getParentFile();
+        dir.mkdirs();
+        report.toCommandLineOption().ifPresent(args::add);
+        args.add("-outputFile");
+        args.add(report.getDestination().getAbsolutePath());
+      }
     }
 
     if (task.getEffort().isPresent()) {

@@ -31,7 +31,7 @@ public final class SemanticVersion implements Comparable<SemanticVersion> {
   public SemanticVersion(String version) {
     Matcher matcher = PATTERN.matcher(version);
     if (!matcher.matches()) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException(version + " is not valid as a semantic version");
     }
 
     major = Integer.parseInt(matcher.group(1), 10);
@@ -57,5 +57,10 @@ public final class SemanticVersion implements Comparable<SemanticVersion> {
         .thenComparingInt(SemanticVersion::getMinor)
         .thenComparingInt(SemanticVersion::getPatch)
         .compare(this, that);
+  }
+
+  @Override
+  public String toString() {
+    return "SemanticVersion(" + major + '.' + minor + '.' + patch + ')';
   }
 }
