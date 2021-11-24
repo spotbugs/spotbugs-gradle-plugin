@@ -42,13 +42,13 @@ public abstract class SpotBugsHtmlReport extends SpotBugsReport {
 
   @NonNull
   @Override
-  public Optional<String> toCommandLineOption() {
+  public String toCommandLineOption() {
     @Nullable TextResource stylesheet = getStylesheet();
 
     if (stylesheet == null) {
-      return Optional.of("-html");
+      return "-html";
     } else {
-      return Optional.of("-html:" + stylesheet.asFile().getAbsolutePath());
+      return "-html:" + stylesheet.asFile().getAbsolutePath();
     }
   }
 

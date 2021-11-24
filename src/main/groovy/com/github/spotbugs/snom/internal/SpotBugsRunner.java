@@ -102,17 +102,14 @@ public abstract class SpotBugsRunner {
       for (SpotBugsReport report : task.getEnabledReports()) {
         File dir = report.getDestination().getParentFile();
         dir.mkdirs();
-        report
-            .toCommandLineOption()
-            .map(reportType -> reportType + "=" + report.getDestination().getAbsolutePath())
-            .ifPresent(args::add);
+        args.add(report.toCommandLineOption() + "=" + report.getDestination().getAbsolutePath());
       }
     } else {
       SpotBugsReport report = task.getFirstEnabledReport();
       if (report != null) {
         File dir = report.getDestination().getParentFile();
         dir.mkdirs();
-        report.toCommandLineOption().ifPresent(args::add);
+        args.add(report.toCommandLineOption());
         args.add("-outputFile");
         args.add(report.getDestination().getAbsolutePath());
       }

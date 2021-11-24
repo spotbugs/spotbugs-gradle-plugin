@@ -17,7 +17,6 @@ import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import groovy.lang.Closure;
 import java.io.File;
-import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import org.gradle.api.file.RegularFileProperty;
@@ -51,7 +50,7 @@ public abstract class SpotBugsReport
   }
 
   @NonNull
-  public abstract Optional<String> toCommandLineOption();
+  public abstract String toCommandLineOption();
 
   @Override
   @OutputFile
