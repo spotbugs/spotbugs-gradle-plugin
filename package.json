@@ -8,7 +8,7 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.1.2",
     "pinst": "^2.1.6",
-    "prettier": "^2.4.1",
+    "prettier": "^2.5.0",
     "semantic-release": "18.0.1"
   },
   "scripts": {
