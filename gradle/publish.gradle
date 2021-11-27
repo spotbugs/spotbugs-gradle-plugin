@@ -29,6 +29,11 @@ gradlePlugin {
 
 publishing.publications.all {
     pom {
+        scm {
+            connection = 'scm:git:git@github.com:spotbugs/spotbugs-gradle-plugin.git'
+            developerConnection = 'scm:git:git@github.com:spotbugs/spotbugs-gradle-plugin.git'
+            url = 'https://github.com/spotbugs/spotbugs-gradle-plugin/'
+        }
         licenses {
             license {
                 name = 'Apache License 2.0'
