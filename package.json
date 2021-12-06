@@ -24,10 +24,6 @@
     "branches": [
       {
         "name": "master"
-      },
-      {
-        "name": "beta",
-        "prerelease": "rc"
       }
     ],
     "plugins": [
