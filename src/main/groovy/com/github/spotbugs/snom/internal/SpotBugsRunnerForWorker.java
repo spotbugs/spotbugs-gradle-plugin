@@ -13,18 +13,22 @@
  */
 package com.github.spotbugs.snom.internal;
 
+import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.DetectorFactoryCollection;
 import edu.umd.cs.findbugs.FindBugs;
 import edu.umd.cs.findbugs.FindBugs2;
 import edu.umd.cs.findbugs.TextUICommandLine;
-import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import java.nio.file.Paths;
+import java.io.File;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
+import org.gradle.api.file.RegularFile;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.jvm.toolchain.JavaLauncher;
@@ -82,6 +86,9 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
       params.getArguments().addAll(buildArguments(task));
       params.getIgnoreFailures().set(task.getIgnoreFailures());
       params.getShowStackTraces().set(task.getShowStackTraces());
+      task.getEnabledReports().stream()
+          .map(SpotBugsReport::getOutputLocation)
+          .forEach(params.getReports()::add);
     };
   }
 
@@ -91,6 +98,8 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
     Property<Boolean> getIgnoreFailures();
 
     Property<Boolean> getShowStackTraces();
+
+    ListProperty<RegularFile> getReports();
   }
 
   public abstract static class SpotBugsExecutor implements WorkAction<SpotBugsWorkParameters> {
@@ -120,9 +129,15 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
             message.append(findBugs2.getBugCount()).append(" SpotBugs violations were found.");
           }
           if (message.length() > 0) {
-            String reportPath = findReportPath();
-            if (reportPath != null) {
-              message.append(" See the report at: ").append(Paths.get(reportPath).toUri());
+            List<String> reportPaths =
+                params.getReports().get().stream()
+                    .map(RegularFile::getAsFile)
+                    .map(File::toPath)
+                    .map(Path::toUri)
+                    .map(URI::toString)
+                    .collect(Collectors.toList());
+            if (!reportPaths.isEmpty()) {
+              message.append("See the report at: ").append(String.join(",", reportPaths));
             }
 
             GradleException e = new GradleException(message.toString());
@@ -141,17 +156,6 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
         throw e;
       } catch (Exception e) {
         throw new GradleException("Verification failed: SpotBugs execution thrown exception", e);
-      }
-    }
-
-    @CheckForNull
-    private String findReportPath() {
-      List<String> arguments = getParameters().getArguments().get();
-      int outputFileParameterIndex = arguments.indexOf("-outputFile");
-      if (outputFileParameterIndex > 0) {
-        return arguments.get(outputFileParameterIndex + 1);
-      } else {
-        return null;
       }
     }
   }

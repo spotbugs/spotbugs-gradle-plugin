@@ -438,6 +438,13 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         return report.orElse(null)
     }
 
+    @NonNull
+    @Optional
+    @Nested
+    Set<SpotBugsReport> getEnabledReports() {
+        return reports.findAll {it.enabled}
+    }
+
     void setReportLevel(@Nullable String name) {
         Confidence confidence = name == null ? null : Confidence.valueOf(name.toUpperCase())
         getReportLevel().set(confidence)

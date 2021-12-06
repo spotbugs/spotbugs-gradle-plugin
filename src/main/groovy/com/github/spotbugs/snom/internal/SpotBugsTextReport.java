@@ -16,7 +16,6 @@ package com.github.spotbugs.snom.internal;
 import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import java.util.Optional;
 import javax.inject.Inject;
 import org.gradle.api.model.ObjectFactory;
 
@@ -31,8 +30,8 @@ public abstract class SpotBugsTextReport extends SpotBugsReport {
 
   @NonNull
   @Override
-  public Optional<String> toCommandLineOption() {
-    return Optional.empty();
+  public String toCommandLineOption() {
+    return "-sortByClass";
   }
 
   @Override

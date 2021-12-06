@@ -13,6 +13,7 @@
  */
 package com.github.spotbugs.snom.internal;
 
+import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
@@ -23,7 +24,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
+import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.Property;
+import org.gradle.api.provider.Provider;
 import org.gradle.jvm.toolchain.JavaLauncher;
 import org.gradle.process.JavaExecSpec;
 import org.gradle.process.internal.ExecException;
@@ -49,7 +52,10 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
       } else {
         String errorMessage = "Verification failed: SpotBugs execution thrown exception.";
         List<String> reportPaths =
-            task.getReportsDir().getAsFileTree().getFiles().stream()
+            task.getEnabledReports().stream()
+                .map(SpotBugsReport::getOutputLocation)
+                .map(RegularFileProperty::getAsFile)
+                .map(Provider::get)
                 .map(File::toPath)
                 .map(Path::toUri)
                 .map(URI::toString)

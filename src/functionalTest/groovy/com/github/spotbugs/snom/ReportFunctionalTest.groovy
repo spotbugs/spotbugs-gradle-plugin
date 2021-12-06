@@ -20,6 +20,9 @@ import spock.lang.Specification
 import org.gradle.testkit.runner.GradleRunner
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
+
+import java.nio.file.Path
+
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertFalse
@@ -219,7 +222,7 @@ spotbugsMain {
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.html").toFile()
         assertTrue(report.isFile())
-        assertTrue(result.getOutput().contains("-html,"))
+        assertTrue(result.getOutput().contains("-html="))
     }
 
     def "can generate spotbugs.html with stylesheet"() {
@@ -475,5 +478,29 @@ spotbugsMain {
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.sarif").toFile()
         assertTrue(report.isFile())
+    }
+
+    def "can generate XML and SARIF reports"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        xml.enabled = true
+        sarif.enabled = true
+    }
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+
+        Path reportDir = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs")
+        assertTrue(reportDir.resolve("main.xml").toFile().isFile())
+        assertTrue(reportDir.resolve("main.sarif").toFile().isFile())
     }
 }
