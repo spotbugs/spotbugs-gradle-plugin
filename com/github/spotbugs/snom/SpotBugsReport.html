@@ -180,7 +180,7 @@ implements <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/repor
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>public&nbsp;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/io/File.html' title='File'>File</a></code></td>
-                            <td class="colLast"><code><strong><a href="#getDestination()">getDestination</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#getDestination()">getDestination</a></strong>()</code><br><DL><DT><B>deprecated:</B></DT><DD>use <a href='#getOutputLocation()'>getOutputLocation()</a> instead.</DD></DL> </td>
                         </tr>
                         
                         <tr class="altColor">
@@ -222,31 +222,31 @@ implements <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/repor
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>public&nbsp;boolean</code></td>
-                            <td class="colLast"><code><strong><a href="#isEnabled()">isEnabled</a></strong>()</code><br></td>
+                            <td class="colLast"><code><strong><a href="#isEnabled()">isEnabled</a></strong>()</code><br><DL><DT><B>deprecated:</B></DT><DD>use <a href='#getRequired()'>getRequired()</a> instead.</DD></DL> </td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>public&nbsp;void</code></td>
-                            <td class="colLast"><code><strong><a href="#setDestination(java.io.File)">setDestination</a></strong>(<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/io/File.html' title='File'>File</a> file)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#setDestination(java.io.File)">setDestination</a></strong>(<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/io/File.html' title='File'>File</a> file)</code><br><DL><DT><B>deprecated:</B></DT><DD>use <CODE>getOutputLocation().set(file)</CODE> instead.</DD></DL> </td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>public&nbsp;void</code></td>
-                            <td class="colLast"><code><strong><a href="#setDestination(Provider)">setDestination</a></strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Provider.html' title='Provider'>Provider</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/io/File.html' title='File'>File</a>&gt; provider)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#setDestination(Provider)">setDestination</a></strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Provider.html' title='Provider'>Provider</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/io/File.html' title='File'>File</a>&gt; provider)</code><br><DL><DT><B>deprecated:</B></DT><DD>use <CODE>getOutputLocation().set(provider)</CODE> instead.</DD></DL> </td>
                         </tr>
                         
                         <tr class="rowColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>public&nbsp;void</code></td>
-                            <td class="colLast"><code><strong><a href="#setEnabled(boolean)">setEnabled</a></strong>(boolean b)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#setEnabled(boolean)">setEnabled</a></strong>(boolean b)</code><br><DL><DT><B>deprecated:</B></DT><DD>use <CODE>getRequired().set(value)</CODE> instead.</DD></DL> </td>
                         </tr>
                         
                         <tr class="altColor">
                             <td class="colFirst"><code></code></td>
                             <td class="colLast"><code>public&nbsp;void</code></td>
-                            <td class="colLast"><code><strong><a href="#setEnabled(Provider)">setEnabled</a></strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Provider.html' title='Provider'>Provider</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; provider)</code><br></td>
+                            <td class="colLast"><code><strong><a href="#setEnabled(Provider)">setEnabled</a></strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Provider.html' title='Provider'>Provider</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; provider)</code><br><DL><DT><B>deprecated:</B></DT><DD>use <CODE>getRequired().set(provider)</CODE> instead.</DD></DL> </td>
                         </tr>
                         
                         <tr class="rowColor">
@@ -349,9 +349,9 @@ public&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/repo
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
-@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/OutputFile.html' title='OutputFile'>OutputFile</a>
+@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Deprecated.html' title='Deprecated'>Deprecated</a>
 public&nbsp;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/io/File.html' title='File'>File</a> <strong>getDestination</strong>()</h4>
-                                <p></p>
+                                <p><DL><DT><B>deprecated:</B></DT><DD>use <a href='#getOutputLocation()'>getOutputLocation()</a> instead.</DD></DL>  </p>
                             </li>
                         </ul>
                     
@@ -368,7 +368,7 @@ public&nbsp;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lan
                         <a name="getOutputLocation()"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/OutputFile.html' title='OutputFile'>OutputFile</a>
+                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
 public&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/file/RegularFileProperty.html' title='RegularFileProperty'>RegularFileProperty</a> <strong>getOutputLocation</strong>()</h4>
                                 <p></p>
                             </li>
@@ -387,7 +387,8 @@ public&nbsp;<a href='../../../../OutputType.html'>OutputType</a> <strong>getOutp
                         <a name="getRequired()"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
+                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
+@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
 public&nbsp;<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Property.html' title='Property'>Property</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; <strong>getRequired</strong>()</h4>
                                 <p></p>
                             </li>
@@ -416,46 +417,50 @@ protected&nbsp;final&nbsp;<a href='../../../../com/github/spotbugs/snom/SpotBugs
                         <a name="isEnabled()"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
-@<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/Input.html' title='Input'>Input</a>
+                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Deprecated.html' title='Deprecated'>Deprecated</a>
+@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
 public&nbsp;boolean <strong>isEnabled</strong>()</h4>
-                                <p></p>
+                                <p><DL><DT><B>deprecated:</B></DT><DD>use <a href='#getRequired()'>getRequired()</a> instead.</DD></DL>  </p>
                             </li>
                         </ul>
                     
                         <a name="setDestination(java.io.File)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
+                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Deprecated.html' title='Deprecated'>Deprecated</a>
+@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
 public&nbsp;void <strong>setDestination</strong>(<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/io/File.html' title='File'>File</a> file)</h4>
-                                <p></p>
+                                <p><DL><DT><B>deprecated:</B></DT><DD>use <CODE>getOutputLocation().set(file)</CODE> instead.</DD></DL>  </p>
                             </li>
                         </ul>
                     
                         <a name="setDestination(Provider)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
+                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Deprecated.html' title='Deprecated'>Deprecated</a>
+@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
 public&nbsp;void <strong>setDestination</strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Provider.html' title='Provider'>Provider</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/io/File.html' title='File'>File</a>&gt; provider)</h4>
-                                <p></p>
+                                <p><DL><DT><B>deprecated:</B></DT><DD>use <CODE>getOutputLocation().set(provider)</CODE> instead.</DD></DL>  </p>
                             </li>
                         </ul>
                     
                         <a name="setEnabled(boolean)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
+                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Deprecated.html' title='Deprecated'>Deprecated</a>
+@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
 public&nbsp;void <strong>setEnabled</strong>(boolean b)</h4>
-                                <p></p>
+                                <p><DL><DT><B>deprecated:</B></DT><DD>use <CODE>getRequired().set(value)</CODE> instead.</DD></DL>  </p>
                             </li>
                         </ul>
                     
                         <a name="setEnabled(Provider)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
+                                <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Deprecated.html' title='Deprecated'>Deprecated</a>
+@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
 public&nbsp;void <strong>setEnabled</strong>(<a href='https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Provider.html' title='Provider'>Provider</a>&lt;<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Boolean.html' title='Boolean'>Boolean</a>&gt; provider)</h4>
-                                <p></p>
+                                <p><DL><DT><B>deprecated:</B></DT><DD>use <CODE>getRequired().set(provider)</CODE> instead.</DD></DL>  </p>
                             </li>
                         </ul>
                     
@@ -463,7 +468,7 @@ public&nbsp;void <strong>setEnabled</strong>(<a href='https://docs.gradle.org/cu
                         <ul class="blockListLast">
                             <li class="blockList">
                                 <h4>@<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/Override.html' title='Override'>Override</a>
-public&nbsp;void <strong>setStylesheet</strong>(@javax.annotation.Nullable <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/resources/TextResource.html' title='TextResource'>TextResource</a> textResource)</h4>
+public&nbsp;void <strong>setStylesheet</strong>(@edu.umd.cs.findbugs.annotations.Nullable <a href='https://docs.gradle.org/current/javadoc/org/gradle/api/resources/TextResource.html' title='TextResource'>TextResource</a> textResource)</h4>
                                 <p></p>
                             </li>
                         </ul>
@@ -471,7 +476,7 @@ public&nbsp;void <strong>setStylesheet</strong>(@javax.annotation.Nullable <a hr
                         <a name="setStylesheet(java.lang.String)"><!-- --></a>
                         <ul class="blockListLast">
                             <li class="blockList">
-                                <h4>public&nbsp;void <strong>setStylesheet</strong>(@javax.annotation.Nullable <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> path)</h4>
+                                <h4>public&nbsp;void <strong>setStylesheet</strong>(@edu.umd.cs.findbugs.annotations.Nullable <a href='https://docs.oracle.com/en/java/javase/11/docs/api/java/lang/String.html' title='String'>String</a> path)</h4>
                                 <p></p>
                             </li>
                         </ul>
