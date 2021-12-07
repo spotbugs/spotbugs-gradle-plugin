@@ -434,7 +434,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Optional
     @Nested
     SpotBugsReport getFirstEnabledReport() {
-        java.util.Optional<SpotBugsReport> report = reports.stream().filter({ report -> report.enabled || report.required}).findFirst()
+        java.util.Optional<SpotBugsReport> report = reports.stream().filter({ report -> report.enabled }).findFirst()
         return report.orElse(null)
     }
 
@@ -442,7 +442,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Optional
     @Nested
     Set<SpotBugsReport> getEnabledReports() {
-        return reports.findAll {it.enabled}
+        return reports.findAll { it.enabled }
     }
 
     void setReportLevel(@Nullable String name) {
