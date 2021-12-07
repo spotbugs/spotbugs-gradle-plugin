@@ -503,4 +503,26 @@ spotbugsMain {
         assertTrue(reportDir.resolve("main.xml").toFile().isFile())
         assertTrue(reportDir.resolve("main.sarif").toFile().isFile())
     }
+
+    def "can disable XML report"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        xml.required = false
+    }
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+
+        Path reportDir = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs")
+        assertFalse(reportDir.resolve("main.xml").toFile().isFile())
+    }
 }
