@@ -484,8 +484,8 @@ spotbugsMain {
         buildFile << """
 spotbugsMain {
     reports {
-        xml.enabled = true
-        sarif.enabled = true
+        xml.required = true
+        sarif.required = true
     }
 }"""
         when:
