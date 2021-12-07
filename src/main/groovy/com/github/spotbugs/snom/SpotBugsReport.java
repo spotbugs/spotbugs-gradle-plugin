@@ -36,15 +36,13 @@ public abstract class SpotBugsReport
         CustomizableHtmlReport // to expose CustomizableHtmlReport#setStylesheet to build script
 {
   private final RegularFileProperty destination;
-  private final Property<Boolean> isEnabled;
   private final Property<Boolean> isRequired;
   private final SpotBugsTask task;
 
   @Inject
   public SpotBugsReport(ObjectFactory objects, SpotBugsTask task) {
     this.destination = objects.fileProperty();
-    this.isEnabled = objects.property(Boolean.class);
-    this.isRequired = objects.property(Boolean.class).value(Boolean.TRUE);
+    this.isRequired = objects.property(Boolean.class).convention(Boolean.TRUE);
     this.task = task;
   }
 
@@ -79,21 +77,21 @@ public abstract class SpotBugsReport
   @Deprecated
   @Override
   public boolean isEnabled() {
-    return isEnabled.getOrElse(Boolean.TRUE);
+    return isRequired.get();
   }
 
   /** @deprecated use {@code getRequired().set(value)} instead. */
   @Deprecated
   @Override
   public void setEnabled(boolean b) {
-    isEnabled.set(b);
+    isRequired.set(b);
   }
 
   /** @deprecated use {@code getRequired().set(provider)} instead. */
   @Deprecated
   @Override
   public void setEnabled(Provider<Boolean> provider) {
-    isEnabled.set(provider);
+    isRequired.set(provider);
   }
 
   /** @deprecated use {@code getOutputLocation().set(file)} instead. */
