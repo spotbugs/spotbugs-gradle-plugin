@@ -96,7 +96,7 @@ Configure `spotbugs` to choose your favorite SpotBugs version:
 
 ```groovy
 dependencies {
-    spotbugs 'com.github.spotbugs:spotbugs:4.4.2'
+    spotbugs 'com.github.spotbugs:spotbugs:4.5.1'
 }
 ```
 
@@ -105,7 +105,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    spotbugs("com.github.spotbugs:spotbugs:4.4.2")
+    spotbugs("com.github.spotbugs:spotbugs:4.5.1")
 }
 ```
 </details>
@@ -161,6 +161,7 @@ You can change SpotBugs version by [the `toolVersion` property of the spotbugs e
 
 |Gradle Plugin|SpotBugs|
 |-----:|-----:|
+| 5.0.2| 4.5.1|
 | 4.7.10| 4.5.0|
 | 4.7.8| 4.4.2|
 | 4.7.5| 4.4.1|
