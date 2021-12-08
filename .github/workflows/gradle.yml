@@ -10,10 +10,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         gradle: ['7.0', '7.3.1']
+        os: ['ubuntu-latest', 'windows-latest']
     steps:
     - uses: actions/checkout@v2
       with:
@@ -27,12 +28,13 @@ jobs:
     - name: Read .nvmrc
       run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
       id: nvm
+      if: matrix.gradle == '7.0' && matrix.os == 'ubuntu-latest'
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '${{ steps.nvm.outputs.NVMRC }}'
         cache: npm
-      if: matrix.gradle == '7.0'
+      if: matrix.gradle == '7.0' && matrix.os == 'ubuntu-latest'
     - name: Gradle Wrapper Validation
       uses: gradle/wrapper-validation-action@v1
     - name: Build with Gradle
@@ -51,7 +53,7 @@ jobs:
         rm -rf build/libs/*.jar
         npm ci
         npx semantic-release
-      if: matrix.gradle == '7.0'
+      if: matrix.gradle == '7.0' && matrix.os == 'ubuntu-latest'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Run SonarQube Scanner
@@ -59,12 +61,12 @@ jobs:
         if [ "$SONAR_LOGIN" != "" ]; then
           ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN --no-daemon
         fi
-      if: matrix.gradle == '7.0'
+      if: matrix.gradle == '7.0' && matrix.os == 'ubuntu-latest'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
     - uses: actions/upload-artifact@v2
       if: always()
       with:
-        name: reports (Gradle ${{ matrix.gradle }})
+        name: reports (Gradle ${{ matrix.gradle }} on ${{ matrix.os }})
         path: build/reports
