@@ -110,7 +110,7 @@ buildscript {
 """
         runner.pluginClasspath.forEach({ file ->
             buildFile << """
-        classpath files('${file.absolutePath}')
+        classpath files("${file.absolutePath}")
 """
         })
         buildFile << """
