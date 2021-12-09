@@ -17,9 +17,7 @@ import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import groovy.lang.Closure;
-import java.io.File;
-import java.net.URI;
-import java.nio.file.Path;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -144,9 +142,16 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
       List<String> reportPaths =
           params.getReports().get().stream()
               .map(RegularFile::getAsFile)
-              .map(File::toPath)
-              .map(Path::toUri)
-              .map(URI::toString)
+              .map(
+                  file -> {
+                    try {
+                      return file.getCanonicalPath();
+                    } catch (IOException e) {
+                      log.warn(
+                          "failed to compute a canonical path, use absolute path as a fallback", e);
+                      return file.getAbsolutePath();
+                    }
+                  })
               .collect(Collectors.toList());
       if (!reportPaths.isEmpty()) {
         errorMessage += "See the report at: " + String.join(",", reportPaths);
