@@ -36,7 +36,7 @@ jobs:
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
       run: |
-        ./gradlew build --no-daemon -Dsnom.test.functional.gradle=${{ matrix.gradle }}
+        ./gradlew build --no-daemon
         echo Verifying the java version used in class files...
         cd build/classes/groovy/main
         javap -v com.github.spotbugs.snom.SpotBugsPlugin | grep -q 'major version: 52'
@@ -60,7 +60,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       if: always()
       with:
-        name: reports (Gradle ${{ matrix.gradle }} on ${{ matrix.os }})
+        name: reports
         path: build/reports
   build:
     runs-on: ${{ matrix.os }}
@@ -68,10 +68,10 @@ jobs:
       matrix:
         gradle: ['7.0', '7.3.1']
         os: ['ubuntu-latest', 'windows-latest']
-      exclude:
-        # used in the sonar-and-semantic-release job
-        - gradle: '7.3.1'
-          os: 'ubuntu-latest'
+        exclude:
+          # used in the sonar-and-semantic-release job
+          - gradle: '7.3.1'
+            os: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
       with:
@@ -87,7 +87,7 @@ jobs:
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
       run: |
-        ./gradlew build --no-daemon -Dsnom.test.functional.gradle=${{ matrix.gradle }}
+        ./gradlew build --no-daemon "-Dsnom.test.functional.gradle=${{ matrix.gradle }}"
     - uses: actions/upload-artifact@v2
       if: always()
       with:
