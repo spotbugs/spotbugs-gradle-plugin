@@ -9,11 +9,8 @@ on:
       - master
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        gradle: ['7.0', '7.3.1']
+  sonar-and-semantic-release:
+    runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2
       with:
@@ -32,7 +29,6 @@ jobs:
       with:
         node-version: '${{ steps.nvm.outputs.NVMRC }}'
         cache: npm
-      if: matrix.gradle == '7.0'
     - name: Gradle Wrapper Validation
       uses: gradle/wrapper-validation-action@v1
     - name: Build with Gradle
@@ -51,7 +47,6 @@ jobs:
         rm -rf build/libs/*.jar
         npm ci
         npx semantic-release
-      if: matrix.gradle == '7.0'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Run SonarQube Scanner
@@ -59,12 +54,42 @@ jobs:
         if [ "$SONAR_LOGIN" != "" ]; then
           ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN --no-daemon
         fi
-      if: matrix.gradle == '7.0'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
     - uses: actions/upload-artifact@v2
       if: always()
       with:
-        name: reports (Gradle ${{ matrix.gradle }})
+        name: reports (Gradle ${{ matrix.gradle }} on ${{ matrix.os }})
+        path: build/reports
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        gradle: ['7.0', '7.3.1']
+        os: ['ubuntu-latest', 'windows-latest']
+      exclude:
+        # used in the sonar-and-semantic-release job
+        - gradle: '7.3.1'
+          os: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: 11
+        cache: gradle
+    - name: Build with Gradle
+      env:
+        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+      run: |
+        ./gradlew build --no-daemon -Dsnom.test.functional.gradle=${{ matrix.gradle }}
+    - uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: reports (Gradle ${{ matrix.gradle }} on ${{ matrix.os }})
         path: build/reports
