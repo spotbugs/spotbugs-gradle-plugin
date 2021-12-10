@@ -699,7 +699,7 @@ spotbugsMain {
         then:
         result.task(':spotbugsMain').outcome == TaskOutcome.FAILED
         result.output.contains('See the report at')
-        def expectedOutput = rootDir.toPath().resolve(Paths.get("build", "reports", "spotbugs", "main.xml")).toUri().toString()
+        def expectedOutput = rootDir.toPath().resolve(Paths.get("build", "reports", "spotbugs", "main.xml")).toFile().getCanonicalPath()
         result.output.contains(expectedOutput)
 
         where:

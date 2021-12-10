@@ -79,7 +79,7 @@ spotbugs {
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-include"))
-        assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
+        assertTrue(result.getOutput().contains(filter.getCanonicalPath()))
     }
 
     def "can use excludeFilter"() {
@@ -103,7 +103,7 @@ spotbugs {
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-exclude"))
-        assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
+        assertTrue(result.getOutput().contains(filter.getCanonicalPath()))
     }
 
     def "can use baselineFile"() {
@@ -127,7 +127,7 @@ spotbugs {
         then:
         assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
         assertTrue(result.getOutput().contains("-excludeBugs"))
-        assertTrue(result.getOutput().contains(baseline.getAbsolutePath()))
+        assertTrue(result.getOutput().contains(baseline.getCanonicalPath()))
     }
 
     def "can use visitors"() {
