@@ -11,6 +11,9 @@ on:
 jobs:
   sonar-and-semantic-release:
     runs-on: 'ubuntu-latest'
+    strategy:
+      matrix:
+        gradle: ['7.0', '7.3.3']
     steps:
     - uses: actions/checkout@v2
       with:
@@ -66,11 +69,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        gradle: ['7.0', '7.3.1']
+        gradle: ['7.0', '7.3.3']
         os: ['ubuntu-latest', 'windows-latest']
         exclude:
           # used in the sonar-and-semantic-release job
-          - gradle: '7.3.1'
+          - gradle: '7.3.3'
             os: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v2

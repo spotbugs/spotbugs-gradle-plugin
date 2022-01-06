@@ -494,7 +494,7 @@ public class Foo {
         given:
         buildFile << """
 dependencies{
-  spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
+  spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'
 }"""
         when:
         BuildResult result =
@@ -519,7 +519,7 @@ spotbugs {
   ignoreFailures = true
 }
 dependencies {
-  spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
+  spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'
 }"""
 
         File testDir = rootDir.toPath().resolve(Paths.get("src", "test", "java")).toFile()
