@@ -510,8 +510,9 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
      *
      * @see <a href="https://github.com/spotbugs/spotbugs/releases/tag/4.5.0">GitHub Releases</a>
      */
-    Provider<Boolean> isSupportingMultipleReports() {
-        return isSupportingMultipleReports
+    @Internal
+    boolean isSupportingMultipleReports() {
+        return isSupportingMultipleReports.getOrElse(Boolean.FALSE).booleanValue()
     }
 
     @Internal

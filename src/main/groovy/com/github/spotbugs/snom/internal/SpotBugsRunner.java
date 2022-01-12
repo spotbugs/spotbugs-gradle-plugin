@@ -69,7 +69,7 @@ public abstract class SpotBugsRunner {
       args.add("-progress");
     }
 
-    if (task.isSupportingMultipleReports().get()) {
+    if (task.isSupportingMultipleReports()) {
       for (SpotBugsReport report : task.getEnabledReports()) {
         File reportFile = report.getOutputLocation().getAsFile().get();
         File dir = reportFile.getParentFile();
