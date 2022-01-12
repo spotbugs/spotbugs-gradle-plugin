@@ -34,12 +34,12 @@ class CacheabilityFunctionalTest extends Specification {
         when:
         BuildResult result =
                 GradleRunner.create()
-                        .withProjectDir(buildDir)
-                        .withArguments(':spotbugsMain', '--configuration-cache')
-                        .withPluginClasspath()
-                        .forwardOutput()
-                        .withGradleVersion(version)
-                        .build()
+                .withProjectDir(buildDir)
+                .withArguments(':spotbugsMain', '--configuration-cache')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
 
         then:
         !result.output.contains("Configuration cache problems found in this build")
