@@ -45,30 +45,6 @@ public abstract class SpotBugsRunner {
 
   public abstract void run(@NonNull SpotBugsTask task);
 
-  /**
-   * The multiple reports feature is available from SpotBugs 4.5.0
-   *
-   * @see <a href="https://github.com/spotbugs/spotbugs/releases/tag/4.5.0">GitHub Releases</a>
-   */
-  private boolean isSupportingMultipleReports(Project project) {
-    Configuration configuration = project.getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME);
-    configuration.resolve();
-    Optional<Dependency> spotbugs =
-        configuration.getDependencies().stream()
-            .filter(
-                dependency ->
-                    "com.github.spotbugs".equals(dependency.getGroup())
-                        && "spotbugs".equals(dependency.getName()))
-            .findFirst();
-    if (!spotbugs.isPresent()) {
-      log.warn("No spotbugs found in the {} configuration", SpotBugsPlugin.CONFIG_NAME);
-      return false;
-    }
-    SemanticVersion version = new SemanticVersion(spotbugs.get().getVersion());
-    log.debug("Using SpotBugs version {}", version);
-    return version.compareTo(new SemanticVersion("4.5.0")) >= 0;
-  }
-
   protected List<String> buildArguments(SpotBugsTask task) {
     List<String> args = new ArrayList<>();
 
@@ -98,7 +74,7 @@ public abstract class SpotBugsRunner {
       args.add("-progress");
     }
 
-    if (isSupportingMultipleReports(task.getProject())) {
+    if (task.isSupportingMultipleReports().get()) {
       for (SpotBugsReport report : task.getEnabledReports()) {
         File reportFile = report.getOutputLocation().getAsFile().get();
         File dir = reportFile.getParentFile();

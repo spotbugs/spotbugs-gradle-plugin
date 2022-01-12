@@ -11,8 +11,9 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.snom;
+package com.github.spotbugs.snom
 
+import com.github.spotbugs.snom.internal.SemanticVersion;
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForHybrid;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
@@ -21,7 +22,9 @@ import com.github.spotbugs.snom.internal.SpotBugsSarifReport;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
 import edu.umd.cs.findbugs.annotations.NonNull
-import edu.umd.cs.findbugs.annotations.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable
+import org.gradle.api.Project
+import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.plugins.JavaPluginExtension
@@ -268,6 +271,8 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     private boolean enableHybridWorker;
     private FileCollection pluginJarFiles
 
+    private Provider<Boolean> isSupportingMultipleReports
+
     void setClasses(FileCollection fileCollection) {
         this.classes = fileCollection
     }
@@ -342,6 +347,26 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         def pluginConfiguration = project.getConfigurations().getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
         pluginJarFiles = project.layout.files {
             pluginConfiguration.files
+        }
+
+        def configuration = project.getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME)
+        def logger = this.log
+        isSupportingMultipleReports = project.provider {
+            configuration.resolve()
+            java.util.Optional<Dependency> spotbugs =
+                    configuration.getDependencies().stream()
+                            .filter(
+                                    dependency ->
+                                            "com.github.spotbugs" == dependency.getGroup()
+                                                    && "spotbugs" == dependency.getName())
+                            .findFirst()
+            if (!spotbugs.isPresent()) {
+                logger.warn("No spotbugs found in the {} configuration", SpotBugsPlugin.CONFIG_NAME)
+                return false
+            }
+            SemanticVersion version = new SemanticVersion(spotbugs.get().getVersion())
+            logger.debug("Using SpotBugs version {}", version)
+            return version >= new SemanticVersion("4.5.0")
         }
     }
 
@@ -481,6 +506,15 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Input
     boolean getShowStackTraces() {
         showStackTraces.get();
+    }
+
+    /**
+     * The multiple reports feature is available from SpotBugs 4.5.0
+     *
+     * @see <a href="https://github.com/spotbugs/spotbugs/releases/tag/4.5.0">GitHub Releases</a>
+     */
+    Provider<Boolean> isSupportingMultipleReports() {
+        return isSupportingMultipleReports
     }
 
     @Internal
