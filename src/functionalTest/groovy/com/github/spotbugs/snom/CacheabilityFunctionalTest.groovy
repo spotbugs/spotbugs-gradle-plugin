@@ -15,6 +15,7 @@ package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.GradleVersion
 import spock.lang.Specification
 
@@ -44,6 +45,18 @@ class CacheabilityFunctionalTest extends Specification {
         then:
         !result.output.contains("Configuration cache problems found in this build")
         result.output.contains("Configuration cache entry stored.")
+
+        when:
+        BuildResult resultOfCachedBuild = GradleRunner.create()
+                .withProjectDir(buildDir)
+                .withArguments(':spotbugsMain', '--configuration-cache')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+        then:
+        resultOfCachedBuild.task(":spotbugsMain").outcome == TaskOutcome.UP_TO_DATE
+        resultOfCachedBuild.output.contains("Configuration cache entry reused.")
     }
 
     /**
