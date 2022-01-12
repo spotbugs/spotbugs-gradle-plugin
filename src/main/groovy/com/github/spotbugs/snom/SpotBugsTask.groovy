@@ -95,9 +95,6 @@ import javax.inject.Inject
 
 @CacheableTask
 abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
-    private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
-    private static final String FEATURE_FLAG_HYBRID_WORKER = "com.github.spotbugs.snom.javaexec-in-worker";
-
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
 
     private final WorkerExecutor workerExecutor;
@@ -269,6 +266,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     private boolean enableWorkerApi;
     private boolean enableHybridWorker;
+    private FileCollection pluginJarFiles
 
     void setClasses(FileCollection fileCollection) {
         this.classes = fileCollection
@@ -341,6 +339,10 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         useAuxclasspathFile = objects.property(Boolean)
         setDescription("Run SpotBugs analysis.")
         setGroup(JavaBasePlugin.VERIFICATION_GROUP)
+        def pluginConfiguration = project.getConfigurations().getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
+        pluginJarFiles = project.layout.files {
+            pluginConfiguration.files
+        }
     }
 
     /**
@@ -418,7 +420,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @NonNull
     @Internal
     Set<File> getPluginJar() {
-        return getProject().getConfigurations().getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME).getFiles()
+        return pluginJarFiles.files
     }
 
     @NonNull
