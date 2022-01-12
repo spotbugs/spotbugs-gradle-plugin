@@ -43,6 +43,7 @@ class CacheabilityFunctionalTest extends Specification {
 
         then:
         !result.output.contains("Configuration cache problems found in this build")
+        result.output.contains("Configuration cache entry stored.")
     }
 
     /**
