@@ -11,8 +11,9 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.snom;
+package com.github.spotbugs.snom
 
+import com.github.spotbugs.snom.internal.SemanticVersion;
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForHybrid;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
@@ -21,7 +22,8 @@ import com.github.spotbugs.snom.internal.SpotBugsSarifReport;
 import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
 import edu.umd.cs.findbugs.annotations.NonNull
-import edu.umd.cs.findbugs.annotations.Nullable;
+import edu.umd.cs.findbugs.annotations.Nullable
+import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.plugins.JavaPluginExtension
@@ -33,7 +35,6 @@ import org.gradle.api.Action;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.NamedDomainObjectContainer;
-import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
@@ -53,7 +54,6 @@ import org.gradle.api.tasks.VerificationTask
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService;
 import org.gradle.util.ClosureBackedAction
-import org.gradle.util.GradleVersion;
 import org.gradle.workers.WorkerExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory
@@ -95,9 +95,6 @@ import javax.inject.Inject
 
 @CacheableTask
 abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
-    private static final String FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker";
-    private static final String FEATURE_FLAG_HYBRID_WORKER = "com.github.spotbugs.snom.javaexec-in-worker";
-
     private final Logger log = LoggerFactory.getLogger(SpotBugsTask);
 
     private final WorkerExecutor workerExecutor;
@@ -269,6 +266,10 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
     private boolean enableWorkerApi;
     private boolean enableHybridWorker;
+    private FileCollection pluginJarFiles
+    private FileCollection spotbugsClasspath
+
+    private Provider<Boolean> isSupportingMultipleReports
 
     void setClasses(FileCollection fileCollection) {
         this.classes = fileCollection
@@ -341,6 +342,32 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         useAuxclasspathFile = objects.property(Boolean)
         setDescription("Run SpotBugs analysis.")
         setGroup(JavaBasePlugin.VERIFICATION_GROUP)
+        def pluginConfiguration = project.getConfigurations().getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
+        pluginJarFiles = project.layout.files {
+            pluginConfiguration.files
+        }
+
+        def configuration = project.getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME)
+        def logger = this.log
+        isSupportingMultipleReports = project.provider {
+            configuration.resolve()
+            java.util.Optional<Dependency> spotbugs =
+                    configuration.getDependencies().stream()
+                    .filter { dependency -> "com.github.spotbugs" == dependency.group && "spotbugs" == dependency.name }
+                    .findFirst()
+            if (!spotbugs.isPresent()) {
+                logger.warn("No spotbugs found in the {} configuration", SpotBugsPlugin.CONFIG_NAME)
+                return false
+            }
+            SemanticVersion version = new SemanticVersion(spotbugs.get().getVersion())
+            logger.debug("Using SpotBugs version {}", version)
+            return version >= new SemanticVersion("4.5.0")
+        }
+
+        def spotbugsSlf4j = project.configurations.getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
+        spotbugsClasspath = project.layout.files {
+            spotbugsSlf4j.files + configuration.files
+        }
     }
 
     /**
@@ -418,16 +445,13 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @NonNull
     @Internal
     Set<File> getPluginJar() {
-        return getProject().getConfigurations().getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME).getFiles()
+        return pluginJarFiles.files
     }
 
     @NonNull
     @Internal
     FileCollection getSpotbugsClasspath() {
-        Configuration config = getProject().getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME)
-        Configuration spotbugsSlf4j = getProject().getConfigurations().getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
-
-        return getProject().files(config, spotbugsSlf4j)
+        return spotbugsClasspath
     }
 
     @Nullable
@@ -479,6 +503,16 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Input
     boolean getShowStackTraces() {
         showStackTraces.get();
+    }
+
+    /**
+     * The multiple reports feature is available from SpotBugs 4.5.0
+     *
+     * @see <a href="https://github.com/spotbugs/spotbugs/releases/tag/4.5.0">GitHub Releases</a>
+     */
+    @Internal
+    boolean isSupportingMultipleReports() {
+        return isSupportingMultipleReports.getOrElse(Boolean.FALSE).booleanValue()
     }
 
     @Internal
