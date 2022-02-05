@@ -143,7 +143,7 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
                         })
                     .collect(Collectors.toList());
             if (!reportPaths.isEmpty()) {
-              message.append("See the report at: ").append(String.join(",", reportPaths));
+              message.append("See the report at: ").append(String.join(", ", reportPaths));
             }
 
             GradleException e = new GradleException(message.toString());

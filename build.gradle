@@ -3,10 +3,10 @@ plugins {
     id 'java-gradle-plugin'
     id 'jacoco'
     id 'signing'
-    id 'com.gradle.plugin-publish' version '0.19.0'
+    id 'com.gradle.plugin-publish' version '0.20.0'
     id 'com.github.spotbugs.gradle-plugin'
     id 'org.sonarqube' version '3.3'
-    id 'com.github.spotbugs' version '5.0.3'
+    id 'com.github.spotbugs' version '5.0.5'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -21,10 +21,10 @@ repositories {
 }
 
 ext {
-    errorproneVersion = '2.10.0'
+    errorproneVersion = '2.11.0'
     spotBugsVersion = '4.5.3'
     slf4jVersion = '1.8.0-beta4'
-    androidGradlePluginVersion = '7.0.4'
+    androidGradlePluginVersion = '7.1.1'
 }
 
 dependencies {
