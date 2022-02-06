@@ -20,9 +20,7 @@ import edu.umd.cs.findbugs.FindBugs;
 import edu.umd.cs.findbugs.FindBugs2;
 import edu.umd.cs.findbugs.TextUICommandLine;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import java.io.File;
-import java.net.URI;
-import java.nio.file.Path;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -132,9 +130,17 @@ public class SpotBugsRunnerForWorker extends SpotBugsRunner {
             List<String> reportPaths =
                 params.getReports().get().stream()
                     .map(RegularFile::getAsFile)
-                    .map(File::toPath)
-                    .map(Path::toUri)
-                    .map(URI::toString)
+                    .map(
+                        file -> {
+                          try {
+                            return file.getCanonicalPath();
+                          } catch (IOException e) {
+                            log.warn(
+                                "failed to compute a canonical path, use absolute path as a fallback",
+                                e);
+                            return file.getAbsolutePath();
+                          }
+                        })
                     .collect(Collectors.toList());
             if (!reportPaths.isEmpty()) {
               message.append("See the report at: ").append(String.join(", ", reportPaths));

@@ -16,9 +16,7 @@ package com.github.spotbugs.snom.internal;
 import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
-import java.io.File;
-import java.net.URI;
-import java.nio.file.Path;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,12 +54,20 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
                 .map(SpotBugsReport::getOutputLocation)
                 .map(RegularFileProperty::getAsFile)
                 .map(Provider::get)
-                .map(File::toPath)
-                .map(Path::toUri)
-                .map(URI::toString)
+                .map(
+                    file -> {
+                      try {
+                        return file.getCanonicalPath();
+                      } catch (IOException ioe) {
+                        log.warn(
+                            "failed to compute a canonical path, use absolute path as a fallback",
+                            ioe);
+                        return file.getAbsolutePath();
+                      }
+                    })
                 .collect(Collectors.toList());
         if (!reportPaths.isEmpty()) {
-          errorMessage += "See the report at: " + String.join(",", reportPaths);
+          errorMessage += "See the report at: " + String.join(", ", reportPaths);
         }
         throw new GradleException(errorMessage, e);
       }
