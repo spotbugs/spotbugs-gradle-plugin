@@ -6,7 +6,7 @@
     "conventional-changelog-conventionalcommits": "^4.6.3",
     "gradle-semantic-release-plugin": "1.6.4",
     "husky": "^7.0.4",
-    "lint-staged": "^12.3.3",
+    "lint-staged": "^12.3.4",
     "pinst": "^2.1.6",
     "prettier": "^2.5.0",
     "semantic-release": "19.0.2"
