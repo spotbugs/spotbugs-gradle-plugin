@@ -160,6 +160,7 @@ You can change SpotBugs version by [the `toolVersion` property of the spotbugs e
 
 |Gradle Plugin|SpotBugs|
 |-----:|-----:|
+| 5.0.7| 4.6.0|
 | 5.0.4| 4.5.3|
 | 5.0.3| 4.5.2|
 | 5.0.2| 4.5.1|
