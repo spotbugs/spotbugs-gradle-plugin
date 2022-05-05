@@ -77,7 +77,7 @@ Configure `spotbugsPlugin` to apply any SpotBugs plugin:
 
 ```groovy
 dependencies {
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
 }
 ```
 
@@ -86,7 +86,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0")
+    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0")
 }
 ```
 </details>
@@ -95,7 +95,7 @@ Configure `spotbugs` to choose your favorite SpotBugs version:
 
 ```groovy
 dependencies {
-    spotbugs 'com.github.spotbugs:spotbugs:4.5.3'
+    spotbugs 'com.github.spotbugs:spotbugs:4.7.0'
 }
 ```
 
@@ -104,7 +104,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    spotbugs("com.github.spotbugs:spotbugs:4.5.3")
+    spotbugs("com.github.spotbugs:spotbugs:4.7.0")
 }
 ```
 </details>
@@ -160,7 +160,7 @@ You can change SpotBugs version by [the `toolVersion` property of the spotbugs e
 
 |Gradle Plugin|SpotBugs|
 |-----:|-----:|
-| 5.0.7| 4.6.0|
+| 5.0.7| 4.7.0|
 | 5.0.4| 4.5.3|
 | 5.0.3| 4.5.2|
 | 5.0.2| 4.5.1|
