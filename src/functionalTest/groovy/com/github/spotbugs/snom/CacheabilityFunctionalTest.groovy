@@ -110,6 +110,71 @@ class CacheabilityFunctionalTest extends Specification {
         hashKeyLine1 == hashKeyLine2
     }
 
+    /**
+     * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/710">GitHub Issue</a>
+     */
+    def 'build cache is invalidate when user changes stylesheet'() {
+        given:
+        def buildDir = Files.createTempDirectory(null).toFile()
+        def buildFile = new File(buildDir, 'build.gradle')
+        def version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+        def buildFileContent = '''
+            |plugins {
+            |    id 'java'
+            |    id 'com.github.spotbugs'
+            |}
+            |
+            |version = 1.0
+            |
+            |repositories {
+            |    mavenCentral()
+            |}
+            |spotbugsMain {
+            |    reports {
+            |        html {
+            |            required = true
+            |            stylesheet = 'fancy-hist.xsl'
+            |        }
+            |    }
+            |}
+            |'''.stripMargin()
+
+        initializeBuildFile(buildDir)
+        buildFile.write(buildFileContent)
+
+        when:
+        GradleRunner.create()
+                .withProjectDir(buildDir)
+                .withArguments('--build-cache', ':spotbugsMain')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
+
+        buildFile.write(buildFileContent.replace('fancy-hist.xsl', 'plain.xsl'))
+        BuildResult result1 =
+                GradleRunner.create()
+                .withProjectDir(buildDir)
+                .withArguments('--build-cache', ':spotbugsMain')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result1.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+
+        when:
+        BuildResult result2 =
+                GradleRunner.create()
+                .withProjectDir(buildDir)
+                .withArguments('--build-cache', ':spotbugsMain')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result2.task(':spotbugsMain').outcome == TaskOutcome.UP_TO_DATE
+    }
+
     private static String getHashKeyLine(BuildResult result) {
         return result.output.find('Build cache key for task \':spotbugsMain\' is .*')
     }
