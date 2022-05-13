@@ -24,6 +24,7 @@ import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.resources.TextResource;
+import org.gradle.api.tasks.Input;
 
 public abstract class SpotBugsHtmlReport extends SpotBugsReport {
   private final Property<TextResource> stylesheet;
@@ -56,6 +57,7 @@ public abstract class SpotBugsHtmlReport extends SpotBugsReport {
   }
 
   @Override
+  @Input
   public TextResource getStylesheet() {
     if (stylesheet.isPresent()) {
       return stylesheet.get();
