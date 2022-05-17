@@ -306,7 +306,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
      * A file that lists class files and jar files to analyse.
      */
     @OutputFile
-    abstract RegularFileProperty analyseClassFile
+    final abstract RegularFileProperty analyseClassFile
 
     @Inject
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
