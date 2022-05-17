@@ -168,7 +168,7 @@ public abstract class SpotBugsRunner {
     try {
       Iterable<String> lines =
           files.filter(File::exists).getFiles().stream().map(File::getAbsolutePath)::iterator;
-      Files.write(file.toPath(), lines, StandardCharsets.UTF_8, StandardOpenOption.WRITE);
+      Files.write(file.toPath(), lines, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
     } catch (IOException e) {
       throw new GradleException("Fail to generate the text file to list target .class files", e);
     }
