@@ -306,7 +306,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
      * A file that lists class files and jar files to analyse.
      */
     @OutputFile
-    final abstract RegularFileProperty analyseClassFile
+    abstract RegularFileProperty analyseClassFile
 
     @Inject
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
@@ -376,9 +376,6 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         spotbugsClasspath = project.layout.files {
             spotbugsSlf4j.files + configuration.files
         }
-
-        def file = new File(project.buildDir, this.name + "-analyse-class-file.txt")
-        analyseClassFile = project.objects.fileProperty().fileValue(file)
     }
 
     /**
@@ -414,6 +411,9 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
         this.enableWorkerApi = enableWorkerApi
         this.enableHybridWorker = enableHybridWorker
+
+        def file = new File(project.buildDir, this.name + "-analyse-class-file.txt")
+        analyseClassFile.set(file)
     }
 
 
