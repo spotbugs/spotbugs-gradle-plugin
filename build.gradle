@@ -6,7 +6,7 @@ plugins {
     id 'com.gradle.plugin-publish' version '0.21.0'
     id 'com.github.spotbugs.gradle-plugin'
     id 'org.sonarqube' version '3.4.0.2513'
-    id 'com.github.spotbugs' version '5.0.6'
+    id 'com.github.spotbugs' version '5.0.7'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
