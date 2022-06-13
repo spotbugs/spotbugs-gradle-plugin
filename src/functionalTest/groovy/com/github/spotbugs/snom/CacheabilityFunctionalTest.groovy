@@ -110,6 +110,47 @@ class CacheabilityFunctionalTest extends Specification {
         hashKeyLine1 == hashKeyLine2
     }
 
+    def 'spotbugsMain is cacheable even when no report is configured'() {
+        given:
+        def buildDir = Files.createTempDirectory(null).toFile()
+        def version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+        def buildFile = new File(buildDir, "build.gradle")
+
+        initializeBuildFile(buildDir)
+        buildFile.write """
+            |plugins {
+            |    id 'java'
+            |    id 'com.github.spotbugs'
+            |}
+            |
+            |version = 1.0
+            |
+            |repositories {
+            |    mavenCentral()
+            |}
+            |""".stripMargin()
+
+        when:
+        GradleRunner.create()
+                .withProjectDir(buildDir)
+                .withArguments(':spotbugsMain', '--build-cache')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+        BuildResult result =
+                GradleRunner.create()
+                .withProjectDir(buildDir)
+                .withArguments(':spotbugsMain', '--build-cache')
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == TaskOutcome.UP_TO_DATE
+    }
+
     private static String getHashKeyLine(BuildResult result) {
         return result.output.find('Build cache key for task \':spotbugsMain\' is .*')
     }

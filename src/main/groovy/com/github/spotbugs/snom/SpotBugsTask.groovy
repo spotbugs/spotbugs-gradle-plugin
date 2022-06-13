@@ -28,7 +28,8 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.plugins.JavaBasePlugin
-import org.gradle.api.provider.Provider;
+import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.SkipWhenEmpty
 
 import org.gradle.api.Action;
@@ -51,6 +52,7 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
+import org.gradle.internal.enterprise.test.FileProperty
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService;
 import org.gradle.util.ClosureBackedAction
@@ -300,6 +302,13 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Optional
     abstract Property<JavaLauncher> getLauncher()
 
+    /**
+     * A file that lists class files and jar files to analyse.
+     */
+    @OutputFile
+    @NonNull
+    abstract RegularFileProperty getAnalyseClassFile()
+
     @Inject
     SpotBugsTask(ObjectFactory objects, WorkerExecutor workerExecutor) {
         this.workerExecutor = Objects.requireNonNull(workerExecutor);
@@ -403,6 +412,9 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
         this.enableWorkerApi = enableWorkerApi
         this.enableHybridWorker = enableHybridWorker
+
+        def file = new File(project.buildDir, this.name + "-analyse-class-file.txt")
+        analyseClassFile.set(file)
     }
 
 

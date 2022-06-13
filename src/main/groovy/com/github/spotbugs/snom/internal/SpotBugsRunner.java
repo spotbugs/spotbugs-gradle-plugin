@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.gradle.api.GradleException;
-import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,8 +122,11 @@ public abstract class SpotBugsRunner {
     args.add(task.getProjectName().get());
     args.add("-release");
     args.add(task.getRelease().get());
+
+    File file = task.getAnalyseClassFile().getAsFile().get();
+    generateFile(task.getClasses(), task.getAnalyseClassFile().getAsFile().get());
     args.add("-analyzeFromFile");
-    args.add(generateFile(task.getClasses(), task).getAbsolutePath());
+    args.add(file.getAbsolutePath());
 
     args.addAll(task.getExtraArgs().getOrElse(Collections.emptyList()));
     log.debug("Arguments for SpotBugs are generated: {}", args);
@@ -162,14 +164,11 @@ public abstract class SpotBugsRunner {
     }
   }
 
-  private File generateFile(FileCollection files, Task task) {
+  private void generateFile(FileCollection files, File file) {
     try {
-      File file = File.createTempFile("spotbugs-gradle-plugin", ".txt", task.getTemporaryDir());
       Iterable<String> lines =
           files.filter(File::exists).getFiles().stream().map(File::getAbsolutePath)::iterator;
-      Files.write(file.toPath(), lines, StandardCharsets.UTF_8, StandardOpenOption.WRITE);
-
-      return file;
+      Files.write(file.toPath(), lines, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
     } catch (IOException e) {
       throw new GradleException("Fail to generate the text file to list target .class files", e);
     }
