@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.model.ReplacedBy;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.reporting.CustomizableHtmlReport;
@@ -52,6 +53,7 @@ public abstract class SpotBugsReport
   /** @deprecated use {@link #getOutputLocation()} instead. */
   @Override
   @Deprecated
+  @ReplacedBy("getRequired")
   public File getDestination() {
     return destination.get().getAsFile();
   }
@@ -76,6 +78,7 @@ public abstract class SpotBugsReport
   /** @deprecated use {@link #getRequired()} instead. */
   @Deprecated
   @Override
+  @ReplacedBy("getRequired")
   public boolean isEnabled() {
     return isRequired.get();
   }
