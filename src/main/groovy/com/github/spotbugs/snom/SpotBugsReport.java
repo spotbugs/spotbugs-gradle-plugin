@@ -50,8 +50,8 @@ public abstract class SpotBugsReport
   public abstract String toCommandLineOption();
 
   /** @deprecated use {@link #getOutputLocation()} instead. */
-  @Override
   @Deprecated
+  @Internal
   public File getDestination() {
     return destination.get().getAsFile();
   }
@@ -75,35 +75,31 @@ public abstract class SpotBugsReport
 
   /** @deprecated use {@link #getRequired()} instead. */
   @Deprecated
-  @Override
+  @Internal
   public boolean isEnabled() {
     return isRequired.get();
   }
 
   /** @deprecated use {@code getRequired().set(value)} instead. */
   @Deprecated
-  @Override
   public void setEnabled(boolean b) {
     isRequired.set(b);
   }
 
   /** @deprecated use {@code getRequired().set(provider)} instead. */
   @Deprecated
-  @Override
   public void setEnabled(Provider<Boolean> provider) {
     isRequired.set(provider);
   }
 
   /** @deprecated use {@code getOutputLocation().set(file)} instead. */
   @Deprecated
-  @Override
   public void setDestination(File file) {
     destination.set(file);
   }
 
   /** @deprecated use {@code getOutputLocation().set(provider)} instead. */
   @Deprecated
-  @Override
   public void setDestination(Provider<File> provider) {
     destination.set(this.task.getProject().getLayout().file(provider));
   }

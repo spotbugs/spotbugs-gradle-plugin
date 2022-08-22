@@ -140,7 +140,7 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
         return;
       }
 
-      String errorMessage = "Verification failed: SpotBugs ended with exit code " + exitValue;
+      String errorMessage = "Verification failed: SpotBugs ended with exit code " + exitValue + ".";
       List<String> reportPaths =
           params.getReports().get().stream()
               .map(RegularFile::getAsFile)
@@ -149,7 +149,7 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
               .map(URI::toString)
               .collect(Collectors.toList());
       if (!reportPaths.isEmpty()) {
-        errorMessage += "See the report at: " + String.join(",", reportPaths);
+        errorMessage += " See the report at: " + String.join(",", reportPaths);
       }
       throw new GradleException(errorMessage);
     }
