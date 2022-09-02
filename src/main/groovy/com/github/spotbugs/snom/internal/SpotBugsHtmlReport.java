@@ -51,11 +51,6 @@ public abstract class SpotBugsHtmlReport extends SpotBugsReport {
   }
 
   @Override
-  public String getName() {
-    return "HTML";
-  }
-
-  @Override
   public TextResource getStylesheet() {
     if (stylesheet.isPresent()) {
       return stylesheet.get();

@@ -32,9 +32,4 @@ public abstract class SpotBugsSarifReport extends SpotBugsReport {
   public String toCommandLineOption() {
     return "-sarif";
   }
-
-  @Override
-  public String getName() {
-    return "SARIF";
-  }
 }
