@@ -1,8 +1,39 @@
 import net.ltgt.gradle.errorprone.errorprone
 
 plugins {
+    jacoco
+    `java-library`
     id("com.diffplug.spotless")
     id("net.ltgt.errorprone")
+    id("org.sonarqube")
+}
+
+val junitVersion = "5.8.1"
+
+dependencies {
+    testImplementation(gradleTestKit())
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+    maxParallelForks = Runtime.getRuntime().availableProcessors()
+}
+
+val jacocoTestReport = tasks.named("jacocoTestReport", JacocoReport::class) {
+    reports {
+        xml.required.set(true)
+    }
+}
+
+tasks.sonarqube {
+    mustRunAfter(tasks.jacocoTestReport)
+}
+
+tasks.check {
+    dependsOn(tasks.jacocoTestReport)
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -34,5 +65,14 @@ spotless {
         target("**/*.gradle")
         greclipse()
         indentWithSpaces()
+    }
+}
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "com.github.spotbugs.gradle")
+        property("sonar.organization", "spotbugs")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.map { it.reports.xml.outputLocation })
     }
 }
