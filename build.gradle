@@ -2,6 +2,7 @@ plugins {
     id 'groovy'
     id 'java-gradle-plugin'
     id 'jacoco'
+    id 'functional-test'
     id 'signing'
     id 'com.gradle.plugin-publish' version '0.21.0'
     id 'com.github.spotbugs.gradle-plugin'
@@ -74,7 +75,6 @@ tasks.withType(Jar).configureEach {
     dependsOn processResources
 }
 
-apply from: "$rootDir/gradle/functional-test.gradle"
 apply from: "$rootDir/gradle/publish.gradle"
 
 defaultTasks 'spotlessApply', 'build'
