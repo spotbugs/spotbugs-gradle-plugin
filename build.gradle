@@ -2,7 +2,6 @@ plugins {
     id 'groovy'
     id 'java-gradle-plugin'
     id 'jacoco'
-    id 'functional-test'
     id 'signing'
     id 'com.gradle.plugin-publish' version '0.21.0'
     id 'com.github.spotbugs.gradle-plugin'

@@ -3,6 +3,7 @@ import net.ltgt.gradle.errorprone.errorprone
 plugins {
     jacoco
     `java-library`
+    `java-gradle-plugin`
     id("com.diffplug.spotless")
     id("net.ltgt.errorprone")
     id("org.sonarqube")
@@ -28,7 +29,34 @@ testing {
                 }
             }
         }
+        val functionalTest by registering(JvmTestSuite::class) {
+            dependencies {
+                implementation("org.spockframework:spock-core:2.0-M5-groovy-3.0")
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        description = "Runs the functional tests."
+                        group = "verification"
+                        testClassesDirs = functionalTest.output.classesDirs
+                        classpath = functionalTest.runtimeClasspath
+                        systemProperty("snom.test.functional.gradle", System.getProperty("snom.test.functional.gradle", gradle.gradleVersion))
+                    }
+                }
+            }
+        }
     }
+}
+
+configurations["functionalTestImplementation"].extendsFrom(configurations["testImplementation"])
+
+val functionalTest: SourceSet by sourceSets.getting {
+    compileClasspath += sourceSets["main"].output
+    runtimeClasspath += output + compileClasspath
+}
+
+gradlePlugin {
+    testSourceSets(functionalTest)
 }
 
 val jacocoTestReport = tasks.named("jacocoTestReport", JacocoReport::class) {
