@@ -158,24 +158,25 @@ By default, this Gradle Plugin uses the SpotBugs version listed in this table.
 
 You can change SpotBugs version by [the `toolVersion` property of the spotbugs extension](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/spotbugsextension#toolVersion) or the `spotbugs` configuration.
 
-|Gradle Plugin|SpotBugs|
-|-----:|-----:|
-| 5.0.9| 4.7.1|
-| 5.0.7| 4.7.0|
-| 5.0.4| 4.5.3|
-| 5.0.3| 4.5.2|
-| 5.0.2| 4.5.1|
-| 4.7.10| 4.5.0|
-| 4.7.8| 4.4.2|
-| 4.7.5| 4.4.1|
-| 4.7.3| 4.4.0|
-| 4.7.2| 4.3.0|
-| 4.6.1| 4.2.1|
-| 4.5.0| 4.1.1|
-| 4.4.4| 4.0.6|
-| 4.4.2| 4.0.5|
-| 4.0.7| 4.0.2|
-| 4.0.0| 4.0.0|
+| Gradle Plugin | SpotBugs |
+|--------------:|---------:|
+|        5.0.10 |    4.7.2 |
+|         5.0.9 |    4.7.1 |
+|         5.0.7 |    4.7.0 |
+|         5.0.4 |    4.5.3 |
+|         5.0.3 |    4.5.2 |
+|         5.0.2 |    4.5.1 |
+|        4.7.10 |    4.5.0 |
+|         4.7.8 |    4.4.2 |
+|         4.7.5 |    4.4.1 |
+|         4.7.3 |    4.4.0 |
+|         4.7.2 |    4.3.0 |
+|         4.6.1 |    4.2.1 |
+|         4.5.0 |    4.1.1 |
+|         4.4.4 |    4.0.6 |
+|         4.4.2 |    4.0.5 |
+|         4.0.7 |    4.0.2 |
+|         4.0.0 |    4.0.0 |
 
 ### Refer the version in the build script
 
