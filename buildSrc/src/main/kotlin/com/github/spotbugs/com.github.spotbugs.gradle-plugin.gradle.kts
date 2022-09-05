@@ -10,16 +10,25 @@ plugins {
 
 val junitVersion = "5.8.1"
 
-dependencies {
-    testImplementation(gradleTestKit())
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:${junitVersion}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
-    maxParallelForks = Runtime.getRuntime().availableProcessors()
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter()
+            dependencies {
+                implementation(gradleTestKit())
+                implementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+                implementation("org.junit.jupiter:junit-jupiter-params:${junitVersion}")
+                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        maxParallelForks = Runtime.getRuntime().availableProcessors()
+                    }
+                }
+            }
+        }
+    }
 }
 
 val jacocoTestReport = tasks.named("jacocoTestReport", JacocoReport::class) {
@@ -33,7 +42,7 @@ tasks.sonarqube {
 }
 
 tasks.check {
-    dependsOn(tasks.jacocoTestReport)
+    dependsOn(jacocoTestReport)
 }
 
 tasks.withType<JavaCompile>().configureEach {
