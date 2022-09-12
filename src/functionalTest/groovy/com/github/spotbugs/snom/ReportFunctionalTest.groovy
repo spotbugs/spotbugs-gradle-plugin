@@ -519,4 +519,30 @@ spotbugsMain {
         Path reportDir = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs")
         !reportDir.resolve("main.xml").toFile().isFile()
     }
+
+    def "can reconfigure a report"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        xml.required = true
+    }
+    
+    reports {
+        xml.required = false
+    }
+}"""
+        when:
+        def result = GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withArguments('spotbugsMain')
+                .withPluginClasspath()
+                .withGradleVersion(version)
+                .build()
+
+        then:
+        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+
+        Path reportDir = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs")
+        assertFalse(reportDir.resolve("main.xml").toFile().isFile())
+    }
 }

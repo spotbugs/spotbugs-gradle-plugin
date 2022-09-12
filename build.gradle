@@ -5,7 +5,7 @@ plugins {
     id 'signing'
     id 'com.gradle.plugin-publish' version '0.21.0'
     id 'com.github.spotbugs.gradle-plugin'
-    id 'com.github.spotbugs' version '5.0.10'
+    id 'com.github.spotbugs' version '5.0.12'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -21,8 +21,8 @@ repositories {
 
 ext {
     errorproneVersion = '2.15.0'
-    spotBugsVersion = '4.7.1'
-    slf4jVersion = '1.8.0-beta4'
+    spotBugsVersion = '4.7.2'
+    slf4jVersion = '2.0.0'
     androidGradlePluginVersion = '7.2.2'
 }
 
