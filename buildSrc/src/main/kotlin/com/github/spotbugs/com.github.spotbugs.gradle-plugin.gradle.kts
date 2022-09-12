@@ -9,17 +9,12 @@ plugins {
     id("org.sonarqube")
 }
 
-val junitVersion = "5.8.1"
-
 testing {
     suites {
         val test by getting(JvmTestSuite::class) {
             useJUnitJupiter()
             dependencies {
                 implementation(gradleTestKit())
-                implementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-                implementation("org.junit.jupiter:junit-jupiter-params:${junitVersion}")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
             }
             targets {
                 all {
@@ -30,9 +25,7 @@ testing {
             }
         }
         val functionalTest by registering(JvmTestSuite::class) {
-            dependencies {
-                implementation("org.spockframework:spock-core:2.2-groovy-3.0")
-            }
+            useSpock()
             targets {
                 all {
                     testTask.configure {
