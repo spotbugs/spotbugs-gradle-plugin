@@ -14,7 +14,6 @@
 package com.github.spotbugs.snom
 import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.util.GradleVersion
-import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
 
 import org.gradle.testkit.runner.GradleRunner
@@ -24,17 +23,12 @@ import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import java.nio.file.Path
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static org.junit.jupiter.api.Assertions.assertEquals
-import static org.junit.jupiter.api.Assertions.assertFalse
-import static org.junit.jupiter.api.Assertions.assertNotNull
-import static org.junit.jupiter.api.Assertions.assertTrue
 
 class ReportFunctionalTest extends Specification {
     File rootDir
     File buildFile
     String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
-    @BeforeEach
     def setup() {
         rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')
@@ -79,9 +73,9 @@ public class Foo {
                 .buildAndFail()
 
         then:
-        assertEquals(FAILED, result.task(":spotbugsMain").outcome)
-        assertTrue(result.output.contains("M D UrF: Unread public/protected field: Bar.unreadField  At Bar.java:[line 3]"))
-        assertFalse(rootDir.toPath().resolve("build").toFile().list().contains("reports"))
+        FAILED == result.task(":spotbugsMain").outcome
+        result.output.contains("M D UrF: Unread public/protected field: Bar.unreadField  At Bar.java:[line 3]")
+        !rootDir.toPath().resolve("build").toFile().list().contains("reports")
     }
 
     def "can generate spotbugs.txt"() {
@@ -100,9 +94,9 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.txt").toFile()
-        assertTrue(report.isFile())
+        report.isFile()
     }
 
     def "can generate spotbugs.txt in configured buildDir"() {
@@ -122,9 +116,9 @@ buildDir = 'new-build-dir'
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
         File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main.txt").toFile()
-        assertTrue(report.isFile())
+        report.isFile()
     }
 
     def "prints reports location when stacktrace is suppressed"() {
@@ -175,9 +169,9 @@ buildDir = 'new-build-dir'
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
         File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main.html").toFile()
-        assertTrue(report.isFile())
+        report.isFile()
     }
 
     def "can generate spotbugs.xml in configured buildDir"() {
@@ -197,9 +191,9 @@ buildDir = 'new-build-dir'
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
         File report = rootDir.toPath().resolve("new-build-dir").resolve("reports").resolve("spotbugs").resolve("main.xml").toFile()
-        assertTrue(report.isFile())
+        report.isFile()
     }
 
     def "can generate spotbugs.html"() {
@@ -219,10 +213,10 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.html").toFile()
-        assertTrue(report.isFile())
-        assertTrue(result.getOutput().contains("-html="))
+        report.isFile()
+        result.getOutput().contains("-html=")
     }
 
     def "can generate spotbugs.html with stylesheet"() {
@@ -252,14 +246,14 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.html").toFile()
-        assertTrue(report.isFile())
-        assertTrue(result.getOutput().contains("-html:"))
+        report.isFile()
+        result.getOutput().contains("-html:")
         // confirm -projectName is working
-        assertNotNull(report.readLines("utf-8").find({line -> line.contains("sample-project (spotbugsMain)")}))
+        report.readLines("utf-8").find({line -> line.contains("sample-project (spotbugsMain)")}) != null
         // confirm -release is working
-        assertNotNull(report.readLines("utf-8").find({line -> line.contains("1.2.3")}))
+        report.readLines("utf-8").find({line -> line.contains("1.2.3")}) != null
     }
 
     def "can generate spotbugs.html with the path of stylesheet"() {
@@ -282,10 +276,10 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.html").toFile()
-        assertTrue(report.isFile())
-        assertTrue(result.getOutput().contains("-html:"))
+        report.isFile()
+        result.getOutput().contains("-html:")
     }
 
     def "can generate spotbugs.xml"() {
@@ -304,9 +298,9 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.xml").toFile()
-        assertTrue(report.isFile())
+        report.isFile()
     }
 
     def "can generate a report in specified reportsDir"() {
@@ -329,11 +323,11 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
         File reportsDir = rootDir.toPath().resolve("build").resolve("spotbugs").toFile();
-        assertTrue(reportsDir.isDirectory())
+        reportsDir.isDirectory()
         File report = reportsDir.toPath().resolve("main.txt").toFile()
-        assertTrue(report.isFile())
+        report.isFile()
     }
 
     def "reports error when set unknown report type"() {
@@ -352,8 +346,8 @@ spotbugsMain {
                 .buildAndFail()
 
         then:
-        assertTrue(result.getTasks().isEmpty())
-        assertTrue(result.getOutput().contains("unknown is invalid as the report name"))
+        result.getTasks().isEmpty()
+        result.getOutput().contains("unknown is invalid as the report name")
     }
 
     def "can run task by Worker Process"() {
@@ -367,8 +361,8 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.output.contains("Running SpotBugs by Gradle no-isolated Worker...") || result.output.contains("Running SpotBugs by Gradle process-isolated Worker..."));
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.output.contains("Running SpotBugs by Gradle no-isolated Worker...") || result.output.contains("Running SpotBugs by Gradle process-isolated Worker...")
     }
 
     def "can run task by JavaExec by gradle.properties"() {
@@ -385,8 +379,8 @@ com.github.spotbugs.snom.worker=false
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("Running SpotBugs by JavaExec..."))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("Running SpotBugs by JavaExec...")
     }
 
     def "can run task by JavaExec by commandline option"() {
@@ -400,8 +394,8 @@ com.github.spotbugs.snom.worker=false
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("Running SpotBugs by JavaExec..."))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("Running SpotBugs by JavaExec...")
     }
 
     def "does not resolve spotbugs configuration by setting stylesheet"() {
@@ -429,7 +423,7 @@ configurations.spotbugs {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
     }
 
     def "can use configuration configured via reporting extension"() {
@@ -452,11 +446,11 @@ reporting {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
         File reportsDir = rootDir.toPath().resolve("build").resolve("our-reports").resolve("spotbugs").toFile();
-        assertTrue(reportsDir.isDirectory())
+        reportsDir.isDirectory()
         File report = reportsDir.toPath().resolve("main.txt").toFile()
-        assertTrue(report.isFile())
+        report.isFile()
     }
 
     def "can generate spotbugs.sarif"() {
@@ -475,9 +469,9 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs").resolve("main.sarif").toFile()
-        assertTrue(report.isFile())
+        report.isFile()
     }
 
     def "can generate XML and SARIF reports"() {
@@ -497,11 +491,11 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
 
         Path reportDir = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs")
-        assertTrue(reportDir.resolve("main.xml").toFile().isFile())
-        assertTrue(reportDir.resolve("main.sarif").toFile().isFile())
+        reportDir.resolve("main.xml").toFile().isFile()
+        reportDir.resolve("main.sarif").toFile().isFile()
     }
 
     def "can disable XML report"() {
@@ -520,9 +514,9 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
+        SUCCESS == result.task(":spotbugsMain").outcome
 
         Path reportDir = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs")
-        assertFalse(reportDir.resolve("main.xml").toFile().isFile())
+        !reportDir.resolve("main.xml").toFile().isFile()
     }
 }

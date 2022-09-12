@@ -18,22 +18,18 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.GradleVersion
-import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.nio.file.Paths
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static org.junit.jupiter.api.Assertions.assertEquals
-import static org.junit.jupiter.api.Assertions.assertTrue
 
 class BasePluginFunctionalTest extends Specification {
     File rootDir
     File buildFile
     String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
-    @BeforeEach
     def setup() {
         rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')

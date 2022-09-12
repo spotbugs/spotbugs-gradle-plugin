@@ -17,13 +17,10 @@ import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import spock.lang.Requires
 import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static org.junit.jupiter.api.Assertions.assertEquals
 
 class AndroidFunctionalTest extends Specification {
     static String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
@@ -38,12 +35,10 @@ class AndroidFunctionalTest extends Specification {
 
     File rootDir
 
-    @BeforeEach
     def setup() {
         rootDir = Files.createTempDir()
     }
 
-    @AfterEach
     void cleanup() {
         rootDir.deleteDir()
     }
@@ -61,7 +56,7 @@ class AndroidFunctionalTest extends Specification {
         BuildResult result = build(runner)
 
         then: "gradle runs spotbugsRelease successfully"
-        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
+        SUCCESS == result.task(":spotbugsRelease").outcome
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
@@ -77,7 +72,7 @@ class AndroidFunctionalTest extends Specification {
         BuildResult result = build(runner)
 
         then: "gradle runs spotbugsRelease successfully"
-        assertEquals(SUCCESS, result.task(":spotbugsRelease").outcome)
+        SUCCESS == result.task(":spotbugsRelease").outcome
     }
 
     private BuildResult build(GradleRunner runner) {

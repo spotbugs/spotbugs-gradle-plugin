@@ -30,9 +30,6 @@ testing {
                 all {
                     testTask.configure {
                         description = "Runs the functional tests."
-                        group = "verification"
-                        testClassesDirs = functionalTest.output.classesDirs
-                        classpath = functionalTest.runtimeClasspath
                         systemProperty("snom.test.functional.gradle", System.getProperty("snom.test.functional.gradle", gradle.gradleVersion))
                     }
                 }
@@ -41,15 +38,8 @@ testing {
     }
 }
 
-configurations["functionalTestImplementation"].extendsFrom(configurations["testImplementation"])
-
-val functionalTest: SourceSet by sourceSets.getting {
-    compileClasspath += sourceSets["main"].output
-    runtimeClasspath += output + compileClasspath
-}
-
 gradlePlugin {
-    testSourceSets(functionalTest)
+    testSourceSets(sourceSets["functionalTest"])
 }
 
 val jacocoTestReport = tasks.named("jacocoTestReport", JacocoReport::class) {

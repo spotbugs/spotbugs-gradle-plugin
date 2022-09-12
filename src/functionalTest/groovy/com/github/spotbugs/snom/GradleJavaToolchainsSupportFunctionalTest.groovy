@@ -16,7 +16,6 @@ package com.github.spotbugs.snom
 import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
-import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -27,7 +26,6 @@ class GradleJavaToolchainsSupportFunctionalTest extends Specification {
     File buildFile
     String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
-    @BeforeEach
     def setup() {
         rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')

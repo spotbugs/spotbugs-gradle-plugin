@@ -18,13 +18,10 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.GradleVersion
-import org.junit.jupiter.api.BeforeEach
 import spock.lang.Ignore
 import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static org.junit.jupiter.api.Assertions.assertEquals
-import static org.junit.jupiter.api.Assertions.assertTrue
 
 class MultiProjectFunctionalTest extends Specification {
     File rootDir
@@ -32,7 +29,6 @@ class MultiProjectFunctionalTest extends Specification {
     String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
     File subBuildFile
 
-    @BeforeEach
     def setup() {
         rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')
@@ -84,8 +80,8 @@ repositories {
                 .build()
 
         then:
-        assertEquals(TaskOutcome.SUCCESS, result.task(":sub:classes").outcome)
-        assertEquals(TaskOutcome.SUCCESS, result.task(":sub:spotbugsMain").outcome)
+        TaskOutcome.SUCCESS == result.task(":sub:classes").outcome
+        TaskOutcome.SUCCESS == result.task(":sub:spotbugsMain").outcome
     }
 
     def "can use project name of sub project"() {
@@ -99,8 +95,8 @@ repositories {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":sub:spotbugsMain").outcome)
-        assertTrue(result.output.contains("-projectName, sub (spotbugsMain)"))
+        SUCCESS == result.task(":sub:spotbugsMain").outcome
+        result.output.contains("-projectName, sub (spotbugsMain)")
     }
 
     @Ignore("Gradle does not support this type of configuration. See https://git.io/JvOVT#issuecomment-580239267")
@@ -124,8 +120,8 @@ subprojects {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":sub:spotbugsMain").outcome)
-        assertTrue(result.output.contains("spotbugs-4.0.0-RC1.jar"))
+        SUCCESS == result.task(":sub:spotbugsMain").outcome
+        result.output.contains("spotbugs-4.0.0-RC1.jar")
     }
 
     def "can use toolVersion in the subproject"() {
@@ -146,7 +142,7 @@ spotbugs {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":sub:spotbugsMain").outcome)
-        assertTrue(result.output.contains("spotbugs-4.0.0-RC1.jar"))
+        SUCCESS == result.task(":sub:spotbugsMain").outcome
+        result.output.contains("spotbugs-4.0.0-RC1.jar")
     }
 }
