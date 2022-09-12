@@ -31,7 +31,7 @@ testing {
         }
         val functionalTest by registering(JvmTestSuite::class) {
             dependencies {
-                implementation("org.spockframework:spock-core:2.0-M5-groovy-3.0")
+                implementation("org.spockframework:spock-core:2.2-groovy-3.0")
             }
             targets {
                 all {
