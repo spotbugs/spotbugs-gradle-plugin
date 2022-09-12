@@ -26,6 +26,7 @@ testing {
         }
         val functionalTest by registering(JvmTestSuite::class) {
             useSpock()
+            testType.set(TestSuiteType.FUNCTIONAL_TEST)
             targets {
                 all {
                     testTask.configure {
