@@ -3,7 +3,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'jacoco'
     id 'signing'
-    id 'com.gradle.plugin-publish' version '0.21.0'
+    id 'com.gradle.plugin-publish' version '1.0.0'
     id 'com.github.spotbugs.gradle-plugin'
     id 'org.sonarqube' version '3.5.0.2730'
     id 'com.github.spotbugs' version '5.0.13'
