@@ -5,6 +5,7 @@ plugins {
     signing
     id("com.github.spotbugs.gradle-plugin")
     id("com.github.spotbugs.plugin-publish")
+    id("com.github.spotbugs.functional-test")
     id("org.sonarqube") version "3.5.0.2730"
     id("com.github.spotbugs") version "5.0.13"
 }
@@ -73,6 +74,5 @@ tasks {
 }
 
 apply(from = "$rootDir/gradle/test.gradle")
-apply(from = "$rootDir/gradle/functional-test.gradle")
 
 defaultTasks("spotlessApply", "build")
