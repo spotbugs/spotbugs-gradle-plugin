@@ -35,4 +35,7 @@ spotless {
         greclipse()
         indentWithSpaces()
     }
+    kotlinGradle {
+        ktlint()
+    }
 }
