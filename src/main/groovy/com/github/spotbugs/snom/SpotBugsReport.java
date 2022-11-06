@@ -49,7 +49,9 @@ public abstract class SpotBugsReport
   @NonNull
   public abstract String toCommandLineOption();
 
-  /** @deprecated use {@link #getOutputLocation()} instead. */
+  /**
+   * @deprecated use {@link #getOutputLocation()} instead.
+   */
   @Deprecated
   @Internal
   public File getDestination() {
@@ -73,32 +75,42 @@ public abstract class SpotBugsReport
     return isRequired;
   }
 
-  /** @deprecated use {@link #getRequired()} instead. */
+  /**
+   * @deprecated use {@link #getRequired()} instead.
+   */
   @Deprecated
   @Internal
   public boolean isEnabled() {
     return isRequired.get();
   }
 
-  /** @deprecated use {@code getRequired().set(value)} instead. */
+  /**
+   * @deprecated use {@code getRequired().set(value)} instead.
+   */
   @Deprecated
   public void setEnabled(boolean b) {
     isRequired.set(b);
   }
 
-  /** @deprecated use {@code getRequired().set(provider)} instead. */
+  /**
+   * @deprecated use {@code getRequired().set(provider)} instead.
+   */
   @Deprecated
   public void setEnabled(Provider<Boolean> provider) {
     isRequired.set(provider);
   }
 
-  /** @deprecated use {@code getOutputLocation().set(file)} instead. */
+  /**
+   * @deprecated use {@code getOutputLocation().set(file)} instead.
+   */
   @Deprecated
   public void setDestination(File file) {
     destination.set(file);
   }
 
-  /** @deprecated use {@code getOutputLocation().set(provider)} instead. */
+  /**
+   * @deprecated use {@code getOutputLocation().set(provider)} instead.
+   */
   @Deprecated
   public void setDestination(Provider<File> provider) {
     destination.set(this.task.getProject().getLayout().file(provider));

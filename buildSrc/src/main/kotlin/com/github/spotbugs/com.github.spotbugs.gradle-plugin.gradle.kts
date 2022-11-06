@@ -6,55 +6,6 @@ plugins {
     `java-gradle-plugin`
     id("com.diffplug.spotless")
     id("net.ltgt.errorprone")
-    id("org.sonarqube")
-}
-
-testing {
-    suites {
-        val test by getting(JvmTestSuite::class) {
-            useJUnitJupiter()
-            dependencies {
-                implementation(gradleTestKit())
-            }
-            targets {
-                all {
-                    testTask.configure {
-                        maxParallelForks = Runtime.getRuntime().availableProcessors()
-                    }
-                }
-            }
-        }
-        val functionalTest by registering(JvmTestSuite::class) {
-            useSpock()
-            testType.set(TestSuiteType.FUNCTIONAL_TEST)
-            targets {
-                all {
-                    testTask.configure {
-                        description = "Runs the functional tests."
-                        systemProperty("snom.test.functional.gradle", System.getProperty("snom.test.functional.gradle", gradle.gradleVersion))
-                    }
-                }
-            }
-        }
-    }
-}
-
-gradlePlugin {
-    testSourceSets(sourceSets["functionalTest"])
-}
-
-val jacocoTestReport = tasks.named("jacocoTestReport", JacocoReport::class) {
-    reports {
-        xml.required.set(true)
-    }
-}
-
-tasks.sonarqube {
-    mustRunAfter(tasks.jacocoTestReport)
-}
-
-tasks.check {
-    dependsOn(jacocoTestReport)
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -87,13 +38,7 @@ spotless {
         greclipse()
         indentWithSpaces()
     }
-}
-
-sonarqube {
-    properties {
-        property("sonar.projectKey", "com.github.spotbugs.gradle")
-        property("sonar.organization", "spotbugs")
-        property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.map { it.reports.xml.outputLocation })
+    kotlinGradle {
+        ktlint()
     }
 }
