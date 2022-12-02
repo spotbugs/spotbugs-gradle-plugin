@@ -1,0 +1,82 @@
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'jacoco'
+    id 'signing'
+    id 'com.gradle.plugin-publish' version '0.21.0'
+    id 'com.github.spotbugs.gradle-plugin'
+    id 'org.sonarqube' version '3.5.0.2730'
+    id 'com.github.spotbugs' version '5.0.13'
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+group = 'com.github.spotbugs.snom'
+
+repositories {
+    // To download the Android Gradle Plugin
+    google()
+    // To download trove4j required by the Android Gradle Plugin
+    mavenCentral()
+}
+
+ext {
+    errorproneVersion = '2.16'
+    spotBugsVersion = '4.7.3'
+    slf4jVersion = '2.0.0'
+    androidGradlePluginVersion = '7.3.1'
+}
+
+dependencies {
+    errorprone "com.google.errorprone:error_prone_core:${errorproneVersion}"
+    compileOnly localGroovy()
+    compileOnly "com.github.spotbugs:spotbugs:${spotBugsVersion}"
+    compileOnly "com.android.tools.build:gradle:${androidGradlePluginVersion}"
+    testImplementation 'com.tngtech.archunit:archunit:1.0.0'
+}
+
+def signingKey = System.getenv("SIGNING_KEY")
+def signingPassword = System.getenv("SIGNING_PASSWORD")
+
+signing {
+    if(signingKey != null &&
+            signingPassword != null &&
+            !signingKey.isEmpty() &&
+            !signingPassword.isEmpty()){
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign configurations.archives
+    }
+    else{
+        logger.warn('The signing key and password are null. This can be ignored if this is a pull request.')
+    }
+}
+
+spotbugs {
+    ignoreFailures = true
+}
+spotbugsMain {
+    reports {
+        sarif {
+            required = true
+        }
+    }
+}
+
+def processVersionFile = tasks.register('processVersionFile', WriteProperties) {
+    outputFile file('src/main/resources/spotbugs-gradle-plugin.properties')
+
+    property 'slf4j-version', slf4jVersion
+    property 'spotbugs-version', spotBugsVersion
+}
+tasks.named('processResources').configure {
+    dependsOn processVersionFile
+}
+tasks.withType(Jar).configureEach {
+    dependsOn processResources
+}
+
+apply from: "$rootDir/gradle/test.gradle"
+apply from: "$rootDir/gradle/functional-test.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
+
+defaultTasks 'spotlessApply', 'build'
