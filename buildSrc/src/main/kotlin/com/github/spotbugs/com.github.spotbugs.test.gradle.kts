@@ -3,6 +3,7 @@ import org.gradle.testing.jacoco.tasks.JacocoReport
 plugins {
     `jacoco`
     java
+    `java-gradle-plugin`
     id("org.sonarqube")
 }
 
@@ -12,6 +13,40 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+}
+
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter()
+            dependencies {
+                implementation(gradleTestKit())
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        maxParallelForks = Runtime.getRuntime().availableProcessors()
+                    }
+                }
+            }
+        }
+        val functionalTest by registering(JvmTestSuite::class) {
+            useSpock()
+            testType.set(TestSuiteType.FUNCTIONAL_TEST)
+            targets {
+                all {
+                    testTask.configure {
+                        description = "Runs the functional tests."
+                        systemProperty("snom.test.functional.gradle", System.getProperty("snom.test.functional.gradle", gradle.gradleVersion))
+                    }
+                }
+            }
+        }
+    }
+}
+
+gradlePlugin {
+    testSourceSets(sourceSets["functionalTest"])
 }
 
 val jacocoTestReport = tasks.named<JacocoReport>("jacocoTestReport") {

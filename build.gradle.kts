@@ -6,7 +6,6 @@ plugins {
     id("com.github.spotbugs.gradle-plugin")
     id("com.github.spotbugs.plugin-publish")
     id("com.github.spotbugs.test")
-    id("com.github.spotbugs.functional-test")
     id("org.sonarqube")
     id("com.github.spotbugs") version "5.0.13"
 }
