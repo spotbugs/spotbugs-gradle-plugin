@@ -37,11 +37,11 @@ dependencies {
     testImplementation("com.tngtech.archunit:archunit:1.0.0")
 }
 
-val signingKey: String = System.getenv("SIGNING_KEY")
-val signingPassword: String = System.getenv("SIGNING_PASSWORD")
+val signingKey: String? = System.getenv("SIGNING_KEY")
+val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
 
 signing {
-    if (signingKey.isNotBlank() && signingPassword.isNotBlank()) {
+    if (!signingKey.isNullOrBlank() && !signingPassword.isNullOrBlank()) {
         useInMemoryPgpKeys(signingKey, signingPassword)
         sign(configurations.archives.get())
     } else {
