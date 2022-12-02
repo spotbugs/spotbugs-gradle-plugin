@@ -17,13 +17,9 @@ import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @see <a href="https://semver.org/spec/v2.0.0.html">spec</a>
- */
+/** @see <a href="https://semver.org/spec/v2.0.0.html">spec</a> */
 public final class SemanticVersion implements Comparable<SemanticVersion> {
-  /**
-   * @see <a href="https://regex101.com/r/vkijKf/1/">regular expressions 101</a>
-   */
+  /** @see <a href="https://regex101.com/r/vkijKf/1/">regular expressions 101</a> */
   private static final Pattern PATTERN =
       Pattern.compile(
           "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$");
