@@ -30,7 +30,7 @@ tasks {
         testClassesDirs = functionalTest.output.classesDirs
         classpath = functionalTest.runtimeClasspath
         mustRunAfter(tasks.test)
-        systemProperty("snom.test.functional.gradle", System.getProperty("snom.test.functional.gradle", gradle.gradleVersion))
+        systemProperty("snom.test.functional.gradle", providers.systemProperty("snom.test.functional.gradle").orElse(gradle.gradleVersion))
     }
 
     check.configure {
