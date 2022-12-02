@@ -37,12 +37,12 @@ dependencies {
     testImplementation("com.tngtech.archunit:archunit:1.0.0")
 }
 
-val signingKey = providers.environmentVariable("SIGNING_KEY")
-val signingPassword = providers.environmentVariable("SIGNING_PASSWORD")
+val signingKey: String = System.getenv("SIGNING_KEY")
+val signingPassword: String = System.getenv("SIGNING_PASSWORD")
 
 signing {
-    if (signingKey.isPresent && signingPassword.isPresent) {
-        useInMemoryPgpKeys(signingKey.get(), signingPassword.get())
+    if (signingKey.isNotBlank() && signingPassword.isNotBlank()) {
+        useInMemoryPgpKeys(signingKey, signingPassword)
         sign(configurations.archives.get())
     } else {
         logger.warn("The signing key and password are null. This can be ignored if this is a pull request.")
