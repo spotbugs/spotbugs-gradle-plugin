@@ -24,10 +24,13 @@ jobs:
         distribution: 'temurin'
         java-version: 11
         cache: gradle
+    - name: Read .nvmrc
+      run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+      id: nvm
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version-file: '.nvmrc'
+        node-version: '${{ steps.nvm.outputs.NVMRC }}'
         cache: npm
       if: matrix.gradle == '7.0'
     - name: Gradle Wrapper Validation
