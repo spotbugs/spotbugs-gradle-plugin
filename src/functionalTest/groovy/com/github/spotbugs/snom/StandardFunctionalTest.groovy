@@ -18,22 +18,18 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.GradleVersion
-import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.nio.file.Paths
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static org.junit.jupiter.api.Assertions.assertEquals
-import static org.junit.jupiter.api.Assertions.assertTrue
 
 class StandardFunctionalTest extends Specification {
     File rootDir
     File buildFile
     String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
-    @BeforeEach
     def setup() {
         rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')
@@ -73,8 +69,8 @@ public class Foo {
                 .build()
 
         then:
-        assertEquals(TaskOutcome.SUCCESS, result.task(":classes").outcome)
-        assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").outcome)
+        TaskOutcome.SUCCESS == result.task(":classes").outcome
+        TaskOutcome.SUCCESS == result.task(":spotbugsMain").outcome
     }
 
     def "can be listed in the task list"() {
@@ -111,8 +107,8 @@ dependencies {
                 .build()
 
         then:
-        assertEquals(TaskOutcome.SUCCESS, result.task(":classes").outcome)
-        assertTrue(result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar"))
+        TaskOutcome.SUCCESS == result.task(":classes").outcome
+        result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
     }
 
     def "can skip analysis when no class file we have"() {
@@ -132,7 +128,7 @@ dependencies {
                 .build()
 
         then:
-        assertEquals(TaskOutcome.NO_SOURCE, result.task(":spotbugsMain").outcome)
+        TaskOutcome.NO_SOURCE == result.task(":spotbugsMain").outcome
     }
 
     def "can use effort and reportLevel"() {
@@ -151,8 +147,8 @@ spotbugsMain {
 
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
-        assertTrue(result.getOutput().contains("-effort:min"))
-        assertTrue(result.getOutput().contains("-high"))
+        result.getOutput().contains("-effort:min")
+        result.getOutput().contains("-high")
     }
 
     def "can be cancelled by withType(VerificationTask)"() {
@@ -175,8 +171,8 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("SpotBugsMain ignores failures? true"))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("SpotBugsMain ignores failures? true")
     }
 
     def "is cache-able"() {
@@ -203,8 +199,8 @@ spotbugsMain {
                 .build()
 
         then:
-        assertEquals(TaskOutcome.UP_TO_DATE, result.task(":classes").outcome)
-        assertEquals(TaskOutcome.UP_TO_DATE, result.task(":spotbugsMain").outcome)
+        TaskOutcome.UP_TO_DATE == result.task(":classes").outcome
+        TaskOutcome.UP_TO_DATE == result.task(":spotbugsMain").outcome
     }
 
     def 'ignore missing classes (Hybrid API? #isHybridApi)'() {

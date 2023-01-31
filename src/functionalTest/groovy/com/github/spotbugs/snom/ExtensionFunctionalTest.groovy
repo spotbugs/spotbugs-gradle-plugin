@@ -18,19 +18,15 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.GradleVersion
-import org.junit.jupiter.api.BeforeEach
 import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static org.junit.jupiter.api.Assertions.assertEquals
-import static org.junit.jupiter.api.Assertions.assertTrue
 
 class ExtensionFunctionalTest extends Specification {
     File rootDir
     File buildFile
     String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
-    @BeforeEach
     def setup() {
         rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')
@@ -77,9 +73,9 @@ spotbugs {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("-include"))
-        assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("-include")
+        result.getOutput().contains(filter.getAbsolutePath())
     }
 
     def "can use excludeFilter"() {
@@ -101,9 +97,9 @@ spotbugs {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("-exclude"))
-        assertTrue(result.getOutput().contains(filter.getAbsolutePath()))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("-exclude")
+        result.getOutput().contains(filter.getAbsolutePath())
     }
 
     def "can use baselineFile"() {
@@ -125,9 +121,9 @@ spotbugs {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("-excludeBugs"))
-        assertTrue(result.getOutput().contains(baseline.getAbsolutePath()))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("-excludeBugs")
+        result.getOutput().contains(baseline.getAbsolutePath())
     }
 
     def "can use visitors"() {
@@ -145,8 +141,8 @@ spotbugs {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("-visitors, FindSqlInjection,SwitchFallthrough,"))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("-visitors, FindSqlInjection,SwitchFallthrough,")
     }
 
     def "can use omitVisitors"() {
@@ -163,8 +159,8 @@ spotbugs {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("-omitVisitors, FindSqlInjection,SwitchFallthrough,"))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("-omitVisitors, FindSqlInjection,SwitchFallthrough,")
     }
 
     def "can use onlyAnalyze"() {
@@ -181,8 +177,8 @@ spotbugs {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("-onlyAnalyze, com.foobar.MyClass,com.foobar.mypkg.*,"))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("-onlyAnalyze, com.foobar.MyClass,com.foobar.mypkg.*,")
     }
 
     def "can use extraArgs and jvmArgs"() {
@@ -200,9 +196,9 @@ spotbugs {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("-nested:false"))
-        assertTrue(result.getOutput().contains("-Duser.language=ja"))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("-nested:false")
+        result.getOutput().contains("-Duser.language=ja")
     }
 
     def "can use maxHeapSize"() {
@@ -219,8 +215,8 @@ spotbugs {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("-Xmx256m"))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("-Xmx256m")
     }
 
     def "can use effort and reportLevel"() {
@@ -238,9 +234,9 @@ spotbugs {
                 .build()
 
         then:
-        assertEquals(SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.getOutput().contains("-effort:less"))
-        assertTrue(result.getOutput().contains("-high"))
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("-effort:less")
+        result.getOutput().contains("-high")
     }
 
     def "can use toolVersion to set the SpotBugs version"() {
@@ -260,8 +256,8 @@ spotbugs {
                 .build()
 
         then:
-        assertEquals(TaskOutcome.SUCCESS, result.task(":spotbugsMain").outcome)
-        assertTrue(result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar"))
+        TaskOutcome.SUCCESS == result.task(":spotbugsMain").outcome
+        result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
     }
 
     def "can use toolVersion to get the SpotBugs version"() {
