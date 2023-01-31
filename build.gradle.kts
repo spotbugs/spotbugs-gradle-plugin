@@ -23,7 +23,7 @@ repositories {
     mavenCentral()
 }
 
-val errorproneVersion = "2.16"
+val errorproneVersion = "2.18.0"
 val spotBugsVersion = "4.7.3"
 val slf4jVersion = "2.0.0"
 val androidGradlePluginVersion = "7.3.1"
@@ -33,7 +33,7 @@ dependencies {
     compileOnly(localGroovy())
     compileOnly("com.github.spotbugs:spotbugs:$spotBugsVersion")
     compileOnly("com.android.tools.build:gradle:$androidGradlePluginVersion")
-    testImplementation("com.tngtech.archunit:archunit:1.0.0")
+    testImplementation("com.tngtech.archunit:archunit:1.0.1")
 }
 
 val signingKey: String? = System.getenv("SIGNING_KEY")

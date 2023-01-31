@@ -1,15 +1,15 @@
 {
   "name": "spotbugs-gradle-plugin",
   "devDependencies": {
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.2.0",
+    "@commitlint/cli": "^17.4.2",
+    "@commitlint/config-conventional": "^17.4.2",
     "conventional-changelog-conventionalcommits": "^5.0.0",
-    "gradle-semantic-release-plugin": "1.7.3",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3",
+    "gradle-semantic-release-plugin": "1.7.6",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
     "pinst": "^3.0.0",
-    "prettier": "^2.7.1",
-    "semantic-release": "19.0.5"
+    "prettier": "^2.8.3",
+    "semantic-release": "20.1.0"
   },
   "scripts": {
     "prepare": "husky install"
@@ -41,6 +41,6 @@
     ]
   },
   "engines": {
-    "node": "^16.13.0"
+    "node": "^18.0.0"
   }
 }
