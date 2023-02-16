@@ -17,6 +17,7 @@ dependencies {
 
 testing {
     suites {
+        @Suppress("UNUSED_VARIABLE")
         val test by getting(JvmTestSuite::class) {
             useJUnitJupiter()
             dependencies {
@@ -30,6 +31,7 @@ testing {
                 }
             }
         }
+        @Suppress("UNUSED_VARIABLE")
         val functionalTest by registering(JvmTestSuite::class) {
             useSpock()
             testType.set(TestSuiteType.FUNCTIONAL_TEST)
@@ -65,10 +67,6 @@ sonarqube {
 }
 
 tasks {
-    withType<Test> {
-        useJUnitPlatform()
-        maxParallelForks = Runtime.getRuntime().availableProcessors()
-    }
     named("sonarqube") {
         mustRunAfter(jacocoTestReport)
     }
