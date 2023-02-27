@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -139,12 +138,7 @@ public abstract class SpotBugsRunner {
             .map(File::getAbsolutePath)
             .collect(Collectors.joining("\n"));
     try {
-      Path auxClasspathFile =
-          Paths.get(
-              task.getProject().getBuildDir().getAbsolutePath(),
-              "spotbugs",
-              "auxclasspath",
-              task.getName());
+      Path auxClasspathFile = task.getAuxclasspathPathFile();
       try {
         Files.createDirectories(auxClasspathFile.getParent());
         if (!Files.exists(auxClasspathFile)) {

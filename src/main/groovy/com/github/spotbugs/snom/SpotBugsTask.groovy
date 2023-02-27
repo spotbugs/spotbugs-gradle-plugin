@@ -52,7 +52,6 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
-import org.gradle.internal.enterprise.test.FileProperty
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService;
 import org.gradle.util.ClosureBackedAction
@@ -61,6 +60,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory
 
 import javax.inject.Inject
+import java.nio.file.Path
 
 /**
  * The Gradle task to run the SpotBugs analysis. All properties are optional.
@@ -264,6 +264,8 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @NonNull
     final Property<Boolean> useAuxclasspathFile
 
+    @Internal
+    private Path auxclasspathPathFile;
     private FileCollection classes;
 
     private boolean enableWorkerApi;
@@ -386,6 +388,9 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
      * @param extension the source extension to copy the properties.
      */
     void init(SpotBugsExtension extension, boolean enableWorkerApi, boolean enableHybridWorker) {
+        def taskName = getName()
+        auxclasspathPathFile = project.layout.buildDirectory.file("spotbugs/auxclasspath/$taskName").get().getAsFile().toPath()
+
         ignoreFailures.convention(extension.ignoreFailures)
         showStackTraces.convention(extension.showStackTraces)
         showProgress.convention(extension.showProgress)
@@ -399,7 +404,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         excludeFilter.convention(extension.excludeFilter)
         baselineFile.convention(extension.baselineFile)
         onlyAnalyze.convention(extension.onlyAnalyze)
-        projectName.convention(extension.projectName.map({p -> String.format("%s (%s)", p, getName())}))
+        projectName.convention(extension.projectName.map({p -> String.format("%s (%s)", p, taskName)}))
         release.convention(extension.release)
         jvmArgs.convention(extension.jvmArgs)
         extraArgs.convention(extension.extraArgs)
@@ -534,5 +539,9 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
             prunedName = task.getName()
         }
         return new StringBuilder().append(Character.toLowerCase(prunedName.charAt(0))).append(prunedName.substring(1)).toString()
+    }
+
+    Path getAuxclasspathPathFile() {
+        return auxclasspathPathFile
     }
 }
