@@ -265,7 +265,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     final Property<Boolean> useAuxclasspathFile
 
     @Internal
-    private Path auxclasspathPathFile;
+    private Path auxclasspathFile;
     private FileCollection classes;
 
     private boolean enableWorkerApi;
@@ -389,7 +389,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
      */
     void init(SpotBugsExtension extension, boolean enableWorkerApi, boolean enableHybridWorker) {
         def taskName = getName()
-        auxclasspathPathFile = project.layout.buildDirectory.file("spotbugs/auxclasspath/$taskName").get().getAsFile().toPath()
+        auxclasspathFile = project.layout.buildDirectory.file("spotbugs/auxclasspath/$taskName").get().getAsFile().toPath()
 
         ignoreFailures.convention(extension.ignoreFailures)
         showStackTraces.convention(extension.showStackTraces)
@@ -541,7 +541,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         return new StringBuilder().append(Character.toLowerCase(prunedName.charAt(0))).append(prunedName.substring(1)).toString()
     }
 
-    Path getAuxclasspathPathFile() {
-        return auxclasspathPathFile
+    Path getAuxclasspathFile() {
+        return auxclasspathFile
     }
 }

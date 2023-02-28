@@ -138,7 +138,7 @@ public abstract class SpotBugsRunner {
             .map(File::getAbsolutePath)
             .collect(Collectors.joining("\n"));
     try {
-      Path auxClasspathFile = task.getAuxclasspathPathFile();
+      Path auxClasspathFile = task.getAuxclasspathFile();
       try {
         Files.createDirectories(auxClasspathFile.getParent());
         if (!Files.exists(auxClasspathFile)) {
