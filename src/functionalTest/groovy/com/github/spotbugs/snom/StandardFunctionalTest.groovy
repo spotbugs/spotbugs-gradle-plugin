@@ -13,7 +13,6 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -31,7 +30,7 @@ class StandardFunctionalTest extends Specification {
     String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     def setup() {
-        rootDir = Files.createTempDir()
+        rootDir = File.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')
         buildFile << """
 plugins {
@@ -109,6 +108,50 @@ dependencies {
         then:
         TaskOutcome.SUCCESS == result.task(":classes").outcome
         result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
+    }
+
+    def "can be configured to support multiple reports"() {
+        setup:
+        buildFile << """
+dependencies {
+    spotbugs "com.github.spotbugs:spotbugs:4.0.0-beta4"
+}
+
+spotbugsMain {
+    if (project.property('set.supporting.multiple.reports') == 'true') {
+        isSupportingMultipleReports.set(true)
+    }
+    println "isSupportingMultipleReports = \${it.isSupportingMultipleReports.get()}"
+}
+"""
+        GradleRunner runner =
+                GradleRunner.create()
+                .withProjectDir(rootDir)
+                .withPluginClasspath()
+                .forwardOutput()
+                .withGradleVersion(version)
+
+        when:
+        BuildResult result =
+                runner
+                .withArguments(":spotbugsMain", "--debug", "-Pset.supporting.multiple.reports=false")
+                .build()
+
+        then: 'property value is false because Spotbugs version is 4.0.0'
+        TaskOutcome.SUCCESS == result.task(":spotbugsMain").outcome
+        result.output.contains("Using SpotBugs version SemanticVersion(4.0.0)")
+        result.output.contains("isSupportingMultipleReports = false")
+
+        when:
+        result =
+                runner
+                .withArguments(":spotbugsMain", "--debug", "-Pset.supporting.multiple.reports=true")
+                .build()
+
+        then: 'property value is true and convention code does not run'
+        TaskOutcome.SUCCESS == result.task(":spotbugsMain").outcome
+        !result.output.contains("Using SpotBugs version SemanticVersion(4.0.0)")
+        result.output.contains("isSupportingMultipleReports = true")
     }
 
     def "can skip analysis when no class file we have"() {

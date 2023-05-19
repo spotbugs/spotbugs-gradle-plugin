@@ -264,6 +264,16 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @NonNull
     final Property<Boolean> useAuxclasspathFile
 
+    /**
+     * Property to override the automatic decision to allow using multiple reports when
+     * Spotbugs version is greater or equal to 4.5.0.
+     * Default value is {@code true} if Spotbugs version is greater or equal to 4.5.0.
+     */
+    @Input
+    @Optional
+    @NonNull
+    final Property<Boolean> isSupportingMultipleReports
+
     @Internal
     private Path auxclasspathFile;
     private FileCollection classes;
@@ -272,8 +282,6 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     private boolean enableHybridWorker;
     private FileCollection pluginJarFiles
     private FileCollection spotbugsClasspath
-
-    private Provider<Boolean> isSupportingMultipleReports
 
     void setClasses(FileCollection fileCollection) {
         this.classes = fileCollection
@@ -351,6 +359,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         extraArgs = objects.listProperty(String);
         maxHeapSize = objects.property(String);
         useAuxclasspathFile = objects.property(Boolean)
+        isSupportingMultipleReports = objects.property(Boolean)
         setDescription("Run SpotBugs analysis.")
         setGroup(JavaBasePlugin.VERIFICATION_GROUP)
         def pluginConfiguration = project.getConfigurations().getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
@@ -360,20 +369,21 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
         def configuration = project.getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME)
         def logger = this.log
-        isSupportingMultipleReports = project.provider {
-            configuration.resolve()
-            java.util.Optional<Dependency> spotbugs =
-                    configuration.getDependencies().stream()
-                    .filter { dependency -> "com.github.spotbugs" == dependency.group && "spotbugs" == dependency.name }
-                    .findFirst()
-            if (!spotbugs.isPresent()) {
-                logger.warn("No spotbugs found in the {} configuration", SpotBugsPlugin.CONFIG_NAME)
-                return false
-            }
-            SemanticVersion version = new SemanticVersion(spotbugs.get().getVersion())
-            logger.debug("Using SpotBugs version {}", version)
-            return version >= new SemanticVersion("4.5.0")
-        }
+        isSupportingMultipleReports.convention(
+                project.provider {
+                    configuration.resolve()
+                    java.util.Optional<Dependency> spotbugs =
+                            configuration.getDependencies().stream()
+                            .filter { dependency -> "com.github.spotbugs" == dependency.group && "spotbugs" == dependency.name }
+                            .findFirst()
+                    if (!spotbugs.isPresent()) {
+                        logger.warn("No spotbugs found in the {} configuration", SpotBugsPlugin.CONFIG_NAME)
+                        return false
+                    }
+                    SemanticVersion version = new SemanticVersion(spotbugs.get().getVersion())
+                    logger.debug("Using SpotBugs version {}", version)
+                    return version >= new SemanticVersion("4.5.0")
+                })
 
         def spotbugsSlf4j = project.configurations.getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
         spotbugsClasspath = project.layout.files {
