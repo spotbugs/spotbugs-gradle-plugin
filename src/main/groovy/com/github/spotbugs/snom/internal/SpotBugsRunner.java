@@ -67,23 +67,11 @@ public abstract class SpotBugsRunner {
       args.add("-progress");
     }
 
-    if (task.isSupportingMultipleReports()) {
-      for (SpotBugsReport report : task.getEnabledReports()) {
-        File reportFile = report.getOutputLocation().getAsFile().get();
-        File dir = reportFile.getParentFile();
-        dir.mkdirs();
-        args.add(report.toCommandLineOption() + "=" + reportFile.getAbsolutePath());
-      }
-    } else {
-      SpotBugsReport report = task.getFirstEnabledReport();
-      if (report != null) {
-        File reportFile = report.getOutputLocation().getAsFile().get();
-        File dir = reportFile.getParentFile();
-        dir.mkdirs();
-        args.add(report.toCommandLineOption());
-        args.add("-outputFile");
-        args.add(reportFile.getAbsolutePath());
-      }
+    for (SpotBugsReport report : task.getEnabledReports()) {
+      File reportFile = report.getOutputLocation().getAsFile().get();
+      File dir = reportFile.getParentFile();
+      dir.mkdirs();
+      args.add(report.toCommandLineOption() + "=" + reportFile.getAbsolutePath());
     }
 
     if (task.getEffort().isPresent()) {

@@ -273,8 +273,6 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     private FileCollection pluginJarFiles
     private FileCollection spotbugsClasspath
 
-    private Provider<Boolean> isSupportingMultipleReports
-
     void setClasses(FileCollection fileCollection) {
         this.classes = fileCollection
     }
@@ -361,20 +359,6 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
         def configuration = project.getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME)
         def logger = this.log
-        isSupportingMultipleReports = project.provider {
-            configuration.resolve()
-            java.util.Optional<Dependency> spotbugs =
-                    configuration.getDependencies().stream()
-                    .filter { dependency -> "com.github.spotbugs" == dependency.group && "spotbugs" == dependency.name }
-                    .findFirst()
-            if (!spotbugs.isPresent()) {
-                logger.warn("No spotbugs found in the {} configuration", SpotBugsPlugin.CONFIG_NAME)
-                return false
-            }
-            SemanticVersion version = new SemanticVersion(spotbugs.get().getVersion())
-            logger.debug("Using SpotBugs version {}", version)
-            return version >= new SemanticVersion("4.5.0")
-        }
 
         def spotbugsSlf4j = project.configurations.getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
         spotbugsClasspath = project.layout.files {
@@ -521,16 +505,6 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
     @Input
     boolean getShowStackTraces() {
         showStackTraces.get();
-    }
-
-    /**
-     * The multiple reports feature is available from SpotBugs 4.5.0
-     *
-     * @see <a href="https://github.com/spotbugs/spotbugs/releases/tag/4.5.0">GitHub Releases</a>
-     */
-    @Internal
-    boolean isSupportingMultipleReports() {
-        return isSupportingMultipleReports.getOrElse(Boolean.FALSE).booleanValue()
     }
 
     @Internal
