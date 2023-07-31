@@ -353,10 +353,11 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         useAuxclasspathFile = objects.property(Boolean)
         setDescription("Run SpotBugs analysis.")
         setGroup(JavaBasePlugin.VERIFICATION_GROUP)
-        def pluginConfiguration = project.getConfigurations().getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
+        def internalPluginConfiguration = project.configurations.getByName(SpotBugsPlugin.INTERNAL_CONFIG_NAME)
         pluginJarFiles = project.layout.files {
-            pluginConfiguration.files
+            internalPluginConfiguration.files
         }
+        def pluginConfiguration = project.configurations.getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
 
         def configuration = project.getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME)
         def logger = this.log
@@ -377,7 +378,7 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
 
         def spotbugsSlf4j = project.configurations.getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
         spotbugsClasspath = project.layout.files {
-            spotbugsSlf4j.files + configuration.files
+            spotbugsSlf4j.files + pluginConfiguration.files + configuration.files
         }
     }
 
