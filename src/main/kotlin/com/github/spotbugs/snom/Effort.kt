@@ -58,5 +58,5 @@ enum class Effort {
      * The effort level that maximize the computation cost. SpotBugs will run Interprocedural Analysis
      * of Referenced Classes.
      */
-    MAX
+    MAX,
 }

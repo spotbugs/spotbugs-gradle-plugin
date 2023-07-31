@@ -13,8 +13,8 @@
  */
 package com.github.spotbugs.snom
 
-import java.util.Optional
 import org.gradle.api.tasks.Internal
+import java.util.Optional
 
 /**
  * The [Confidence] is used to specify the level to report bugs. Lower level contains more
@@ -44,21 +44,24 @@ enum class Confidence {
         override fun toCommandLineOption(): Optional<String> =
             Optional.of("-low")
     },
+
     /** The report level to report medium and high priority detected bugs in the report. */
     MEDIUM {
         override fun toCommandLineOption(): Optional<String> =
             Optional.of("-medium")
     },
+
     /** The default level that provides the same feature with {@link #MEDIUM}. */
     DEFAULT {
         override fun toCommandLineOption(): Optional<String> =
             Optional.empty()
     },
+
     /** The report level to report high priority detected bugs in the report. */
     HIGH {
         override fun toCommandLineOption(): Optional<String> =
             Optional.of("-high")
-    };
+    }, ;
 
     @Internal("This is internally used property so no need to refer to judge out-of-date or not.")
     abstract fun toCommandLineOption(): Optional<String>
