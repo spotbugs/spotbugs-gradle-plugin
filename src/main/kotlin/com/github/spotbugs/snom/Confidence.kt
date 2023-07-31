@@ -11,11 +11,10 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.snom;
+package com.github.spotbugs.snom
 
-import java.util.Optional;
-import javax.annotation.Nonnull;
-import org.gradle.api.tasks.Internal;
+import java.util.Optional
+import org.gradle.api.tasks.Internal
 
 /**
  * The {@code Confidence} is used to specify the level to report bugs. Lower level contains more
@@ -35,36 +34,28 @@ import org.gradle.api.tasks.Internal;
  *
  * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual</a>.</p>
  */
-enum Confidence {
+enum class Confidence {
     /** The report level to report all detected bugs in the report. */
     LOW {
-        @Override
-        Optional<String> toCommandLineOption() {
-            return Optional.of("-low");
-        }
+        override fun toCommandLineOption(): Optional<String> =
+            Optional.of("-low")
     },
     /** The report level to report medium and high priority detected bugs in the report. */
     MEDIUM {
-        @Override
-        Optional<String> toCommandLineOption() {
-            return Optional.of("-medium");
-        }
+        override fun toCommandLineOption(): Optional<String> =
+            Optional.of("-medium")
     },
     /** The default level that provides the same feature with {@link #MEDIUM}. */
     DEFAULT {
-        @Override
-        Optional<String> toCommandLineOption() {
-            return Optional.empty();
-        }
+        override fun toCommandLineOption(): Optional<String> =
+            Optional.empty()
     },
     /** The report level to report high priority detected bugs in the report. */
     HIGH {
-        @Override
-        Optional<String> toCommandLineOption() {
-            return Optional.of("-high");
-        }
-    }
+        override fun toCommandLineOption(): Optional<String> =
+            Optional.of("-high")
+    };
 
     @Internal("This is internally used property so no need to refer to judge out-of-date or not.")
-    abstract @Nonnull Optional<String> toCommandLineOption()
+    abstract fun toCommandLineOption(): Optional<String>
 }
