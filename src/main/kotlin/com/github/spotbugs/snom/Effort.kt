@@ -11,41 +11,49 @@
  * express or implied. See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.spotbugs.snom;
+package com.github.spotbugs.snom
 
 /**
- * The {@code Effort} is configuration to adjust SpotBugs detectors. Use lower effort to reduce
+ * The [Effort] is configuration to adjust SpotBugs detectors. Use lower effort to reduce
  * computation cost.
  *
- * <p><strong>Usage:</strong>
+ * ### Usage
  *
- * <p>Set via the {@code spotbugs} extension to configure all tasks in your project: <div><code>
- * spotbugs {<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;effort = 'less'<br>
- * }</code></div>
+ * Set via the `spotbugs` extension to configure all tasks in your project:
+ * ```kotlin
+ * spotbugs {
+ *     effort = "less"
+ * }
+ * ```
  *
- * <p>Or via {@code SpotBugsTask} to configure the specific task in your project:<div><code>
- * spotbugsMain { // or name of another task<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;effort = 'max'<br>
- * }</code></div>
+ * Or via [SpotBugsTask] to configure the specific task in your project:
+ * ```kotlin
+ * spotbugsMain { // or name of another task
+ *     effort = "max"
+ * }
+ * ```
  *
- * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/effort.html">SpotBugs Manual</a>.</p>
+ * See also [SpotBugs Manual](https://spotbugs.readthedocs.io/en/stable/effort.html).
  */
-enum Effort {
+enum class Effort {
     /**
      * The effort level to minimize the computation cost. SpotBugs will try to conserve space at the
      * expense of precision.
      */
     MIN,
-    /** The effort level to reduce the computation cost. */
+
+    /** The effort level to reduce the computation cost.  */
     LESS,
-    /** The default level that provides the same feature with {@link #MORE}. */
+
+    /** The default level that provides the same feature with [MORE].  */
     DEFAULT,
+
     /**
      * The effort level that uses more computation cost. SpotBugs will try to detect more problems by
      * Interprocedural Analysis and Null Pointer Analysis.
      */
     MORE,
+
     /**
      * The effort level that maximize the computation cost. SpotBugs will run Interprocedural Analysis
      * of Referenced Classes.

@@ -17,22 +17,26 @@ import java.util.Optional
 import org.gradle.api.tasks.Internal
 
 /**
- * The {@code Confidence} is used to specify the level to report bugs. Lower level contains more
- * bugs reported. To include all bugs to your report, use {@link #LOW}.
+ * The [Confidence] is used to specify the level to report bugs. Lower level contains more
+ * bugs reported. To include all bugs to your report, use [LOW].
  *
- * <p><strong>Usage:</strong>
+ * ### Usage
  *
- * <p>Set via the {@code spotbugs} extension to configure all tasks in your project:<div><code>
- * spotbugs {<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;reportLevel = 'low'<br>
- * </code></div>
+ * Set via the {@code spotbugs} extension to configure all tasks in your project:
+ * ```kotlin
+ * spotbugs {
+ *     reportLevel = "low"
+ * }
+ * ```
  *
- * <p>Or via {@code SpotBugsTask} to configure the specific task in your project:<div><code>
- * spotbugsMain { // or name of another task<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;reportLevel = 'high'<br>
- * }</code></div>
+ * Or via [SpotBugsTask] to configure the specific task in your project:
+ * ```kotlin
+ * spotbugsMain { // or name of another task
+ *     reportLevel = "high"
+ * }
+ * ```
  *
- * <p>See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual</a>.</p>
+ * See also [SpotBugs Manual](https://spotbugs.readthedocs.io/en/stable/running.html).
  */
 enum class Confidence {
     /** The report level to report all detected bugs in the report. */
