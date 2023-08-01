@@ -125,6 +125,7 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
     project
         .getConfigurations()
         .create(SpotBugsPlugin.INTERNAL_CONFIG_NAME)
+        .extendsFrom(configuration)
         .setDescription(
             "configuration for the external SpotBugs plugins excluding transitive dependencies")
         .setTransitive(false);
