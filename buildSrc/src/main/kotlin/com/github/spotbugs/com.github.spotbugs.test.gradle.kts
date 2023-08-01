@@ -72,5 +72,6 @@ tasks {
     }
 }
 tasks.check {
+    dependsOn(tasks.named("functionalTest"))
     dependsOn(jacocoTestReport)
 }
