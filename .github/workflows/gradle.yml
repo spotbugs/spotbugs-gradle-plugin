@@ -51,6 +51,8 @@ jobs:
       if: matrix.gradle == '7.0'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
     - name: Run SonarQube Scanner
       run: |
         if [ "$SONAR_LOGIN" != "" ]; then

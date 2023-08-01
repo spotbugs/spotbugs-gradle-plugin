@@ -138,12 +138,20 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
   }
 
   private Configuration createPluginConfiguration(Project project) {
-    return project
+    Configuration configuration =
+        project
+            .getConfigurations()
+            .create(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
+            .setDescription("configuration for the external SpotBugs plugins")
+            .setVisible(false)
+            .setTransitive(true);
+    project
         .getConfigurations()
-        .create(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
-        .setDescription("configuration for the external SpotBugs plugins")
-        .setVisible(false)
-        .setTransitive(true);
+        .create(SpotBugsPlugin.INTERNAL_CONFIG_NAME)
+        .setDescription(
+            "configuration for the external SpotBugs plugins excluding transitive dependencies")
+        .setTransitive(false);
+    return configuration;
   }
 
   void verifyGradleVersion(GradleVersion version) {
