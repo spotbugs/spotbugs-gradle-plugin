@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        gradle: ['7.0', '8.0']
+        gradle: ['7.6', '8.0']
     steps:
     - uses: actions/checkout@v3
       with:
@@ -28,7 +28,7 @@ jobs:
       with:
         node-version-file: '.nvmrc'
         cache: npm
-      if: matrix.gradle == '7.0'
+      if: matrix.gradle == '7.6'
     - name: Gradle Wrapper Validation
       uses: gradle/wrapper-validation-action@v1
     - name: Build with Gradle
@@ -46,7 +46,7 @@ jobs:
         rm -rf build/libs/*.jar
         npm ci
         npx semantic-release
-      if: matrix.gradle == '7.0'
+      if: matrix.gradle == '7.6'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
@@ -56,7 +56,7 @@ jobs:
         if [ "$SONAR_LOGIN" != "" ]; then
           ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN --no-daemon
         fi
-      if: matrix.gradle == '7.0'
+      if: matrix.gradle == '7.6'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
