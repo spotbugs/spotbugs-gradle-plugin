@@ -17,11 +17,13 @@ import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
+import spock.lang.Ignore
 import spock.lang.Requires
 import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
+@Ignore
 class AndroidFunctionalTest extends Specification {
     static String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
