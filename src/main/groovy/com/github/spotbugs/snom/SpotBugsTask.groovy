@@ -351,15 +351,14 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
         useAuxclasspathFile = objects.property(Boolean)
         setDescription("Run SpotBugs analysis.")
         setGroup(JavaBasePlugin.VERIFICATION_GROUP)
-        def internalPluginConfiguration = project.configurations.getByName(SpotBugsPlugin.INTERNAL_CONFIG_NAME)
-        def pluginConfiguration = project.configurations.getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
+        def internalPluginConfiguration = project.configurations.getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
         pluginJarFiles = project.layout.files {
             internalPluginConfiguration.resolve()
         }
         def configuration = project.getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME)
         def spotbugsSlf4j = project.configurations.getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
         spotbugsClasspath = project.layout.files {
-            spotbugsSlf4j.resolve() + pluginConfiguration.resolve() + configuration.resolve()
+            spotbugsSlf4j.resolve() + configuration.resolve()
         }
     }
 
