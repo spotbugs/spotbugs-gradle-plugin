@@ -53,14 +53,13 @@ class SpotBugsPlugin : Plugin<Project> {
 
     companion object {
         const val CONFIG_NAME = "spotbugs"
-        const val PLUGINS_CONFIG_NAME = "spotbugsPlugins"
 
         /**
          * The configuration contains SpotBugs plugin jar files only
          *
          * @see [GitHub issue](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/910)
          */
-        const val INTERNAL_CONFIG_NAME = "actualSpotbugsPlugins"
+        const val PLUGINS_CONFIG_NAME = "spotbugsPlugins"
         const val SLF4J_CONFIG_NAME = "spotbugsSlf4j"
         const val EXTENSION_NAME = "spotbugs"
     }

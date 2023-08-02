@@ -13,10 +13,8 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.DependencySet
 import org.gradle.api.file.Directory
@@ -130,19 +128,12 @@ class SpotBugsBasePlugin : Plugin<Project> {
     }
 
     private fun createPluginConfiguration(project: Project): Configuration {
-        val configuration = project
+        return project
             .configurations
             .create(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
             .setDescription("configuration for the external SpotBugs plugins")
             .setVisible(false)
-            .setTransitive(true)
-        project
-            .configurations
-            .create(SpotBugsPlugin.INTERNAL_CONFIG_NAME)
-            .setDescription(
-                "configuration for the external SpotBugs plugins excluding transitive dependencies"
-            ).isTransitive = false
-        return configuration
+            .setTransitive(false)
     }
 
     fun verifyGradleVersion(version: GradleVersion) {
