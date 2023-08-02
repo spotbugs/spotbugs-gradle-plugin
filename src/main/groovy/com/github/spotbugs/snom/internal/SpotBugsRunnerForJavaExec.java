@@ -37,6 +37,8 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
   private final Logger log = LoggerFactory.getLogger(SpotBugsRunnerForJavaExec.class);
   private final Property<JavaLauncher> javaLauncher;
 
+  private OutputScanner stderrOutputScanner;
+
   public SpotBugsRunnerForJavaExec(Property<JavaLauncher> javaLauncher) {
     this.javaLauncher = javaLauncher;
   }
@@ -46,6 +48,9 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
     // TODO print version of SpotBugs and Plugins
     try {
       task.getProject().javaexec(configureJavaExec(task)).rethrowFailure().assertNormalExitValue();
+      if (stderrOutputScanner.isFailedToReport() && !task.getIgnoreFailures()) {
+        throw new GradleException("SpotBugs analysis succeeded but report generation failed");
+      }
     } catch (ExecException e) {
       if (task.getIgnoreFailures()) {
         log.warn("SpotBugs reported failures", task.getShowStackTraces() ? e : null);
@@ -81,6 +86,8 @@ public class SpotBugsRunnerForJavaExec extends SpotBugsRunner {
       if (maxHeapSize != null) {
         spec.setMaxHeapSize(maxHeapSize);
       }
+      stderrOutputScanner = new OutputScanner(System.err);
+      spec.setErrorOutput(stderrOutputScanner);
       if (javaLauncher.isPresent()) {
         log.info(
             "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
