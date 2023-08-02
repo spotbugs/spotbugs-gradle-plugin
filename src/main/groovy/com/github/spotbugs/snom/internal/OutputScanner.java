@@ -13,16 +13,18 @@
  */
 package com.github.spotbugs.snom.internal;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Monitors the stdout of forked process, and report when it contains some problems reported by
  * SpotBugs core.
  */
 class OutputScanner extends FilterOutputStream {
-  private final StringBuilder builder = new StringBuilder();
+  private final ByteArrayOutputStream builder = new ByteArrayOutputStream();
   private boolean failedToReport = false;
 
   public OutputScanner(OutputStream out) {
@@ -34,17 +36,23 @@ class OutputScanner extends FilterOutputStream {
   }
 
   @Override
+  public void write(byte @NotNull [] b, int off, int len) throws IOException {
+    super.write(b, off, len);
+    builder.write(b, off, len);
+  }
+
+  @Override
   public void write(int b) throws IOException {
     super.write(b);
-    builder.append((char) b);
+    builder.write(b);
+
     if (b == '\n') {
       String line = builder.toString();
-      System.err.println("line:" + line);
       if (line.contains("Could not generate HTML output")) {
         failedToReport = true;
       }
 
-      builder.delete(0, builder.length());
+      builder.reset();
     }
   }
 }
