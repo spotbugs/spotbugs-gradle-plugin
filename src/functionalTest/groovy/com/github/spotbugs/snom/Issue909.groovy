@@ -13,7 +13,6 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.Specification
@@ -60,13 +59,13 @@ public class Foo {
 """
     }
 
-    def "can generate spotbugs.html with stylesheet"() {
+    def "cannot generate HTML report if invalid XSL is provided"() {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(rootDir.toFile())
                 .withArguments('spotbugsMain')
                 .withPluginClasspath()
-                .build()
+                .buildAndFail()
 
         then:
         TaskOutcome.FAILED == result.task(":spotbugsMain").outcome
