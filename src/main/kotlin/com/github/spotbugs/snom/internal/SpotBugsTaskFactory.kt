@@ -61,9 +61,9 @@ class SpotBugsTaskFactory {
                                 name,
                                 SpotBugsTask::class.java,
                                 Action { task: SpotBugsTask ->
-                                    task.sourceDirs = sourceSet.allSource.sourceDirectories
-                                    task.classDirs = sourceSet.output
-                                    task.auxClassPaths = sourceSet.compileClasspath
+                                    task.sourceDirs.setFrom(sourceSet.allSource.sourceDirectories)
+                                    task.classDirs.setFrom(sourceSet.output)
+                                    task.auxClassPaths.setFrom(sourceSet.compileClasspath)
                                     val description = String.format(
                                         "Run SpotBugs analysis for the source set '%s'",
                                         sourceSet.name,
@@ -101,9 +101,9 @@ class SpotBugsTaskFactory {
                             Action { spotbugsTask: SpotBugsTask ->
                                 val javaCompile =
                                     variant.javaCompileProvider.get()
-                                spotbugsTask.sourceDirs = javaCompile.source
-                                spotbugsTask.classDirs = project.files(javaCompile.destinationDir)
-                                spotbugsTask.auxClassPaths = javaCompile.classpath
+                                spotbugsTask.sourceDirs.setFrom(javaCompile.source)
+                                spotbugsTask.classDirs.setFrom(javaCompile.destinationDirectory)
+                                spotbugsTask.auxClassPaths.setFrom(javaCompile.classpath)
                                 spotbugsTask.dependsOn(javaCompile)
                             },
                         )

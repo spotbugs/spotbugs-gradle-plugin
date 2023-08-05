@@ -22,7 +22,7 @@ abstract class SpotBugsTextReport @Inject constructor(objects: ObjectFactory, ta
     SpotBugsReport(objects, task) {
     init {
         // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.txt"
-        outputLocation.convention(task.reportsDir.file(task.baseName + ".txt"))
+        outputLocation.convention(task.reportsDir.file(task.getBaseName() + ".txt"))
     }
 
     override fun toCommandLineOption(): String {

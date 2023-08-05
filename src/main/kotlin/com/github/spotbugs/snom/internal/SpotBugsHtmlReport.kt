@@ -29,7 +29,7 @@ abstract class SpotBugsHtmlReport @Inject constructor(objects: ObjectFactory, ta
 
     init {
         // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.html"
-        outputLocation.convention(task.reportsDir.file(task.baseName + ".html"))
+        outputLocation.convention(task.reportsDir.file(task.getBaseName() + ".html"))
         stylesheet = objects.property(TextResource::class.java)
         stylesheetPath = objects.property(String::class.java)
     }

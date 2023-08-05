@@ -42,7 +42,7 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
             if (task.getIgnoreFailures()) {
                 log.warn(
                     "SpotBugs reported failures",
-                    if (task.getShowStackTraces()) {
+                    if (task.showStackTraces.get()) {
                         e
                     } else {
                         null
@@ -77,7 +77,7 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
             val args = mutableListOf<String>()
             args.add("-exitcode")
             args.addAll(buildArguments(task))
-            spec.classpath(task.getSpotbugsClasspath())
+            spec.classpath(task.spotbugsClasspath)
             spec.jvmArgs = buildJvmArguments(task)
             spec.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
             spec.setArgs(args)

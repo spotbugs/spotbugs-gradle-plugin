@@ -22,7 +22,7 @@ abstract class SpotBugsXmlReport @Inject constructor(objects: ObjectFactory, tas
     SpotBugsReport(objects, task) {
     init {
         // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.xml"
-        outputLocation.convention(task.reportsDir.file(task.baseName + ".xml"))
+        outputLocation.convention(task.reportsDir.file(task.getBaseName() + ".xml"))
     }
 
     override fun toCommandLineOption(): String {

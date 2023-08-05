@@ -50,7 +50,7 @@ class SpotBugsRunnerForWorker @Inject constructor(
 
     private fun configureWorkerSpec(task: SpotBugsTask): Action<ProcessWorkerSpec> {
         return Action { spec ->
-            spec.classpath.setFrom(task.getSpotbugsClasspath())
+            spec.classpath.setFrom(task.spotbugsClasspath)
             spec.forkOptions { option: JavaForkOptions ->
                 option.jvmArgs(buildJvmArguments(task))
                 val maxHeapSize = task.maxHeapSize.getOrNull()
@@ -73,8 +73,8 @@ class SpotBugsRunnerForWorker @Inject constructor(
         return Action { params ->
             params.getArguments().addAll(buildArguments(task))
             params.getIgnoreFailures().set(task.getIgnoreFailures())
-            params.getShowStackTraces().set(task.getShowStackTraces())
-            task.enabledReports.stream()
+            params.getShowStackTraces().set(task.showStackTraces)
+            task.getEnabledReports().stream()
                 .map(SpotBugsReport::getOutputLocation)
                 .forEach(params.getReports()::add)
         }

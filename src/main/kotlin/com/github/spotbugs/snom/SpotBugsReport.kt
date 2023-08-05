@@ -74,7 +74,7 @@ abstract class SpotBugsReport @Inject constructor(
         }
 
     @Deprecated("use {@code getRequired().set(provider)} instead.")
-    fun setEnabled(provider: Provider<Boolean>?) {
+    fun setEnabled(provider: Provider<Boolean>) {
         isRequired.set(provider)
     }
 
@@ -84,7 +84,7 @@ abstract class SpotBugsReport @Inject constructor(
     }
 
     @Deprecated("use {@code getOutputLocation().set(provider)} instead.")
-    fun setDestination(provider: Provider<File?>?) {
+    fun setDestination(provider: Provider<File?>) {
         destination.set(task.project.layout.file(provider))
     }
 

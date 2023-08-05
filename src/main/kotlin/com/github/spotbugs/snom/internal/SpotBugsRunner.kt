@@ -35,28 +35,28 @@ abstract class SpotBugsRunner {
     abstract fun run(task: SpotBugsTask)
     protected fun buildArguments(task: SpotBugsTask): List<String> {
         val args: MutableList<String> = ArrayList()
-        val plugins = task.getPluginJar()
-        if (plugins.isNotEmpty()) {
+        val plugins = task.pluginJarFiles
+        if (plugins.isPresent) {
             args.add("-pluginList")
-            args.add(join(plugins))
+            args.add(join(plugins.get().map { it.get().asFile }))
         }
         args.add("-timestampNow")
-        if (!task.getAuxClassPaths().isEmpty) {
-            if (task.getUseAuxclasspathFile().get()) {
+        if (!task.auxClassPaths.isEmpty) {
+            if (task.useAuxclasspathFile.get()) {
                 args.add("-auxclasspathFromFile")
                 val auxClasspathFile = createFileForAuxClasspath(task)
                 log.debug("Using auxclasspath file: {}", auxClasspathFile)
                 args.add(auxClasspathFile)
             } else {
                 args.add("-auxclasspath")
-                args.add(join(task.getAuxClassPaths().files))
+                args.add(join(task.auxClassPaths.files))
             }
         }
-        if (!task.getSourceDirs().isEmpty) {
+        if (!task.sourceDirs.isEmpty) {
             args.add("-sourcepath")
-            args.add(task.getSourceDirs().asPath)
+            args.add(task.sourceDirs.asPath)
         }
-        if (task.getShowProgress().getOrElse(Boolean.FALSE)) {
+        if (task.showProgress.getOrElse(Boolean.FALSE)) {
             args.add("-progress")
         }
         for (report: SpotBugsReport in task.getEnabledReports()) {
@@ -65,59 +65,59 @@ abstract class SpotBugsRunner {
             dir.mkdirs()
             args.add(report.toCommandLineOption() + "=" + reportFile.absolutePath)
         }
-        if (task.getEffort().isPresent) {
-            args.add("-effort:" + task.getEffort().get().name.lowercase(Locale.getDefault()))
+        if (task.effort.isPresent) {
+            args.add("-effort:" + task.effort.get().name.lowercase(Locale.getDefault()))
         }
-        if (task.getReportLevel().isPresent) {
-            task.getReportLevel().get().toCommandLineOption().ifPresent { e: String ->
+        if (task.reportLevel.isPresent) {
+            task.reportLevel.get().toCommandLineOption().ifPresent { e: String ->
                 args.add(
                     e,
                 )
             }
         }
-        if (task.getVisitors().isPresent && task.getVisitors().get().isNotEmpty()) {
+        if (task.visitors.isPresent && task.visitors.get().isNotEmpty()) {
             args.add("-visitors")
-            args.add(task.getVisitors().get().stream().collect(Collectors.joining(",")))
+            args.add(task.visitors.get().stream().collect(Collectors.joining(",")))
         }
-        if (task.getOmitVisitors().isPresent && task.getOmitVisitors().get().isNotEmpty()) {
+        if (task.omitVisitors.isPresent && task.omitVisitors.get().isNotEmpty()) {
             args.add("-omitVisitors")
-            args.add(task.getOmitVisitors().get().stream().collect(Collectors.joining(",")))
+            args.add(task.omitVisitors.get().stream().collect(Collectors.joining(",")))
         }
-        if (task.getIncludeFilter().isPresent && task.getIncludeFilter().get() != null) {
+        if (task.includeFilter.isPresent && task.includeFilter.get() != null) {
             args.add("-include")
-            args.add(task.getIncludeFilter().get().asFile.absolutePath)
+            args.add(task.includeFilter.get().asFile.absolutePath)
         }
-        if (task.getExcludeFilter().isPresent && task.getExcludeFilter().get() != null) {
+        if (task.excludeFilter.isPresent && task.excludeFilter.get() != null) {
             args.add("-exclude")
-            args.add(task.getExcludeFilter().get().asFile.absolutePath)
+            args.add(task.excludeFilter.get().asFile.absolutePath)
         }
-        if (task.getBaselineFile().isPresent && task.getBaselineFile().get() != null) {
+        if (task.baselineFile.isPresent && task.baselineFile.get() != null) {
             args.add("-excludeBugs")
-            args.add(task.getBaselineFile().get().asFile.absolutePath)
+            args.add(task.baselineFile.get().asFile.absolutePath)
         }
-        if (task.getOnlyAnalyze().isPresent && task.getOnlyAnalyze().get().isNotEmpty()) {
+        if (task.onlyAnalyze.isPresent && task.onlyAnalyze.get().isNotEmpty()) {
             args.add("-onlyAnalyze")
-            args.add(task.getOnlyAnalyze().get().stream().collect(Collectors.joining(",")))
+            args.add(task.onlyAnalyze.get().stream().collect(Collectors.joining(",")))
         }
         args.add("-projectName")
-        args.add(task.getProjectName().get())
+        args.add(task.projectName.get())
         args.add("-release")
-        args.add(task.getRelease().get())
-        val file = task.getAnalyseClassFile().asFile.get()
-        generateFile(task.getClasses(), task.getAnalyseClassFile().asFile.get())
+        args.add(task.release.get())
+        val file = task.analyseClassFile.asFile.get()
+        generateFile(task.classes ?: task.project.layout.files(), task.analyseClassFile.asFile.get())
         args.add("-analyzeFromFile")
         args.add(file.absolutePath)
-        args.addAll(task.getExtraArgs().getOrElse(emptyList()))
+        args.addAll(task.extraArgs.getOrElse(emptyList()))
         log.debug("Arguments for SpotBugs are generated: {}", args)
         return args
     }
 
     private fun createFileForAuxClasspath(task: SpotBugsTask): String {
-        val auxClasspath = task.getAuxClassPaths().files.stream()
+        val auxClasspath = task.auxClassPaths.files.stream()
             .map { obj: File -> obj.absolutePath }
             .collect(Collectors.joining("\n"))
         try {
-            val auxClasspathFile = task.getAuxclasspathFile()
+            val auxClasspathFile = task.auxclasspathFile
             try {
                 Files.createDirectories(auxClasspathFile.parent)
                 if (!Files.exists(auxClasspathFile)) {
@@ -156,7 +156,7 @@ abstract class SpotBugsRunner {
     }
 
     protected fun buildJvmArguments(task: SpotBugsTask): List<String> {
-        val args = task.getJvmArgs().getOrElse(emptyList())
+        val args = task.jvmArgs.getOrElse(emptyList())
         log.debug("Arguments for JVM process are generated: {}", args)
         return args
     }
