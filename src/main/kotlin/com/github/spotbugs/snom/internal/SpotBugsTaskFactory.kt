@@ -18,7 +18,11 @@ import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.api.BaseVariant
 import com.github.spotbugs.snom.SpotBugsTask
-import org.gradle.api.*
+import org.gradle.api.Action
+import org.gradle.api.DomainObjectSet
+import org.gradle.api.GradleException
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.plugins.JavaPluginExtension
@@ -62,10 +66,11 @@ class SpotBugsTaskFactory {
                                     task.auxClassPaths = sourceSet.compileClasspath
                                     val description = String.format(
                                         "Run SpotBugs analysis for the source set '%s'",
-                                        sourceSet.name
+                                        sourceSet.name,
                                     )
                                     task.description = description
-                                })
+                                },
+                            )
                     }
             }
     }
@@ -74,7 +79,7 @@ class SpotBugsTaskFactory {
         val action: Action<in Plugin<*>?> =
             Action {
                 val baseExtension = project.extensions.getByType(
-                    BaseExtension::class.java
+                    BaseExtension::class.java,
                 )
                 val variants: DomainObjectSet<out BaseVariant> = when (baseExtension) {
                     is AppExtension -> baseExtension.applicationVariants
@@ -85,7 +90,7 @@ class SpotBugsTaskFactory {
                     val spotbugsTaskName =
                         toLowerCamelCase(
                             "spotbugs",
-                            variant.name
+                            variant.name,
                         )
                     log.debug("Creating SpotBugsTask for {}", variant.name)
                     project
@@ -100,7 +105,8 @@ class SpotBugsTaskFactory {
                                 spotbugsTask.classDirs = project.files(javaCompile.destinationDir)
                                 spotbugsTask.auxClassPaths = javaCompile.classpath
                                 spotbugsTask.dependsOn(javaCompile)
-                            })
+                            },
+                        )
                 }
             }
         project.plugins.withId("com.android.application", action)

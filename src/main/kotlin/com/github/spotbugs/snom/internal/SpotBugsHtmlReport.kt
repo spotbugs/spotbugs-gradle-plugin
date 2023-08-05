@@ -68,7 +68,7 @@ abstract class SpotBugsHtmlReport @Inject constructor(objects: ObjectFactory, ta
                 .fromArchiveEntry(spotbugsJar.get(), path)
         } else {
             throw InvalidUserDataException(
-                "The dependency on SpotBugs not found in 'spotbugs' configuration"
+                "The dependency on SpotBugs not found in 'spotbugs' configuration",
             )
         }
     }

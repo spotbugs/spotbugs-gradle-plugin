@@ -41,12 +41,12 @@ class SpotBugsBasePlugin : Plugin<Project> {
             .tasks
             .withType(SpotBugsTask::class.java)
             .configureEach { task ->
-                    task.init(
-                        extension,
-                        enableWorkerApi.toBoolean(),
-                        enableHybridWorker.toBoolean()
-                    )
-                }
+                task.init(
+                    extension,
+                    enableWorkerApi.toBoolean(),
+                    enableHybridWorker.toBoolean(),
+                )
+            }
     }
 
     private fun createExtension(project: Project): SpotBugsExtension {
@@ -56,26 +56,30 @@ class SpotBugsBasePlugin : Plugin<Project> {
                 SpotBugsPlugin.EXTENSION_NAME,
                 SpotBugsExtension::class.java,
                 project,
-                project.objects
+                project.objects,
             )
         extension.ignoreFailures.convention(false)
         extension.showStackTraces.convention(false)
         extension.projectName.convention(project.provider { project.name })
-        extension.release.convention(project.provider {
-            project.version.toString()
-        })
+        extension.release.convention(
+            project.provider {
+                project.version.toString()
+            },
+        )
 
         // ReportingBasePlugin should be applied before we create this SpotBugsExtension instance
         val baseReportsDir = project.extensions.getByType(
-            ReportingExtension::class.java
+            ReportingExtension::class.java,
         ).baseDirectory
         extension
             .reportsDir
-            .convention(baseReportsDir.map { directory: Directory ->
-                directory.dir(
-                    DEFAULT_REPORTS_DIR_NAME
-                )
-            })
+            .convention(
+                baseReportsDir.map { directory: Directory ->
+                    directory.dir(
+                        DEFAULT_REPORTS_DIR_NAME,
+                    )
+                },
+            )
         extension.useAuxclasspathFile.convention(true)
         extension.useJavaToolchains.convention(false)
         return extension
@@ -94,9 +98,11 @@ class SpotBugsBasePlugin : Plugin<Project> {
             dependencies.add(
                 project
                     .dependencies
-                    .create(extension.toolVersion.map {
-                        "com.github.spotbugs:spotbugs:$it"
-                    })
+                    .create(
+                        extension.toolVersion.map {
+                            "com.github.spotbugs:spotbugs:$it"
+                        },
+                    ),
             )
         }
         val spotbugsSlf4j = project
@@ -109,7 +115,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
             dependencies.add(
                 project
                     .dependencies
-                    .create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version"))
+                    .create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version")),
             )
         }
     }
@@ -140,7 +146,8 @@ class SpotBugsBasePlugin : Plugin<Project> {
         if (version < SUPPORTED_VERSION) {
             val message = String.format(
                 "Gradle version %s is unsupported. Please use %s or later.",
-                version, SUPPORTED_VERSION
+                version,
+                SUPPORTED_VERSION,
             )
             throw IllegalArgumentException(message)
         }

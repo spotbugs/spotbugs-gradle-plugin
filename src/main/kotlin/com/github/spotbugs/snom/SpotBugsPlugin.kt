@@ -28,10 +28,10 @@ class SpotBugsPlugin : Plugin<Project> {
         project
             .pluginManager
             .withPlugin(
-                "java-base"
+                "java-base",
             ) { javaBase: AppliedPlugin ->
                 log.debug(
-                    "The javaBase plugin has been applied, so making the check task depending on all of SpotBugsTask"
+                    "The javaBase plugin has been applied, so making the check task depending on all of SpotBugsTask",
                 )
                 project
                     .tasks
@@ -39,8 +39,8 @@ class SpotBugsPlugin : Plugin<Project> {
                     .configure { task: Task ->
                         task.dependsOn(
                             project.tasks.withType(
-                                SpotBugsTask::class.java
-                            )
+                                SpotBugsTask::class.java,
+                            ),
                         )
                     }
             }

@@ -29,11 +29,11 @@ import java.io.File
 import javax.inject.Inject
 
 abstract class SpotBugsReport @Inject constructor(
-    objects: ObjectFactory, @get:Internal
-    protected val task: SpotBugsTask
+    objects: ObjectFactory,
+    @get:Internal
+    protected val task: SpotBugsTask,
 ) :
-    SingleFileReport, CustomizableHtmlReport // to expose CustomizableHtmlReport#setStylesheet to build script
-{
+    SingleFileReport, CustomizableHtmlReport { // to expose CustomizableHtmlReport#setStylesheet to build script
     private val destination: RegularFileProperty
     private val isRequired: Property<Boolean>
 
@@ -107,8 +107,8 @@ abstract class SpotBugsReport @Inject constructor(
         throw UnsupportedOperationException(
             String.format(
                 "stylesheet property is not available in the %s type report",
-                name
-            )
+                name,
+            ),
         )
     }
 
@@ -116,8 +116,8 @@ abstract class SpotBugsReport @Inject constructor(
         throw UnsupportedOperationException(
             String.format(
                 "stylesheet property is not available in the %s type report",
-                name
-            )
+                name,
+            ),
         )
     }
 }

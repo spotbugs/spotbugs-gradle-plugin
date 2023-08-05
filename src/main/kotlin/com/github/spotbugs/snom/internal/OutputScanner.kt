@@ -13,9 +13,9 @@
  */
 package com.github.spotbugs.snom.internal
 
-import java.io.ByteArrayOutputStream;
-import java.io.FilterOutputStream;
-import java.io.OutputStream;
+import java.io.ByteArrayOutputStream
+import java.io.FilterOutputStream
+import java.io.OutputStream
 
 /**
  * Monitors the stdout of forked process, and report when it contains some problems reported by
