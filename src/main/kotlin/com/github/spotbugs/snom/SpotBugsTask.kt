@@ -92,10 +92,11 @@ import javax.inject.Inject
  */
 
 @CacheableTask
-abstract class SpotBugsTask @Inject constructor(
-    private val workerExecutor: WorkerExecutor,
-) : DefaultTask(), VerificationTask {
+abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     private val log = LoggerFactory.getLogger(SpotBugsTask::class.java)
+
+    @get:Inject
+    abstract val workerExecutor: WorkerExecutor
 
     @get:Input
     abstract val ignoreFailures: Property<Boolean>
@@ -274,9 +275,10 @@ abstract class SpotBugsTask @Inject constructor(
         get() {
             return field
                 ?: (
-                        classDirs.asFileTree.filter {
-                            it.name.endsWith(".class")
-                        })
+                    classDirs.asFileTree.filter {
+                        it.name.endsWith(".class")
+                    }
+                    )
         }
 
     private var enableWorkerApi: Boolean = true
@@ -321,7 +323,7 @@ abstract class SpotBugsTask @Inject constructor(
      * @param extension the source extension to copy the properties.
      */
     fun init(extension: SpotBugsExtension, enableWorkerApi: Boolean, enableHybridWorker: Boolean) {
-        // TODO use property
+        // TODO use Property
         this.auxclasspathFile = project.layout.buildDirectory.file("spotbugs/auxclasspath/$name").get().asFile.toPath()
 
         ignoreFailures.convention(extension.ignoreFailures)

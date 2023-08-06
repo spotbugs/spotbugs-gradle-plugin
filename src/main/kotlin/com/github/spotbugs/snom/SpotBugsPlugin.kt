@@ -17,7 +17,6 @@ import com.github.spotbugs.snom.internal.SpotBugsTaskFactory
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.plugins.AppliedPlugin
 import org.gradle.api.plugins.JavaBasePlugin
 import org.slf4j.LoggerFactory
 
@@ -29,7 +28,7 @@ class SpotBugsPlugin : Plugin<Project> {
             .pluginManager
             .withPlugin(
                 "java-base",
-            ) { javaBase: AppliedPlugin ->
+            ) {
                 log.debug(
                     "The javaBase plugin has been applied, so making the check task depending on all of SpotBugsTask",
                 )

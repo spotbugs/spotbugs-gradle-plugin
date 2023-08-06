@@ -55,22 +55,12 @@ class SpotBugsTaskFactory {
                     .all { sourceSet: SourceSet ->
                         val name = sourceSet.getTaskName("spotbugs", null)
                         log.debug("Creating SpotBugsTask for {}", sourceSet)
-                        project
-                            .tasks
-                            .register(
-                                name,
-                                SpotBugsTask::class.java,
-                                Action { task: SpotBugsTask ->
-                                    task.sourceDirs.setFrom(sourceSet.allSource.sourceDirectories)
-                                    task.classDirs.setFrom(sourceSet.output)
-                                    task.auxClassPaths.setFrom(sourceSet.compileClasspath)
-                                    val description = String.format(
-                                        "Run SpotBugs analysis for the source set '%s'",
-                                        sourceSet.name,
-                                    )
-                                    task.description = description
-                                },
-                            )
+                        project.tasks.register(name, SpotBugsTask::class.java) {
+                            it.sourceDirs.setFrom(sourceSet.allSource.sourceDirectories)
+                            it.classDirs.setFrom(sourceSet.output)
+                            it.auxClassPaths.setFrom(sourceSet.compileClasspath)
+                            it.description = "Run SpotBugs analysis for the source set '${sourceSet.name}'"
+                        }
                     }
             }
     }

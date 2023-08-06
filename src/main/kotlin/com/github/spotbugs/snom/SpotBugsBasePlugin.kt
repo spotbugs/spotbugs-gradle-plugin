@@ -55,8 +55,6 @@ class SpotBugsBasePlugin : Plugin<Project> {
             .create(
                 SpotBugsPlugin.EXTENSION_NAME,
                 SpotBugsExtension::class.java,
-                project,
-                project.objects,
             )
         extension.ignoreFailures.convention(false)
         extension.showStackTraces.convention(false)
