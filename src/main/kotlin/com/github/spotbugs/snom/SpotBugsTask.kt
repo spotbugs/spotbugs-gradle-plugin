@@ -55,7 +55,6 @@ import org.gradle.util.ClosureBackedAction
 import org.gradle.workers.WorkerExecutor
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -98,8 +97,15 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     @get:Inject
     abstract val workerExecutor: WorkerExecutor
 
-    @get:Input
-    abstract val ignoreFailures: Property<Boolean>
+    @Input
+    override fun getIgnoreFailures(): Boolean =
+        this.ignoreFailures.get()
+
+    override fun setIgnoreFailures(ignoreFailures: Boolean) {
+        this.ignoreFailures.set(ignoreFailures)
+    }
+
+    private val ignoreFailures = project.objects.property(Boolean::class.java)
 
     @get:Input
     abstract val showStackTraces: Property<Boolean>
@@ -291,6 +297,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     abstract val spotbugsClasspath: ListProperty<RegularFileProperty>
 
     @get:Nested
+    @get:Optional
     abstract val launcher: Property<JavaLauncher>
 
     /**
@@ -412,7 +419,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     @Nullable
     @Optional
     @Nested
-    fun getFirstEnabledReport(): SpotBugsReport {
+    fun getFirstEnabledReport(): SpotBugsReport? {
         val report = reports.stream().filter { report -> report.isEnabled }.findFirst()
         return report.orElse(null)
     }

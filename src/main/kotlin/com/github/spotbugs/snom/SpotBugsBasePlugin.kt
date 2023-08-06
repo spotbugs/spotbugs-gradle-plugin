@@ -99,7 +99,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
                     .create(
                         extension.toolVersion.map {
                             "com.github.spotbugs:spotbugs:$it"
-                        },
+                        }.get(),
                     ),
             )
         }
