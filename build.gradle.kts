@@ -7,7 +7,7 @@ plugins {
     id("com.github.spotbugs.plugin-publish")
     id("com.github.spotbugs.test")
     id("org.sonarqube")
-    id("com.github.spotbugs") version "5.0.14"
+    id("com.github.spotbugs") version "5.1.1"
 }
 
 java {
@@ -23,7 +23,7 @@ repositories {
     mavenCentral()
 }
 
-val errorproneVersion = "2.20.0"
+val errorproneVersion = "2.21.1"
 val spotBugsVersion = "4.7.3"
 val slf4jVersion = "2.0.0"
 val androidGradlePluginVersion = "7.3.1"
