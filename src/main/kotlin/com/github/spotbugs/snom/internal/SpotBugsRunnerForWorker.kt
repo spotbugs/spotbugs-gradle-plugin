@@ -45,12 +45,7 @@ class SpotBugsRunnerForWorker @Inject constructor(
     private val log = LoggerFactory.getLogger(SpotBugsRunnerForWorker::class.java)
 
     override fun run(task: SpotBugsTask) {
-        val workerQueue = workerExecutor.processIsolation(configureWorkerSpec(task))
-        workerQueue.submit(SpotBugsExecutor::class.java, configureWorkParameters(task))
-    }
-
-    private fun configureWorkerSpec(task: SpotBugsTask): Action<ProcessWorkerSpec> {
-        return Action { spec ->
+        val workerQueue = workerExecutor.processIsolation { spec ->
             spec.classpath.setFrom(task.spotbugsClasspath)
             spec.forkOptions { option: JavaForkOptions ->
                 option.jvmArgs(buildJvmArguments(task))
@@ -68,10 +63,7 @@ class SpotBugsRunnerForWorker @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun configureWorkParameters(task: SpotBugsTask): Action<SpotBugsWorkParameters> {
-        return Action { params ->
+        workerQueue.submit(SpotBugsExecutor::class.java) { params ->
             params.getArguments().addAll(buildArguments(task))
             params.getIgnoreFailures().set(task.getIgnoreFailures())
             params.getShowStackTraces().set(task.showStackTraces)

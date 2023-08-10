@@ -48,11 +48,7 @@ class SpotBugsRunnerForHybrid(
 ) : SpotBugsRunner() {
 
     override fun run(task: SpotBugsTask) {
-        workerExecutor.noIsolation().submit(SpotBugsExecutor::class.java, configureWorkerSpec(task))
-    }
-
-    private fun configureWorkerSpec(task: SpotBugsTask): Action<SpotBugsWorkParameters> {
-        return Action { params: SpotBugsWorkParameters ->
+        workerExecutor.noIsolation().submit(SpotBugsExecutor::class.java) { params: SpotBugsWorkParameters ->
             val args = mutableListOf<String>()
             args.add("-exitcode")
             args.addAll(buildArguments(task))
@@ -101,11 +97,9 @@ class SpotBugsRunnerForHybrid(
 
         override fun execute() {
             // TODO print version of SpotBugs and Plugins
-            val params = getParameters()
-
             val exitValue =
-                execOperations.javaexec(configureJavaExec(params)).rethrowFailure().exitValue
-            val ignoreFailures = params.getIgnoreFailures().getOrElse(false);
+                execOperations.javaexec(configureJavaExec(parameters)).rethrowFailure().exitValue
+            val ignoreFailures = parameters.getIgnoreFailures().getOrElse(false);
             if (ignoreMissingClassFlag(exitValue) == 0) {
                 if (stderrOutputScanner.isFailedToReport && !ignoreFailures) {
                     throw GradleException("SpotBugs analysis succeeded but report generation failed");
@@ -121,7 +115,7 @@ class SpotBugsRunnerForHybrid(
             val errorMessage = buildString {
                 append("Verification failed: SpotBugs ended with exit code $exitValue.")
                 val reportPaths =
-                    params.getReports().get().stream()
+                    parameters.getReports().get().stream()
                         .map(RegularFile::getAsFile)
                         .map(File::toPath)
                         .map(Path::toUri)
