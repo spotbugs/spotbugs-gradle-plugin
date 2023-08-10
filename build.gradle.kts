@@ -7,7 +7,7 @@ plugins {
     id("com.github.spotbugs.plugin-publish")
     id("com.github.spotbugs.test")
     id("org.sonarqube")
-    id("com.github.spotbugs") version "5.1.1"
+    id("com.github.spotbugs") version "5.1.2"
 }
 
 java {
