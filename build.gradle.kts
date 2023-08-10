@@ -28,7 +28,7 @@ repositories {
 
 val spotBugsVersion = "4.7.3"
 val slf4jVersion = "2.0.0"
-val androidGradlePluginVersion = "7.3.1"
+val androidGradlePluginVersion = "8.1.0"
 
 dependencies {
     compileOnly(localGroovy())
