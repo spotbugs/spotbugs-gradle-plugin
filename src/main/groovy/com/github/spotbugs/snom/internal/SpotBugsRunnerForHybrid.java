@@ -17,7 +17,7 @@ import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import groovy.lang.Closure;
-import java.io.File;
+import java.io.*;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -119,6 +119,8 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final ExecOperations execOperations;
 
+    private OutputScanner stderrOutputScanner;
+
     @Inject
     public SpotBugsExecutor(ExecOperations execOperations) {
       this.execOperations = Objects.requireNonNull(execOperations);
@@ -131,11 +133,15 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
 
       final int exitValue =
           execOperations.javaexec(configureJavaExec(params)).rethrowFailure().getExitValue();
+      final boolean ignoreFailures = params.getIgnoreFailures().getOrElse(Boolean.FALSE);
       if (ignoreMissingClassFlag(exitValue) == 0) {
+        if (stderrOutputScanner.isFailedToReport() && !ignoreFailures) {
+          throw new GradleException("SpotBugs analysis succeeded but report generation failed");
+        }
         return;
       }
 
-      if (params.getIgnoreFailures().getOrElse(Boolean.FALSE)) {
+      if (ignoreFailures) {
         log.warn("SpotBugs ended with exit code " + exitValue);
         return;
       }
@@ -180,6 +186,8 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
           spec.setExecutable(params.getJavaToolchainExecutablePath().get());
         }
         spec.setIgnoreExitValue(true);
+        this.stderrOutputScanner = new OutputScanner(System.err);
+        spec.setErrorOutput(stderrOutputScanner);
       };
     }
   }

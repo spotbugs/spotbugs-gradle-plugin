@@ -22,14 +22,13 @@ import org.slf4j.LoggerFactory;
 
 public class SpotBugsPlugin implements Plugin<Project> {
   public static final String CONFIG_NAME = "spotbugs";
-  public static final String PLUGINS_CONFIG_NAME = "spotbugsPlugins";
 
   /**
    * The configuration contains SpotBugs plugin jar files only
    *
    * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/910">GitHub issue</a>
    */
-  public static final String INTERNAL_CONFIG_NAME = "actualSpotbugsPlugins";
+  public static final String PLUGINS_CONFIG_NAME = "spotbugsPlugins";
 
   public static final String SLF4J_CONFIG_NAME = "spotbugsSlf4j";
   public static final String EXTENSION_NAME = "spotbugs";
