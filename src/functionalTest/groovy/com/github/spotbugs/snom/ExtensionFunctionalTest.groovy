@@ -75,7 +75,7 @@ spotbugs {
         then:
         SUCCESS == result.task(":spotbugsMain").outcome
         result.getOutput().contains("-include")
-        result.getOutput().contains(filter.getAbsolutePath())
+        result.getOutput().contains(filter.canonicalPath)
     }
 
     def "can use excludeFilter"() {
@@ -99,7 +99,7 @@ spotbugs {
         then:
         SUCCESS == result.task(":spotbugsMain").outcome
         result.getOutput().contains("-exclude")
-        result.getOutput().contains(filter.getAbsolutePath())
+        result.getOutput().contains(filter.canonicalPath)
     }
 
     def "can use baselineFile"() {
@@ -123,7 +123,7 @@ spotbugs {
         then:
         SUCCESS == result.task(":spotbugsMain").outcome
         result.getOutput().contains("-excludeBugs")
-        result.getOutput().contains(baseline.getAbsolutePath())
+        result.getOutput().contains(baseline.canonicalPath)
     }
 
     def "can use visitors"() {
