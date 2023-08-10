@@ -31,6 +31,8 @@ class KotlinBuildScriptFunctionalTest extends Specification {
         rootDir = Files.createTempDirectory("KotlinBuildScriptFunctionalTest").toFile()
         buildFile = new File(rootDir, 'build.gradle.kts')
         buildFile << """
+import com.github.spotbugs.snom.Confidence.Companion.assign
+import com.github.spotbugs.snom.Effort.Companion.assign
 plugins {
   `java`
   id("com.github.spotbugs")
@@ -58,21 +60,21 @@ public class Foo {
         setup:
         buildFile << """
 spotbugs {
-    ignoreFailures.set(false)
-    showStackTraces.set(true)
-    showProgress.set(true)
-    effort.set(com.github.spotbugs.snom.Effort.DEFAULT)
-    reportLevel.set(com.github.spotbugs.snom.Confidence.DEFAULT)
-    visitors.set(listOf("FindSqlInjection", "SwitchFallthrough"))
-    omitVisitors.set(listOf("FindNonShortCircuit"))
-    reportsDir.set(file("\$buildDir/spotbugs"))
-    includeFilter.set(file("include.xml"))
-    excludeFilter.set(file("exclude.xml"))
-    baselineFile.set(file("baseline.xml"))
-    onlyAnalyze.set(listOf("com.foobar.MyClass", "com.foobar.mypkg.*"))
-    maxHeapSize.set("1g")
-    extraArgs.set(listOf("-nested:false"))
-    jvmArgs.set(listOf("-Duser.language=ja"))
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+    effort = "DEFAULT"
+    reportLevel = "DEFAULT"
+    visitors = listOf("FindSqlInjection", "SwitchFallthrough")
+    omitVisitors = listOf("FindNonShortCircuit")
+    reportsDir = file("\$buildDir/spotbugs")
+    includeFilter = file("include.xml")
+    excludeFilter = file("exclude.xml")
+    baselineFile = file("baseline.xml")
+    onlyAnalyze = listOf("com.foobar.MyClass", "com.foobar.mypkg.*")
+    maxHeapSize = "1g"
+    extraArgs = listOf("-nested:false")
+    jvmArgs = listOf("-Duser.language=ja")
 }
 """
         new File(rootDir, "include.xml") << "<FindBugsFilter />"

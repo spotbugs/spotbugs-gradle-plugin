@@ -19,14 +19,12 @@ import edu.umd.cs.findbugs.DetectorFactoryCollection
 import edu.umd.cs.findbugs.FindBugs
 import edu.umd.cs.findbugs.FindBugs2
 import edu.umd.cs.findbugs.TextUICommandLine
-import org.gradle.api.Action
 import org.gradle.api.GradleException
 import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.process.JavaForkOptions
-import org.gradle.workers.ProcessWorkerSpec
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import org.gradle.workers.WorkerExecutor

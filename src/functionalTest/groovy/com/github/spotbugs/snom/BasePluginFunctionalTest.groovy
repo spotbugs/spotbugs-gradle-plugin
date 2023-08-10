@@ -76,7 +76,7 @@ public class Foo {
         buildFile << """
 task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
     dependsOn 'classes'
-    classDirs.set(sourceSets.main.output)
+    classDirs = sourceSets.main.output
 }
 """
         when:
@@ -99,7 +99,7 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
         buildFile << """
 task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
     dependsOn 'classes'
-    classDirs.set(sourceSets.main.output)
+    classDirs = sourceSets.main.output
 }
 """
         when:
@@ -130,7 +130,7 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
         buildFile << """
 task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
     dependsOn 'classes'
-    classDirs.set(sourceSets.main.output)
+    classDirs = sourceSets.main.output
 }
 """
         when:

@@ -13,6 +13,8 @@
  */
 package com.github.spotbugs.snom
 
+import org.gradle.api.provider.Property
+
 /**
  * The [Effort] is configuration to adjust SpotBugs detectors. Use lower effort to reduce
  * computation cost.
@@ -59,4 +61,11 @@ enum class Effort {
      * of Referenced Classes.
      */
     MAX,
+
+    ;
+    companion object {
+        fun Property<Effort>.assign(string: String) {
+            set(Effort.valueOf(string))
+        }
+    }
 }

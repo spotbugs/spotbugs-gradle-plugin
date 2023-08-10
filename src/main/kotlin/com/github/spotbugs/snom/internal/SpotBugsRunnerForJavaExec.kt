@@ -33,14 +33,14 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
     private val javaLauncher: Property<JavaLauncher>,
 ) : SpotBugsRunner() {
     private val log = LoggerFactory.getLogger(SpotBugsRunnerForJavaExec::class.java)
-    private lateinit var stderrOutputScanner: OutputScanner;
+    private lateinit var stderrOutputScanner: OutputScanner
 
     override fun run(task: SpotBugsTask) {
         // TODO print version of SpotBugs and Plugins
         try {
             task.project.javaexec(configureJavaExec(task)).rethrowFailure().assertNormalExitValue()
             if (stderrOutputScanner.isFailedToReport && !task.getIgnoreFailures()) {
-                throw GradleException("SpotBugs analysis succeeded but report generation failed");
+                throw GradleException("SpotBugs analysis succeeded but report generation failed")
             }
         } catch (e: ExecException) {
             if (task.getIgnoreFailures()) {
@@ -89,8 +89,8 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
             if (maxHeapSize != null) {
                 spec.maxHeapSize = maxHeapSize
             }
-            stderrOutputScanner = OutputScanner(System.err);
-            spec.setErrorOutput(stderrOutputScanner);
+            stderrOutputScanner = OutputScanner(System.err)
+            spec.setErrorOutput(stderrOutputScanner)
             if (javaLauncher.isPresent) {
                 log.info(
                     "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",

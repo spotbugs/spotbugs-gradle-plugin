@@ -93,16 +93,16 @@ class SpotBugsRunnerForHybrid(
         private val execOperations: ExecOperations,
     ) : WorkAction<SpotBugsWorkParameters> {
         private val log = LoggerFactory.getLogger(this.javaClass)
-        private lateinit var stderrOutputScanner: OutputScanner;
+        private lateinit var stderrOutputScanner: OutputScanner
 
         override fun execute() {
             // TODO print version of SpotBugs and Plugins
             val exitValue =
                 execOperations.javaexec(configureJavaExec(parameters)).rethrowFailure().exitValue
-            val ignoreFailures = parameters.getIgnoreFailures().getOrElse(false);
+            val ignoreFailures = parameters.getIgnoreFailures().getOrElse(false)
             if (ignoreMissingClassFlag(exitValue) == 0) {
                 if (stderrOutputScanner.isFailedToReport && !ignoreFailures) {
-                    throw GradleException("SpotBugs analysis succeeded but report generation failed");
+                    throw GradleException("SpotBugs analysis succeeded but report generation failed")
                 }
                 return
             }
@@ -157,8 +157,8 @@ class SpotBugsRunnerForHybrid(
                     spec.executable = params.getJavaToolchainExecutablePath().get()
                 }
                 spec.setIgnoreExitValue(true)
-                stderrOutputScanner = OutputScanner(System.err);
-                spec.setErrorOutput(stderrOutputScanner);
+                stderrOutputScanner = OutputScanner(System.err)
+                spec.setErrorOutput(stderrOutputScanner)
             }
         }
     }

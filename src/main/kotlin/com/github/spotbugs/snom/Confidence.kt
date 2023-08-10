@@ -13,6 +13,7 @@
  */
 package com.github.spotbugs.snom
 
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Internal
 import java.util.Optional
 
@@ -65,4 +66,10 @@ enum class Confidence {
 
     @Internal("This is internally used property so no need to refer to judge out-of-date or not.")
     abstract fun toCommandLineOption(): Optional<String>
+
+    companion object {
+        fun Property<Confidence>.assign(string: String) {
+            set(Confidence.valueOf(string))
+        }
+    }
 }
