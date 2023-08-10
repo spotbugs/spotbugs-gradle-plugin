@@ -37,6 +37,7 @@ import java.nio.file.Path
 import java.util.stream.Collectors
 import javax.inject.Inject
 
+@Deprecated("Will be removed in v6 release")
 class SpotBugsRunnerForWorker @Inject constructor(
     private val workerExecutor: WorkerExecutor,
     private val javaLauncher: Property<JavaLauncher>,
