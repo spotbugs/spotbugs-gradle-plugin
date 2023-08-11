@@ -364,15 +364,15 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
         val pluginConfiguration = project.configurations.getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
         pluginJarFiles.from(
-            project.provider { pluginConfiguration.files }
+            project.provider { pluginConfiguration.files },
         )
         val configuration = project.configurations.getByName(SpotBugsPlugin.CONFIG_NAME)
         val spotbugsSlf4j = project.configurations.getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
         spotbugsClasspath.from(
             project.layout.files(
                 project.provider { spotbugsSlf4j.files },
-                project.provider { configuration.files }
-            )
+                project.provider { configuration.files },
+            ),
         )
     }
 
