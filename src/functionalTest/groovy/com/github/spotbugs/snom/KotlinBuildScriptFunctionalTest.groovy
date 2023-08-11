@@ -32,8 +32,7 @@ class KotlinBuildScriptFunctionalTest extends Specification {
         rootDir = Files.createTempDirectory("KotlinBuildScriptFunctionalTest").toFile()
         buildFile = new File(rootDir, 'build.gradle.kts')
         buildFile << """
-import com.github.spotbugs.snom.Confidence.Companion.assign
-import com.github.spotbugs.snom.Effort.Companion.assign
+import com.github.spotbugs.snom.assign
 plugins {
   `java`
   id("com.github.spotbugs")

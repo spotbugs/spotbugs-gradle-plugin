@@ -65,11 +65,4 @@ enum class Effort {
      * of Referenced Classes.
      */
     MAX,
-
-    ;
-    companion object {
-        fun Property<Effort>.assign(string: String) {
-            set(Effort.valueOf(string))
-        }
-    }
 }
