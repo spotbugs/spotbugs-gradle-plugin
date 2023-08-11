@@ -373,9 +373,11 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         val configuration = project.configurations.getByName(SpotBugsPlugin.CONFIG_NAME)
         val spotbugsSlf4j = project.configurations.getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
         spotbugsClasspath.convention(
-            (spotbugsSlf4j.files + configuration.files).map { file ->
-                project.objects.fileProperty().apply {
-                    set(file)
+            project.provider {
+                (spotbugsSlf4j.files + configuration.files).map { file ->
+                    project.objects.fileProperty().apply {
+                        set(file)
+                    }
                 }
             },
         )

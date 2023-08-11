@@ -133,9 +133,13 @@ dependencies {
 
     def "can use effort and reportLevel"() {
         buildFile << """
+import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
 spotbugsMain {
-    effort = 'min'
-    reportLevel = 'high'
+    // https://discuss.kotlinlang.org/t/bug-cannot-use-kotlin-enum-from-groovy/1521
+    // https://touk.pl/blog/2018/05/28/testing-kotlin-with-spock-part-2-enum-with-instance-method/
+    effort = Effort.valueOf('MIN')
+    reportLevel = Confidence.valueOf('HIGH')
 }"""
         when:
         def result = GradleRunner.create()
@@ -775,7 +779,9 @@ spotbugs {
         given:
         buildFile << """
 spotbugs {
-    reportLevel = com.github.spotbugs.snom.Confidence.DEFAULT
+    // https://discuss.kotlinlang.org/t/bug-cannot-use-kotlin-enum-from-groovy/1521
+    // https://touk.pl/blog/2018/05/28/testing-kotlin-with-spock-part-2-enum-with-instance-method/
+    reportLevel = com.github.spotbugs.snom.Confidence.valueOf('DEFAULT')
 }
 """
 
