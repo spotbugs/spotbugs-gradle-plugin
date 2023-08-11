@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
 import java.lang.Boolean
-import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.StandardOpenOption
 import java.util.*
@@ -104,7 +103,7 @@ abstract class SpotBugsRunner {
         args.add("-release")
         args.add(task.release.get())
         val file = task.analyseClassFile.asFile.get()
-        generateFile(task.classes ?: task.project.layout.files(), task.analyseClassFile.asFile.get())
+        task.classes?.let { generateFile(it, file) }
         args.add("-analyzeFromFile")
         args.add(file.absolutePath)
         args.addAll(task.extraArgs.getOrElse(emptyList()))
@@ -143,13 +142,13 @@ abstract class SpotBugsRunner {
 
     private fun generateFile(files: FileCollection, file: File) {
         try {
-            val lines =
-                Iterable {
-                    files.filter { obj: File -> obj.exists() }
-                        .files.stream().map { obj: File -> obj.absolutePath }
-                        .iterator()
-                }
-            Files.write(file.toPath(), lines, StandardCharsets.UTF_8, StandardOpenOption.CREATE)
+            file.bufferedWriter().use { writer ->
+                files.filter(File::exists)
+                    .forEach {
+                        writer.write(it.absolutePath)
+                        writer.newLine()
+                    }
+            }
         } catch (e: IOException) {
             throw GradleException("Fail to generate the text file to list target .class files", e)
         }
