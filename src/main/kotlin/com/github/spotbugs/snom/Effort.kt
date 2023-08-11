@@ -23,15 +23,19 @@ import org.gradle.api.provider.Property
  *
  * Set via the `spotbugs` extension to configure all tasks in your project:
  * ```kotlin
+ * // require Gradle 8.2+
+ * import com.github.spotbugs.snom.Effort
  * spotbugs {
- *     effort = "less"
+ *     effort = Effort.LESS
  * }
  * ```
  *
  * Or via [SpotBugsTask] to configure the specific task in your project:
  * ```kotlin
+ * // require Gradle 8.2+
+ * import com.github.spotbugs.snom.Effort
  * spotbugsMain { // or name of another task
- *     effort = "max"
+ *     effort = Effort.MAX
  * }
  * ```
  *

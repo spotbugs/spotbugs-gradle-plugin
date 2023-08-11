@@ -25,23 +25,25 @@ import org.gradle.api.provider.Property
  * ### Usage
  * After you apply the SpotBugs Gradle plugin to project, write extension like below:
  * ```kotlin
+ * // require Gradle 8.2+
+ * import com.github.spotbugs.snom.Confidence
+ * import com.github.spotbugs.snom.Effort
  * spotbugs {
- *     ignoreFailures.set(false)
- *     showStackTraces.set(true)
- *     showProgress.set(false)
- *     reportLevel.set("default")
- *     effort.set("default")
- *     visitors.value(listOf("FindSqlInjection", "SwitchFallthrough"))
- *     omitVisitors.value(listOf("FindNonShortCircuit"))
- *     reportsDir.set("$buildDir/reports/spotbugs")
- *     includeFilter.set("spotbugs-include.xml")
- *     excludeFilter.set("spotbugs-exclude.xml")
- *     onlyAnalyze.value(listOf("com.foobar.MyClass", "com.foobar.mypkg.*"))
- *     projectName.set(name)
- *     release.set(version)
- *     extraArgs.value(listOf("-nested:false"))
- *     jvmArgs.value(listOf("-Duser.language=ja"))
- *     maxHeapSize.set("512m")
+ *     ignoreFailures = false
+ *     showStackTraces = true
+ *     showProgress = true
+ *     effort = Effort.DEFAULT
+ *     reportLevel = Confidence.DEFAULT
+ *     visitors = listOf("FindSqlInjection", "SwitchFallthrough")
+ *     omitVisitors = listOf("FindNonShortCircuit")
+ *     reportsDir = file("$buildDir/spotbugs")
+ *     includeFilter = file("include.xml")
+ *     excludeFilter = file("exclude.xml")
+ *     baselineFile = file("baseline.xml")
+ *     onlyAnalyze = listOf("com.foobar.MyClass", "com.foobar.mypkg.*")
+ *     maxHeapSize = "1g"
+ *     extraArgs = listOf("-nested:false")
+ *     jvmArgs = listOf("-Duser.language=ja")
  * }
  * ```
  *

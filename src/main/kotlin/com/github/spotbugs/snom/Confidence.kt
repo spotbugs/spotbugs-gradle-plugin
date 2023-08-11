@@ -25,15 +25,19 @@ import java.util.Optional
  *
  * Set via the {@code spotbugs} extension to configure all tasks in your project:
  * ```kotlin
+ * // require Gradle 8.2+
+ * import com.github.spotbugs.snom.Confidence
  * spotbugs {
- *     reportLevel = "low"
+ *     reportLevel = Confidence.LOW
  * }
  * ```
  *
  * Or via [SpotBugsTask] to configure the specific task in your project:
  * ```kotlin
+ * // require Gradle 8.2+
+ * import com.github.spotbugs.snom.Confidence
  * spotbugsMain { // or name of another task
- *     reportLevel = "high"
+ *     reportLevel = Confidence.LOW
  * }
  * ```
  *

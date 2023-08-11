@@ -144,8 +144,8 @@ dependencies {
         buildFile << """
 tasks.spotbugsMain {
     reports.create("html") {
-        required.set(true)
-        outputLocation.set(file("\$buildDir/reports/spotbugs.html"))
+        required = true
+        outputLocation = file("\$buildDir/reports/spotbugs.html")
         setStylesheet("fancy-hist.xsl")
     }
 }
