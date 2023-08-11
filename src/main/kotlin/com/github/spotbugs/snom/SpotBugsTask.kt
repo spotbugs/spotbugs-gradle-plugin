@@ -154,8 +154,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
      *
      * @see SpotBugsReport
      */
-    @get:Internal
-    val reports: NamedDomainObjectContainer<SpotBugsReport>
+    private val reports: NamedDomainObjectContainer<SpotBugsReport>
 
     /**
      * Property to set the filter file to limit which bug should be reported.
@@ -291,10 +290,10 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     private var enableHybridWorker: Boolean = true
 
     @get:Internal
-    abstract val pluginJarFiles: ListProperty<RegularFileProperty>
+    abstract val pluginJarFiles: ConfigurableFileCollection
 
     @get:Internal
-    abstract val spotbugsClasspath: ListProperty<RegularFileProperty>
+    abstract val spotbugsClasspath: ConfigurableFileCollection
 
     @get:Nested
     @get:Optional
@@ -363,23 +362,16 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         analyseClassFile.set(project.buildDir.resolve(this.name + "-analyse-class-file.txt"))
 
         val pluginConfiguration = project.configurations.getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
-        pluginJarFiles.convention(
-            pluginConfiguration.files.map { file ->
-                project.objects.fileProperty().apply {
-                    set(file)
-                }
-            },
+        pluginJarFiles.from(
+            project.provider { pluginConfiguration.files }
         )
         val configuration = project.configurations.getByName(SpotBugsPlugin.CONFIG_NAME)
         val spotbugsSlf4j = project.configurations.getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
-        spotbugsClasspath.convention(
-            project.provider {
-                (spotbugsSlf4j.files + configuration.files).map { file ->
-                    project.objects.fileProperty().apply {
-                        set(file)
-                    }
-                }
-            },
+        spotbugsClasspath.from(
+            project.layout.files(
+                project.provider { spotbugsSlf4j.files },
+                project.provider { configuration.files }
+            )
         )
     }
 

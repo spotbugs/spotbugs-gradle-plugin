@@ -35,9 +35,9 @@ abstract class SpotBugsRunner {
     protected fun buildArguments(task: SpotBugsTask): List<String> {
         val args: MutableList<String> = ArrayList()
         val plugins = task.pluginJarFiles
-        if (plugins.isPresent) {
+        if (!plugins.isEmpty) {
             args.add("-pluginList")
-            args.add(join(plugins.get().map { it.get().asFile }))
+            args.add(join(plugins.files))
         }
         args.add("-timestampNow")
         if (!task.auxClassPaths.isEmpty) {
