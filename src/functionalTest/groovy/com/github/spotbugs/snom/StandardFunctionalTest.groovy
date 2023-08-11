@@ -133,6 +133,8 @@ dependencies {
 
     def "can use effort and reportLevel"() {
         buildFile << """
+import import com.github.spotbugs.snom.Confidence
+import import com.github.spotbugs.snom.Effort
 spotbugsMain {
     // https://discuss.kotlinlang.org/t/bug-cannot-use-kotlin-enum-from-groovy/1521
     // https://touk.pl/blog/2018/05/28/testing-kotlin-with-spock-part-2-enum-with-instance-method/
