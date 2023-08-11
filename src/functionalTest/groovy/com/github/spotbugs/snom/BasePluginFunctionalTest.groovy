@@ -18,11 +18,14 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.GradleVersion
+import spock.lang.IgnoreIf
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-
+@IgnoreIf({
+    def current = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+    return GradleVersion.version(current) < GradleVersion.version("8.1")
+})
 class BasePluginFunctionalTest extends Specification {
     File rootDir
     File buildFile

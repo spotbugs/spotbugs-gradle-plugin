@@ -57,7 +57,9 @@ public class Foo {
 """
     }
 
-    @IgnoreIf({ GradleVersion.version(version) < GradleVersion.version("8.2") })
+    @IgnoreIf({
+        def current = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+        return GradleVersion.version(current) < GradleVersion.version("8.2") })
     def "can set params to SpotBugsExtension"() {
         setup:
         buildFile << """
