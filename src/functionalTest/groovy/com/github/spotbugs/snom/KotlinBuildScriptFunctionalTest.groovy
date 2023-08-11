@@ -140,6 +140,9 @@ dependencies {
         result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
     }
 
+    @IgnoreIf({
+        def current = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+        return GradleVersion.version(current) < GradleVersion.version("8.2") })
     def "can generate spotbugs.html in configured outputLocation"() {
         buildFile << """
 tasks.spotbugsMain {
