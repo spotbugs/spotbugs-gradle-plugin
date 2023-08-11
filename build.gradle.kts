@@ -4,6 +4,7 @@ plugins {
     jacoco
     signing
     kotlin("jvm") version "1.9.0"
+    id("org.jetbrains.dokka") version "1.8.20"
     id("com.github.spotbugs.gradle-plugin")
     id("com.github.spotbugs.plugin-publish")
     id("com.github.spotbugs.test")
