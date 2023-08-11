@@ -16,6 +16,7 @@ package com.github.spotbugs.snom
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
+import spock.lang.IgnoreIf
 import spock.lang.Specification
 
 import java.nio.file.Files
@@ -56,6 +57,7 @@ public class Foo {
 """
     }
 
+    @IgnoreIf({ GradleVersion.version(version) < GradleVersion.version("8.2") })
     def "can set params to SpotBugsExtension"() {
         setup:
         buildFile << """
