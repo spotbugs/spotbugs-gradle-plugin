@@ -24,6 +24,10 @@
     "branches": [
       {
         "name": "master"
+      },
+      {
+        "name": "v6",
+        "prerelease": true
       }
     ],
     "plugins": [
