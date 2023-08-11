@@ -13,7 +13,6 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Internal
 import java.util.Optional
 

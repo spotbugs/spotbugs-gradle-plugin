@@ -13,8 +13,6 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.api.provider.Property
-
 /**
  * The [Effort] is configuration to adjust SpotBugs detectors. Use lower effort to reduce
  * computation cost.
