@@ -13,6 +13,7 @@
  */
 package com.github.spotbugs.snom.internal;
 
+import com.github.spotbugs.snom.SpotBugsPlugin;
 import com.github.spotbugs.snom.SpotBugsReport;
 import com.github.spotbugs.snom.SpotBugsTask;
 import edu.umd.cs.findbugs.annotations.NonNull;
@@ -21,13 +22,14 @@ import java.io.File;
 import java.util.Optional;
 import javax.inject.Inject;
 import org.gradle.api.InvalidUserDataException;
+import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.resources.TextResource;
+import org.gradle.api.resources.TextResourceFactory;
 
 public abstract class SpotBugsHtmlReport extends SpotBugsReport {
   private final Property<TextResource> stylesheet;
-  private final Property<String> stylesheetPath;
 
   @Inject
   public SpotBugsHtmlReport(ObjectFactory objects, SpotBugsTask task) {
@@ -35,38 +37,25 @@ public abstract class SpotBugsHtmlReport extends SpotBugsReport {
     // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.html"
     getOutputLocation().convention(task.getReportsDir().file(task.getBaseName() + ".html"));
     stylesheet = objects.property(TextResource.class);
-    stylesheetPath = objects.property(String.class);
   }
 
   @NonNull
   @Override
   public String toCommandLineOption() {
-    @Nullable TextResource stylesheet = getStylesheet();
-
-    if (stylesheet == null) {
-      return "-html";
-    } else {
-      return "-html:" + stylesheet.asFile().getAbsolutePath();
-    }
+    return stylesheet
+        .map(textResource -> "-html:" + textResource.asFile().getAbsolutePath())
+        .getOrElse("-html");
   }
 
   @Override
   public TextResource getStylesheet() {
-    if (stylesheet.isPresent()) {
-      return stylesheet.get();
-    } else if (stylesheetPath.isPresent()) {
-      return resolve(stylesheetPath.get());
-    }
-
-    return null;
+    return stylesheet.getOrNull();
   }
 
-  private TextResource resolve(String path) {
+  private TextResource resolve(
+      String path, Configuration configuration, TextResourceFactory factory) {
     Optional<File> spotbugsJar =
-        getTask()
-            .getProject()
-            .getConfigurations()
-            .getByName("spotbugs")
+        configuration
             .files(
                 dependency ->
                     dependency.getGroup().equals("com.github.spotbugs")
@@ -74,11 +63,7 @@ public abstract class SpotBugsHtmlReport extends SpotBugsReport {
             .stream()
             .findFirst();
     if (spotbugsJar.isPresent()) {
-      return getTask()
-          .getProject()
-          .getResources()
-          .getText()
-          .fromArchiveEntry(spotbugsJar.get(), path);
+      return factory.fromArchiveEntry(spotbugsJar.get(), path);
     } else {
       throw new InvalidUserDataException(
           "The dependency on SpotBugs not found in 'spotbugs' configuration");
@@ -92,6 +77,9 @@ public abstract class SpotBugsHtmlReport extends SpotBugsReport {
 
   @Override
   public void setStylesheet(@Nullable String path) {
-    stylesheetPath.set(path);
+    Configuration configuration =
+        getTask().getProject().getConfigurations().getByName(SpotBugsPlugin.CONFIG_NAME);
+    TextResourceFactory factory = getTask().getProject().getResources().getText();
+    stylesheet.set(getTask().getProject().provider(() -> resolve(path, configuration, factory)));
   }
 }
