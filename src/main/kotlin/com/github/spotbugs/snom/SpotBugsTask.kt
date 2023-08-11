@@ -154,7 +154,8 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
      *
      * @see SpotBugsReport
      */
-    private val reports: NamedDomainObjectContainer<SpotBugsReport>
+    @get:Internal
+    val reports: NamedDomainObjectContainer<SpotBugsReport>
 
     /**
      * Property to set the filter file to limit which bug should be reported.
