@@ -150,7 +150,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     abstract val reportsDir: DirectoryProperty
 
     /**
-     * Property to specify which report you need.
+     * Property defined to keep the backward compatibility with [org.gradle.api.reporting.Reporting] interface.
      *
      * @see SpotBugsReport
      */
@@ -400,10 +400,16 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         }
     }
 
+    /**
+     * Function defined to keep the backward compatibility with [org.gradle.api.reporting.Reporting] interface.
+     */
     fun reports(closure: Closure<NamedDomainObjectContainer<SpotBugsReport>>): NamedDomainObjectContainer<SpotBugsReport> {
         return reports(ClosureBackedAction(closure))
     }
 
+    /**
+     * Function defined to keep the backward compatibility with [org.gradle.api.reporting.Reporting] interface.
+     */
     fun reports(
         configureAction: Action<NamedDomainObjectContainer<SpotBugsReport>>,
     ): NamedDomainObjectContainer<SpotBugsReport> {
