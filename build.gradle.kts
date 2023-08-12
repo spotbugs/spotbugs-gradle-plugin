@@ -9,7 +9,7 @@ plugins {
     id("com.github.spotbugs.plugin-publish")
     id("com.github.spotbugs.test")
     id("org.sonarqube")
-    id("com.github.spotbugs") version "5.1.1"
+    id("io.gitlab.arturbosch.detekt") version "1.23.1"
 }
 
 java {
@@ -51,15 +51,10 @@ signing {
     }
 }
 
-spotbugs {
-    ignoreFailures.set(true)
-}
 tasks {
-    named<com.github.spotbugs.snom.SpotBugsTask>("spotbugsMain") {
+    named<io.gitlab.arturbosch.detekt.Detekt>("detekt") {
         reports {
-            register("sarif") {
-                required.set(true)
-            }
+            sarif.required.set(true)
         }
     }
     val processVersionFile by registering(WriteProperties::class) {
