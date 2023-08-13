@@ -26,6 +26,7 @@
         "name": "master"
       },
       {
+        "channel": "beta",
         "name": "v6",
         "prerelease": true
       }
