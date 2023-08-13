@@ -24,11 +24,9 @@ import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaBasePlugin
-import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
-import org.gradle.util.GradleVersion
 import org.slf4j.LoggerFactory
 
 class SpotBugsTaskFactory {
@@ -39,11 +37,7 @@ class SpotBugsTaskFactory {
     }
 
     private fun getSourceSetContainer(project: Project): SourceSetContainer {
-        return if (GradleVersion.current() < GradleVersion.version("7.1")) {
-            project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets
-        } else {
-            project.extensions.getByType(JavaPluginExtension::class.java).sourceSets
-        }
+        return project.extensions.getByType(JavaPluginExtension::class.java).sourceSets
     }
 
     private fun generateForJava(project: Project) {
