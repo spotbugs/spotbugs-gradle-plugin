@@ -20,9 +20,11 @@ import org.junit.jupiter.api.Test;
 class SpotBugsTaskFactoryTest {
   @Test
   void toLowerCamelCase() {
-    assertEquals("spotbugs", SpotBugsTaskFactory.toLowerCamelCase("spotbugs", null));
-    assertEquals("spotbugs", SpotBugsTaskFactory.toLowerCamelCase("spotbugs", ""));
-    assertEquals("spotbugsMain", SpotBugsTaskFactory.toLowerCamelCase("spotbugs", "main"));
-    assertEquals("spotbugsMainCode", SpotBugsTaskFactory.toLowerCamelCase("spotbugs", "mainCode"));
+    assertEquals("spotbugs", SpotBugsTaskFactory.Companion.toLowerCamelCase("spotbugs", null));
+    assertEquals("spotbugs", SpotBugsTaskFactory.Companion.toLowerCamelCase("spotbugs", ""));
+    assertEquals(
+        "spotbugsMain", SpotBugsTaskFactory.Companion.toLowerCamelCase("spotbugs", "main"));
+    assertEquals(
+        "spotbugsMainCode", SpotBugsTaskFactory.Companion.toLowerCamelCase("spotbugs", "mainCode"));
   }
 }

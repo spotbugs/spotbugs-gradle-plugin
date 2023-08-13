@@ -5,9 +5,11 @@ on:
   push:
     branches:
       - master
+      - v6
   pull_request:
     branches:
       - master
+      - v6
 
 jobs:
   CodeQL-Build:
@@ -29,15 +31,14 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 11
-          cache: gradle
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1
-
-      - name: Build
-        run: |
-          ./gradlew spotbugsMain
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: detekt --scan
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v1
         with:
           # Path to SARIF file relative to the root of the repository
-          sarif_file: build/reports/spotbugs/main.sarif
+          sarif_file: build/reports/detekt/detekt.sarif

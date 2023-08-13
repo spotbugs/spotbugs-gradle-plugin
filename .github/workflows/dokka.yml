@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+
 jobs:
   javadoc:
     runs-on: ubuntu-latest
@@ -16,14 +17,15 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 11
-          cache: gradle
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
           cache: npm
       - name: Generate Groovydoc
-        run: ./gradlew groovydoc
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: dokkaHtml
       - name: Prepare to Deploy
         run: |
           npm ci
@@ -33,4 +35,4 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: build/docs/groovydoc/
+          FOLDER: build/dokka/html/
