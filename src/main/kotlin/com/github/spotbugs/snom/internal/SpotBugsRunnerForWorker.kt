@@ -65,7 +65,7 @@ class SpotBugsRunnerForWorker @Inject constructor(
             params.getArguments().addAll(buildArguments(task))
             params.getIgnoreFailures().set(task.getIgnoreFailures())
             params.getShowStackTraces().set(task.showStackTraces)
-            task.getEnabledReports().stream()
+            task.getRequiredReports()
                 .map(SpotBugsReport::getOutputLocation)
                 .forEach(params.getReports()::add)
         }

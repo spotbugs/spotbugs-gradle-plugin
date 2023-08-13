@@ -61,7 +61,7 @@ class SpotBugsRunnerForHybrid(
             }
             params.getIgnoreFailures().set(task.ignoreFailures)
             params.getShowStackTraces().set(task.showStackTraces)
-            task.getEnabledReports().stream()
+            task.getRequiredReports()
                 .map(SpotBugsReport::getOutputLocation)
                 .forEach(params.getReports()::add)
             if (javaLauncher.isPresent) {
