@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.URI
 import java.nio.file.Path
-import java.util.stream.Collectors
 import javax.inject.Inject
 
 class SpotBugsRunnerForJavaExec @Inject constructor(
@@ -56,7 +55,8 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
                 val errorMessage = buildString {
                     append("Verification failed: SpotBugs execution thrown exception.")
                     val reportPaths =
-                        task.getEnabledReports().stream()
+                        task.getRequiredReports()
+                            .asSequence()
                             .map(SpotBugsReport::getOutputLocation)
                             .map(RegularFileProperty::getAsFile)
                             .map {
@@ -65,7 +65,7 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
                             .map(File::toPath)
                             .map(Path::toUri)
                             .map(URI::toString)
-                            .collect(Collectors.toList())
+                            .toList()
                     if (reportPaths.isNotEmpty()) {
                         append("See the report at: ")
                         append(reportPaths.joinToString(","))

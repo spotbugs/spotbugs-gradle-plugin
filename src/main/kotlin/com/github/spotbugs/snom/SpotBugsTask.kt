@@ -20,8 +20,6 @@ import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker
 import com.github.spotbugs.snom.internal.SpotBugsSarifReport
 import com.github.spotbugs.snom.internal.SpotBugsTextReport
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport
-import edu.umd.cs.findbugs.annotations.NonNull
-import edu.umd.cs.findbugs.annotations.Nullable
 import groovy.lang.Closure
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
@@ -417,21 +415,6 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         return reports
     }
 
-    @Nullable
-    @Optional
-    @Nested
-    fun getFirstEnabledReport(): SpotBugsReport? {
-        val report = reports.stream().filter { report -> report.isEnabled }.findFirst()
-        return report.orElse(null)
-    }
-
-    @NonNull
-    @Optional
-    @Nested
-    fun getEnabledReports(): Set<SpotBugsReport> {
-        return reports.matching { report -> report.isEnabled }
-    }
-
     @Internal
     fun getBaseName(): String {
         var prunedName = name.replaceFirst("spotbugs", "")
@@ -444,4 +427,8 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
             append(prunedName.substring(1))
         }
     }
+
+    @Internal
+    internal fun getRequiredReports() =
+        reports.matching { it.required.get() }.asMap.values
 }

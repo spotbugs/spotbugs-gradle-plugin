@@ -13,7 +13,6 @@
  */
 package com.github.spotbugs.snom.internal
 
-import com.github.spotbugs.snom.SpotBugsReport
 import com.github.spotbugs.snom.SpotBugsTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.FileCollection
@@ -58,7 +57,7 @@ abstract class SpotBugsRunner {
         if (task.showProgress.getOrElse(Boolean.FALSE)) {
             args.add("-progress")
         }
-        for (report: SpotBugsReport in task.getEnabledReports()) {
+        task.getRequiredReports().forEach { report ->
             val reportFile = report.outputLocation.asFile.get()
             val dir = reportFile.parentFile
             dir.mkdirs()
