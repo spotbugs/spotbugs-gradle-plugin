@@ -19,7 +19,6 @@ import org.gradle.api.file.FileCollection
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
-import java.lang.Boolean
 import java.nio.file.Files
 import java.nio.file.StandardOpenOption
 import java.util.*
@@ -54,7 +53,7 @@ abstract class SpotBugsRunner {
             args.add("-sourcepath")
             args.add(task.sourceDirs.asPath)
         }
-        if (task.showProgress.getOrElse(Boolean.FALSE)) {
+        if (task.showProgress.getOrElse(false)) {
             args.add("-progress")
         }
         task.getRequiredReports().forEach { report ->
@@ -81,19 +80,19 @@ abstract class SpotBugsRunner {
             args.add("-omitVisitors")
             args.add(task.omitVisitors.get().stream().collect(Collectors.joining(",")))
         }
-        if (task.includeFilter.isPresent && task.includeFilter.get() != null) {
+        if (task.includeFilter.isPresent) {
             args.add("-include")
             args.add(task.includeFilter.get().asFile.absolutePath)
         }
-        if (task.excludeFilter.isPresent && task.excludeFilter.get() != null) {
+        if (task.excludeFilter.isPresent) {
             args.add("-exclude")
             args.add(task.excludeFilter.get().asFile.absolutePath)
         }
-        if (task.baselineFile.isPresent && task.baselineFile.get() != null) {
+        if (task.baselineFile.isPresent) {
             args.add("-excludeBugs")
             args.add(task.baselineFile.get().asFile.absolutePath)
         }
-        if (task.onlyAnalyze.isPresent && task.onlyAnalyze.get().isNotEmpty()) {
+        if (task.onlyAnalyze.isPresent) {
             args.add("-onlyAnalyze")
             args.add(task.onlyAnalyze.get().stream().collect(Collectors.joining(",")))
         }

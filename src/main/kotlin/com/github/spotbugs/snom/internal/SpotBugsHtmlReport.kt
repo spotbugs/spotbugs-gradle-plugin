@@ -63,7 +63,7 @@ abstract class SpotBugsHtmlReport @Inject constructor(objects: ObjectFactory, ta
 
     override fun setStylesheet(path: String?) {
         if (path == null) {
-            stylesheet.set(null as TextResource)
+            stylesheet.set(null as TextResource?)
         } else {
             val configuration = task
                 .project
