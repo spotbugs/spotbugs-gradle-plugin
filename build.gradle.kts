@@ -56,7 +56,7 @@ tasks {
         }
     }
     val processVersionFile by registering(WriteProperties::class) {
-        outputFile = file("src/main/resources/spotbugs-gradle-plugin.properties")
+        destinationFile = file("src/main/resources/spotbugs-gradle-plugin.properties")
 
         property("slf4j-version", slf4jVersion)
         property("spotbugs-version", spotBugsVersion)
