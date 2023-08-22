@@ -26,7 +26,7 @@ repositories {
 val errorproneVersion = "2.21.1"
 val spotBugsVersion = "4.7.3"
 val slf4jVersion = "2.0.0"
-val androidGradlePluginVersion = "7.3.1"
+val androidGradlePluginVersion = "8.1.1"
 
 dependencies {
     errorprone("com.google.errorprone:error_prone_core:$errorproneVersion")
