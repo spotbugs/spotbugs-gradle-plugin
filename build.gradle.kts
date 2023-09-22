@@ -23,7 +23,7 @@ repositories {
     mavenCentral()
 }
 
-val errorproneVersion = "2.21.1"
+val errorproneVersion = "2.22.0"
 val spotBugsVersion = "4.7.3"
 val slf4jVersion = "2.0.0"
 val androidGradlePluginVersion = "7.3.1"
