@@ -19,6 +19,7 @@ import groovy.lang.Closure;
 import java.io.File;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import org.gradle.api.Action;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
@@ -29,7 +30,6 @@ import org.gradle.api.reporting.SingleFileReport;
 import org.gradle.api.resources.TextResource;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Internal;
-import org.gradle.util.ConfigureUtil;
 
 public abstract class SpotBugsReport
     implements SingleFileReport,
@@ -118,7 +118,15 @@ public abstract class SpotBugsReport
 
   @Override
   public Report configure(Closure closure) {
-    ConfigureUtil.configureSelf(closure, this);
+    return configure(
+        report -> {
+          closure.setDelegate(report);
+          closure.call(report);
+        });
+  }
+
+  public Report configure(Action<? super Report> action) {
+    action.execute(this);
     return this;
   }
 
