@@ -16,13 +16,6 @@ java {
 }
 group = "com.github.spotbugs.snom"
 
-repositories {
-    // To download the Android Gradle Plugin
-    google()
-    // To download trove4j required by the Android Gradle Plugin
-    mavenCentral()
-}
-
 val errorproneVersion = "2.22.0"
 val spotBugsVersion = "4.7.3"
 val slf4jVersion = "2.0.0"
