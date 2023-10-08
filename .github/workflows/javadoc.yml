@@ -17,12 +17,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 11
-          cache: gradle
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
           cache: npm
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
       - name: Generate Groovydoc
         run: ./gradlew groovydoc
       - name: Prepare to Deploy

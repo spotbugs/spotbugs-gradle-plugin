@@ -30,10 +30,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 11
-          cache: gradle
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1
-
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
       - name: Build
         run: |
           ./gradlew spotbugsMain
