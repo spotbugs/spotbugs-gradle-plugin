@@ -23,7 +23,7 @@ import org.gradle.api.reporting.ReportingExtension
 import org.gradle.util.GradleVersion
 import java.io.IOException
 import java.io.UncheckedIOException
-import java.util.*
+import java.util.Properties
 import kotlin.IllegalArgumentException
 import kotlin.String
 import kotlin.toString
@@ -50,12 +50,13 @@ class SpotBugsBasePlugin : Plugin<Project> {
     }
 
     private fun createExtension(project: Project): SpotBugsExtension {
-        val extension = project
-            .extensions
-            .create(
-                SpotBugsPlugin.EXTENSION_NAME,
-                SpotBugsExtension::class.java,
-            )
+        val extension =
+            project
+                .extensions
+                .create(
+                    SpotBugsPlugin.EXTENSION_NAME,
+                    SpotBugsExtension::class.java,
+                )
         extension.ignoreFailures.convention(false)
         extension.showStackTraces.convention(false)
         extension.projectName.convention(project.provider { project.name })
@@ -66,9 +67,10 @@ class SpotBugsBasePlugin : Plugin<Project> {
         )
 
         // ReportingBasePlugin should be applied before we create this SpotBugsExtension instance
-        val baseReportsDir = project.extensions.getByType(
-            ReportingExtension::class.java,
-        ).baseDirectory
+        val baseReportsDir =
+            project.extensions.getByType(
+                ReportingExtension::class.java,
+            ).baseDirectory
         extension
             .reportsDir
             .convention(
@@ -83,15 +85,19 @@ class SpotBugsBasePlugin : Plugin<Project> {
         return extension
     }
 
-    private fun createConfiguration(project: Project, extension: SpotBugsExtension) {
+    private fun createConfiguration(
+        project: Project,
+        extension: SpotBugsExtension,
+    ) {
         val props = loadProperties()
         extension.toolVersion.convention(props.getProperty("spotbugs-version"))
-        val configuration = project
-            .configurations
-            .create(SpotBugsPlugin.CONFIG_NAME)
-            .setDescription("configuration for the SpotBugs engine")
-            .setVisible(false)
-            .setTransitive(true)
+        val configuration =
+            project
+                .configurations
+                .create(SpotBugsPlugin.CONFIG_NAME)
+                .setDescription("configuration for the SpotBugs engine")
+                .setVisible(false)
+                .setTransitive(true)
         configuration.defaultDependencies { dependencies: DependencySet ->
             dependencies.add(
                 project
@@ -103,12 +109,13 @@ class SpotBugsBasePlugin : Plugin<Project> {
                     ),
             )
         }
-        val spotbugsSlf4j = project
-            .configurations
-            .create(SpotBugsPlugin.SLF4J_CONFIG_NAME)
-            .setDescription("configuration for the SLF4J provider to run SpotBugs")
-            .setVisible(false)
-            .setTransitive(true)
+        val spotbugsSlf4j =
+            project
+                .configurations
+                .create(SpotBugsPlugin.SLF4J_CONFIG_NAME)
+                .setDescription("configuration for the SLF4J provider to run SpotBugs")
+                .setVisible(false)
+                .setTransitive(true)
         spotbugsSlf4j.defaultDependencies { dependencies: DependencySet ->
             dependencies.add(
                 project
@@ -142,16 +149,21 @@ class SpotBugsBasePlugin : Plugin<Project> {
 
     fun verifyGradleVersion(version: GradleVersion) {
         if (version < SUPPORTED_VERSION) {
-            val message = String.format(
-                "Gradle version %s is unsupported. Please use %s or later.",
-                version,
-                SUPPORTED_VERSION,
-            )
+            val message =
+                String.format(
+                    "Gradle version %s is unsupported. Please use %s or later.",
+                    version,
+                    SUPPORTED_VERSION,
+                )
             throw IllegalArgumentException(message)
         }
     }
 
-    private fun getPropertyOrDefault(project: Project, propertyName: String, defaultValue: String): String {
+    private fun getPropertyOrDefault(
+        project: Project,
+        propertyName: String,
+        defaultValue: String,
+    ): String {
         return if (project.hasProperty(propertyName)) project.property(propertyName).toString() else defaultValue
     }
 

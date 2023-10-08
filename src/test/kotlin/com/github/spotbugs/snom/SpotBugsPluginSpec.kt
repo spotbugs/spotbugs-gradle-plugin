@@ -32,8 +32,9 @@ class SpotBugsPluginSpec : DescribeSpec({
         }
 
         it("does not depend on Gradle internal API") {
-            val implementation = ClassFileImporter()
-                .importPackages("com.github.spotbugs.snom", "com.github.spotbugs.snom.internal")
+            val implementation =
+                ClassFileImporter()
+                    .importPackages("com.github.spotbugs.snom", "com.github.spotbugs.snom.internal")
             val rule: ArchRule =
                 ArchRuleDefinition.noClasses().should().dependOnClassesThat().resideInAPackage("org.gradle..internal..")
             rule.check(implementation)

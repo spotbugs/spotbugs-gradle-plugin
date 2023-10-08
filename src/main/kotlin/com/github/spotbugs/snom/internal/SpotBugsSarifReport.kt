@@ -18,14 +18,16 @@ import com.github.spotbugs.snom.SpotBugsTask
 import org.gradle.api.model.ObjectFactory
 import javax.inject.Inject
 
-abstract class SpotBugsSarifReport @Inject constructor(objects: ObjectFactory, task: SpotBugsTask) :
+abstract class SpotBugsSarifReport
+    @Inject
+    constructor(objects: ObjectFactory, task: SpotBugsTask) :
     SpotBugsReport(objects, task) {
-    init {
-        // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.sarif"
-        outputLocation.convention(task.reportsDir.file(task.getBaseName() + ".sarif"))
-    }
+        init {
+            // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.sarif"
+            outputLocation.convention(task.reportsDir.file(task.getBaseName() + ".sarif"))
+        }
 
-    override fun toCommandLineOption(): String {
-        return "-sarif"
+        override fun toCommandLineOption(): String {
+            return "-sarif"
+        }
     }
-}

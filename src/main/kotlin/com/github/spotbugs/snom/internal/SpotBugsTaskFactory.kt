@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory
 
 class SpotBugsTaskFactory {
     private val log = LoggerFactory.getLogger(SpotBugsTaskFactory::class.java)
+
     fun generate(project: Project) {
         generateForJava(project)
         generateForAndroid(project)
@@ -62,14 +63,16 @@ class SpotBugsTaskFactory {
     private fun generateForAndroid(project: Project) {
         val action: Action<in Plugin<*>?> =
             Action {
-                val baseExtension = project.extensions.getByType(
-                    BaseExtension::class.java,
-                )
-                val variants: DomainObjectSet<out BaseVariant> = when (baseExtension) {
-                    is AppExtension -> baseExtension.applicationVariants
-                    is LibraryExtension -> baseExtension.libraryVariants
-                    else -> throw GradleException("Unrecognized Android extension $baseExtension")
-                }
+                val baseExtension =
+                    project.extensions.getByType(
+                        BaseExtension::class.java,
+                    )
+                val variants: DomainObjectSet<out BaseVariant> =
+                    when (baseExtension) {
+                        is AppExtension -> baseExtension.applicationVariants
+                        is LibraryExtension -> baseExtension.libraryVariants
+                        else -> throw GradleException("Unrecognized Android extension $baseExtension")
+                    }
                 variants.all { variant: BaseVariant ->
                     val spotbugsTaskName =
                         toLowerCamelCase(
@@ -98,7 +101,10 @@ class SpotBugsTaskFactory {
     }
 
     companion object {
-        fun toLowerCamelCase(head: String, tail: String?): String {
+        fun toLowerCamelCase(
+            head: String,
+            tail: String?,
+        ): String {
             if (tail.isNullOrEmpty()) {
                 return head
             }

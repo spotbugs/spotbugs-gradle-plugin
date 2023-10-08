@@ -21,7 +21,7 @@ import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.StandardOpenOption
-import java.util.*
+import java.util.Locale
 import java.util.stream.Collectors
 import kotlin.Exception
 import kotlin.String
@@ -29,7 +29,9 @@ import kotlin.collections.ArrayList
 
 abstract class SpotBugsRunner {
     private val log = LoggerFactory.getLogger(SpotBugsRunner::class.java)
+
     abstract fun run(task: SpotBugsTask)
+
     protected fun buildArguments(task: SpotBugsTask): List<String> {
         val args: MutableList<String> = ArrayList()
         val plugins = task.pluginJarFiles
@@ -110,9 +112,10 @@ abstract class SpotBugsRunner {
     }
 
     private fun createFileForAuxClasspath(task: SpotBugsTask): String {
-        val auxClasspath = task.auxClassPaths.files.stream()
-            .map { obj: File -> obj.absolutePath }
-            .collect(Collectors.joining("\n"))
+        val auxClasspath =
+            task.auxClassPaths.files.stream()
+                .map { obj: File -> obj.absolutePath }
+                .collect(Collectors.joining("\n"))
         try {
             val auxClasspathFile = task.auxclasspathFile
             try {
@@ -138,7 +141,10 @@ abstract class SpotBugsRunner {
         }
     }
 
-    private fun generateFile(files: FileCollection, file: File) {
+    private fun generateFile(
+        files: FileCollection,
+        file: File,
+    ) {
         try {
             file.bufferedWriter().use { writer ->
                 files.filter(File::exists)

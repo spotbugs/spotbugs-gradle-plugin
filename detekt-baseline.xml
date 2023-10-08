@@ -12,14 +12,14 @@
     <ID>LongMethod:SpotBugsRunner.kt$SpotBugsRunner$protected fun buildArguments(task: SpotBugsTask): List&lt;String></ID>
     <ID>MagicNumber:SemanticVersion.kt$SemanticVersion$10</ID>
     <ID>MagicNumber:SemanticVersion.kt$SemanticVersion$3</ID>
-    <ID>MaxLineLength:SemanticVersion.kt$SemanticVersion.Companion$"^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"</ID>
+    <ID>MaxLineLength:SemanticVersion.kt$SemanticVersion.Companion$"(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"</ID>
     <ID>MaxLineLength:SpotBugsBasePlugin.kt$SpotBugsBasePlugin.Companion$*</ID>
     <ID>MaxLineLength:SpotBugsExtension.kt$SpotBugsExtension$*</ID>
     <ID>MaxLineLength:SpotBugsExtension.kt$SpotBugsExtension$* Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.</ID>
     <ID>MaxLineLength:SpotBugsExtension.kt$SpotBugsExtension$* Property to specify the name of project. Some reporting formats use this property. Default value is the name of your Gradle project.</ID>
-    <ID>MaxLineLength:SpotBugsHtmlReport.kt$SpotBugsHtmlReport$private</ID>
-    <ID>MaxLineLength:SpotBugsHtmlReport.kt$SpotBugsHtmlReport$val</ID>
+    <ID>MaxLineLength:SpotBugsHtmlReport.kt$SpotBugsHtmlReport$configuration.files { dependency: Dependency -> dependency.group == "com.github.spotbugs" &amp;&amp; dependency.name == "spotbugs" }</ID>
     <ID>MaxLineLength:SpotBugsRunnerForHybrid.kt$SpotBugsRunnerForHybrid.Companion$*</ID>
+    <ID>MaxLineLength:SpotBugsRunnerForWorker.kt$SpotBugsRunnerForWorker$"Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}"</ID>
     <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$*</ID>
     <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$* Property to set the directory to generate report files. Default is {@code "$buildDir/reports/spotbugs/$taskName"}.</ID>
     <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$* Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.</ID>

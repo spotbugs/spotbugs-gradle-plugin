@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory
 
 class SpotBugsPlugin : Plugin<Project> {
     private val log = LoggerFactory.getLogger(javaClass)
+
     override fun apply(project: Project) {
         project.pluginManager.apply(SpotBugsBasePlugin::class.java)
         project

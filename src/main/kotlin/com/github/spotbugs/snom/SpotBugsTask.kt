@@ -20,7 +20,6 @@ import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker
 import com.github.spotbugs.snom.internal.SpotBugsSarifReport
 import com.github.spotbugs.snom.internal.SpotBugsTextReport
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport
-import groovy.lang.Closure
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.InvalidUserDataException
@@ -49,7 +48,6 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService
-import org.gradle.util.ClosureBackedAction
 import org.gradle.workers.WorkerExecutor
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
@@ -96,8 +94,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     abstract val workerExecutor: WorkerExecutor
 
     @Input
-    override fun getIgnoreFailures(): Boolean =
-        this.ignoreFailures.get()
+    override fun getIgnoreFailures(): Boolean = this.ignoreFailures.get()
 
     override fun setIgnoreFailures(ignoreFailures: Boolean) {
         this.ignoreFailures.set(ignoreFailures)
@@ -282,7 +279,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
                     classDirs.asFileTree.filter {
                         it.name.endsWith(".class")
                     }
-                    )
+                )
         }
 
     private var enableWorkerApi: Boolean = true
@@ -306,17 +303,18 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
     init {
         val objects = project.objects
-        this.reports = objects.domainObjectContainer(
-            SpotBugsReport::class.java,
-        ) { name: String ->
-            when (name) {
-                "html" -> objects.newInstance(SpotBugsHtmlReport::class.java, name, objects, this)
-                "xml" -> objects.newInstance(SpotBugsXmlReport::class.java, name, objects, this)
-                "text" -> objects.newInstance(SpotBugsTextReport::class.java, name, objects, this)
-                "sarif" -> objects.newInstance(SpotBugsSarifReport::class.java, name, objects, this)
-                else -> throw InvalidUserDataException("$name is invalid as the report name")
+        this.reports =
+            objects.domainObjectContainer(
+                SpotBugsReport::class.java,
+            ) { name: String ->
+                when (name) {
+                    "html" -> objects.newInstance(SpotBugsHtmlReport::class.java, name, objects, this)
+                    "xml" -> objects.newInstance(SpotBugsXmlReport::class.java, name, objects, this)
+                    "text" -> objects.newInstance(SpotBugsTextReport::class.java, name, objects, this)
+                    "sarif" -> objects.newInstance(SpotBugsSarifReport::class.java, name, objects, this)
+                    else -> throw InvalidUserDataException("$name is invalid as the report name")
+                }
             }
-        }
         setDescription("Run SpotBugs analysis.")
         setGroup(JavaBasePlugin.VERIFICATION_GROUP)
     }
@@ -327,7 +325,11 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
      *
      * @param extension the source extension to copy the properties.
      */
-    fun init(extension: SpotBugsExtension, enableWorkerApi: Boolean, enableHybridWorker: Boolean) {
+    fun init(
+        extension: SpotBugsExtension,
+        enableWorkerApi: Boolean,
+        enableHybridWorker: Boolean,
+    ) {
         // TODO use Property
         this.auxclasspathFile = project.layout.buildDirectory.file("spotbugs/auxclasspath/$name").get().asFile.toPath()
 
@@ -401,16 +403,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     /**
      * Function defined to keep the backward compatibility with [org.gradle.api.reporting.Reporting] interface.
      */
-    fun reports(closure: Closure<NamedDomainObjectContainer<SpotBugsReport>>): NamedDomainObjectContainer<SpotBugsReport> {
-        return reports(ClosureBackedAction(closure))
-    }
-
-    /**
-     * Function defined to keep the backward compatibility with [org.gradle.api.reporting.Reporting] interface.
-     */
-    fun reports(
-        configureAction: Action<NamedDomainObjectContainer<SpotBugsReport>>,
-    ): NamedDomainObjectContainer<SpotBugsReport> {
+    fun reports(configureAction: Action<NamedDomainObjectContainer<SpotBugsReport>>): NamedDomainObjectContainer<SpotBugsReport> {
         configureAction.execute(reports)
         return reports
     }
@@ -429,6 +422,5 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     }
 
     @Internal
-    internal fun getRequiredReports() =
-        reports.matching { it.required.get() }.asMap.values
+    internal fun getRequiredReports() = reports.matching { it.required.get() }.asMap.values
 }
