@@ -14,6 +14,7 @@
 package com.github.spotbugs.snom
 
 import groovy.lang.Closure
+import org.gradle.api.Action;
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
@@ -24,7 +25,6 @@ import org.gradle.api.reporting.SingleFileReport
 import org.gradle.api.resources.TextResource
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
-import org.gradle.util.ConfigureUtil
 import java.io.File
 import javax.inject.Inject
 
@@ -88,9 +88,16 @@ abstract class SpotBugsReport @Inject constructor(
         destination.set(task.project.layout.file(provider))
     }
 
-    override fun configure(closure: Closure<*>?): Report {
-        ConfigureUtil.configureSelf(closure, this)
-        return this
+    override fun configure(closure: Closure<in Report>): Report {
+        return configure { report ->
+            closure.delegate = report;
+            closure.call(report);
+        };
+    }
+
+    fun configure(action: Action<in Report>): Report {
+        action.execute(this);
+        return this;
     }
 
     @Internal("This property provides only a human readable name.")
