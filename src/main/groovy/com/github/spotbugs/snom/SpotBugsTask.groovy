@@ -13,7 +13,6 @@
  */
 package com.github.spotbugs.snom
 
-import com.github.spotbugs.snom.internal.SemanticVersion;
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForHybrid;
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec;
@@ -23,7 +22,7 @@ import com.github.spotbugs.snom.internal.SpotBugsTextReport;
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport;
 import edu.umd.cs.findbugs.annotations.NonNull
 import edu.umd.cs.findbugs.annotations.Nullable
-import org.gradle.api.artifacts.Dependency;
+import org.gradle.api.Action
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.plugins.JavaPluginExtension
@@ -32,7 +31,6 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.SkipWhenEmpty
 
-import org.gradle.api.Action;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.NamedDomainObjectContainer;
@@ -54,7 +52,6 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService;
-import org.gradle.util.ClosureBackedAction
 import org.gradle.workers.WorkerExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory
@@ -426,12 +423,6 @@ abstract class SpotBugsTask extends DefaultTask implements VerificationTask {
             log.info("Running SpotBugs by Gradle process-isolated Worker...");
             new SpotBugsRunnerForWorker(workerExecutor, launcher).run(this);
         }
-    }
-
-    final NamedDomainObjectContainer<? extends SpotBugsReport> reports(
-            Closure<NamedDomainObjectContainer<? extends SpotBugsReport>> closure) {
-        return reports(
-                new ClosureBackedAction<NamedDomainObjectContainer<? extends SpotBugsReport>>(closure))
     }
 
     final NamedDomainObjectContainer<? extends SpotBugsReport> reports(
