@@ -34,7 +34,7 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: build -Dsnom.test.functional.gradle=${{ matrix.gradle }} --scan
+        arguments: build -Dsnom.test.functional.gradle=${{ matrix.gradle }}
     - run: |
         echo Verifying the java version used in class files...
         cd build/classes/groovy/main
