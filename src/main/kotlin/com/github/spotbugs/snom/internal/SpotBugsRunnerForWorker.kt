@@ -36,109 +36,114 @@ import java.util.stream.Collectors
 import javax.inject.Inject
 
 @Deprecated("Will be removed in v6 release")
-class SpotBugsRunnerForWorker @Inject constructor(
-    private val workerExecutor: WorkerExecutor,
-    private val javaLauncher: Property<JavaLauncher>,
-) : SpotBugsRunner() {
-    private val log = LoggerFactory.getLogger(SpotBugsRunnerForWorker::class.java)
+class SpotBugsRunnerForWorker
+    @Inject
+    constructor(
+        private val workerExecutor: WorkerExecutor,
+        private val javaLauncher: Property<JavaLauncher>,
+    ) : SpotBugsRunner() {
+        private val log = LoggerFactory.getLogger(SpotBugsRunnerForWorker::class.java)
 
-    override fun run(task: SpotBugsTask) {
-        val workerQueue = workerExecutor.processIsolation { spec ->
-            spec.classpath.setFrom(task.spotbugsClasspath)
-            spec.forkOptions { option: JavaForkOptions ->
-                option.jvmArgs(buildJvmArguments(task))
-                val maxHeapSize = task.maxHeapSize.getOrNull()
-                if (maxHeapSize != null) {
-                    option.maxHeapSize = maxHeapSize
-                }
-                if (javaLauncher.isPresent) {
-                    log.info(
-                        "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
-                        javaLauncher.get().metadata.vendor,
-                        javaLauncher.get().metadata.languageVersion.asInt(),
-                    )
-                    option.executable = javaLauncher.get().executablePath.asFile.absolutePath
-                }
-            }
-        }
-        workerQueue.submit(SpotBugsExecutor::class.java) { params ->
-            params.getArguments().addAll(buildArguments(task))
-            params.getIgnoreFailures().set(task.getIgnoreFailures())
-            params.getShowStackTraces().set(task.showStackTraces)
-            task.getRequiredReports()
-                .map(SpotBugsReport::getOutputLocation)
-                .forEach(params.getReports()::add)
-        }
-    }
-
-    interface SpotBugsWorkParameters : WorkParameters {
-        fun getArguments(): ListProperty<String>
-
-        fun getIgnoreFailures(): Property<Boolean>
-
-        fun getShowStackTraces(): Property<Boolean>
-
-        fun getReports(): ListProperty<RegularFile>
-    }
-
-    abstract class SpotBugsExecutor : WorkAction<SpotBugsWorkParameters> {
-        private val log = LoggerFactory.getLogger(SpotBugsExecutor::class.java)
-
-        override fun execute() {
-            val args = parameters.getArguments().get().toTypedArray()
-            DetectorFactoryCollection.resetInstance(DetectorFactoryCollection())
-
-            try {
-                edu.umd.cs.findbugs.Version.printVersion(false)
-                FindBugs2().use { findBugs2 ->
-                    val commandLine = TextUICommandLine()
-                    FindBugs.processCommandLine(commandLine, args, findBugs2)
-                    findBugs2.execute()
-
-                    val message = buildString {
-                        if (findBugs2.errorCount > 0) {
-                            append(findBugs2.errorCount).append(" SpotBugs errors were found.")
+        override fun run(task: SpotBugsTask) {
+            val workerQueue =
+                workerExecutor.processIsolation { spec ->
+                    spec.classpath.setFrom(task.spotbugsClasspath)
+                    spec.forkOptions { option: JavaForkOptions ->
+                        option.jvmArgs(buildJvmArguments(task))
+                        val maxHeapSize = task.maxHeapSize.getOrNull()
+                        if (maxHeapSize != null) {
+                            option.maxHeapSize = maxHeapSize
                         }
-                        if (findBugs2.bugCount > 0) {
-                            if (isNotEmpty()) {
-                                append(' ')
-                            }
-                            append(findBugs2.bugCount)
-                            append(" SpotBugs violations were found.")
-                        }
-                    }
-                    if (message.isNotEmpty()) {
-                        val reportLocation = buildString {
-                            val reportPaths =
-                                parameters.getReports().get().stream()
-                                    .map(RegularFile::getAsFile)
-                                    .map(File::toPath)
-                                    .map(Path::toUri)
-                                    .map(URI::toString)
-                                    .collect(Collectors.toList())
-                            if (reportPaths.isNotEmpty()) {
-                                append("See the report at: ")
-                                append(reportPaths.joinToString(", "))
-                            }
-                        }
-
-                        val e = GradleException(message + reportLocation)
-                        if (parameters.getIgnoreFailures().getOrElse(false)) {
-                            log.warn(message)
-                            log.warn(reportLocation)
-                            if (parameters.getShowStackTraces().getOrElse(false)) {
-                                log.warn("", e)
-                            }
-                        } else {
-                            throw e
+                        if (javaLauncher.isPresent) {
+                            log.info(
+                                "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
+                                javaLauncher.get().metadata.vendor,
+                                javaLauncher.get().metadata.languageVersion.asInt(),
+                            )
+                            option.executable = javaLauncher.get().executablePath.asFile.absolutePath
                         }
                     }
                 }
-            } catch (e: GradleException) {
-                throw e
-            } catch (e: Exception) {
-                throw GradleException("Verification failed: SpotBugs execution thrown exception", e)
+            workerQueue.submit(SpotBugsExecutor::class.java) { params ->
+                params.getArguments().addAll(buildArguments(task))
+                params.getIgnoreFailures().set(task.getIgnoreFailures())
+                params.getShowStackTraces().set(task.showStackTraces)
+                task.getRequiredReports()
+                    .map(SpotBugsReport::getOutputLocation)
+                    .forEach(params.getReports()::add)
+            }
+        }
+
+        interface SpotBugsWorkParameters : WorkParameters {
+            fun getArguments(): ListProperty<String>
+
+            fun getIgnoreFailures(): Property<Boolean>
+
+            fun getShowStackTraces(): Property<Boolean>
+
+            fun getReports(): ListProperty<RegularFile>
+        }
+
+        abstract class SpotBugsExecutor : WorkAction<SpotBugsWorkParameters> {
+            private val log = LoggerFactory.getLogger(SpotBugsExecutor::class.java)
+
+            override fun execute() {
+                val args = parameters.getArguments().get().toTypedArray()
+                DetectorFactoryCollection.resetInstance(DetectorFactoryCollection())
+
+                try {
+                    edu.umd.cs.findbugs.Version.printVersion(false)
+                    FindBugs2().use { findBugs2 ->
+                        val commandLine = TextUICommandLine()
+                        FindBugs.processCommandLine(commandLine, args, findBugs2)
+                        findBugs2.execute()
+
+                        val message =
+                            buildString {
+                                if (findBugs2.errorCount > 0) {
+                                    append(findBugs2.errorCount).append(" SpotBugs errors were found.")
+                                }
+                                if (findBugs2.bugCount > 0) {
+                                    if (isNotEmpty()) {
+                                        append(' ')
+                                    }
+                                    append(findBugs2.bugCount)
+                                    append(" SpotBugs violations were found.")
+                                }
+                            }
+                        if (message.isNotEmpty()) {
+                            val reportLocation =
+                                buildString {
+                                    val reportPaths =
+                                        parameters.getReports().get().stream()
+                                            .map(RegularFile::getAsFile)
+                                            .map(File::toPath)
+                                            .map(Path::toUri)
+                                            .map(URI::toString)
+                                            .collect(Collectors.toList())
+                                    if (reportPaths.isNotEmpty()) {
+                                        append("See the report at: ")
+                                        append(reportPaths.joinToString(", "))
+                                    }
+                                }
+
+                            val e = GradleException(message + reportLocation)
+                            if (parameters.getIgnoreFailures().getOrElse(false)) {
+                                log.warn(message)
+                                log.warn(reportLocation)
+                                if (parameters.getShowStackTraces().getOrElse(false)) {
+                                    log.warn("", e)
+                                }
+                            } else {
+                                throw e
+                            }
+                        }
+                    }
+                } catch (e: GradleException) {
+                    throw e
+                } catch (e: Exception) {
+                    throw GradleException("Verification failed: SpotBugs execution thrown exception", e)
+                }
             }
         }
     }
-}

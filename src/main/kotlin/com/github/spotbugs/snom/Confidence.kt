@@ -45,26 +45,22 @@ import java.util.Optional
 enum class Confidence {
     /** The report level to report all detected bugs in the report. */
     LOW {
-        override fun toCommandLineOption(): Optional<String> =
-            Optional.of("-low")
+        override fun toCommandLineOption(): Optional<String> = Optional.of("-low")
     },
 
     /** The report level to report medium and high priority detected bugs in the report. */
     MEDIUM {
-        override fun toCommandLineOption(): Optional<String> =
-            Optional.of("-medium")
+        override fun toCommandLineOption(): Optional<String> = Optional.of("-medium")
     },
 
     /** The default level that provides the same feature with {@link #MEDIUM}. */
     DEFAULT {
-        override fun toCommandLineOption(): Optional<String> =
-            Optional.empty()
+        override fun toCommandLineOption(): Optional<String> = Optional.empty()
     },
 
     /** The report level to report high priority detected bugs in the report. */
     HIGH {
-        override fun toCommandLineOption(): Optional<String> =
-            Optional.of("-high")
+        override fun toCommandLineOption(): Optional<String> = Optional.of("-high")
     }, ;
 
     @Internal("This is internally used property so no need to refer to judge out-of-date or not.")

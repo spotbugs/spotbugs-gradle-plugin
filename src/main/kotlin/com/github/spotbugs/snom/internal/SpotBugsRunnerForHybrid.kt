@@ -46,7 +46,6 @@ class SpotBugsRunnerForHybrid(
     private val workerExecutor: WorkerExecutor,
     private val javaLauncher: Property<JavaLauncher>,
 ) : SpotBugsRunner() {
-
     override fun run(task: SpotBugsTask) {
         workerExecutor.noIsolation().submit(SpotBugsExecutor::class.java) { params: SpotBugsWorkParameters ->
             val args = mutableListOf<String>()
@@ -76,6 +75,7 @@ class SpotBugsRunnerForHybrid(
         fun getClasspath(): ConfigurableFileCollection
 
         fun getMaxHeapSize(): Property<String>
+
         fun getArgs(): ListProperty<String>
 
         fun getJvmArgs(): ListProperty<String>
@@ -89,79 +89,82 @@ class SpotBugsRunnerForHybrid(
         fun getReports(): ListProperty<RegularFile>
     }
 
-    abstract class SpotBugsExecutor @Inject constructor(
-        private val execOperations: ExecOperations,
-    ) : WorkAction<SpotBugsWorkParameters> {
-        private val log = LoggerFactory.getLogger(this.javaClass)
-        private lateinit var stderrOutputScanner: OutputScanner
+    abstract class SpotBugsExecutor
+        @Inject
+        constructor(
+            private val execOperations: ExecOperations,
+        ) : WorkAction<SpotBugsWorkParameters> {
+            private val log = LoggerFactory.getLogger(this.javaClass)
+            private lateinit var stderrOutputScanner: OutputScanner
 
-        override fun execute() {
-            // TODO print version of SpotBugs and Plugins
-            val exitValue =
-                execOperations.javaexec(configureJavaExec(parameters)).rethrowFailure().exitValue
-            val ignoreFailures = parameters.getIgnoreFailures().getOrElse(false)
-            if (ignoreMissingClassFlag(exitValue) == 0) {
-                if (stderrOutputScanner.isFailedToReport && !ignoreFailures) {
-                    throw GradleException("SpotBugs analysis succeeded but report generation failed")
+            override fun execute() {
+                // TODO print version of SpotBugs and Plugins
+                val exitValue =
+                    execOperations.javaexec(configureJavaExec(parameters)).rethrowFailure().exitValue
+                val ignoreFailures = parameters.getIgnoreFailures().getOrElse(false)
+                if (ignoreMissingClassFlag(exitValue) == 0) {
+                    if (stderrOutputScanner.isFailedToReport && !ignoreFailures) {
+                        throw GradleException("SpotBugs analysis succeeded but report generation failed")
+                    }
+                    return
                 }
-                return
+
+                if (ignoreFailures) {
+                    log.warn("SpotBugs ended with exit code $exitValue")
+                    return
+                }
+
+                val errorMessage =
+                    buildString {
+                        append("Verification failed: SpotBugs ended with exit code $exitValue.")
+                        val reportPaths =
+                            parameters.getReports().get().stream()
+                                .map(RegularFile::getAsFile)
+                                .map(File::toPath)
+                                .map(Path::toUri)
+                                .map(URI::toString)
+                                .collect(Collectors.toList())
+                        if (reportPaths.isNotEmpty()) {
+                            append(" See the report at: ")
+                            append(reportPaths.joinToString(","))
+                        }
+                    }
+                throw GradleException(errorMessage)
             }
 
-            if (ignoreFailures) {
-                log.warn("SpotBugs ended with exit code $exitValue")
-                return
+            private fun ignoreMissingClassFlag(exitValue: Int): Int {
+                if ((exitValue.and(MISSING_CLASS_FLAG)) == 0) {
+                    return exitValue
+                }
+                log.debug(
+                    "MISSING_CLASS_FLAG (2) was set to the exit code, but ignore it to keep the task result stable.",
+                )
+                return (exitValue.xor(MISSING_CLASS_FLAG))
             }
 
-            val errorMessage = buildString {
-                append("Verification failed: SpotBugs ended with exit code $exitValue.")
-                val reportPaths =
-                    parameters.getReports().get().stream()
-                        .map(RegularFile::getAsFile)
-                        .map(File::toPath)
-                        .map(Path::toUri)
-                        .map(URI::toString)
-                        .collect(Collectors.toList())
-                if (reportPaths.isNotEmpty()) {
-                    append(" See the report at: ")
-                    append(reportPaths.joinToString(","))
+            private fun configureJavaExec(params: SpotBugsWorkParameters): Action<JavaExecSpec> {
+                return Action { spec ->
+                    spec.jvmArgs = params.getJvmArgs().get()
+                    spec.classpath(params.getClasspath())
+                    spec.setArgs(params.getArgs().get())
+                    spec.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
+                    val maxHeapSize = params.getMaxHeapSize().getOrNull()
+                    if (maxHeapSize != null) {
+                        spec.maxHeapSize = maxHeapSize
+                    }
+                    if (params.getJavaToolchainExecutablePath().isPresent) {
+                        log.info(
+                            "Spotbugs will be executed using Java Toolchain configuration: {}",
+                            params.getJavaToolchainExecutablePath().get(),
+                        )
+                        spec.executable = params.getJavaToolchainExecutablePath().get()
+                    }
+                    spec.setIgnoreExitValue(true)
+                    stderrOutputScanner = OutputScanner(System.err)
+                    spec.setErrorOutput(stderrOutputScanner)
                 }
             }
-            throw GradleException(errorMessage)
         }
-
-        private fun ignoreMissingClassFlag(exitValue: Int): Int {
-            if ((exitValue.and(MISSING_CLASS_FLAG)) == 0) {
-                return exitValue
-            }
-            log.debug(
-                "MISSING_CLASS_FLAG (2) was set to the exit code, but ignore it to keep the task result stable.",
-            )
-            return (exitValue.xor(MISSING_CLASS_FLAG))
-        }
-
-        private fun configureJavaExec(params: SpotBugsWorkParameters): Action<JavaExecSpec> {
-            return Action { spec ->
-                spec.jvmArgs = params.getJvmArgs().get()
-                spec.classpath(params.getClasspath())
-                spec.setArgs(params.getArgs().get())
-                spec.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
-                val maxHeapSize = params.getMaxHeapSize().getOrNull()
-                if (maxHeapSize != null) {
-                    spec.maxHeapSize = maxHeapSize
-                }
-                if (params.getJavaToolchainExecutablePath().isPresent) {
-                    log.info(
-                        "Spotbugs will be executed using Java Toolchain configuration: {}",
-                        params.getJavaToolchainExecutablePath().get(),
-                    )
-                    spec.executable = params.getJavaToolchainExecutablePath().get()
-                }
-                spec.setIgnoreExitValue(true)
-                stderrOutputScanner = OutputScanner(System.err)
-                spec.setErrorOutput(stderrOutputScanner)
-            }
-        }
-    }
 
     companion object {
         /**

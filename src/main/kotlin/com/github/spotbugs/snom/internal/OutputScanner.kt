@@ -26,7 +26,11 @@ internal class OutputScanner(out: OutputStream) : FilterOutputStream(out) {
     var isFailedToReport = false
         get() = field
 
-    override fun write(b: ByteArray, off: Int, len: Int) {
+    override fun write(
+        b: ByteArray,
+        off: Int,
+        len: Int,
+    ) {
         super.write(b, off, len)
         builder.write(b, off, len)
     }
