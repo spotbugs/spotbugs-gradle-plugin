@@ -12,6 +12,7 @@ on:
 jobs:
   CodeQL-Build:
     runs-on: ubuntu-latest
+    if: github.repository == 'spotbugs/spotbugs-gradle-plugin'
 
     steps:
       - name: Checkout repository

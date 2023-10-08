@@ -6,6 +6,7 @@ on:
 jobs:
   javadoc:
     runs-on: ubuntu-latest
+    if: github.repository == 'spotbugs/spotbugs-gradle-plugin'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -46,7 +46,7 @@ jobs:
         rm -rf build/libs/*.jar
         npm ci
         npx semantic-release
-      if: matrix.gradle == '7.6.2'
+      if: matrix.gradle == '7.6.2' && github.repository == 'spotbugs/spotbugs-gradle-plugin'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
@@ -56,7 +56,7 @@ jobs:
         if [ "$SONAR_LOGIN" != "" ]; then
           ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN --no-daemon
         fi
-      if: matrix.gradle == '7.6.2'
+      if: matrix.gradle == '7.6.2' && github.repository == 'spotbugs/spotbugs-gradle-plugin'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
