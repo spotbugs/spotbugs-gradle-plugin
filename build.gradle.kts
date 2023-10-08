@@ -14,6 +14,7 @@ java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
+
 group = "com.github.spotbugs.snom"
 
 val errorproneVersion = "2.22.0"
@@ -44,8 +45,9 @@ signing {
 spotbugs {
     ignoreFailures.set(true)
 }
+
 tasks {
-    named<com.github.spotbugs.snom.SpotBugsTask>("spotbugsMain") {
+    spotbugsMain {
         reports {
             register("sarif") {
                 required.set(true)
@@ -53,17 +55,17 @@ tasks {
         }
     }
     val processVersionFile by registering(WriteProperties::class) {
-        outputFile = file("src/main/resources/spotbugs-gradle-plugin.properties")
+        destinationFile.set(file("src/main/resources/spotbugs-gradle-plugin.properties"))
 
         property("slf4j-version", slf4jVersion)
         property("spotbugs-version", spotBugsVersion)
     }
-    named("processResources") {
+    processResources {
         dependsOn(processVersionFile)
     }
-    withType<Jar> {
+    withType<Jar>().configureEach {
         dependsOn(processResources)
     }
 }
 
-defaultTasks("spotlessApply", "build")
+defaultTasks(tasks.spotlessApply.name, tasks.build.name)
