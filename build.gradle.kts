@@ -30,8 +30,8 @@ dependencies {
     testImplementation("com.tngtech.archunit:archunit:1.1.0")
 }
 
-val signingKey: String? = System.getenv("SIGNING_KEY")
-val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
+val signingKey: String? = providers.environmentVariable("SIGNING_KEY").orNull
+val signingPassword: String? = providers.environmentVariable("SIGNING_PASSWORD").orNull
 
 signing {
     if (!signingKey.isNullOrBlank() && !signingPassword.isNullOrBlank()) {
