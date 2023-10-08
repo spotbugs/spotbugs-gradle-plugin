@@ -34,7 +34,7 @@ testing {
         @Suppress("UNUSED_VARIABLE")
         val functionalTest by registering(JvmTestSuite::class) {
             useSpock()
-            testType.set(TestSuiteType.FUNCTIONAL_TEST)
+            testType = TestSuiteType.FUNCTIONAL_TEST
             targets {
                 all {
                     testTask.configure {
@@ -53,7 +53,7 @@ gradlePlugin {
 
 tasks.jacocoTestReport {
     reports.named("xml") {
-            required.set(true)
+            required = true
     }
 }
 

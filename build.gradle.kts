@@ -43,19 +43,19 @@ signing {
 }
 
 spotbugs {
-    ignoreFailures.set(true)
+    ignoreFailures = true
 }
 
 tasks {
     spotbugsMain {
         reports {
             register("sarif") {
-                required.set(true)
+                required = true
             }
         }
     }
     val processVersionFile by registering(WriteProperties::class) {
-        destinationFile.set(file("src/main/resources/spotbugs-gradle-plugin.properties"))
+        destinationFile = file("src/main/resources/spotbugs-gradle-plugin.properties")
 
         property("slf4j-version", slf4jVersion)
         property("spotbugs-version", spotBugsVersion)

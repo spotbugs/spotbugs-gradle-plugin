@@ -8,7 +8,7 @@ plugins {
 tasks.withType<JavaCompile>().configureEach {
     // disable warnings in generated code by immutables
     // https://github.com/google/error-prone/issues/329
-    options.errorprone.disableWarningsInGeneratedCode.set(true)
+    options.errorprone.disableWarningsInGeneratedCode = true
 }
 
 tasks.withType<Groovydoc>().configureEach {
