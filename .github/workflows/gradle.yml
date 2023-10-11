@@ -5,8 +5,7 @@ on:
     branches:
       - master
   pull_request:
-    branches:
-      - master
+  workflow_dispatch:
 
 jobs:
   build:
@@ -29,12 +28,10 @@ jobs:
         node-version-file: '.nvmrc'
         cache: npm
       if: matrix.gradle == '7.6.2'
-    - name: Gradle Wrapper Validation
-      uses: gradle/wrapper-validation-action@v1
-    - name: Build with Gradle
+    - name: Gradle cache
       uses: gradle/gradle-build-action@v2
-      with:
-        arguments: build -Dsnom.test.functional.gradle=${{ matrix.gradle }} --scan
+    - name: Build with Gradle
+      run: ./gradlew build -Dsnom.test.functional.gradle=${{ matrix.gradle }}
     - run: |
         echo Verifying the java version used in class files...
         cd build/classes/groovy/main
@@ -46,7 +43,7 @@ jobs:
         rm -rf build/libs/*.jar
         npm ci
         npx semantic-release
-      if: matrix.gradle == '7.6.2'
+      if: matrix.gradle == '7.6.2' && github.repository == 'spotbugs/spotbugs-gradle-plugin'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
@@ -56,7 +53,7 @@ jobs:
         if [ "$SONAR_LOGIN" != "" ]; then
           ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN --no-daemon
         fi
-      if: matrix.gradle == '7.6.2'
+      if: matrix.gradle == '7.6.2' && github.repository == 'spotbugs/spotbugs-gradle-plugin'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}

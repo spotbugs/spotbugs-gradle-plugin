@@ -14,14 +14,8 @@ java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
-group = "com.github.spotbugs.snom"
 
-repositories {
-    // To download the Android Gradle Plugin
-    google()
-    // To download trove4j required by the Android Gradle Plugin
-    mavenCentral()
-}
+group = "com.github.spotbugs.snom"
 
 val errorproneVersion = "2.22.0"
 val spotBugsVersion = "4.7.3"
@@ -36,8 +30,8 @@ dependencies {
     testImplementation("com.tngtech.archunit:archunit:1.1.0")
 }
 
-val signingKey: String? = System.getenv("SIGNING_KEY")
-val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
+val signingKey: String? = providers.environmentVariable("SIGNING_KEY").orNull
+val signingPassword: String? = providers.environmentVariable("SIGNING_PASSWORD").orNull
 
 signing {
     if (!signingKey.isNullOrBlank() && !signingPassword.isNullOrBlank()) {
@@ -49,28 +43,29 @@ signing {
 }
 
 spotbugs {
-    ignoreFailures.set(true)
+    ignoreFailures = true
 }
+
 tasks {
-    named<com.github.spotbugs.snom.SpotBugsTask>("spotbugsMain") {
+    spotbugsMain {
         reports {
             register("sarif") {
-                required.set(true)
+                required = true
             }
         }
     }
     val processVersionFile by registering(WriteProperties::class) {
-        outputFile = file("src/main/resources/spotbugs-gradle-plugin.properties")
+        destinationFile = file("src/main/resources/spotbugs-gradle-plugin.properties")
 
         property("slf4j-version", slf4jVersion)
         property("spotbugs-version", spotBugsVersion)
     }
-    named("processResources") {
+    processResources {
         dependsOn(processVersionFile)
     }
-    withType<Jar> {
+    withType<Jar>().configureEach {
         dependsOn(processResources)
     }
 }
 
-defaultTasks("spotlessApply", "build")
+defaultTasks(tasks.spotlessApply.name, tasks.build.name)

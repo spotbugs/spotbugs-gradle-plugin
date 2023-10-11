@@ -34,7 +34,7 @@ testing {
         @Suppress("UNUSED_VARIABLE")
         val functionalTest by registering(JvmTestSuite::class) {
             useSpock()
-            testType.set(TestSuiteType.FUNCTIONAL_TEST)
+            testType = TestSuiteType.FUNCTIONAL_TEST
             targets {
                 all {
                     testTask.configure {
@@ -51,9 +51,9 @@ gradlePlugin {
     testSourceSets(sourceSets["functionalTest"])
 }
 
-val jacocoTestReport = tasks.named<JacocoReport>("jacocoTestReport") {
+tasks.jacocoTestReport {
     reports.named("xml") {
-            required.set(true)
+            required = true
     }
 }
 
@@ -62,7 +62,7 @@ sonarqube {
         property("sonar.projectKey", "com.github.spotbugs.gradle")
         property("sonar.organization", "spotbugs")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.flatMap { it.reports.xml.outputLocation })
+        property("sonar.coverage.jacoco.xmlReportPaths", tasks.jacocoTestReport.flatMap { it.reports.xml.outputLocation })
     }
 }
 
@@ -73,5 +73,5 @@ tasks {
 }
 tasks.check {
     dependsOn(tasks.named("functionalTest"))
-    dependsOn(jacocoTestReport)
+    dependsOn(tasks.jacocoTestReport)
 }
