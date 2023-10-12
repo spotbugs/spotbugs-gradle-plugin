@@ -69,8 +69,8 @@ repositories {
                 .build()
 
         then:
-        TaskOutcome.SUCCESS == result.task(":sub:classes").outcome
-        TaskOutcome.SUCCESS == result.task(":sub:spotbugsMain").outcome
+        SUCCESS == result.task(":sub:classes").outcome
+        SUCCESS == result.task(":sub:spotbugsMain").outcome
     }
 
     def "can use project name of sub project"() {

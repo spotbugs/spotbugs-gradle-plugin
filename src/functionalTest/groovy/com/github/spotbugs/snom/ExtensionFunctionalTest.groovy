@@ -13,9 +13,7 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.TaskOutcome
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
@@ -219,7 +217,7 @@ spotbugs {
                 .build()
 
         then:
-        TaskOutcome.SUCCESS == result.task(":spotbugsMain").outcome
+        SUCCESS == result.task(":spotbugsMain").outcome
         result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
     }
 
@@ -238,7 +236,7 @@ dependencies {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.task(":spotbugsMain").outcome == SUCCESS
         result.output.contains("com.github.spotbugs:spotbugs-annotations:4.0.2")
     }
 }

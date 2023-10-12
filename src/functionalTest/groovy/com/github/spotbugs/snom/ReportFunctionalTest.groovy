@@ -286,7 +286,7 @@ spotbugsMain {
 
         then:
         SUCCESS == result.task(":spotbugsMain").outcome
-        File reportsDir = rootDir.toPath().resolve("build").resolve("spotbugs").toFile();
+        File reportsDir = rootDir.toPath().resolve("build").resolve("spotbugs").toFile()
         reportsDir.isDirectory()
         File report = reportsDir.toPath().resolve("main.txt").toFile()
         report.isFile()
@@ -387,7 +387,7 @@ reporting {
 
         then:
         SUCCESS == result.task(":spotbugsMain").outcome
-        File reportsDir = rootDir.toPath().resolve("build").resolve("our-reports").resolve("spotbugs").toFile();
+        File reportsDir = rootDir.toPath().resolve("build").resolve("our-reports").resolve("spotbugs").toFile()
         reportsDir.isDirectory()
         File report = reportsDir.toPath().resolve("main.txt").toFile()
         report.isFile()

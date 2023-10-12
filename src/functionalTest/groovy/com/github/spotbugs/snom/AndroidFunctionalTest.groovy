@@ -23,7 +23,7 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 @Ignore
 class AndroidFunctionalTest extends BaseFunctionalTest {
 
-    @Requires({ env['ANDROID_SDK_ROOT'] })
+    @Requires({env['ANDROID_SDK_ROOT']})
     def "can generate spotbugsRelease depending on app variant compilation task with AGP 4.2.0"() {
         given: "a Gradle project to build an Android app"
         GradleRunner runner = gradleRunner
@@ -150,6 +150,7 @@ public class Foo {
     void writeManifestFile() {
         File manifestFile = new File(rootDir, "src/main/AndroidManifest.xml")
         manifestFile.parentFile.mkdirs()
+        //noinspection HttpUrlsUsage
         manifestFile << """
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="test.spotbugs" />
 """

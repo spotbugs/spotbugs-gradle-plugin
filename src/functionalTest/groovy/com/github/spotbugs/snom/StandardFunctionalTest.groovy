@@ -57,8 +57,8 @@ public class Foo {
                 .build()
 
         then:
-        TaskOutcome.SUCCESS == result.task(":classes").outcome
-        TaskOutcome.SUCCESS == result.task(":spotbugsMain").outcome
+        SUCCESS == result.task(":classes").outcome
+        SUCCESS == result.task(":spotbugsMain").outcome
     }
 
     def "can be listed in the task list"() {
@@ -68,7 +68,7 @@ public class Foo {
                 .build()
 
         then:
-        result.task(":tasks").outcome == TaskOutcome.SUCCESS
+        result.task(":tasks").outcome == SUCCESS
         result.output.contains("spotbugsMain - Run SpotBugs analysis for the source set 'main'")
         result.output.contains("spotbugsTest - Run SpotBugs analysis for the source set 'test'")
     }
@@ -85,7 +85,7 @@ dependencies {
                 .build()
 
         then:
-        TaskOutcome.SUCCESS == result.task(":classes").outcome
+        SUCCESS == result.task(":classes").outcome
         result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
     }
 
@@ -194,7 +194,7 @@ spotbugsMain {
         def result = runner.build()
 
         then:
-        result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+        result.task(':spotbugsMain').outcome == SUCCESS
 
         where:
         isHybridApi << [true, false]
@@ -253,7 +253,7 @@ spotbugs {
         def result = runner. build()
 
         then:
-        result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+        result.task(':spotbugsMain').outcome == SUCCESS
         result.output.contains('\tat ') || result.output.contains('SpotBugs ended with exit code 1')
 
         where:
@@ -286,7 +286,7 @@ spotbugs {
         def result = runner. build()
 
         then:
-        result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+        result.task(':spotbugsMain').outcome == SUCCESS
         !(result.output.contains('\tat '))
 
         where:
@@ -313,7 +313,7 @@ spotbugsMain {
         def result = runner. build()
 
         then:
-        result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+        result.task(':spotbugsMain').outcome == SUCCESS
     }
     def 'analyse main sourceset only'() {
         given:
@@ -339,7 +339,7 @@ public class Foo {
         def result = runner.build()
 
         then:
-        TaskOutcome.SUCCESS == result.task(':spotbugsMain').outcome
+        SUCCESS == result.task(':spotbugsMain').outcome
         TaskOutcome.SKIPPED == result.task(':spotbugsTest').outcome
     }
 
@@ -376,7 +376,7 @@ public class Foo {
         def result = runner.build()
 
         then:
-        TaskOutcome.SUCCESS == result.task(':spotbugsAnother').outcome
+        SUCCESS == result.task(':spotbugsAnother').outcome
     }
 
     def "can pass the analysis when classDirs contain no .class file"() {
@@ -394,7 +394,7 @@ public class Foo {
                 .build()
 
         then:
-        result.task(":classes").outcome == TaskOutcome.SUCCESS
+        result.task(":classes").outcome == SUCCESS
         result.task(":spotbugsMain").outcome == TaskOutcome.NO_SOURCE
     }
 
@@ -405,7 +405,7 @@ public class Foo {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.task(":spotbugsMain").outcome == SUCCESS
     }
 
     def "can apply plugin"() {
@@ -420,7 +420,7 @@ dependencies{
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.task(":spotbugsMain").outcome == SUCCESS
         result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
         !result.output.contains("Trying to add already registered factory")
     }
@@ -450,8 +450,8 @@ public class FooTest {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
-        result.task(":spotbugsTest").outcome == TaskOutcome.SUCCESS
+        result.task(":spotbugsMain").outcome == SUCCESS
+        result.task(":spotbugsTest").outcome == SUCCESS
         result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to Foo")
         result.output.contains("Applying com.h3xstream.findsecbugs.PredictableRandomDetector to FooTest")
         !result.output.contains("Trying to add already registered factory")
@@ -485,7 +485,7 @@ public class MyFoo {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.task(":spotbugsMain").outcome == SUCCESS
         result.output.contains("Using auxclasspath file")
         def expectedOutput = File.separator + "build" + File.separator + "spotbugs" + File.separator + "auxclasspath" + File.separator + "spotbugsMain"
         result.output.contains(expectedOutput)
@@ -496,7 +496,7 @@ public class MyFoo {
                 .build()
 
         then:
-        repeatedResult.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        repeatedResult.task(":spotbugsMain").outcome == SUCCESS
     }
 
     def "can apply plugin using useAuxclasspathFile flag in parallel"() {
@@ -549,7 +549,7 @@ public class SimpleTest {
                 .build()
 
         then:
-        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.task(":spotbugsMain").outcome == SUCCESS
         result.output.contains("Using auxclasspath file")
         def expectedOutputMain = File.separator + "build" + File.separator + "spotbugs" + File.separator + "auxclasspath" + File.separator + "spotbugsMain"
         result.output.contains(expectedOutputMain)
@@ -654,7 +654,7 @@ spotbugs {
         def result = runner.build()
 
         then:
-        result.task(':spotbugsMain').outcome == TaskOutcome.SUCCESS
+        result.task(':spotbugsMain').outcome == SUCCESS
 
         where:
         isWorkerApi << [true, false]
@@ -674,7 +674,7 @@ spotbugs {
                 .build()
 
         then:
-        result.task(":compileJava").outcome == TaskOutcome.SUCCESS
-        result.task(":spotbugsMain").outcome == TaskOutcome.SUCCESS
+        result.task(":compileJava").outcome == SUCCESS
+        result.task(":spotbugsMain").outcome == SUCCESS
     }
 }
