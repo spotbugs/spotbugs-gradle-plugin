@@ -13,25 +13,18 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.util.GradleVersion
-import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.nio.file.Paths
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-class StandardFunctionalTest extends Specification {
-    File rootDir
+class StandardFunctionalTest extends BaseFunctionalTest {
     File buildFile
-    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     def setup() {
-        rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')
         buildFile << """
 plugins {
@@ -59,13 +52,8 @@ public class Foo {
 
     def "can create spotbugsMain task depending on classes task"() {
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments(":spotbugsMain")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -75,13 +63,8 @@ public class Foo {
 
     def "can be listed in the task list"() {
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments(":tasks")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -97,13 +80,8 @@ dependencies {
     spotbugs "com.github.spotbugs:spotbugs:4.0.0-beta4"
 }"""
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments(":spotbugsMain", "--info")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -118,13 +96,8 @@ dependencies {
         sourceFile.delete()
 
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments(":spotbugsMain")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -138,11 +111,8 @@ spotbugsMain {
     reportLevel = 'high'
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -163,11 +133,8 @@ spotbugsMain {
 }
 """
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -184,18 +151,11 @@ spotbugsMain {
 }"""
 
         when:
-        GradleRunner.create()
-                .withProjectDir(rootDir)
+        getGradleRunner()
                 .withArguments(":spotbugsMain")
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments(":spotbugsMain", "--info")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -228,12 +188,8 @@ spotbugsMain {
             '-is'
         ]
         arguments.add('-Pcom.github.spotbugs.snom.javaexec-in-worker=' + isHybridApi)
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = getGradleRunner()
                 .withArguments(arguments)
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
 
         def result = runner.build()
 
@@ -259,12 +215,8 @@ spotbugsMain {
         if(!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = getGradleRunner()
                 .withArguments(arguments)
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
 
         def result = runner.buildAndFail()
 
@@ -295,12 +247,8 @@ spotbugs {
         if(!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = getGradleRunner()
                 .withArguments(arguments)
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
 
         def result = runner. build()
 
@@ -332,12 +280,8 @@ spotbugs {
         if(!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = getGradleRunner()
                 .withArguments(arguments)
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
 
         def result = runner. build()
 
@@ -363,12 +307,8 @@ spotbugsMain {
     classes = classes.filter { it.name.contains 'Foo' }
 }"""
         when:
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = getGradleRunner()
                 .withArguments(':spotbugsMain', '-is')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
 
         def result = runner. build()
 
@@ -393,12 +333,8 @@ public class Foo {
 }
 """
         when:
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = getGradleRunner()
                 .withArguments(':spotbugsMain', ':spotbugsTest')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
 
         def result = runner.build()
 
@@ -434,12 +370,8 @@ public class Foo {
 """
 
         when:
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = getGradleRunner()
                 .withArguments(':spotbugsAnother')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
 
         def result = runner.build()
 
@@ -457,13 +389,8 @@ public class Foo {
         File xml = new File(resourceDir, "bar.xml")
         xml << "<!-- I am not .class file -->"
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments(":spotbugsMain")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -473,13 +400,8 @@ public class Foo {
 
     def "can run analysis when check task is triggered"() {
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments("clean", "check")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -493,13 +415,8 @@ dependencies{
   spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'
 }"""
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments("spotbugsMain", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -528,13 +445,8 @@ public class FooTest {
     }
 }"""
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments("spotbugsMain", "spotbugsTest", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -559,7 +471,7 @@ dependencies {
 public class MyFoo {
     public static void main(String... args) {
         java.util.Map items = com.google.common.collect.ImmutableMap.of("coin", 3, "glass", 4, "pencil", 1);
-                
+
                         items.entrySet()
                                 .stream()
                                 .forEach(System.out::println);
@@ -568,13 +480,8 @@ public class MyFoo {
 """
 
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments("spotbugsMain", '--debug')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -584,13 +491,8 @@ public class MyFoo {
         result.output.contains(expectedOutput)
 
         when:
-        BuildResult repeatedResult =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult repeatedResult = getGradleRunner()
                 .withArguments("spotbugsMain", '--rerun-tasks', '-s')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -615,7 +517,7 @@ dependencies {
 public class MyFoo {
     public static void main(String... args) {
         java.util.Map items = com.google.common.collect.ImmutableMap.of("coin", 3, "glass", 4, "pencil", 1);
-                
+
                         items.entrySet()
                                 .stream()
                                 .forEach(System.out::println);
@@ -629,9 +531,9 @@ public class MyFoo {
         testSourceFile << """
 import org.junit.*;
 import static org.junit.Assert.*;
- 
+
 import java.util.*;
- 
+
 public class SimpleTest {
     @Test
     public void testEmptyCollection() {
@@ -642,13 +544,8 @@ public class SimpleTest {
 """
 
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments("spotbugsMain", "spotbugsTest", '--parallel', '--debug')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -682,12 +579,8 @@ spotbugsMain {
         if(!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = getGradleRunner()
                 .withArguments(arguments)
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .withDebug(true)
 
         def result = runner.buildAndFail()
@@ -754,12 +647,8 @@ spotbugs {
         if(!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = getGradleRunner()
                 .withArguments(arguments)
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .withDebug(true)
 
         def result = runner.build()
@@ -780,13 +669,8 @@ spotbugs {
 """
 
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
-                .withArguments("build", "--stacktrace", "--debug")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
+        BuildResult result = getGradleRunner()
+                .withArguments("build", "--debug")
                 .build()
 
         then:

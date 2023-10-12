@@ -15,20 +15,15 @@ package com.github.spotbugs.snom
 
 import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.util.GradleVersion
-import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-class ExtensionFunctionalTest extends Specification {
-    File rootDir
+class ExtensionFunctionalTest extends BaseFunctionalTest {
     File buildFile
-    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     def setup() {
-        rootDir = Files.createTempDir()
+
         buildFile = new File(rootDir, 'build.gradle')
         buildFile << """
 plugins {
@@ -65,11 +60,8 @@ spotbugs {
 <FindBugsFilter></FindBugsFilter>
 """
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -89,11 +81,8 @@ spotbugs {
 <FindBugsFilter></FindBugsFilter>
 """
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -113,11 +102,8 @@ spotbugs {
 <BugCollection></BugCollection>
 """
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -133,11 +119,8 @@ spotbugs {
     visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -151,11 +134,8 @@ spotbugs {
     omitVisitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -169,11 +149,8 @@ spotbugs {
     onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -188,11 +165,8 @@ spotbugs {
     jvmArgs = ['-Duser.language=ja']
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -207,11 +181,8 @@ spotbugs {
     maxHeapSize = '256m'
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -226,11 +197,8 @@ spotbugs {
     reportLevel = 'high'
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -246,13 +214,8 @@ spotbugs {
     toolVersion = "4.0.0-beta4"
 }"""
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments(":spotbugsMain", "--info")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -270,13 +233,8 @@ dependencies {
     compileOnly "com.github.spotbugs:spotbugs-annotations:\${spotbugs.toolVersion.get()}"
 }"""
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = getGradleRunner()
                 .withArguments(":spotbugsMain", "--debug")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:

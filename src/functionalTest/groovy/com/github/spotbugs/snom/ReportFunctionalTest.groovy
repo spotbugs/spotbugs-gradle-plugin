@@ -12,11 +12,6 @@
  * limitations under the License.
  */
 package com.github.spotbugs.snom
-import org.gradle.internal.impldep.com.google.common.io.Files
-import org.gradle.util.GradleVersion
-import spock.lang.Specification
-
-import org.gradle.testkit.runner.GradleRunner
 
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 
@@ -24,13 +19,10 @@ import java.nio.file.Path
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-class ReportFunctionalTest extends Specification {
-    File rootDir
+class ReportFunctionalTest extends BaseFunctionalTest {
     File buildFile
-    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     def setup() {
-        rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')
         buildFile << """
 plugins {
@@ -65,11 +57,8 @@ public class Foo {
         |}
         |'''.stripMargin()
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .buildAndFail()
 
         then:
@@ -86,11 +75,8 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '-is')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -109,10 +95,8 @@ spotbugsMain {
 buildDir = 'new-build-dir'
 """
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
                 .build()
 
         then:
@@ -140,10 +124,8 @@ buildDir = 'new-build-dir'
         |'''.stripMargin()
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
                 .buildAndFail()
 
         then:
@@ -162,10 +144,8 @@ spotbugsMain {
 buildDir = 'new-build-dir'
 """
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
                 .build()
 
         then:
@@ -184,10 +164,8 @@ spotbugsMain {
 buildDir = 'new-build-dir'
 """
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
                 .build()
 
         then:
@@ -204,12 +182,8 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -238,11 +212,8 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', "--debug")
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -268,11 +239,8 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -290,11 +258,8 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -315,11 +280,8 @@ spotbugsMain {
 }
 """
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -338,11 +300,8 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .buildAndFail()
 
         then:
@@ -352,12 +311,8 @@ spotbugsMain {
 
     def "can run task by Worker Process"() {
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--info')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -370,12 +325,8 @@ spotbugsMain {
 com.github.spotbugs.snom.worker=false
 """
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '--info')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -385,12 +336,8 @@ com.github.spotbugs.snom.worker=false
 
     def "can run task by JavaExec by commandline option"() {
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain', '-Pcom.github.spotbugs.snom.worker=false', '--info')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -414,12 +361,8 @@ configurations.spotbugs {
 }
 """
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -438,11 +381,8 @@ reporting {
     baseDir "\$buildDir/our-reports"
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -461,11 +401,8 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -483,11 +420,8 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -506,11 +440,8 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -526,17 +457,14 @@ spotbugsMain {
     reports {
         xml.required = true
     }
-    
+
     reports {
         xml.required = false
     }
 }"""
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = getGradleRunner()
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
-                .withGradleVersion(version)
                 .build()
 
         then:

@@ -13,40 +13,27 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
 import spock.lang.Ignore
 import spock.lang.Requires
-import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 @Ignore
-class AndroidFunctionalTest extends Specification {
-    static String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+class AndroidFunctionalTest extends BaseFunctionalTest {
 
     /**
      * AGP 4.2 is only supported by Gradle 6.7.1 and up
      * @see <a href="https://developer.android.com/studio/releases/gradle-plugin#updating-gradle">Android Gradle plugin release notes</a>
      */
     private static boolean supportsAGP42() {
-        GradleVersion.version(version) >= GradleVersion.version("6.7.1")
+        GradleVersion.version(gradleVersion) >= GradleVersion.version("6.7.1")
     }
 
-    File rootDir
-
-    def setup() {
-        rootDir = Files.createTempDir()
-    }
-
-    void cleanup() {
-        rootDir.deleteDir()
-    }
-
-    @Requires({env['ANDROID_SDK_ROOT']})
-    @Requires({AndroidFunctionalTest.supportsAGP42()})
+    @Requires({ env['ANDROID_SDK_ROOT'] })
+    @Requires({ supportsAGP42() })
     def "can generate spotbugsRelease depending on app variant compilation task with AGP 4.2.0"() {
         given: "a Gradle project to build an Android app"
         GradleRunner runner = getGradleRunner()
@@ -62,7 +49,7 @@ class AndroidFunctionalTest extends Specification {
     }
 
     @Requires({env['ANDROID_SDK_ROOT']})
-    @Requires({AndroidFunctionalTest.supportsAGP42()})
+    @Requires({ supportsAGP42()})
     def "can generate spotbugsRelease depending on library variant compilation task with AGP 4.2.0"() {
         given: "a Gradle project to build an Android library"
         GradleRunner runner = getGradleRunner()
@@ -79,18 +66,7 @@ class AndroidFunctionalTest extends Specification {
 
     private BuildResult build(GradleRunner runner) {
         runner.withArguments(":spotbugsRelease", '-s')
-                .withGradleVersion(version)
                 .build()
-    }
-
-    private GradleRunner getGradleRunner() {
-        GradleRunner runner =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
-        runner
     }
 
     def writeAppBuildFile(runner, agpVersion) {
