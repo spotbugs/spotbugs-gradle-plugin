@@ -55,7 +55,7 @@ public class Foo {
 
     def "cannot generate HTML report if invalid XSL is provided"() {
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .buildAndFail()
 

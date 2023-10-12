@@ -48,7 +48,7 @@ public class Foo {
 
     def "can run analysis when check task is triggered"() {
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments("check", "--debug")
                 .build()
 

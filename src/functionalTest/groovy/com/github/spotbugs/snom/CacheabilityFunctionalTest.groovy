@@ -28,7 +28,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
         initializeBuildFile(rootDir)
 
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(':spotbugsMain', '--configuration-cache')
                 .build()
 
@@ -37,7 +37,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
         result.output.contains("Configuration cache entry stored.")
 
         when:
-        BuildResult resultOfCachedBuild = getGradleRunner()
+        BuildResult resultOfCachedBuild = gradleRunner
                 .withArguments(':spotbugsMain', '--configuration-cache')
                 .build()
         then:
@@ -65,7 +65,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
         initializeBuildFile(buildDir2)
 
         when:
-        BuildResult result1 = getGradleRunner()
+        BuildResult result1 = gradleRunner
                 .withProjectDir(buildDir1)
                 .withArguments(':spotbugsMain')
                 .build()
@@ -75,7 +75,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
         hashKeyLine1
 
         when:
-        BuildResult result2 = getGradleRunner()
+        BuildResult result2 = gradleRunner
                 .withProjectDir(buildDir2)
                 .withArguments(':spotbugsMain', '--scan')
                 .build()
@@ -107,11 +107,11 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
             |""".stripMargin()
 
         when:
-        getGradleRunner()
+        gradleRunner
                 .withProjectDir(buildDir)
                 .withArguments(':spotbugsMain', '--build-cache')
                 .build()
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withProjectDir(buildDir)
                 .withArguments(':spotbugsMain', '--build-cache')
                 .build()
@@ -151,7 +151,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
             |""".stripMargin()
 
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withProjectDir(buildDir)
                 .withArguments(':spotbugsMain', '--configuration-cache')
                 .build()

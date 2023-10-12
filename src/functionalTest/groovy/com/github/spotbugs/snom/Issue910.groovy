@@ -48,7 +48,7 @@ public class Foo {
 
     def "can build with the sb-contrib 7-6-0"() {
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments("check")
                 .build()
 

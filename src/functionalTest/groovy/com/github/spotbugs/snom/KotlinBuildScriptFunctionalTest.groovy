@@ -72,7 +72,7 @@ spotbugs {
         new File(rootDir, "baseline.xml") << "<BugCollection />"
 
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('check', '--info')
                 .build()
 
@@ -89,7 +89,7 @@ dependencies {
 """
 
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('check', '--debug', "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .build()
 
@@ -106,7 +106,7 @@ dependencies {
     spotbugs("com.github.spotbugs:spotbugs:4.0.0-beta4")
 }"""
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain", "--info")
                 .build()
 
@@ -126,7 +126,7 @@ tasks.spotbugsMain {
 }
 """
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('check')
                 .build()
 
@@ -145,7 +145,7 @@ dependencies {
 }
 """
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain", "--debug")
                 .build()
 

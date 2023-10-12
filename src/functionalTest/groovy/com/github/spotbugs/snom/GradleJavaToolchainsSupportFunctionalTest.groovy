@@ -69,7 +69,7 @@ plugins {
         def arguments = [':spotbugsMain', '-is']
         arguments.add(processConfigurationArgument)
 
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(arguments)
 
         def result = runner.build()
@@ -91,7 +91,7 @@ plugins {
         def arguments = [':spotbugsMain', '-is']
         arguments.add(processConfigurationArgument)
 
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(arguments)
 
         def result = runner.build()

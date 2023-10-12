@@ -64,7 +64,7 @@ repositories {
 
     def "can create spotbugsMain task depending on classes task"() {
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":sub:spotbugsMain")
                 .build()
 
@@ -75,7 +75,7 @@ repositories {
 
     def "can use project name of sub project"() {
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments(':sub:spotbugsMain', '--debug')
                 .build()
 
@@ -96,7 +96,7 @@ subprojects {
 """
 
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments(':sub:spotbugsMain', '--debug')
                 .build()
 
@@ -114,7 +114,7 @@ spotbugs {
 """
 
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments(':sub:spotbugsMain', '--debug')
                 .build()
 

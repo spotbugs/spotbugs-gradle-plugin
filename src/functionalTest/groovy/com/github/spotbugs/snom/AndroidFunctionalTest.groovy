@@ -26,7 +26,7 @@ class AndroidFunctionalTest extends BaseFunctionalTest {
     @Requires({ env['ANDROID_SDK_ROOT'] })
     def "can generate spotbugsRelease depending on app variant compilation task with AGP 4.2.0"() {
         given: "a Gradle project to build an Android app"
-        GradleRunner runner = getGradleRunner()
+        GradleRunner runner = gradleRunner
         writeAppBuildFile(runner, '4.2.0')
         writeSourceFile()
         writeManifestFile()
@@ -41,7 +41,7 @@ class AndroidFunctionalTest extends BaseFunctionalTest {
     @Requires({env['ANDROID_SDK_ROOT']})
     def "can generate spotbugsRelease depending on library variant compilation task with AGP 4.2.0"() {
         given: "a Gradle project to build an Android library"
-        GradleRunner runner = getGradleRunner()
+        GradleRunner runner = gradleRunner
         writeLibraryBuildFile(runner, '4.2.0')
         writeSourceFile()
         writeManifestFile()

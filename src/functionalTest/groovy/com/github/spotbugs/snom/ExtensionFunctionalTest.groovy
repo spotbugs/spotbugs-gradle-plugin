@@ -60,7 +60,7 @@ spotbugs {
 <FindBugsFilter></FindBugsFilter>
 """
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -81,7 +81,7 @@ spotbugs {
 <FindBugsFilter></FindBugsFilter>
 """
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -102,7 +102,7 @@ spotbugs {
 <BugCollection></BugCollection>
 """
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -119,7 +119,7 @@ spotbugs {
     visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -134,7 +134,7 @@ spotbugs {
     omitVisitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -149,7 +149,7 @@ spotbugs {
     onlyAnalyze = ['com.foobar.MyClass', 'com.foobar.mypkg.*']
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -165,7 +165,7 @@ spotbugs {
     jvmArgs = ['-Duser.language=ja']
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -181,7 +181,7 @@ spotbugs {
     maxHeapSize = '256m'
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -197,7 +197,7 @@ spotbugs {
     reportLevel = 'high'
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -214,7 +214,7 @@ spotbugs {
     toolVersion = "4.0.0-beta4"
 }"""
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain", "--info")
                 .build()
 
@@ -233,7 +233,7 @@ dependencies {
     compileOnly "com.github.spotbugs:spotbugs-annotations:\${spotbugs.toolVersion.get()}"
 }"""
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain", "--debug")
                 .build()
 

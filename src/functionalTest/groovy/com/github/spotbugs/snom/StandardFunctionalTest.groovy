@@ -52,7 +52,7 @@ public class Foo {
 
     def "can create spotbugsMain task depending on classes task"() {
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain")
                 .build()
 
@@ -63,7 +63,7 @@ public class Foo {
 
     def "can be listed in the task list"() {
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":tasks")
                 .build()
 
@@ -80,7 +80,7 @@ dependencies {
     spotbugs "com.github.spotbugs:spotbugs:4.0.0-beta4"
 }"""
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain", "--info")
                 .build()
 
@@ -96,7 +96,7 @@ dependencies {
         sourceFile.delete()
 
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain")
                 .build()
 
@@ -111,7 +111,7 @@ spotbugsMain {
     reportLevel = 'high'
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -133,7 +133,7 @@ spotbugsMain {
 }
 """
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 
@@ -151,10 +151,10 @@ spotbugsMain {
 }"""
 
         when:
-        getGradleRunner()
+        gradleRunner
                 .withArguments(":spotbugsMain")
                 .build()
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments(":spotbugsMain", "--info")
                 .build()
 
@@ -188,7 +188,7 @@ spotbugsMain {
             '-is'
         ]
         arguments.add('-Pcom.github.spotbugs.snom.javaexec-in-worker=' + isHybridApi)
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(arguments)
 
         def result = runner.build()
@@ -215,7 +215,7 @@ spotbugsMain {
         if(!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(arguments)
 
         def result = runner.buildAndFail()
@@ -247,7 +247,7 @@ spotbugs {
         if(!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(arguments)
 
         def result = runner. build()
@@ -280,7 +280,7 @@ spotbugs {
         if(!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(arguments)
 
         def result = runner. build()
@@ -307,7 +307,7 @@ spotbugsMain {
     classes = classes.filter { it.name.contains 'Foo' }
 }"""
         when:
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(':spotbugsMain', '-is')
 
         def result = runner. build()
@@ -333,7 +333,7 @@ public class Foo {
 }
 """
         when:
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(':spotbugsMain', ':spotbugsTest')
 
         def result = runner.build()
@@ -370,7 +370,7 @@ public class Foo {
 """
 
         when:
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(':spotbugsAnother')
 
         def result = runner.build()
@@ -389,7 +389,7 @@ public class Foo {
         File xml = new File(resourceDir, "bar.xml")
         xml << "<!-- I am not .class file -->"
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain")
                 .build()
 
@@ -400,7 +400,7 @@ public class Foo {
 
     def "can run analysis when check task is triggered"() {
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments("clean", "check")
                 .build()
 
@@ -415,7 +415,7 @@ dependencies{
   spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'
 }"""
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments("spotbugsMain", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .build()
 
@@ -445,7 +445,7 @@ public class FooTest {
     }
 }"""
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments("spotbugsMain", "spotbugsTest", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .build()
 
@@ -480,7 +480,7 @@ public class MyFoo {
 """
 
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments("spotbugsMain", '--debug')
                 .build()
 
@@ -491,7 +491,7 @@ public class MyFoo {
         result.output.contains(expectedOutput)
 
         when:
-        BuildResult repeatedResult = getGradleRunner()
+        BuildResult repeatedResult = gradleRunner
                 .withArguments("spotbugsMain", '--rerun-tasks', '-s')
                 .build()
 
@@ -544,7 +544,7 @@ public class SimpleTest {
 """
 
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments("spotbugsMain", "spotbugsTest", '--parallel', '--debug')
                 .build()
 
@@ -579,7 +579,7 @@ spotbugsMain {
         if(!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(arguments)
                 .withDebug(true)
 
@@ -647,7 +647,7 @@ spotbugs {
         if(!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(arguments)
                 .withDebug(true)
 
@@ -669,7 +669,7 @@ spotbugs {
 """
 
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments("build", "--debug")
                 .build()
 

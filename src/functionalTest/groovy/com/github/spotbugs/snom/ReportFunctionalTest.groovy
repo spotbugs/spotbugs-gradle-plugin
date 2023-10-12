@@ -57,7 +57,7 @@ public class Foo {
         |}
         |'''.stripMargin()
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .buildAndFail()
 
@@ -75,7 +75,7 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '-is')
                 .build()
 
@@ -95,7 +95,7 @@ spotbugsMain {
 buildDir = 'new-build-dir'
 """
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 
@@ -124,7 +124,7 @@ buildDir = 'new-build-dir'
         |'''.stripMargin()
 
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .buildAndFail()
 
@@ -144,7 +144,7 @@ spotbugsMain {
 buildDir = 'new-build-dir'
 """
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 
@@ -164,7 +164,7 @@ spotbugsMain {
 buildDir = 'new-build-dir'
 """
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 
@@ -182,7 +182,7 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -212,7 +212,7 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', "--debug")
                 .build()
 
@@ -239,7 +239,7 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--debug')
                 .build()
 
@@ -258,7 +258,7 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 
@@ -280,7 +280,7 @@ spotbugsMain {
 }
 """
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 
@@ -300,7 +300,7 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .buildAndFail()
 
@@ -311,7 +311,7 @@ spotbugsMain {
 
     def "can run task by Worker Process"() {
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--info')
                 .build()
 
@@ -325,7 +325,7 @@ spotbugsMain {
 com.github.spotbugs.snom.worker=false
 """
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '--info')
                 .build()
 
@@ -336,7 +336,7 @@ com.github.spotbugs.snom.worker=false
 
     def "can run task by JavaExec by commandline option"() {
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain', '-Pcom.github.spotbugs.snom.worker=false', '--info')
                 .build()
 
@@ -361,7 +361,7 @@ configurations.spotbugs {
 }
 """
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 
@@ -381,7 +381,7 @@ reporting {
     baseDir "\$buildDir/our-reports"
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 
@@ -401,7 +401,7 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 
@@ -420,7 +420,7 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 
@@ -440,7 +440,7 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 
@@ -463,7 +463,7 @@ spotbugsMain {
     }
 }"""
         when:
-        def result = getGradleRunner()
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
                 .build()
 

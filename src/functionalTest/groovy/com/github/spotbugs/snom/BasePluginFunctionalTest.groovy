@@ -48,7 +48,7 @@ public class Foo {
 
     def "does not create SpotBugsTask by default"() {
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":check")
                 .build()
 
@@ -66,7 +66,7 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
 }
 """
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain")
                 .build()
 
@@ -84,7 +84,7 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
 }
 """
         when:
-        BuildResult result = getGradleRunner()
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain")
                 .build()
 
@@ -114,7 +114,7 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
         if (!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = getGradleRunner()
+        def runner = gradleRunner
                 .withArguments(arguments)
                 .withDebug(true)
 
