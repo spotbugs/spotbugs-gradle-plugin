@@ -14,21 +14,35 @@
 package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.internal.DefaultGradleRunner
 import org.gradle.util.GradleVersion
 import spock.lang.Specification
 import spock.lang.TempDir
 
-abstract class BaseFunctionalTest extends Specification{
+abstract class BaseFunctionalTest extends Specification {
     static String gradleVersion = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
-    @TempDir File rootDir
+    @TempDir
+    File rootDir
 
     GradleRunner getGradleRunner() {
-        return GradleRunner.create()
+        return new TestGradleRunner()
                 .withGradleVersion(gradleVersion)
                 .withProjectDir(rootDir)
                 .withArguments('--stacktrace')
                 .forwardOutput()
                 .withPluginClasspath()
+    }
+
+    class TestGradleRunner extends DefaultGradleRunner {
+        @Override
+        DefaultGradleRunner withArguments(List<String> arguments) {
+            return super.withArguments(this.arguments + arguments)
+        }
+
+        @Override
+        DefaultGradleRunner withArguments(String... arguments) {
+            return withArguments(Arrays.asList(arguments))
+        }
     }
 }
