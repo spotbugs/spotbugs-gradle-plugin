@@ -20,8 +20,8 @@ import java.net.URL;
 import java.util.Properties;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.DependencySet;
+import org.gradle.api.artifacts.ConfigurationContainer;
+import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.plugins.ReportingBasePlugin;
 import org.gradle.util.GradleVersion;
 
@@ -45,7 +45,7 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
 
     SpotBugsExtension extension = createExtension(project);
     createConfiguration(project, extension);
-    createPluginConfiguration(project);
+    createPluginConfiguration(project.getConfigurations());
 
     String enableWorkerApi = getPropertyOrDefault(project, FEATURE_FLAG_WORKER_API, "true");
     String enableHybridWorker = getPropertyOrDefault(project, FEATURE_FLAG_HYBRID_WORKER, "true");
@@ -70,36 +70,39 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
   private void createConfiguration(Project project, SpotBugsExtension extension) {
     Properties props = loadProperties();
     extension.getToolVersion().convention(props.getProperty("spotbugs-version"));
+    ConfigurationContainer configs = project.getConfigurations();
 
-    Configuration configuration =
-        project
-            .getConfigurations()
-            .create(SpotBugsPlugin.CONFIG_NAME)
-            .setDescription("configuration for the SpotBugs engine")
-            .setVisible(false)
-            .setTransitive(true);
+    configs.register(
+        SpotBugsPlugin.CONFIG_NAME,
+        c -> {
+          c.setDescription("configuration for the SpotBugs engine");
+          c.setVisible(false);
+          c.setTransitive(true);
+          c.defaultDependencies(
+              d -> {
+                Dependency dep =
+                    project
+                        .getDependencies()
+                        .create("com.github.spotbugs:spotbugs:" + extension.getToolVersion().get());
+                d.add(dep);
+              });
+        });
 
-    configuration.defaultDependencies(
-        (DependencySet dependencies) ->
-            dependencies.add(
-                project
-                    .getDependencies()
-                    .create("com.github.spotbugs:spotbugs:" + extension.getToolVersion().get())));
-
-    Configuration spotbugsSlf4j =
-        project
-            .getConfigurations()
-            .create(SpotBugsPlugin.SLF4J_CONFIG_NAME)
-            .setDescription("configuration for the SLF4J provider to run SpotBugs")
-            .setVisible(false)
-            .setTransitive(true);
-
-    spotbugsSlf4j.defaultDependencies(
-        (DependencySet dependencies) ->
-            dependencies.add(
-                project
-                    .getDependencies()
-                    .create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version"))));
+    configs.register(
+        SpotBugsPlugin.SLF4J_CONFIG_NAME,
+        c -> {
+          c.setDescription("configuration for the SLF4J provider to run SpotBugs");
+          c.setVisible(false);
+          c.setTransitive(true);
+          c.defaultDependencies(
+              d -> {
+                Dependency dep =
+                    project
+                        .getDependencies()
+                        .create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version"));
+                d.add(dep);
+              });
+        });
   }
 
   Properties loadProperties() {
@@ -114,13 +117,14 @@ public class SpotBugsBasePlugin implements Plugin<Project> {
     }
   }
 
-  private Configuration createPluginConfiguration(Project project) {
-    return project
-        .getConfigurations()
-        .create(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
-        .setDescription("configuration for the external SpotBugs plugins")
-        .setVisible(false)
-        .setTransitive(false);
+  private void createPluginConfiguration(ConfigurationContainer configs) {
+    configs.register(
+        SpotBugsPlugin.PLUGINS_CONFIG_NAME,
+        c -> {
+          c.setDescription("configuration for the external SpotBugs plugins");
+          c.setVisible(false);
+          c.setTransitive(false);
+        });
   }
 
   void verifyGradleVersion(GradleVersion version) {
