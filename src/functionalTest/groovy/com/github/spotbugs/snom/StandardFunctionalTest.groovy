@@ -81,7 +81,7 @@ dependencies {
 }"""
         when:
         BuildResult result = gradleRunner
-                .withArguments(":spotbugsMain", "--info")
+                .withArguments(":spotbugsMain")
                 .build()
 
         then:
@@ -155,7 +155,7 @@ spotbugsMain {
                 .withArguments(":spotbugsMain")
                 .build()
         def result = gradleRunner
-                .withArguments(":spotbugsMain", "--info")
+                .withArguments(":spotbugsMain")
                 .build()
 
         then:

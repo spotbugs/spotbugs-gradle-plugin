@@ -312,7 +312,7 @@ spotbugsMain {
     def "can run task by Worker Process"() {
         when:
         def result = gradleRunner
-                .withArguments('spotbugsMain', '--info')
+                .withArguments('spotbugsMain')
                 .build()
 
         then:
@@ -326,7 +326,7 @@ com.github.spotbugs.snom.worker=false
 """
         when:
         def result = gradleRunner
-                .withArguments('spotbugsMain', '--info')
+                .withArguments('spotbugsMain')
                 .build()
 
         then:
@@ -337,7 +337,7 @@ com.github.spotbugs.snom.worker=false
     def "can run task by JavaExec by commandline option"() {
         when:
         def result = gradleRunner
-                .withArguments('spotbugsMain', '-Pcom.github.spotbugs.snom.worker=false', '--info')
+                .withArguments('spotbugsMain', '-Pcom.github.spotbugs.snom.worker=false')
                 .build()
 
         then:

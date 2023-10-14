@@ -213,7 +213,7 @@ spotbugs {
 }"""
         when:
         BuildResult result = gradleRunner
-                .withArguments(":spotbugsMain", "--info")
+                .withArguments(":spotbugsMain")
                 .build()
 
         then:
