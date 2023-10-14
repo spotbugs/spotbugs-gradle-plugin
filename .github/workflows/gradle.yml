@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        gradle: ['7.6.2', '8.0']
+        gradle: ['7.6.2', '8.4']
     steps:
     - uses: actions/checkout@v4
       with:
