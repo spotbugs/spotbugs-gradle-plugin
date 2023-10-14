@@ -76,7 +76,7 @@ repositories {
     def "can use project name of sub project"() {
         when:
         def result = gradleRunner
-                .withArguments(':sub:spotbugsMain', '--debug')
+                .withArguments(':sub:spotbugsMain')
                 .build()
 
         then:
@@ -97,7 +97,7 @@ subprojects {
 
         when:
         def result = gradleRunner
-                .withArguments(':sub:spotbugsMain', '--debug')
+                .withArguments(':sub:spotbugsMain')
                 .build()
 
         then:
@@ -115,7 +115,7 @@ spotbugs {
 
         when:
         def result = gradleRunner
-                .withArguments(':sub:spotbugsMain', '--debug')
+                .withArguments(':sub:spotbugsMain')
                 .build()
 
         then:

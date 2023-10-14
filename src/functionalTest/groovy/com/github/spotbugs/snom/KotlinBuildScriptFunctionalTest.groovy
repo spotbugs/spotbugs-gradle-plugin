@@ -90,7 +90,7 @@ dependencies {
 
         when:
         def result = gradleRunner
-                .withArguments('check', '--debug', "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
+                .withArguments('check', "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .build()
 
         then:
@@ -146,7 +146,7 @@ dependencies {
 """
         when:
         BuildResult result = gradleRunner
-                .withArguments(":spotbugsMain", "--debug")
+                .withArguments(":spotbugsMain")
                 .build()
 
         then:

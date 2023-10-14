@@ -112,7 +112,7 @@ spotbugsMain {
 }"""
         when:
         def result = gradleRunner
-                .withArguments('spotbugsMain', '--debug')
+                .withArguments('spotbugsMain')
                 .build()
 
         then:
@@ -416,7 +416,7 @@ dependencies{
 }"""
         when:
         BuildResult result = gradleRunner
-                .withArguments("spotbugsMain", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
+                .withArguments("spotbugsMain", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .build()
 
         then:
@@ -446,7 +446,7 @@ public class FooTest {
 }"""
         when:
         BuildResult result = gradleRunner
-                .withArguments("spotbugsMain", "spotbugsTest", "--debug", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
+                .withArguments("spotbugsMain", "spotbugsTest", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .build()
 
         then:
@@ -481,7 +481,7 @@ public class MyFoo {
 
         when:
         BuildResult result = gradleRunner
-                .withArguments("spotbugsMain", '--debug')
+                .withArguments("spotbugsMain")
                 .build()
 
         then:
@@ -545,7 +545,7 @@ public class SimpleTest {
 
         when:
         BuildResult result = gradleRunner
-                .withArguments("spotbugsMain", "spotbugsTest", '--parallel', '--debug')
+                .withArguments("spotbugsMain", "spotbugsTest", '--parallel')
                 .build()
 
         then:
@@ -670,7 +670,7 @@ spotbugs {
 
         when:
         BuildResult result = gradleRunner
-                .withArguments("build", "--debug")
+                .withArguments("build")
                 .build()
 
         then:
