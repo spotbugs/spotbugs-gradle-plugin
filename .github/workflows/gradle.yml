@@ -4,24 +4,24 @@ on:
   push:
     branches:
       - master
-  pull_request:
-  workflow_dispatch:
+  pull_request: {}
+  workflow_dispatch: {}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        gradle: ['7.6.2', 'current']
+        gradle: ['7.6.2', '8.1', 'current']
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - name: Set up JDK 11
+    - name: Set up JDK
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: 11
+        java-version-file: .java-version
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
@@ -34,8 +34,8 @@ jobs:
       run: ./gradlew build -Dsnom.test.functional.gradle=${{ matrix.gradle }}
     - run: |
         echo Verifying the java version used in class files...
-        cd build/classes/groovy/main
-        javap -v com.github.spotbugs.snom.SpotBugsPlugin | grep -q 'major version: 52'
+        cd build/classes/kotlin/main
+        javap -v com.github.spotbugs.snom.SpotBugsPlugin | grep -q 'major version: 55'
     - name: Run Semantic Release
       run: |
         echo "gradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY }}" > ~/.gradle/gradle.properties

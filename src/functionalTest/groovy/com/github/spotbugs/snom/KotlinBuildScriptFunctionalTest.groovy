@@ -14,6 +14,8 @@
 package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
+import org.gradle.util.GradleVersion
+import spock.lang.IgnoreIf
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
@@ -23,6 +25,7 @@ class KotlinBuildScriptFunctionalTest extends BaseFunctionalTest {
     def setup() {
         buildFile = new File(rootDir, 'build.gradle.kts')
         buildFile << """
+import com.github.spotbugs.snom.assign
 plugins {
   `java`
   id("com.github.spotbugs")
@@ -46,25 +49,28 @@ public class Foo {
 """
     }
 
+    @IgnoreIf({
+        def current = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+        return GradleVersion.version(current) < GradleVersion.version("8.2") })
     def "can set params to SpotBugsExtension"() {
         setup:
         buildFile << """
 spotbugs {
-    ignoreFailures.set(false)
-    showStackTraces.set(true)
-    showProgress.set(true)
-    effort.set(com.github.spotbugs.snom.Effort.DEFAULT)
-    reportLevel.set(com.github.spotbugs.snom.Confidence.DEFAULT)
-    visitors.set(listOf("FindSqlInjection", "SwitchFallthrough"))
-    omitVisitors.set(listOf("FindNonShortCircuit"))
-    reportsDir.set(file("\$buildDir/spotbugs"))
-    includeFilter.set(file("include.xml"))
-    excludeFilter.set(file("exclude.xml"))
-    baselineFile.set(file("baseline.xml"))
-    onlyAnalyze.set(listOf("com.foobar.MyClass", "com.foobar.mypkg.*"))
-    maxHeapSize.set("1g")
-    extraArgs.set(listOf("-nested:false"))
-    jvmArgs.set(listOf("-Duser.language=ja"))
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+    effort = "DEFAULT"
+    reportLevel = "DEFAULT"
+    visitors = listOf("FindSqlInjection", "SwitchFallthrough")
+    omitVisitors = listOf("FindNonShortCircuit")
+    reportsDir = file("\$buildDir/spotbugs")
+    includeFilter = file("include.xml")
+    excludeFilter = file("exclude.xml")
+    baselineFile = file("baseline.xml")
+    onlyAnalyze = listOf("com.foobar.MyClass", "com.foobar.mypkg.*")
+    maxHeapSize = "1g"
+    extraArgs = listOf("-nested:false")
+    jvmArgs = listOf("-Duser.language=ja")
 }
 """
         new File(rootDir, "include.xml") << "<FindBugsFilter />"
@@ -115,12 +121,15 @@ dependencies {
         result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
     }
 
+    @IgnoreIf({
+        def current = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+        return GradleVersion.version(current) < GradleVersion.version("8.2") })
     def "can generate spotbugs.html in configured outputLocation"() {
         buildFile << """
 tasks.spotbugsMain {
     reports.create("html") {
-        required.set(true)
-        outputLocation.set(file("\$buildDir/reports/spotbugs.html"))
+        required = true
+        outputLocation = file("\$buildDir/reports/spotbugs.html")
         setStylesheet("fancy-hist.xsl")
     }
 }

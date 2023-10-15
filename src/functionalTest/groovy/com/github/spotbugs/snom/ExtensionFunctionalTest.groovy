@@ -21,7 +21,6 @@ class ExtensionFunctionalTest extends BaseFunctionalTest {
     File buildFile
 
     def setup() {
-
         buildFile = new File(rootDir, 'build.gradle')
         buildFile << """
 plugins {
@@ -65,7 +64,7 @@ spotbugs {
         then:
         SUCCESS == result.task(":spotbugsMain").outcome
         result.getOutput().contains("-include")
-        result.getOutput().contains(filter.getAbsolutePath())
+        result.getOutput().contains(filter.canonicalPath)
     }
 
     def "can use excludeFilter"() {
@@ -86,7 +85,7 @@ spotbugs {
         then:
         SUCCESS == result.task(":spotbugsMain").outcome
         result.getOutput().contains("-exclude")
-        result.getOutput().contains(filter.getAbsolutePath())
+        result.getOutput().contains(filter.canonicalPath)
     }
 
     def "can use baselineFile"() {
@@ -107,7 +106,7 @@ spotbugs {
         then:
         SUCCESS == result.task(":spotbugsMain").outcome
         result.getOutput().contains("-excludeBugs")
-        result.getOutput().contains(baseline.getAbsolutePath())
+        result.getOutput().contains(baseline.canonicalPath)
     }
 
     def "can use visitors"() {
@@ -190,9 +189,13 @@ spotbugs {
 
     def "can use effort and reportLevel"() {
         buildFile << """
+import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
 spotbugs {
-    effort = 'less'
-    reportLevel = 'high'
+    // https://discuss.kotlinlang.org/t/bug-cannot-use-kotlin-enum-from-groovy/1521
+    // https://touk.pl/blog/2018/05/28/testing-kotlin-with-spock-part-2-enum-with-instance-method/
+    effort = Effort.valueOf('LESS')
+    reportLevel = Confidence.valueOf('HIGH')
 }"""
         when:
         def result = gradleRunner
