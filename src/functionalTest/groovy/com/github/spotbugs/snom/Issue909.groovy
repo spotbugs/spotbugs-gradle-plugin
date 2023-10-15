@@ -13,23 +13,17 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import spock.lang.Specification
-
-import java.nio.file.Files
 import java.nio.file.Path
 
 /**
  * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/909">GitHub Issues</a>
  */
-class Issue909 extends Specification {
-    Path rootDir
+class Issue909 extends BaseFunctionalTest {
     Path buildFile
 
     def setup() {
-        rootDir = Files.createTempDirectory("spotbugs-gradle-plugin")
-        buildFile = rootDir.resolve("build.gradle")
+        buildFile = rootDir.toPath().resolve("build.gradle")
         buildFile.toFile() << """
 plugins {
   id "java"
@@ -47,7 +41,7 @@ tasks.spotbugsMain {
     }
 }
         """
-        Path sourceDir = rootDir.resolve("src").resolve("main").resolve("java")
+        Path sourceDir = rootDir.toPath().resolve("src").resolve("main").resolve("java")
         sourceDir.toFile().mkdirs()
         Path sourceFile = sourceDir.resolve("Foo.java")
         sourceFile.toFile() << """
@@ -61,10 +55,8 @@ public class Foo {
 
     def "cannot generate HTML report if invalid XSL is provided"() {
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir.toFile())
+        def result = gradleRunner
                 .withArguments('spotbugsMain')
-                .withPluginClasspath()
                 .buildAndFail()
 
         then:

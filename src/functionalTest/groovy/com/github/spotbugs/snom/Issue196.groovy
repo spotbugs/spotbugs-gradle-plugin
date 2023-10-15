@@ -13,29 +13,17 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.util.GradleVersion
-import spock.lang.Specification
-import spock.lang.Unroll
-
-import java.nio.file.Paths
-
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 /**
  * https://github.com/lazystone/spotbugs-bugs/blob/master/build.gradle.kts
  * https://github.com/spotbugs/spotbugs-gradle-plugin/issues/196
  */
-class Issue196 extends Specification {
-    File rootDir
+class Issue196 extends BaseFunctionalTest {
     File buildFile
-    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     def setup() {
-        rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle.kts')
         buildFile << """
 plugins {
@@ -60,13 +48,8 @@ public class Foo {
 
     def "can run analysis when check task is triggered"() {
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
-                .withArguments("check", "--debug")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
+        BuildResult result = gradleRunner
+                .withArguments("check")
                 .build()
 
         then:

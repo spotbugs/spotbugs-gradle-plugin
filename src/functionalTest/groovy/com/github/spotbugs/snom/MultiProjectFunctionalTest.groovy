@@ -13,24 +13,18 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.util.GradleVersion
 import spock.lang.Ignore
-import spock.lang.Specification
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-class MultiProjectFunctionalTest extends Specification {
-    File rootDir
+class MultiProjectFunctionalTest extends BaseFunctionalTest {
     File buildFile
-    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+
     File subBuildFile
 
     def setup() {
-        rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')
         buildFile << """
 plugins {
@@ -70,28 +64,19 @@ repositories {
 
     def "can create spotbugsMain task depending on classes task"() {
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = gradleRunner
                 .withArguments(":sub:spotbugsMain")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
-        TaskOutcome.SUCCESS == result.task(":sub:classes").outcome
-        TaskOutcome.SUCCESS == result.task(":sub:spotbugsMain").outcome
+        SUCCESS == result.task(":sub:classes").outcome
+        SUCCESS == result.task(":sub:spotbugsMain").outcome
     }
 
     def "can use project name of sub project"() {
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
-                .withArguments(':sub:spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
-                .forwardOutput()
+        def result = gradleRunner
+                .withArguments(':sub:spotbugsMain')
                 .build()
 
         then:
@@ -111,12 +96,8 @@ subprojects {
 """
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
-                .withArguments(':sub:spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
-                .forwardOutput()
+        def result = gradleRunner
+                .withArguments(':sub:spotbugsMain')
                 .build()
 
         then:
@@ -133,12 +114,8 @@ spotbugs {
 """
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
-                .withArguments(':sub:spotbugsMain', '--debug')
-                .withPluginClasspath()
-                .withGradleVersion(version)
-                .forwardOutput()
+        def result = gradleRunner
+                .withArguments(':sub:spotbugsMain')
                 .build()
 
         then:

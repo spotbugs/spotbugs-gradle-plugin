@@ -39,7 +39,11 @@ testing {
                 all {
                     testTask.configure {
                         description = "Runs the functional tests."
-                        systemProperty("snom.test.functional.gradle", System.getProperty("snom.test.functional.gradle", gradle.gradleVersion))
+                        var testGradleVersion = providers.gradleProperty("snom.test.functional.gradle").getOrElse("current")
+                        if (testGradleVersion == "current") {
+                            testGradleVersion = gradle.gradleVersion
+                        }
+                        systemProperty("snom.test.functional.gradle", testGradleVersion)
                     }
                 }
             }

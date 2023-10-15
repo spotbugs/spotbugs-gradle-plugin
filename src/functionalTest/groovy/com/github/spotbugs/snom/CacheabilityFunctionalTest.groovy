@@ -14,32 +14,21 @@
 package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.util.GradleVersion
-import spock.lang.Specification
 
 import java.nio.file.Files
 
-class CacheabilityFunctionalTest extends Specification {
+class CacheabilityFunctionalTest extends BaseFunctionalTest {
     /**
      * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/662">GitHub Issues</a>
      */
     def 'spotbugsMain task runs with configuration cache'() {
         given:
-        def buildDir = Files.createTempDirectory(null).toFile()
-        def version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
-
-        initializeBuildFile(buildDir)
+        initializeBuildFile(rootDir)
 
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(buildDir)
+        BuildResult result = gradleRunner
                 .withArguments(':spotbugsMain', '--configuration-cache')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -47,12 +36,8 @@ class CacheabilityFunctionalTest extends Specification {
         result.output.contains("Configuration cache entry stored.")
 
         when:
-        BuildResult resultOfCachedBuild = GradleRunner.create()
-                .withProjectDir(buildDir)
+        BuildResult resultOfCachedBuild = gradleRunner
                 .withArguments(':spotbugsMain', '--configuration-cache')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
         then:
         resultOfCachedBuild.task(":spotbugsMain").outcome == TaskOutcome.UP_TO_DATE
@@ -75,19 +60,13 @@ class CacheabilityFunctionalTest extends Specification {
         def buildDir1 = Files.createTempDirectory(null).toFile()
         def buildDir2 = Files.createTempDirectory(null).toFile()
 
-        def version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
-
         initializeBuildFile(buildDir1)
         initializeBuildFile(buildDir2)
 
         when:
-        BuildResult result1 =
-                GradleRunner.create()
+        BuildResult result1 = gradleRunner
                 .withProjectDir(buildDir1)
                 .withArguments(':spotbugsMain')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
         def hashKeyLine1 = getHashKeyLine(result1)
 
@@ -95,13 +74,9 @@ class CacheabilityFunctionalTest extends Specification {
         hashKeyLine1
 
         when:
-        BuildResult result2 =
-                GradleRunner.create()
+        BuildResult result2 = gradleRunner
                 .withProjectDir(buildDir2)
                 .withArguments(':spotbugsMain', '--scan')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
         def hashKeyLine2 = getHashKeyLine(result2)
 
@@ -112,11 +87,9 @@ class CacheabilityFunctionalTest extends Specification {
 
     def 'spotbugsMain is cacheable even when no report is configured'() {
         given:
-        def buildDir = Files.createTempDirectory(null).toFile()
-        def version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
-        def buildFile = new File(buildDir, "build.gradle")
+        def buildFile = new File(rootDir, "build.gradle")
 
-        initializeBuildFile(buildDir)
+        initializeBuildFile(rootDir)
         buildFile.write """
             |plugins {
             |    id 'java'
@@ -131,20 +104,11 @@ class CacheabilityFunctionalTest extends Specification {
             |""".stripMargin()
 
         when:
-        GradleRunner.create()
-                .withProjectDir(buildDir)
+        gradleRunner
                 .withArguments(':spotbugsMain', '--build-cache')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(buildDir)
+        BuildResult result = gradleRunner
                 .withArguments(':spotbugsMain', '--build-cache')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -156,13 +120,11 @@ class CacheabilityFunctionalTest extends Specification {
      */
     def 'spotbugsMain is cacheable even if a stylesheet is set as String for the HTML report'() {
         given:
-        def buildDir = Files.createTempDirectory(null).toFile()
-        def version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
-        def buildFile = new File(buildDir, "build.gradle")
+        def buildFile = new File(rootDir, "build.gradle")
 
-        initializeBuildFile(buildDir)
+        initializeBuildFile(rootDir)
         buildFile.delete()
-        new File(buildDir, "build.gradle.kts") << """
+        new File(rootDir, "build.gradle.kts") << """
             |import com.github.spotbugs.snom.SpotBugsTask
             |plugins {
             |    `java`
@@ -182,12 +144,8 @@ class CacheabilityFunctionalTest extends Specification {
             |""".stripMargin()
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(buildDir)
+        def result = gradleRunner
                 .withArguments(':spotbugsMain', '--configuration-cache')
-                .withPluginClasspath()
-                .withGradleVersion(version)
-                .forwardOutput()
                 .build()
 
         then:
