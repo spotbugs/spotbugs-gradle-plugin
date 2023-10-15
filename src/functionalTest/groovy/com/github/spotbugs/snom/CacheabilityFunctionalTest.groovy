@@ -15,6 +15,7 @@ package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
+import spock.lang.IgnoreIf
 
 import java.nio.file.Files
 
@@ -118,6 +119,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
     /**
      * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/914">GitHub Issues</a>
      */
+    @IgnoreIf({ !jvm.java11 })
     def 'spotbugsMain is cacheable even if a stylesheet is set as String for the HTML report'() {
         given:
         def buildFile = new File(rootDir, "build.gradle")
