@@ -46,7 +46,7 @@ signing {
 tasks {
     named<io.gitlab.arturbosch.detekt.Detekt>("detekt") {
         reports {
-            sarif.required.set(true)
+            sarif.required = true
         }
     }
     val processVersionFile by registering(WriteProperties::class) {

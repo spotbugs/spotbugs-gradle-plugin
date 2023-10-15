@@ -104,7 +104,7 @@ Configure `spotbugs` to choose your favorite SpotBugs version:
 
 ```kotlin
 dependencies {
-    spotbugs("com.github.spotbugs:spotbugs:4.7.1")
+    spotbugs("com.github.spotbugs:spotbugs:4.8.0")
 }
 ```
 
@@ -114,7 +114,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    spotbugs 'com.github.spotbugs:spotbugs:4.7.1'
+    spotbugs 'com.github.spotbugs:spotbugs:4.8.0'
 }
 ```
 </details>
