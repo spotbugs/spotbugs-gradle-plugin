@@ -7,9 +7,10 @@ on:
 jobs:
   javadoc:
     runs-on: ubuntu-latest
+    if: github.repository == 'spotbugs/spotbugs-gradle-plugin'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
       - name: Set up JDK
@@ -22,6 +23,8 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
       - name: Generate Groovydoc
         uses: gradle/gradle-build-action@v2
         with:

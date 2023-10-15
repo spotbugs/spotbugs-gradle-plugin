@@ -13,26 +13,20 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.internal.impldep.com.google.common.io.Files
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.gradle.util.GradleVersion
 import spock.lang.IgnoreIf
-import spock.lang.Specification
 import spock.lang.Unroll
 
 @IgnoreIf({
     def current = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
     return GradleVersion.version(current) < GradleVersion.version("8.1")
 })
-class BasePluginFunctionalTest extends Specification {
-    File rootDir
+class BasePluginFunctionalTest extends BaseFunctionalTest {
     File buildFile
-    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     def setup() {
-        rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')
         buildFile << """
 plugins {
@@ -60,13 +54,8 @@ public class Foo {
 
     def "does not create SpotBugsTask by default"() {
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = gradleRunner
                 .withArguments(":check")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -83,13 +72,8 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
 }
 """
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -106,13 +90,8 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
 }
 """
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
+        BuildResult result = gradleRunner
                 .withArguments(":spotbugsMain")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -141,12 +120,8 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
         if (!isWorkerApi) {
             arguments.add('-Pcom.github.spotbugs.snom.worker=false')
         }
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = gradleRunner
                 .withArguments(arguments)
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .withDebug(true)
 
         def result = runner.buildAndFail()

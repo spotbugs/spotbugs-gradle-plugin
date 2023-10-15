@@ -13,21 +13,14 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.internal.impldep.com.google.common.io.Files
-import org.gradle.testkit.runner.GradleRunner
-import org.gradle.util.GradleVersion
-import spock.lang.Specification
 import spock.lang.Unroll
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-class GradleJavaToolchainsSupportFunctionalTest extends Specification {
-    File rootDir
+class GradleJavaToolchainsSupportFunctionalTest extends BaseFunctionalTest {
     File buildFile
-    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     def setup() {
-        rootDir = Files.createTempDir()
         buildFile = new File(rootDir, 'build.gradle')
         buildFile << """
 plugins {
@@ -76,12 +69,8 @@ plugins {
         def arguments = [':spotbugsMain', '-is']
         arguments.add(processConfigurationArgument)
 
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = gradleRunner
                 .withArguments(arguments)
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
 
         def result = runner.build()
 
@@ -102,12 +91,8 @@ plugins {
         def arguments = [':spotbugsMain', '-is']
         arguments.add(processConfigurationArgument)
 
-        def runner = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def runner = gradleRunner
                 .withArguments(arguments)
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
 
         def result = runner.build()
 

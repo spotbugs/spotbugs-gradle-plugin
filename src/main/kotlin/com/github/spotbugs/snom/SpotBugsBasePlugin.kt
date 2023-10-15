@@ -15,8 +15,7 @@ package com.github.spotbugs.snom
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.Configuration
-import org.gradle.api.artifacts.DependencySet
+import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.file.Directory
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
@@ -24,9 +23,6 @@ import org.gradle.util.GradleVersion
 import java.io.IOException
 import java.io.UncheckedIOException
 import java.util.Properties
-import kotlin.IllegalArgumentException
-import kotlin.String
-import kotlin.toString
 
 class SpotBugsBasePlugin : Plugin<Project> {
     override fun apply(project: Project) {
@@ -34,7 +30,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
         project.pluginManager.apply(ReportingBasePlugin::class.java)
         val extension = createExtension(project)
         createConfiguration(project, extension)
-        createPluginConfiguration(project)
+        createPluginConfiguration(project.configurations)
         val enableWorkerApi = getPropertyOrDefault(project, FEATURE_FLAG_WORKER_API, "true")
         val enableHybridWorker = getPropertyOrDefault(project, FEATURE_FLAG_HYBRID_WORKER, "true")
         project
@@ -91,37 +87,34 @@ class SpotBugsBasePlugin : Plugin<Project> {
     ) {
         val props = loadProperties()
         extension.toolVersion.convention(props.getProperty("spotbugs-version"))
-        val configuration =
-            project
-                .configurations
-                .create(SpotBugsPlugin.CONFIG_NAME)
-                .setDescription("configuration for the SpotBugs engine")
-                .setVisible(false)
-                .setTransitive(true)
-        configuration.defaultDependencies { dependencies: DependencySet ->
-            dependencies.add(
-                project
-                    .dependencies
-                    .create(
-                        extension.toolVersion.map {
-                            "com.github.spotbugs:spotbugs:$it"
-                        }.get(),
-                    ),
-            )
+        val configs = project.configurations
+
+        configs.register(SpotBugsPlugin.CONFIG_NAME) {
+            it.setDescription("configuration for the SpotBugs engine")
+            it.setVisible(false)
+            it.setTransitive(true)
+            it.defaultDependencies { d ->
+                val dep =
+                    project
+                        .dependencies
+                        .create("com.github.spotbugs:spotbugs:" + extension.toolVersion.get())
+                d.add(dep)
+            }
         }
-        val spotbugsSlf4j =
-            project
-                .configurations
-                .create(SpotBugsPlugin.SLF4J_CONFIG_NAME)
-                .setDescription("configuration for the SLF4J provider to run SpotBugs")
-                .setVisible(false)
-                .setTransitive(true)
-        spotbugsSlf4j.defaultDependencies { dependencies: DependencySet ->
-            dependencies.add(
-                project
-                    .dependencies
-                    .create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version")),
-            )
+
+        configs.register(
+            SpotBugsPlugin.SLF4J_CONFIG_NAME,
+        ) {
+            it.description = "configuration for the SLF4J provider to run SpotBugs"
+            it.setVisible(false)
+            it.setTransitive(true)
+            it.defaultDependencies { d ->
+                val dep =
+                    project
+                        .dependencies
+                        .create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version"))
+                d.add(dep)
+            }
         }
     }
 
@@ -138,13 +131,14 @@ class SpotBugsBasePlugin : Plugin<Project> {
         }
     }
 
-    private fun createPluginConfiguration(project: Project): Configuration {
-        return project
-            .configurations
-            .create(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
-            .setDescription("configuration for the external SpotBugs plugins")
-            .setVisible(false)
-            .setTransitive(false)
+    private fun createPluginConfiguration(configs: ConfigurationContainer) {
+        configs.register(
+            SpotBugsPlugin.PLUGINS_CONFIG_NAME,
+        ) {
+            it.setDescription("configuration for the external SpotBugs plugins")
+            it.setVisible(false)
+            it.setTransitive(false)
+        }
     }
 
     fun verifyGradleVersion(version: GradleVersion) {
