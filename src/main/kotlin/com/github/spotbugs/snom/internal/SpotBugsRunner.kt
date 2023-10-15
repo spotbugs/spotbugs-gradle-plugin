@@ -117,7 +117,10 @@ abstract class SpotBugsRunner {
                 .map { obj: File -> obj.absolutePath }
                 .collect(Collectors.joining("\n"))
         try {
-            val auxClasspathFile = task.auxclasspathFile
+            val auxClasspathFile =
+                task.auxclasspathFile.map {
+                    it.asFile.toPath()
+                }.get()
             try {
                 Files.createDirectories(auxClasspathFile.parent)
                 if (!Files.exists(auxClasspathFile)) {

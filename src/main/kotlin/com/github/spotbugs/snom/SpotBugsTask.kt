@@ -16,7 +16,6 @@ package com.github.spotbugs.snom
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForHybrid
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec
-import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker
 import com.github.spotbugs.snom.internal.SpotBugsSarifReport
 import com.github.spotbugs.snom.internal.SpotBugsTextReport
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport
@@ -50,7 +49,6 @@ import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.workers.WorkerExecutor
 import org.slf4j.LoggerFactory
-import java.nio.file.Path
 import javax.inject.Inject
 
 /**
@@ -263,7 +261,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     abstract val useAuxclasspathFile: Property<Boolean>
 
     @get:Internal
-    lateinit var auxclasspathFile: Path
+    abstract val auxclasspathFile: RegularFileProperty
 
     /**
      * Property to specify the target classes to analyse by SpotBugs.
@@ -283,7 +281,6 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         }
 
     private var enableWorkerApi: Boolean = true
-    private var enableHybridWorker: Boolean = true
 
     @get:Internal
     abstract val pluginJarFiles: ConfigurableFileCollection
@@ -328,10 +325,8 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     fun init(
         extension: SpotBugsExtension,
         enableWorkerApi: Boolean,
-        enableHybridWorker: Boolean,
     ) {
-        // TODO use Property
-        this.auxclasspathFile = project.layout.buildDirectory.file("spotbugs/auxclasspath/$name").get().asFile.toPath()
+        this.auxclasspathFile.convention(project.layout.buildDirectory.file("spotbugs/auxclasspath/$name"))
 
         ignoreFailures.convention(extension.ignoreFailures)
         showStackTraces.convention(extension.showStackTraces)
@@ -358,9 +353,8 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         }
 
         this.enableWorkerApi = enableWorkerApi
-        this.enableHybridWorker = enableHybridWorker
 
-        analyseClassFile.set(project.buildDir.resolve(this.name + "-analyse-class-file.txt"))
+        analyseClassFile.set(project.layout.buildDirectory.file("${this.name}-analyse-class-file.txt"))
 
         val pluginConfiguration = project.configurations.getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
         pluginJarFiles.from(
@@ -388,15 +382,12 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
     @TaskAction
     fun run() {
-        if (!enableWorkerApi) {
-            log.info("Running SpotBugs by JavaExec...")
-            SpotBugsRunnerForJavaExec(launcher).run(this)
-        } else if (enableHybridWorker) {
+        if (enableWorkerApi) {
             log.info("Running SpotBugs by Gradle no-isolated Worker...")
             SpotBugsRunnerForHybrid(workerExecutor, launcher).run(this)
         } else {
-            log.info("Running SpotBugs by Gradle process-isolated Worker...")
-            SpotBugsRunnerForWorker(workerExecutor, launcher).run(this)
+            log.info("Running SpotBugs by JavaExec...")
+            SpotBugsRunnerForJavaExec(launcher).run(this)
         }
     }
 

@@ -122,7 +122,6 @@ task spotbugsMain(type: com.github.spotbugs.snom.SpotBugsTask) {
         }
         def runner = gradleRunner
                 .withArguments(arguments)
-                .withDebug(true)
 
         def result = runner.buildAndFail()
 
