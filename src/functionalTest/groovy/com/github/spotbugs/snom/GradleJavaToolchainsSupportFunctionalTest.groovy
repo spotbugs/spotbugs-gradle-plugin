@@ -52,19 +52,13 @@ public class Foo {
 """
         new File(rootDir, "settings.gradle.kts") << """
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version("0.6.0")
+    id("org.gradle.toolchains.foojay-resolver-convention") version("0.7.0")
 }
 """
     }
 
     @Unroll
     def 'Supports Gradle Java Toolchains (#processConfiguration)'() {
-        setup:
-        buildFile << """
-        spotbugs {
-          useJavaToolchains = true
-        }"""
-
         when:
         def arguments = [':spotbugsMain', '-is']
         arguments.add(processConfigurationArgument)
@@ -86,7 +80,13 @@ plugins {
     }
 
     @Unroll
-    def 'Do not use Gradle Java Toolchains if extension is not configured (#processConfiguration)'() {
+    def 'Do not use Gradle Java Toolchains if extension is disabled explicitly (#processConfiguration)'() {
+        setup:
+        buildFile << """
+            spotbugs {
+              useJavaToolchains = false
+            }"""
+
         when:
         def arguments = [':spotbugsMain', '-is']
         arguments.add(processConfigurationArgument)

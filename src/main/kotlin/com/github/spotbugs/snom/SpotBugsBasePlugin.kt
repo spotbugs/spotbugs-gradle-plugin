@@ -77,7 +77,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
                 },
             )
         extension.useAuxclasspathFile.convention(true)
-        extension.useJavaToolchains.convention(false)
+        extension.useJavaToolchains.convention(true)
         return extension
     }
 
