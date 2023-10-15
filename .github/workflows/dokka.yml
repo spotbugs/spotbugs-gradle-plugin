@@ -23,8 +23,6 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
-      - name: Gradle cache
-        uses: gradle/gradle-build-action@v2
       - name: Generate Groovydoc
         uses: gradle/gradle-build-action@v2
         with:

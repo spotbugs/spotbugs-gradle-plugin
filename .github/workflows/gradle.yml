@@ -28,10 +28,10 @@ jobs:
         node-version-file: '.nvmrc'
         cache: npm
       if: matrix.gradle == '7.6.2'
-    - name: Gradle cache
-      uses: gradle/gradle-build-action@v2
     - name: Build with Gradle
-      run: ./gradlew build -Dsnom.test.functional.gradle=${{ matrix.gradle }}
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: build -Dsnom.test.functional.gradle=${{ matrix.gradle }} --scan
     - run: |
         echo Verifying the java version used in class files...
         cd build/classes/kotlin/main
