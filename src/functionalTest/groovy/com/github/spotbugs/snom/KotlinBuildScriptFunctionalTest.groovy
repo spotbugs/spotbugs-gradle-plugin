@@ -14,22 +14,15 @@
 package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.util.GradleVersion
 import spock.lang.IgnoreIf
-import spock.lang.Specification
-
-import java.nio.file.Files
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-class KotlinBuildScriptFunctionalTest extends Specification {
-    File rootDir
+class KotlinBuildScriptFunctionalTest extends BaseFunctionalTest {
     File buildFile
-    String version = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
 
     def setup() {
-        rootDir = Files.createTempDirectory("KotlinBuildScriptFunctionalTest").toFile()
         buildFile = new File(rootDir, 'build.gradle.kts')
         buildFile << """
 import com.github.spotbugs.snom.assign
@@ -85,11 +78,8 @@ spotbugs {
         new File(rootDir, "baseline.xml") << "<BugCollection />"
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
-                .withArguments('check', '--info')
-                .withPluginClasspath()
-                .withGradleVersion(version)
+        def result = gradleRunner
+                .withArguments('check')
                 .build()
 
         then:
@@ -105,11 +95,8 @@ dependencies {
 """
 
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
-                .withArguments('check', '--debug', "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
-                .withPluginClasspath()
-                .withGradleVersion(version)
+        def result = gradleRunner
+                .withArguments('check', "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
                 .build()
 
         then:
@@ -125,13 +112,8 @@ dependencies {
     spotbugs("com.github.spotbugs:spotbugs:4.0.0-beta4")
 }"""
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
-                .withArguments(":spotbugsMain", "--info")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
+        BuildResult result = gradleRunner
+                .withArguments(":spotbugsMain")
                 .build()
 
         then:
@@ -153,12 +135,8 @@ tasks.spotbugsMain {
 }
 """
         when:
-        def result = GradleRunner.create()
-                .withProjectDir(rootDir)
+        def result = gradleRunner
                 .withArguments('check')
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
                 .build()
 
         then:
@@ -176,13 +154,8 @@ dependencies {
 }
 """
         when:
-        BuildResult result =
-                GradleRunner.create()
-                .withProjectDir(rootDir)
-                .withArguments(":spotbugsMain", "--debug")
-                .withPluginClasspath()
-                .forwardOutput()
-                .withGradleVersion(version)
+        BuildResult result = gradleRunner
+                .withArguments(":spotbugsMain")
                 .build()
 
         then:

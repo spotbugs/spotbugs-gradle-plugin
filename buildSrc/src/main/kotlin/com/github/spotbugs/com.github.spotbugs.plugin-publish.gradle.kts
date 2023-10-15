@@ -5,30 +5,30 @@ plugins {
 }
 
 gradlePlugin {
-    website.set("https://github.com/spotbugs/spotbugs-gradle-plugin")
-    vcsUrl.set("https://github.com/spotbugs/spotbugs-gradle-plugin")
+    website = "https://github.com/spotbugs/spotbugs-gradle-plugin"
+    vcsUrl = "https://github.com/spotbugs/spotbugs-gradle-plugin"
     plugins {
         create("spotbugsGradleBasePlugin") {
             id = "com.github.spotbugs-base"
             displayName = "Official SpotBugs Gradle Base Plugin"
             description = "A base Gradle plugin that runs static bytecode analysis by SpotBugs"
             implementationClass = "com.github.spotbugs.snom.SpotBugsBasePlugin"
-            tags.set(listOf(
+            tags = listOf(
                 "spotbugs",
                 "static analysis",
                 "code quality"
-            ))
+            )
         }
         create("spotbugsGradlePlugin") {
             id = "com.github.spotbugs"
             displayName = "Official SpotBugs Gradle Plugin"
             description = "A Gradle plugin that runs static bytecode analysis by SpotBugs"
             implementationClass = "com.github.spotbugs.snom.SpotBugsPlugin"
-            tags.set(listOf(
+            tags = listOf(
                 "spotbugs",
                 "static analysis",
                 "code quality"
-            ))
+            )
         }
     }
 }
@@ -36,14 +36,14 @@ gradlePlugin {
 publishing.publications.withType<MavenPublication> {
     pom {
         scm {
-            connection.set("scm:git:git@github.com:spotbugs/spotbugs-gradle-plugin.git")
-            developerConnection.set("scm:git:git@github.com:spotbugs/spotbugs-gradle-plugin.git")
-            url.set("https://github.com/spotbugs/spotbugs-gradle-plugin/")
+            connection = "scm:git:git@github.com:spotbugs/spotbugs-gradle-plugin.git"
+            developerConnection = "scm:git:git@github.com:spotbugs/spotbugs-gradle-plugin.git"
+            url = "https://github.com/spotbugs/spotbugs-gradle-plugin/"
         }
         licenses {
             license {
-                name.set("Apache License 2.0")
-                url.set("https://spdx.org/licenses/Apache-2.0.html")
+                name = "Apache License 2.0"
+                url = "https://spdx.org/licenses/Apache-2.0.html"
             }
         }
     }

@@ -7,7 +7,7 @@ plugins {
     id("org.sonarqube")
 }
 
-val junitVersion = "5.8.1"
+val junitVersion = "5.10.0"
 dependencies {
     testImplementation(gradleTestKit())
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
@@ -38,12 +38,16 @@ testing {
         @Suppress("UNUSED_VARIABLE")
         val functionalTest by registering(JvmTestSuite::class) {
             useSpock()
-            testType.set(TestSuiteType.FUNCTIONAL_TEST)
+            testType = TestSuiteType.FUNCTIONAL_TEST
             targets {
                 all {
                     testTask.configure {
                         description = "Runs the functional tests."
-                        systemProperty("snom.test.functional.gradle", System.getProperty("snom.test.functional.gradle", gradle.gradleVersion))
+                        var testGradleVersion = providers.gradleProperty("snom.test.functional.gradle").getOrElse("current")
+                        if (testGradleVersion == "current") {
+                            testGradleVersion = gradle.gradleVersion
+                        }
+                        systemProperty("snom.test.functional.gradle", testGradleVersion)
                     }
                 }
             }
@@ -55,9 +59,9 @@ gradlePlugin {
     testSourceSets(sourceSets["functionalTest"])
 }
 
-val jacocoTestReport = tasks.named<JacocoReport>("jacocoTestReport") {
+tasks.jacocoTestReport {
     reports.named("xml") {
-            required.set(true)
+            required = true
     }
 }
 
@@ -66,7 +70,7 @@ sonarqube {
         property("sonar.projectKey", "com.github.spotbugs.gradle")
         property("sonar.organization", "spotbugs")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.coverage.jacoco.xmlReportPaths", jacocoTestReport.flatMap { it.reports.xml.outputLocation })
+        property("sonar.coverage.jacoco.xmlReportPaths", tasks.jacocoTestReport.flatMap { it.reports.xml.outputLocation })
     }
 }
 
@@ -77,5 +81,5 @@ tasks {
 }
 tasks.check {
     dependsOn(tasks.named("functionalTest"))
-    dependsOn(jacocoTestReport)
+    dependsOn(tasks.jacocoTestReport)
 }

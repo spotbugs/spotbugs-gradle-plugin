@@ -17,16 +17,10 @@ java {
         languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
+
 group = "com.github.spotbugs.snom"
 
-repositories {
-    // To download the Android Gradle Plugin
-    google()
-    // To download trove4j required by the Android Gradle Plugin
-    mavenCentral()
-}
-
-val spotBugsVersion = "4.7.3"
+val spotBugsVersion = "4.8.0"
 val slf4jVersion = "2.0.0"
 val androidGradlePluginVersion = "8.1.0"
 
@@ -37,8 +31,8 @@ dependencies {
     testImplementation("com.tngtech.archunit:archunit:1.1.0")
 }
 
-val signingKey: String? = System.getenv("SIGNING_KEY")
-val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
+val signingKey: String? = providers.environmentVariable("SIGNING_KEY").orNull
+val signingPassword: String? = providers.environmentVariable("SIGNING_PASSWORD").orNull
 
 signing {
     if (!signingKey.isNullOrBlank() && !signingPassword.isNullOrBlank()) {
@@ -61,10 +55,10 @@ tasks {
         property("slf4j-version", slf4jVersion)
         property("spotbugs-version", spotBugsVersion)
     }
-    named("processResources") {
+    processResources {
         dependsOn(processVersionFile)
     }
-    withType<Jar> {
+    withType<Jar>().configureEach {
         dependsOn(processResources)
     }
     named("javadoc") {
@@ -72,4 +66,4 @@ tasks {
     }
 }
 
-defaultTasks("spotlessApply", "build")
+defaultTasks(tasks.spotlessApply.name, tasks.build.name)
