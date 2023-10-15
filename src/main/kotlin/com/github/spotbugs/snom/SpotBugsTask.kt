@@ -263,7 +263,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     abstract val useAuxclasspathFile: Property<Boolean>
 
     @get:Internal
-    lateinit var auxclasspathFile: Path
+    abstract val auxclasspathFile: RegularFileProperty
 
     /**
      * Property to specify the target classes to analyse by SpotBugs.
@@ -330,8 +330,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         enableWorkerApi: Boolean,
         enableHybridWorker: Boolean,
     ) {
-        // TODO use Property
-        this.auxclasspathFile = project.layout.buildDirectory.file("spotbugs/auxclasspath/$name").get().asFile.toPath()
+        this.auxclasspathFile.convention(project.layout.buildDirectory.file("spotbugs/auxclasspath/$name"))
 
         ignoreFailures.convention(extension.ignoreFailures)
         showStackTraces.convention(extension.showStackTraces)
