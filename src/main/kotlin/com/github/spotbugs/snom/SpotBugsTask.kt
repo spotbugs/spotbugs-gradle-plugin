@@ -358,7 +358,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         this.enableWorkerApi = enableWorkerApi
         this.enableHybridWorker = enableHybridWorker
 
-        analyseClassFile.set(project.buildDir.resolve(this.name + "-analyse-class-file.txt"))
+        analyseClassFile.set(project.layout.buildDirectory.file("${this.name}-analyse-class-file.txt"))
 
         val pluginConfiguration = project.configurations.getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
         pluginJarFiles.from(
