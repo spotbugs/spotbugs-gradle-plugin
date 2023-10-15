@@ -24,6 +24,11 @@
     "branches": [
       {
         "name": "master"
+      },
+      {
+        "channel": "beta",
+        "name": "beta",
+        "prerelease": true
       }
     ],
     "plugins": [
