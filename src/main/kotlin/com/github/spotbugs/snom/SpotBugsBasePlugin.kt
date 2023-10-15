@@ -32,7 +32,6 @@ class SpotBugsBasePlugin : Plugin<Project> {
         createConfiguration(project, extension)
         createPluginConfiguration(project.configurations)
         val enableWorkerApi = getPropertyOrDefault(project, FEATURE_FLAG_WORKER_API, "true")
-        val enableHybridWorker = getPropertyOrDefault(project, FEATURE_FLAG_HYBRID_WORKER, "true")
         project
             .tasks
             .withType(SpotBugsTask::class.java)
@@ -40,7 +39,6 @@ class SpotBugsBasePlugin : Plugin<Project> {
                 task.init(
                     extension,
                     enableWorkerApi.toBoolean(),
-                    enableHybridWorker.toBoolean(),
                 )
             }
     }
@@ -163,7 +161,6 @@ class SpotBugsBasePlugin : Plugin<Project> {
 
     companion object {
         private const val FEATURE_FLAG_WORKER_API = "com.github.spotbugs.snom.worker"
-        private const val FEATURE_FLAG_HYBRID_WORKER = "com.github.spotbugs.snom.javaexec-in-worker"
         private const val DEFAULT_REPORTS_DIR_NAME = "spotbugs"
 
         /**

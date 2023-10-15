@@ -16,7 +16,6 @@ package com.github.spotbugs.snom
 import com.github.spotbugs.snom.internal.SpotBugsHtmlReport
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForHybrid
 import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec
-import com.github.spotbugs.snom.internal.SpotBugsRunnerForWorker
 import com.github.spotbugs.snom.internal.SpotBugsSarifReport
 import com.github.spotbugs.snom.internal.SpotBugsTextReport
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport
@@ -282,7 +281,6 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         }
 
     private var enableWorkerApi: Boolean = true
-    private var enableHybridWorker: Boolean = true
 
     @get:Internal
     abstract val pluginJarFiles: ConfigurableFileCollection
@@ -327,7 +325,6 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     fun init(
         extension: SpotBugsExtension,
         enableWorkerApi: Boolean,
-        enableHybridWorker: Boolean,
     ) {
         this.auxclasspathFile.convention(project.layout.buildDirectory.file("spotbugs/auxclasspath/$name"))
 
@@ -356,7 +353,6 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         }
 
         this.enableWorkerApi = enableWorkerApi
-        this.enableHybridWorker = enableHybridWorker
 
         analyseClassFile.set(project.layout.buildDirectory.file("${this.name}-analyse-class-file.txt"))
 
@@ -386,15 +382,12 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
     @TaskAction
     fun run() {
-        if (!enableWorkerApi) {
-            log.info("Running SpotBugs by JavaExec...")
-            SpotBugsRunnerForJavaExec(launcher).run(this)
-        } else if (enableHybridWorker) {
+        if (enableWorkerApi) {
             log.info("Running SpotBugs by Gradle no-isolated Worker...")
             SpotBugsRunnerForHybrid(workerExecutor, launcher).run(this)
         } else {
-            log.info("Running SpotBugs by Gradle process-isolated Worker...")
-            SpotBugsRunnerForWorker(workerExecutor, launcher).run(this)
+            log.info("Running SpotBugs by JavaExec...")
+            SpotBugsRunnerForJavaExec(launcher).run(this)
         }
     }
 

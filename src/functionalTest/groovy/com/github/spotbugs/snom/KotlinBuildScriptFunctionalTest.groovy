@@ -96,7 +96,7 @@ dependencies {
 
         when:
         def result = gradleRunner
-                .withArguments('check', "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
+                .withArguments('check', "-Pcom.github.spotbugs.snom.worker=false")
                 .build()
 
         then:

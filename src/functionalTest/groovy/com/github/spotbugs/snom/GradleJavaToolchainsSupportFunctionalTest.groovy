@@ -76,7 +76,6 @@ plugins {
         processConfiguration | processConfigurationArgument
         'javaexec'           | '-Pcom.github.spotbugs.snom.worker=false'
         'worker-api'         | '-Pcom.github.spotbugs.snom.worker=true'
-        'javaexec-in-worker' | '-Pcom.github.spotbugs.snom.javaexec-in-worker=true'
     }
 
     @Unroll
@@ -105,6 +104,5 @@ plugins {
         processConfiguration | processConfigurationArgument
         'javaexec'           | '-Pcom.github.spotbugs.snom.worker=false'
         'worker-api'         | '-Pcom.github.spotbugs.snom.worker=true'
-        'javaexec-in-worker' | '-Pcom.github.spotbugs.snom.javaexec-in-worker=true'
     }
 }

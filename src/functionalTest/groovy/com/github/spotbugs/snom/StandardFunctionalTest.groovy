@@ -167,7 +167,7 @@ spotbugsMain {
         TaskOutcome.UP_TO_DATE == result.task(":spotbugsMain").outcome
     }
 
-    def 'ignore missing classes (Hybrid API? #isHybridApi)'() {
+    def 'ignore missing classes'() {
         given:
         def code = new File(rootDir, 'src/main/java/Bar.java')
         code << '''
@@ -191,7 +191,6 @@ spotbugsMain {
             ':spotbugsMain',
             '-is'
         ]
-        arguments.add('-Pcom.github.spotbugs.snom.javaexec-in-worker=' + isHybridApi)
         def runner = gradleRunner
                 .withArguments(arguments)
 
@@ -199,9 +198,6 @@ spotbugsMain {
 
         then:
         result.task(':spotbugsMain').outcome == SUCCESS
-
-        where:
-        isHybridApi << [true, false]
     }
 
     @Unroll
@@ -420,7 +416,7 @@ dependencies{
 }"""
         when:
         BuildResult result = gradleRunner
-                .withArguments("spotbugsMain", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
+                .withArguments("spotbugsMain", "-Pcom.github.spotbugs.snom.worker=false")
                 .build()
 
         then:
@@ -450,7 +446,7 @@ public class FooTest {
 }"""
         when:
         BuildResult result = gradleRunner
-                .withArguments("spotbugsMain", "spotbugsTest", "-Pcom.github.spotbugs.snom.javaexec-in-worker=false")
+                .withArguments("spotbugsMain", "spotbugsTest", "-Pcom.github.spotbugs.snom.worker=false")
                 .build()
 
         then:
@@ -585,7 +581,6 @@ spotbugsMain {
         }
         def runner = gradleRunner
                 .withArguments(arguments)
-                .withDebug(true)
 
         def result = runner.buildAndFail()
 
@@ -653,7 +648,6 @@ spotbugs {
         }
         def runner = gradleRunner
                 .withArguments(arguments)
-                .withDebug(true)
 
         def result = runner.build()
 
