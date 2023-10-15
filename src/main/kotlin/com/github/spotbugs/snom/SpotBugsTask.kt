@@ -50,7 +50,6 @@ import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.workers.WorkerExecutor
 import org.slf4j.LoggerFactory
-import java.nio.file.Path
 import javax.inject.Inject
 
 /**
