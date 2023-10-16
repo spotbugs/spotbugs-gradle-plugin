@@ -44,7 +44,7 @@ jobs:
         rm -rf build/libs/*.jar
         npm ci
         npx semantic-release
-      if: matrix.gradle == '7.6.2' && ubuntu-latest && github.repository == 'spotbugs/spotbugs-gradle-plugin'
+      if: matrix.gradle == '7.6.2' && matrix.os == ubuntu-latest && github.repository == 'spotbugs/spotbugs-gradle-plugin'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
