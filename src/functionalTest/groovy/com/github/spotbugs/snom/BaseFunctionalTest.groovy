@@ -20,7 +20,7 @@ import spock.lang.Specification
 import spock.lang.TempDir
 
 abstract class BaseFunctionalTest extends Specification {
-    static String gradleVersion = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+    static String gradleVersion = System.getProperty('gradleVersion', GradleVersion.current().version)
 
     @TempDir
     File rootDir
