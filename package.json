@@ -28,7 +28,7 @@
       {
         "channel": "rc",
         "name": "beta",
-        "prerelease": true
+        "prerelease": "rc"
       }
     ],
     "plugins": [
