@@ -26,9 +26,9 @@
         "name": "master"
       },
       {
-        "channel": "beta",
+        "channel": "rc",
         "name": "beta",
-        "prerelease": true
+        "prerelease": "rc"
       }
     ],
     "plugins": [
