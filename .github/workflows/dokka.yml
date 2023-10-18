@@ -17,12 +17,18 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
+<<<<<<< HEAD:.github/workflows/dokka.yml
           java-version-file: .java-version
+=======
+          java-version: 11
+>>>>>>> origin/master:.github/workflows/javadoc.yml
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
           cache: npm
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
       - name: Generate Groovydoc
         uses: gradle/gradle-build-action@v2
         with:
