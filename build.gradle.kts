@@ -20,7 +20,7 @@ group = "com.github.spotbugs.snom"
 val errorproneVersion = "2.23.0"
 val spotBugsVersion = "4.8.0"
 val slf4jVersion = "2.0.0"
-val androidGradlePluginVersion = "7.3.1"
+val androidGradlePluginVersion = "8.1.2"
 
 dependencies {
     errorprone("com.google.errorprone:error_prone_core:$errorproneVersion")
