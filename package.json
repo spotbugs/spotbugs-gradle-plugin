@@ -9,7 +9,7 @@
     "lint-staged": "^15.0.0",
     "pinst": "^3.0.0",
     "prettier": "^3.0.3",
-    "semantic-release": "21.1.2"
+    "semantic-release": "22.0.7"
   },
   "scripts": {
     "prepare": "husky install"
