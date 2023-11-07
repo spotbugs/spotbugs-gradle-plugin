@@ -27,7 +27,7 @@ dependencies {
     compileOnly(localGroovy())
     compileOnly("com.github.spotbugs:spotbugs:$spotBugsVersion")
     compileOnly("com.android.tools.build:gradle:$androidGradlePluginVersion")
-    testImplementation("com.tngtech.archunit:archunit:1.1.0")
+    testImplementation("com.tngtech.archunit:archunit:1.2.0")
 }
 
 val signingKey: String? = providers.environmentVariable("SIGNING_KEY").orNull
