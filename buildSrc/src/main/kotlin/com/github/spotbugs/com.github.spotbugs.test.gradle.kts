@@ -43,7 +43,7 @@ testing {
                         if (testGradleVersion == "current") {
                             testGradleVersion = gradle.gradleVersion
                         }
-                        systemProperty("snom.test.functional.gradle", testGradleVersion)
+                        systemProperty("gradleVersion", testGradleVersion)
                     }
                 }
             }
