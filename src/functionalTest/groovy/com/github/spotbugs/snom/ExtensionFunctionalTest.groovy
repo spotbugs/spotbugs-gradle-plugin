@@ -14,6 +14,7 @@
 package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
+import spock.lang.IgnoreIf
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
@@ -208,6 +209,7 @@ spotbugs {
         result.getOutput().contains("-high")
     }
 
+    @IgnoreIf({ !jvm.java11 })
     def "can use toolVersion to set the SpotBugs version"() {
         setup:
         buildFile << """
@@ -224,6 +226,7 @@ spotbugs {
         result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
     }
 
+    @IgnoreIf({ !jvm.java11 })
     def "can use toolVersion to get the SpotBugs version"() {
         setup:
         buildFile << """

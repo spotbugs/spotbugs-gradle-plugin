@@ -24,7 +24,7 @@ jobs:
         distribution: 'temurin'
         java-version-file: .java-version
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version-file: '.nvmrc'
         cache: npm
@@ -32,7 +32,7 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: build -Dsnom.test.functional.gradle=${{ matrix.gradle }} --scan
+        arguments: build -Psnom.test.functional.gradle=${{ matrix.gradle }} --scan
     - run: |
         echo Verifying the java version used in class files...
         cd build/classes/kotlin/main

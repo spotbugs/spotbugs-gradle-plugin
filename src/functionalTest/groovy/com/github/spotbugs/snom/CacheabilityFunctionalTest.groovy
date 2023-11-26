@@ -123,6 +123,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
     /**
      * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/914">GitHub Issues</a>
      */
+    @IgnoreIf({ !jvm.java11 })
     def 'spotbugsMain is cacheable even if a stylesheet is set as String for the HTML report'() {
         given:
         def buildFile = new File(rootDir, "build.gradle")

@@ -74,6 +74,7 @@ public class Foo {
         result.output.contains("spotbugsTest - Run SpotBugs analysis for the source set 'test'")
     }
 
+    @IgnoreIf({ !jvm.java11 })
     def "can use the specified SpotBugs version"() {
         setup:
         buildFile << """
