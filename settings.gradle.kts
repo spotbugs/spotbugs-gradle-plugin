@@ -28,4 +28,3 @@ gradleEnterprise {
         publishAlwaysIf(isCiBuild)
     }
 }
-
