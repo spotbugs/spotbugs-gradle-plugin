@@ -155,7 +155,7 @@ class SpotBugsRunnerForHybrid extends SpotBugsRunner {
               .map(URI::toString)
               .collect(Collectors.toList());
       if (!reportPaths.isEmpty()) {
-        errorMessage += " See the report at: " + String.join(",", reportPaths);
+        errorMessage += " See the report at: " + String.join(", ", reportPaths);
       }
       throw new GradleException(errorMessage);
     }

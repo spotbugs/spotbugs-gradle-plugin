@@ -7,18 +7,21 @@ plugins {
     id("com.github.spotbugs.plugin-publish")
     id("com.github.spotbugs.test")
     id("org.sonarqube")
-    id("com.github.spotbugs") version "5.2.0"
+    id("com.github.spotbugs") version "5.2.4"
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
 }
 
 group = "com.github.spotbugs.snom"
 
-val errorproneVersion = "2.22.0"
-val spotBugsVersion = "4.8.0"
+val errorproneVersion = "2.23.0"
+val spotBugsVersion = "4.8.1"
 val slf4jVersion = "2.0.0"
 val androidGradlePluginVersion = "7.3.1"
 
@@ -27,7 +30,7 @@ dependencies {
     compileOnly(localGroovy())
     compileOnly("com.github.spotbugs:spotbugs:$spotBugsVersion")
     compileOnly("com.android.tools.build:gradle:$androidGradlePluginVersion")
-    testImplementation("com.tngtech.archunit:archunit:1.1.0")
+    testImplementation("com.tngtech.archunit:archunit:1.2.0")
 }
 
 val signingKey: String? = providers.environmentVariable("SIGNING_KEY").orNull

@@ -15,6 +15,7 @@ package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
+import spock.lang.IgnoreIf
 import spock.lang.Unroll
 
 import java.nio.file.Paths
@@ -73,6 +74,7 @@ public class Foo {
         result.output.contains("spotbugsTest - Run SpotBugs analysis for the source set 'test'")
     }
 
+    @IgnoreIf({ !jvm.java11 })
     def "can use the specified SpotBugs version"() {
         setup:
         buildFile << """
