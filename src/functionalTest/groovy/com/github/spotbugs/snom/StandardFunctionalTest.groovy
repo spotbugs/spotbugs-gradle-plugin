@@ -16,6 +16,7 @@ package com.github.spotbugs.snom
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.Ignore
+import spock.lang.IgnoreIf
 import spock.lang.Unroll
 
 import java.nio.file.Paths
