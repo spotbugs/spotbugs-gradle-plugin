@@ -51,7 +51,7 @@ public class Foo {
     }
 
     @IgnoreIf({
-        def current = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+        def current = System.getProperty('gradleVersion', GradleVersion.current().version)
         return GradleVersion.version(current) < GradleVersion.version("8.2") })
     def "can set params to SpotBugsExtension"() {
         setup:
@@ -125,7 +125,7 @@ dependencies {
     }
 
     @IgnoreIf({
-        def current = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+        def current = System.getProperty('gradleVersion', GradleVersion.current().version)
         return GradleVersion.version(current) < GradleVersion.version("8.2") })
     def "can generate spotbugs.html in configured outputLocation"() {
         buildFile << """

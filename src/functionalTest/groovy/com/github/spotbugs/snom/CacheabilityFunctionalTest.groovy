@@ -25,7 +25,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
      * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/662">GitHub Issues</a>
      */
     @IgnoreIf({
-        def current = System.getProperty('snom.test.functional.gradle', GradleVersion.current().version)
+        def current = System.getProperty('gradleVersion', GradleVersion.current().version)
         return GradleVersion.version(current) < GradleVersion.version("8.1") })
     def 'spotbugsMain task runs with configuration cache'() {
         given:
