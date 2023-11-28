@@ -20,7 +20,7 @@ java {
 
 group = "com.github.spotbugs.snom"
 
-val spotBugsVersion = "4.8.0"
+val spotBugsVersion = "4.8.1"
 val slf4jVersion = "2.0.0"
 val androidGradlePluginVersion = "8.1.0"
 
