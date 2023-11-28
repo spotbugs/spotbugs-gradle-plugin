@@ -24,11 +24,6 @@
     "branches": [
       {
         "name": "master"
-      },
-      {
-        "channel": "rc",
-        "name": "beta",
-        "prerelease": "rc"
       }
     ],
     "plugins": [
