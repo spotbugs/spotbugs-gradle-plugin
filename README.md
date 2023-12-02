@@ -165,7 +165,7 @@ spotbugsMain {
 ### Migration guides
 
 - [v4 to v5: Bump up Gradle to v7 or later](https://github.com/spotbugs/spotbugs-gradle-plugin/releases/tag/5.0.0)
-- [v5 to v6: Bump up Gradle to v7.1 or later, and update the `effort` and `reportLevel` properties of `SpotBugsTask` and `SpotBugsExtension` to enum value](https://github.com/spotbugs/spotbugs-gradle-plugin/releases/tag/6.0.0-rc.1)
+- [v5 to v6: Bump up Gradle to v7.1 or later, and update the `effort` and `reportLevel` properties of `SpotBugsTask` and `SpotBugsExtension` to enum value](https://github.com/spotbugs/spotbugs-gradle-plugin/releases/tag/6.0.0)
 
 ## SpotBugs version mapping
 
