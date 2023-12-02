@@ -65,6 +65,7 @@ $dokka.location:com.github.spotbugs.snom/Confidence.LOW/toCommandLineOption/#/Po
 $dokka.location:com.github.spotbugs.snom/Confidence.MEDIUM///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}spotbugs-gradle-plugin/com.github.spotbugs.snom/-confidence/-m-e-d-i-u-m/index.html
 $dokka.location:com.github.spotbugs.snom/Confidence.MEDIUM/toCommandLineOption/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-confidence/-m-e-d-i-u-m/to-command-line-option.html
 $dokka.location:com.github.spotbugs.snom/Confidence///PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-confidence/index.html
+$dokka.location:com.github.spotbugs.snom/Confidence/entries/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-confidence/entries.html
 $dokka.location:com.github.spotbugs.snom/Confidence/toCommandLineOption/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-confidence/to-command-line-option.html
 $dokka.location:com.github.spotbugs.snom/Confidence/valueOf/#kotlin.String/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-confidence/value-of.html
 $dokka.location:com.github.spotbugs.snom/Confidence/values/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-confidence/values.html
@@ -74,6 +75,7 @@ $dokka.location:com.github.spotbugs.snom/Effort.MAX///PointingToDeclaration/{"or
 $dokka.location:com.github.spotbugs.snom/Effort.MIN///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}spotbugs-gradle-plugin/com.github.spotbugs.snom/-effort/-m-i-n/index.html
 $dokka.location:com.github.spotbugs.snom/Effort.MORE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}spotbugs-gradle-plugin/com.github.spotbugs.snom/-effort/-m-o-r-e/index.html
 $dokka.location:com.github.spotbugs.snom/Effort///PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-effort/index.html
+$dokka.location:com.github.spotbugs.snom/Effort/entries/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-effort/entries.html
 $dokka.location:com.github.spotbugs.snom/Effort/valueOf/#kotlin.String/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-effort/value-of.html
 $dokka.location:com.github.spotbugs.snom/Effort/values/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-effort/values.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsBasePlugin.Companion///PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-base-plugin/-companion/index.html
