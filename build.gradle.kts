@@ -3,30 +3,28 @@ plugins {
     `java-gradle-plugin`
     jacoco
     signing
+    kotlin("jvm") version "1.9.0"
+    id("org.jetbrains.dokka") version "1.8.20"
     id("com.github.spotbugs.gradle-plugin")
     id("com.github.spotbugs.plugin-publish")
     id("com.github.spotbugs.test")
     id("org.sonarqube")
-    id("com.github.spotbugs") version "5.2.5"
+    id("io.gitlab.arturbosch.detekt") version "1.23.1"
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
 
 group = "com.github.spotbugs.snom"
 
-val errorproneVersion = "2.23.0"
 val spotBugsVersion = "4.8.2"
 val slf4jVersion = "2.0.0"
-val androidGradlePluginVersion = "7.3.1"
+val androidGradlePluginVersion = "8.1.0"
 
 dependencies {
-    errorprone("com.google.errorprone:error_prone_core:$errorproneVersion")
     compileOnly(localGroovy())
     compileOnly("com.github.spotbugs:spotbugs:$spotBugsVersion")
     compileOnly("com.android.tools.build:gradle:$androidGradlePluginVersion")
@@ -45,16 +43,10 @@ signing {
     }
 }
 
-spotbugs {
-    ignoreFailures = true
-}
-
 tasks {
-    spotbugsMain {
+    named<io.gitlab.arturbosch.detekt.Detekt>("detekt") {
         reports {
-            register("sarif") {
-                required = true
-            }
+            sarif.required = true
         }
     }
     val processVersionFile by registering(WriteProperties::class) {
@@ -68,6 +60,9 @@ tasks {
     }
     withType<Jar>().configureEach {
         dependsOn(processResources)
+    }
+    named("javadoc") {
+        enabled = false
     }
 }
 
