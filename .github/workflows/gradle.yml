@@ -11,8 +11,8 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest ]
         gradle: [ '7.6.2', '8.1', 'current' ]
+        os: [ ubuntu-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
