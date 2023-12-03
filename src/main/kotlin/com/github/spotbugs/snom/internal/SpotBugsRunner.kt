@@ -14,9 +14,6 @@
 package com.github.spotbugs.snom.internal
 
 import com.github.spotbugs.snom.SpotBugsTask
-import org.gradle.api.GradleException
-import org.gradle.api.file.FileCollection
-import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -26,6 +23,9 @@ import java.util.stream.Collectors
 import kotlin.Exception
 import kotlin.String
 import kotlin.collections.ArrayList
+import org.gradle.api.GradleException
+import org.gradle.api.file.FileCollection
+import org.slf4j.LoggerFactory
 
 abstract class SpotBugsRunner {
     private val log = LoggerFactory.getLogger(SpotBugsRunner::class.java)

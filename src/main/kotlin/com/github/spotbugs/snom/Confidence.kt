@@ -13,8 +13,8 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.api.tasks.Internal
 import java.util.Optional
+import org.gradle.api.tasks.Internal
 
 /**
  * The [Confidence] is used to specify the level to report bugs. Lower level contains more

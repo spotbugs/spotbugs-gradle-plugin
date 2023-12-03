@@ -13,6 +13,9 @@
  */
 package com.github.spotbugs.snom
 
+import java.io.IOException
+import java.io.UncheckedIOException
+import java.util.Properties
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ConfigurationContainer
@@ -20,9 +23,6 @@ import org.gradle.api.file.Directory
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.util.GradleVersion
-import java.io.IOException
-import java.io.UncheckedIOException
-import java.util.Properties
 
 class SpotBugsBasePlugin : Plugin<Project> {
     override fun apply(project: Project) {

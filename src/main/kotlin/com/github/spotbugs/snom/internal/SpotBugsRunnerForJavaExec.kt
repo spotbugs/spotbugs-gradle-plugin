@@ -15,6 +15,10 @@ package com.github.spotbugs.snom.internal
 
 import com.github.spotbugs.snom.SpotBugsReport
 import com.github.spotbugs.snom.SpotBugsTask
+import java.io.File
+import java.net.URI
+import java.nio.file.Path
+import javax.inject.Inject
 import org.gradle.api.Action
 import org.gradle.api.GradleException
 import org.gradle.api.file.RegularFileProperty
@@ -23,85 +27,79 @@ import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.process.JavaExecSpec
 import org.gradle.process.internal.ExecException
 import org.slf4j.LoggerFactory
-import java.io.File
-import java.net.URI
-import java.nio.file.Path
-import javax.inject.Inject
 
-class SpotBugsRunnerForJavaExec
-    @Inject
-    constructor(
-        private val javaLauncher: Property<JavaLauncher>,
-    ) : SpotBugsRunner() {
-        private val log = LoggerFactory.getLogger(SpotBugsRunnerForJavaExec::class.java)
-        private lateinit var stderrOutputScanner: OutputScanner
+class SpotBugsRunnerForJavaExec @Inject constructor(
+    private val javaLauncher: Property<JavaLauncher>,
+) : SpotBugsRunner() {
+    private val log = LoggerFactory.getLogger(SpotBugsRunnerForJavaExec::class.java)
+    private lateinit var stderrOutputScanner: OutputScanner
 
-        override fun run(task: SpotBugsTask) {
-            // TODO print version of SpotBugs and Plugins
-            try {
-                task.project.javaexec(configureJavaExec(task)).rethrowFailure().assertNormalExitValue()
-                if (stderrOutputScanner.isFailedToReport && !task.getIgnoreFailures()) {
-                    throw GradleException("SpotBugs analysis succeeded but report generation failed")
-                }
-            } catch (e: ExecException) {
-                if (task.getIgnoreFailures()) {
-                    log.warn(
-                        "SpotBugs reported failures",
-                        if (task.showStackTraces.get()) {
-                            e
-                        } else {
-                            null
-                        },
-                    )
-                } else {
-                    val errorMessage =
-                        buildString {
-                            append("Verification failed: SpotBugs execution thrown exception.")
-                            val reportPaths =
-                                task.getRequiredReports()
-                                    .asSequence()
-                                    .map(SpotBugsReport::getOutputLocation)
-                                    .map(RegularFileProperty::getAsFile)
-                                    .map {
-                                        it.get()
-                                    }
-                                    .map(File::toPath)
-                                    .map(Path::toUri)
-                                    .map(URI::toString)
-                                    .toList()
-                            if (reportPaths.isNotEmpty()) {
-                                append("See the report at: ")
-                                append(reportPaths.joinToString(", "))
-                            }
-                        }
-                    throw GradleException(errorMessage, e)
-                }
+    override fun run(task: SpotBugsTask) {
+        // TODO print version of SpotBugs and Plugins
+        try {
+            task.project.javaexec(configureJavaExec(task)).rethrowFailure().assertNormalExitValue()
+            if (stderrOutputScanner.isFailedToReport && !task.getIgnoreFailures()) {
+                throw GradleException("SpotBugs analysis succeeded but report generation failed")
             }
-        }
-
-        private fun configureJavaExec(task: SpotBugsTask): Action<JavaExecSpec> {
-            return Action { spec ->
-                val args = mutableListOf<String>()
-                args.add("-exitcode")
-                args.addAll(buildArguments(task))
-                spec.classpath(task.spotbugsClasspath)
-                spec.jvmArgs = buildJvmArguments(task)
-                spec.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
-                spec.setArgs(args)
-                val maxHeapSize = task.maxHeapSize.getOrNull()
-                if (maxHeapSize != null) {
-                    spec.maxHeapSize = maxHeapSize
-                }
-                stderrOutputScanner = OutputScanner(System.err)
-                spec.setErrorOutput(stderrOutputScanner)
-                if (javaLauncher.isPresent) {
-                    log.info(
-                        "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
-                        javaLauncher.get().metadata.vendor,
-                        javaLauncher.get().metadata.languageVersion.asInt(),
-                    )
-                    spec.executable = javaLauncher.get().executablePath.asFile.absolutePath
-                }
+        } catch (e: ExecException) {
+            if (task.getIgnoreFailures()) {
+                log.warn(
+                    "SpotBugs reported failures",
+                    if (task.showStackTraces.get()) {
+                        e
+                    } else {
+                        null
+                    },
+                )
+            } else {
+                val errorMessage =
+                    buildString {
+                        append("Verification failed: SpotBugs execution thrown exception.")
+                        val reportPaths =
+                            task.getRequiredReports()
+                                .asSequence()
+                                .map(SpotBugsReport::getOutputLocation)
+                                .map(RegularFileProperty::getAsFile)
+                                .map {
+                                    it.get()
+                                }
+                                .map(File::toPath)
+                                .map(Path::toUri)
+                                .map(URI::toString)
+                                .toList()
+                        if (reportPaths.isNotEmpty()) {
+                            append("See the report at: ")
+                            append(reportPaths.joinToString(", "))
+                        }
+                    }
+                throw GradleException(errorMessage, e)
             }
         }
     }
+
+    private fun configureJavaExec(task: SpotBugsTask): Action<JavaExecSpec> {
+        return Action { spec ->
+            val args = mutableListOf<String>()
+            args.add("-exitcode")
+            args.addAll(buildArguments(task))
+            spec.classpath(task.spotbugsClasspath)
+            spec.jvmArgs = buildJvmArguments(task)
+            spec.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
+            spec.setArgs(args)
+            val maxHeapSize = task.maxHeapSize.getOrNull()
+            if (maxHeapSize != null) {
+                spec.maxHeapSize = maxHeapSize
+            }
+            stderrOutputScanner = OutputScanner(System.err)
+            spec.setErrorOutput(stderrOutputScanner)
+            if (javaLauncher.isPresent) {
+                log.info(
+                    "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
+                    javaLauncher.get().metadata.vendor,
+                    javaLauncher.get().metadata.languageVersion.asInt(),
+                )
+                spec.executable = javaLauncher.get().executablePath.asFile.absolutePath
+            }
+        }
+    }
+}
