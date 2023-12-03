@@ -9,10 +9,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        gradle: ['7.6.2', '8.1', 'current']
+        gradle: [ '7.6.2', '8.1', 'current' ]
+        os: [ ubuntu-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -27,7 +28,7 @@ jobs:
       with:
         node-version-file: '.nvmrc'
         cache: npm
-      if: matrix.gradle == '7.6.2'
+      if: matrix.gradle == '7.6.2' && matrix.os == 'ubuntu-latest'
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
@@ -43,7 +44,7 @@ jobs:
         rm -rf build/libs/*.jar
         npm ci
         npx semantic-release
-      if: matrix.gradle == '7.6.2' && github.repository == 'spotbugs/spotbugs-gradle-plugin'
+      if: matrix.gradle == '7.6.2' && matrix.os == 'ubuntu-latest' && github.repository == 'spotbugs/spotbugs-gradle-plugin'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
@@ -53,7 +54,7 @@ jobs:
         if [ "$SONAR_LOGIN" != "" ]; then
           ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN --no-daemon
         fi
-      if: matrix.gradle == '7.6.2' && github.repository == 'spotbugs/spotbugs-gradle-plugin'
+      if: matrix.gradle == '7.6.2' && matrix.os == 'ubuntu-latest' && github.repository == 'spotbugs/spotbugs-gradle-plugin'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
