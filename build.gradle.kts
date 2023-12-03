@@ -28,7 +28,7 @@ val androidGradlePluginVersion = "8.2.0"
 dependencies {
     compileOnly(localGroovy())
     compileOnly("com.github.spotbugs:spotbugs:$spotBugsVersion")
-    compileOnly("com.android.tools.build:gradle-api:$androidGradlePluginVersion")
+    compileOnly("com.android.tools.build:gradle:$androidGradlePluginVersion")
     testImplementation("com.tngtech.archunit:archunit:1.2.0")
 }
 
