@@ -33,3 +33,5 @@ gradleEnterprise {
         publishAlwaysIf(isCiBuild)
     }
 }
+
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
