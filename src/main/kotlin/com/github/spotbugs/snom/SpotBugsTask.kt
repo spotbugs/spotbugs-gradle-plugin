@@ -338,7 +338,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         excludeFilter.convention(extension.excludeFilter)
         baselineFile.convention(extension.baselineFile)
         onlyAnalyze.convention(extension.onlyAnalyze)
-        projectName.convention(extension.projectName.map { p -> String.format("%s (%s)", p, name) })
+        projectName.convention(extension.projectName.map { p -> "$p ($name)" })
         release.convention(extension.release)
         jvmArgs.convention(extension.jvmArgs)
         extraArgs.convention(extension.extraArgs)

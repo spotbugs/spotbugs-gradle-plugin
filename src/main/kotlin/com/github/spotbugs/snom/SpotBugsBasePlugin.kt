@@ -141,13 +141,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
 
     fun verifyGradleVersion(version: GradleVersion) {
         if (version < SUPPORTED_VERSION) {
-            val message =
-                String.format(
-                    "Gradle version %s is unsupported. Please use %s or later.",
-                    version,
-                    SUPPORTED_VERSION,
-                )
-            throw IllegalArgumentException(message)
+            throw IllegalArgumentException("Gradle version $version is unsupported. Please use $SUPPORTED_VERSION or later.")
         }
     }
 
