@@ -12,7 +12,11 @@ plugins {
 dependencyResolutionManagement {
     repositories {
         // To download the Android Gradle Plugin
-        google()
+        google {
+            content {
+                includeGroupByRegex(".*android.*")
+            }
+        }
         // To download trove4j required by the Android Gradle Plugin
         mavenCentral()
     }
