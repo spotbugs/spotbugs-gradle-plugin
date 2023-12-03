@@ -1,6 +1,7 @@
+import io.gitlab.arturbosch.detekt.Detekt
+
 plugins {
     groovy
-    `java-gradle-plugin`
     jacoco
     signing
     kotlin("jvm") version "1.9.21"
@@ -14,7 +15,7 @@ plugins {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+        languageVersion = JavaLanguageVersion.of(11)
     }
 }
 
@@ -44,7 +45,7 @@ signing {
 }
 
 tasks {
-    named<io.gitlab.arturbosch.detekt.Detekt>("detekt") {
+    named<Detekt>("detekt") {
         reports {
             sarif.required = true
         }
@@ -61,7 +62,7 @@ tasks {
     withType<Jar>().configureEach {
         dependsOn(processResources)
     }
-    named("javadoc") {
+    javadoc {
         enabled = false
     }
 }

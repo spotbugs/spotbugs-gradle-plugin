@@ -312,8 +312,8 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
                     else -> throw InvalidUserDataException("$name is invalid as the report name")
                 }
             }
-        setDescription("Run SpotBugs analysis.")
-        setGroup(JavaBasePlugin.VERIFICATION_GROUP)
+        description = "Run SpotBugs analysis."
+        group = JavaBasePlugin.VERIFICATION_GROUP
     }
 
     /**

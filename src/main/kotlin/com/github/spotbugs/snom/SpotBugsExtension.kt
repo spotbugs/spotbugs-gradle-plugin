@@ -81,7 +81,7 @@ interface SpotBugsExtension {
     /**
      * Property to set the directory to generate report files. Default is `"$buildDir/reports/spotbugs"`.
      *
-     * Note that each [SpotBugsTask] creates own sub-directory in this directory.
+     * Note that each [SpotBugsTask] creates own subdirectory in this directory.
      */
     val reportsDir: DirectoryProperty
 
