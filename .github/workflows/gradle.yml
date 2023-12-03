@@ -54,7 +54,7 @@ jobs:
         if [ "$SONAR_LOGIN" != "" ]; then
           ./gradlew sonarqube -Dsonar.login=$SONAR_LOGIN --no-daemon
         fi
-      if: matrix.gradle == '7.6.2' && github.repository == 'spotbugs/spotbugs-gradle-plugin'
+      if: matrix.gradle == '7.6.2' && matrix.os == 'ubuntu-latest' && github.repository == 'spotbugs/spotbugs-gradle-plugin'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
