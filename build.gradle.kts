@@ -1,3 +1,5 @@
+import io.gitlab.arturbosch.detekt.Detekt
+
 plugins {
     groovy
     jacoco
@@ -43,7 +45,7 @@ signing {
 }
 
 tasks {
-    named<io.gitlab.arturbosch.detekt.Detekt>("detekt") {
+    named<Detekt>("detekt") {
         reports {
             sarif.required = true
         }
