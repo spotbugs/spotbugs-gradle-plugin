@@ -29,13 +29,45 @@ Refer [the Gradle Plugin portal](https://plugins.gradle.org/plugin/com.github.sp
 
 Configure `spotbugs` extension to configure the behaviour of tasks:
 
-```groovy
+```kotlin
+// require Gradle 8.2+
+import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
 spotbugs {
     ignoreFailures = false
     showStackTraces = true
     showProgress = true
-    effort = 'default'
-    reportLevel = 'default'
+    effort = Effort.DEFAULT
+    reportLevel = Confidence.DEFAULT
+    visitors = listOf("FindSqlInjection", "SwitchFallthrough")
+    omitVisitors = listOf("FindNonShortCircuit")
+    reportsDir = file("$buildDir/spotbugs")
+    includeFilter = file("include.xml")
+    excludeFilter = file("exclude.xml")
+    baselineFile = file("baseline.xml")
+    onlyAnalyze = listOf("com.foobar.MyClass", "com.foobar.mypkg.*")
+    maxHeapSize = "1g"
+    extraArgs = listOf("-nested:false")
+    jvmArgs = listOf("-Duser.language=ja")
+}
+```
+
+<details>
+<summary>with Groovy DSL</summary>
+
+```groovy
+import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
+spotbugs {
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+
+    // https://discuss.kotlinlang.org/t/bug-cannot-use-kotlin-enum-from-groovy/1521
+    // https://touk.pl/blog/2018/05/28/testing-kotlin-with-spock-part-2-enum-with-instance-method/
+    effort = Effort.valueOf('DEFAULT')
+    reportLevel = Confidence.valueOf('DEFAULT')
+
     visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
     omitVisitors = [ 'FindNonShortCircuit' ]
     reportsDir = file("$buildDir/spotbugs")
@@ -48,63 +80,41 @@ spotbugs {
     jvmArgs = [ '-Duser.language=ja' ]
 }
 ```
-
-<details>
-<summary>with Kotlin DSL</summary>
-
-```kotlin
-spotbugs {
-    ignoreFailures.set(false)
-    showStackTraces.set(true)
-    showProgress.set(true)
-    effort.set(com.github.spotbugs.snom.Effort.DEFAULT)
-    reportLevel.set(com.github.spotbugs.snom.Confidence.DEFAULT)
-    visitors.set(listOf("FindSqlInjection", "SwitchFallthrough"))
-    omitVisitors.set(listOf("FindNonShortCircuit"))
-    reportsDir.set(file("$buildDir/spotbugs"))
-    includeFilter.set(file("include.xml"))
-    excludeFilter.set(file("exclude.xml"))
-    baselineFile.set(file("baseline.xml"))
-    onlyAnalyze.set(listOf("com.foobar.MyClass", "com.foobar.mypkg.*"))
-    maxHeapSize.set("1g")
-    extraArgs.set(listOf("-nested:false"))
-    jvmArgs.set(listOf("-Duser.language=ja"))
-}
-```
 </details>
 
 Configure `spotbugsPlugin` to apply any SpotBugs plugin:
-
-```groovy
-dependencies {
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
-}
-```
-
-<details>
-<summary>with Kotlin DSL</summary>
 
 ```kotlin
 dependencies {
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0")
 }
 ```
+
+<details>
+<summary>with Groovy DSL</summary>
+
+```groovy
+dependencies {
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
+}
+```
 </details>
 
 Configure `spotbugs` to choose your favorite SpotBugs version:
 
-```groovy
+```kotlin
 dependencies {
-    spotbugs 'com.github.spotbugs:spotbugs:4.7.1'
+    spotbugs("com.github.spotbugs:spotbugs:4.8.0")
 }
 ```
 
-<details>
-<summary>with Kotlin DSL</summary>
 
-```kotlin
+<details>
+<summary>with Groovy DSL</summary>
+
+```groovy
 dependencies {
-    spotbugs("com.github.spotbugs:spotbugs:4.7.1")
+    spotbugs 'com.github.spotbugs:spotbugs:4.8.0'
 }
 ```
 </details>
@@ -125,6 +135,19 @@ TBU
 Configure [`SpotBugsTask`](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/spotbugstask) directly,
 to set task-specific properties.
 
+```kotlin
+// require Gradle 8.2+
+tasks.spotbugsMain {
+    reports.create("html") {
+        required = true
+        outputLocation = file("$buildDir/reports/spotbugs.html")
+        setStylesheet("fancy-hist.xsl")
+    }
+}
+```
+
+<details>
+<summary>with Groovy DSL</summary>
 ```groovy
 // Example to configure HTML report
 spotbugsMain {
@@ -137,30 +160,25 @@ spotbugsMain {
     }
 }
 ```
-
-<details>
-<summary>with Kotlin DSL</summary>
-
-```kotlin
-tasks.spotbugsMain {
-    reports.create("html") {
-        required.set(true)
-        outputLocation.set(file("$buildDir/reports/spotbugs.html"))
-        setStylesheet("fancy-hist.xsl")
-    }
-}
-```
 </details>
+
+### Migration guides
+
+- [v4 to v5: Bump up Gradle to v7 or later](https://github.com/spotbugs/spotbugs-gradle-plugin/releases/tag/5.0.0)
+- [v5 to v6: Bump up Gradle to v7.1 or later, and update the `effort` and `reportLevel` properties of `SpotBugsTask` and `SpotBugsExtension` to enum value](https://github.com/spotbugs/spotbugs-gradle-plugin/releases/tag/6.0.0)
 
 ## SpotBugs version mapping
 
-By default, this Gradle Plugin uses the SpotBugs version listed in this table.
+By default, this Gradle Plugin uses the SpotBugs version listed in the following table.
 
 You can change SpotBugs version by [the `toolVersion` property of the spotbugs extension](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/spotbugsextension#toolVersion) or the `spotbugs` configuration.
 
 | Gradle Plugin | SpotBugs |
 |--------------:|---------:|
-|        5.1.5  |    4.8.0 |
+|         6.0.0 |    4.8.2 |
+|         5.2.5 |    4.8.2 |
+|         5.2.3 |    4.8.1 |
+|         5.1.5 |    4.8.0 |
 |        5.0.13 |    4.7.3 |
 |        5.0.12 |    4.7.2 |
 |         5.0.9 |    4.7.1 |
@@ -168,17 +186,6 @@ You can change SpotBugs version by [the `toolVersion` property of the spotbugs e
 |         5.0.4 |    4.5.3 |
 |         5.0.3 |    4.5.2 |
 |         5.0.2 |    4.5.1 |
-|        4.7.10 |    4.5.0 |
-|         4.7.8 |    4.4.2 |
-|         4.7.5 |    4.4.1 |
-|         4.7.3 |    4.4.0 |
-|         4.7.2 |    4.3.0 |
-|         4.6.1 |    4.2.1 |
-|         4.5.0 |    4.1.1 |
-|         4.4.4 |    4.0.6 |
-|         4.4.2 |    4.0.5 |
-|         4.0.7 |    4.0.2 |
-|         4.0.0 |    4.0.0 |
 
 ### Refer the version in the build script
 
