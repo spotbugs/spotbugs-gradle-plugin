@@ -52,26 +52,24 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
                     },
                 )
             } else {
-                val errorMessage =
-                    buildString {
-                        append("Verification failed: SpotBugs execution thrown exception.")
-                        val reportPaths =
-                            task.getRequiredReports()
-                                .asSequence()
-                                .map(SpotBugsReport::getOutputLocation)
-                                .map(RegularFileProperty::getAsFile)
-                                .map {
-                                    it.get()
-                                }
-                                .map(File::toPath)
-                                .map(Path::toUri)
-                                .map(URI::toString)
-                                .toList()
-                        if (reportPaths.isNotEmpty()) {
-                            append("See the report at: ")
-                            append(reportPaths.joinToString(", "))
+                val errorMessage = buildString {
+                    append("Verification failed: SpotBugs execution thrown exception.")
+                    val reportPaths = task.getRequiredReports()
+                        .asSequence()
+                        .map(SpotBugsReport::getOutputLocation)
+                        .map(RegularFileProperty::getAsFile)
+                        .map {
+                            it.get()
                         }
+                        .map(File::toPath)
+                        .map(Path::toUri)
+                        .map(URI::toString)
+                        .toList()
+                    if (reportPaths.isNotEmpty()) {
+                        append("See the report at: ")
+                        append(reportPaths.joinToString(", "))
                     }
+                }
                 throw GradleException(errorMessage, e)
             }
         }

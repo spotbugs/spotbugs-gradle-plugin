@@ -112,21 +112,19 @@ class SpotBugsRunnerForHybrid(
                 return
             }
 
-            val errorMessage =
-                buildString {
-                    append("Verification failed: SpotBugs ended with exit code $exitValue.")
-                    val reportPaths =
-                        parameters.getReports().get().stream()
-                            .map(RegularFile::getAsFile)
-                            .map(File::toPath)
-                            .map(Path::toUri)
-                            .map(URI::toString)
-                            .collect(Collectors.toList())
-                    if (reportPaths.isNotEmpty()) {
-                        append(" See the report at: ")
-                        append(reportPaths.joinToString(", "))
-                    }
+            val errorMessage = buildString {
+                append("Verification failed: SpotBugs ended with exit code $exitValue.")
+                val reportPaths = parameters.getReports().get().stream()
+                    .map(RegularFile::getAsFile)
+                    .map(File::toPath)
+                    .map(Path::toUri)
+                    .map(URI::toString)
+                    .collect(Collectors.toList())
+                if (reportPaths.isNotEmpty()) {
+                    append(" See the report at: ")
+                    append(reportPaths.joinToString(", "))
                 }
+            }
             throw GradleException(errorMessage)
         }
 

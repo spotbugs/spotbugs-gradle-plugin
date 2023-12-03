@@ -19,7 +19,6 @@ import com.github.spotbugs.snom.SpotBugsTask
 import javax.inject.Inject
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.artifacts.Configuration
-import org.gradle.api.artifacts.Dependency
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.resources.TextResource
@@ -50,12 +49,11 @@ abstract class SpotBugsHtmlReport @Inject constructor(
         configuration: Configuration,
         textResourceFactory: TextResourceFactory,
     ): TextResource {
-        val spotbugsJar =
-            configuration.files { dependency: Dependency -> dependency.group == "com.github.spotbugs" && dependency.name == "spotbugs" }
-                .find { it.isFile }
+        val spotbugsJar = configuration.files { dependency ->
+            dependency.group == "com.github.spotbugs" && dependency.name == "spotbugs"
+        }.find { it.isFile }
         return if (spotbugsJar != null) {
-            textResourceFactory
-                .fromArchiveEntry(spotbugsJar, path)
+            textResourceFactory.fromArchiveEntry(spotbugsJar, path)
         } else {
             throw InvalidUserDataException(
                 "The dependency on SpotBugs not found in 'spotbugs' configuration",
@@ -71,16 +69,8 @@ abstract class SpotBugsHtmlReport @Inject constructor(
         if (path == null) {
             stylesheet.set(null as TextResource?)
         } else {
-            val configuration =
-                task
-                    .project
-                    .configurations
-                    .getByName(SpotBugsPlugin.CONFIG_NAME)
-            val textResourceFactory =
-                task
-                    .project
-                    .resources
-                    .text
+            val configuration = task.project.configurations.getByName(SpotBugsPlugin.CONFIG_NAME)
+            val textResourceFactory = task.project.resources.text
             stylesheet.set(
                 task.project.provider {
                     resolve(path, configuration, textResourceFactory)
