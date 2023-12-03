@@ -26,7 +26,8 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
      */
     @IgnoreIf({
         def current = System.getProperty('gradleVersion', GradleVersion.current().version)
-        return GradleVersion.version(current) < GradleVersion.version("8.1") })
+        return GradleVersion.version(current) < GradleVersion.version("8.1")
+    })
     def 'spotbugsMain task runs with configuration cache'() {
         given:
         initializeBuildFile(rootDir)
