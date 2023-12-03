@@ -61,7 +61,7 @@ tasks {
     withType<Jar>().configureEach {
         dependsOn(processResources)
     }
-    named("javadoc") {
+    javadoc {
         enabled = false
     }
 }
