@@ -97,6 +97,7 @@ abstract class SpotBugsReport
             }
         }
 
+        @Suppress("MemberVisibilityCanBePrivate")
         fun configure(action: Action<in Report>): Report {
             action.execute(this)
             return this

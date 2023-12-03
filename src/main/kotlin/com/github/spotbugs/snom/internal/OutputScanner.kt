@@ -24,7 +24,6 @@ import java.io.OutputStream
 internal class OutputScanner(out: OutputStream) : FilterOutputStream(out) {
     private val builder = ByteArrayOutputStream()
     var isFailedToReport = false
-        get() = field
 
     override fun write(
         b: ByteArray,
