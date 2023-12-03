@@ -1,6 +1,5 @@
 plugins {
     groovy
-    `java-gradle-plugin`
     jacoco
     signing
     kotlin("jvm") version "1.9.21"
