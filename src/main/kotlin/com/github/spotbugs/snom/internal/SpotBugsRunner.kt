@@ -20,7 +20,6 @@ import java.nio.file.Files
 import java.nio.file.StandardOpenOption
 import java.util.Locale
 import kotlin.String
-import kotlin.collections.ArrayList
 import org.gradle.api.GradleException
 import org.gradle.api.file.FileCollection
 import org.slf4j.LoggerFactory
@@ -31,83 +30,79 @@ abstract class SpotBugsRunner {
     abstract fun run(task: SpotBugsTask)
 
     @Suppress("LongMethod", "CyclomaticComplexMethod")
-    protected fun buildArguments(task: SpotBugsTask): List<String> {
-        val args: MutableList<String> = ArrayList()
+    protected fun buildArguments(task: SpotBugsTask): List<String> = buildList {
         val plugins = task.pluginJarFiles
         if (!plugins.isEmpty) {
-            args.add("-pluginList")
-            args.add(join(plugins.files))
+            add("-pluginList")
+            add(join(plugins.files))
         }
-        args.add("-timestampNow")
+        add("-timestampNow")
         if (!task.auxClassPaths.isEmpty) {
             if (task.useAuxclasspathFile.get()) {
-                args.add("-auxclasspathFromFile")
+                add("-auxclasspathFromFile")
                 val auxClasspathFile = createFileForAuxClasspath(task)
                 log.debug("Using auxclasspath file: {}", auxClasspathFile)
-                args.add(auxClasspathFile)
+                add(auxClasspathFile)
             } else {
-                args.add("-auxclasspath")
-                args.add(join(task.auxClassPaths.files))
+                add("-auxclasspath")
+                add(join(task.auxClassPaths.files))
             }
         }
         if (!task.sourceDirs.isEmpty) {
-            args.add("-sourcepath")
-            args.add(task.sourceDirs.asPath)
+            add("-sourcepath")
+            add(task.sourceDirs.asPath)
         }
         if (task.showProgress.getOrElse(false)) {
-            args.add("-progress")
+            add("-progress")
         }
         task.getRequiredReports().forEach { report ->
             val reportFile = report.outputLocation.asFile.get()
             val dir = reportFile.parentFile
             dir.mkdirs()
-            args.add(report.toCommandLineOption() + "=" + reportFile.absolutePath)
+            add(report.toCommandLineOption() + "=" + reportFile.absolutePath)
         }
         if (task.effort.isPresent) {
-            args.add("-effort:" + task.effort.get().name.lowercase(Locale.getDefault()))
+            add("-effort:" + task.effort.get().name.lowercase(Locale.getDefault()))
         }
         if (task.reportLevel.isPresent) {
             task.reportLevel.get().toCommandLineOption().ifPresent { e: String ->
-                args.add(
-                    e,
-                )
+                add(e)
             }
         }
         if (task.visitors.isPresent && task.visitors.get().isNotEmpty()) {
-            args.add("-visitors")
-            args.add(task.visitors.get().joinToString(","))
+            add("-visitors")
+            add(task.visitors.get().joinToString(","))
         }
         if (task.omitVisitors.isPresent && task.omitVisitors.get().isNotEmpty()) {
-            args.add("-omitVisitors")
-            args.add(task.omitVisitors.get().joinToString(","))
+            add("-omitVisitors")
+            add(task.omitVisitors.get().joinToString(","))
         }
         if (task.includeFilter.isPresent) {
-            args.add("-include")
-            args.add(task.includeFilter.get().asFile.absolutePath)
+            add("-include")
+            add(task.includeFilter.get().asFile.absolutePath)
         }
         if (task.excludeFilter.isPresent) {
-            args.add("-exclude")
-            args.add(task.excludeFilter.get().asFile.absolutePath)
+            add("-exclude")
+            add(task.excludeFilter.get().asFile.absolutePath)
         }
         if (task.baselineFile.isPresent) {
-            args.add("-excludeBugs")
-            args.add(task.baselineFile.get().asFile.absolutePath)
+            add("-excludeBugs")
+            add(task.baselineFile.get().asFile.absolutePath)
         }
         if (task.onlyAnalyze.isPresent) {
-            args.add("-onlyAnalyze")
-            args.add(task.onlyAnalyze.get().joinToString(","))
+            add("-onlyAnalyze")
+            add(task.onlyAnalyze.get().joinToString(","))
         }
-        args.add("-projectName")
-        args.add(task.projectName.get())
-        args.add("-release")
-        args.add(task.release.get())
+        add("-projectName")
+        add(task.projectName.get())
+        add("-release")
+        add(task.release.get())
         val file = task.analyseClassFile.asFile.get()
         task.classes?.let { generateFile(it, file) }
-        args.add("-analyzeFromFile")
-        args.add(file.absolutePath)
-        args.addAll(task.extraArgs.getOrElse(emptyList()))
-        log.debug("Arguments for SpotBugs are generated: {}", args)
-        return args
+        add("-analyzeFromFile")
+        add(file.absolutePath)
+        addAll(task.extraArgs.getOrElse(emptyList()))
+        log.debug("Arguments for SpotBugs are generated: {}", this)
     }
 
     private fun createFileForAuxClasspath(task: SpotBugsTask): String {
