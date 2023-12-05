@@ -23,6 +23,7 @@ import org.gradle.api.Action
 import org.gradle.api.GradleException
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.process.JavaExecSpec
 import org.gradle.process.internal.ExecException
@@ -58,9 +59,7 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
                         .asSequence()
                         .map(SpotBugsReport::getOutputLocation)
                         .map(RegularFileProperty::getAsFile)
-                        .map {
-                            it.get()
-                        }
+                        .map(Provider<File>::get)
                         .map(File::toPath)
                         .map(Path::toUri)
                         .map(URI::toString)
