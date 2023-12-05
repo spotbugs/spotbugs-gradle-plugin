@@ -4,12 +4,6 @@
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:SpotBugsRunner.kt$SpotBugsRunner$protected fun buildArguments(task: SpotBugsTask): List&lt;String></ID>
     <ID>LongMethod:SpotBugsRunner.kt$SpotBugsRunner$protected fun buildArguments(task: SpotBugsTask): List&lt;String></ID>
-    <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$*</ID>
-    <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$* Property to set the directory to generate report files. Default is {@code "$buildDir/reports/spotbugs/$taskName"}.</ID>
-    <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$* Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.</ID>
-    <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$* Property to specify the extra arguments for SpotBugs. Default value is empty so SpotBugs will get no extra argument.</ID>
-    <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$* Property to specify the release identifier of project. Some reporting formats use this property. Default value is the version of your Gradle project.</ID>
-    <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$fun</ID>
     <ID>TooGenericExceptionCaught:SpotBugsRunner.kt$SpotBugsRunner$e: Exception</ID>
     <ID>TooManyFunctions:SpotBugsReport.kt$SpotBugsReport : SingleFileReportCustomizableHtmlReport</ID>
   </CurrentIssues>
