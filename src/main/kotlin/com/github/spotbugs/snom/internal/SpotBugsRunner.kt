@@ -116,31 +116,27 @@ abstract class SpotBugsRunner {
             task.auxClassPaths.files.stream()
                 .map { obj: File -> obj.absolutePath }
                 .collect(Collectors.joining("\n"))
+        val auxClasspathFile =
+            task.auxclasspathFile.map {
+                it.asFile.toPath()
+            }.get()
         try {
-            val auxClasspathFile =
-                task.auxclasspathFile.map {
-                    it.asFile.toPath()
-                }.get()
-            try {
-                Files.createDirectories(auxClasspathFile.parent)
-                if (!Files.exists(auxClasspathFile)) {
-                    Files.createFile(auxClasspathFile)
-                }
-                Files.write(
-                    auxClasspathFile,
-                    auxClasspath.toByteArray(),
-                    StandardOpenOption.TRUNCATE_EXISTING,
-                )
-                return auxClasspathFile.normalize().toString()
-            } catch (e: Exception) {
-                throw GradleException(
-                    "Could not create auxiliary classpath file for SpotBugsTask at " +
-                        auxClasspathFile.normalize().toString(),
-                    e,
-                )
+            Files.createDirectories(auxClasspathFile.parent)
+            if (!Files.exists(auxClasspathFile)) {
+                Files.createFile(auxClasspathFile)
             }
-        } catch (e: Exception) {
-            throw GradleException("Could not create auxiliary classpath file for SpotBugsTask", e)
+            Files.write(
+                auxClasspathFile,
+                auxClasspath.toByteArray(),
+                StandardOpenOption.TRUNCATE_EXISTING,
+            )
+            return auxClasspathFile.normalize().toString()
+        } catch (e: IOException) {
+            throw GradleException(
+                "Could not create auxiliary classpath file for SpotBugsTask at " +
+                    auxClasspathFile.normalize().toString(),
+                e,
+            )
         }
     }
 
