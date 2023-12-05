@@ -145,7 +145,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     /**
      * Property defined to keep the backward compatibility with [org.gradle.api.reporting.Reporting] interface.
      *
-     * @see SpotBugsReport
+     * See [SpotBugsReport]
      */
     @get:Internal
     val reports: NamedDomainObjectContainer<SpotBugsReport>
