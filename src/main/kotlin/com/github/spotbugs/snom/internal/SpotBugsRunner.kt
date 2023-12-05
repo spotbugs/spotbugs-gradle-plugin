@@ -68,8 +68,8 @@ abstract class SpotBugsRunner {
             add("-effort:" + task.effort.get().name.lowercase(Locale.getDefault()))
         }
         if (task.reportLevel.isPresent) {
-            task.reportLevel.get().toCommandLineOption().ifPresent { e: String ->
-                add(e)
+            task.reportLevel.get().commandLineOption?.let {
+                add(it)
             }
         }
         if (task.visitors.isPresent && task.visitors.get().isNotEmpty()) {
