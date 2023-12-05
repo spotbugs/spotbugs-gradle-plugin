@@ -17,6 +17,7 @@ import com.github.spotbugs.snom.SpotBugsReport
 import com.github.spotbugs.snom.SpotBugsTask
 import java.io.File
 import java.net.URI
+import java.nio.file.Path
 import javax.inject.Inject
 import org.gradle.api.Action
 import org.gradle.api.GradleException
@@ -58,7 +59,8 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
                         .map(SpotBugsReport::getOutputLocation)
                         .map(RegularFileProperty::getAsFile)
                         .map(Provider<File>::get)
-                        .map(File::toURI)
+                        .map(File::toPath)
+                        .map(Path::toUri)
                         .map(URI::toString)
                         .toList()
                     if (reportPaths.isNotEmpty()) {
