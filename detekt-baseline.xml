@@ -4,8 +4,6 @@
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:SpotBugsRunner.kt$SpotBugsRunner$protected fun buildArguments(task: SpotBugsTask): List&lt;String></ID>
     <ID>LongMethod:SpotBugsRunner.kt$SpotBugsRunner$protected fun buildArguments(task: SpotBugsTask): List&lt;String></ID>
-    <ID>MaxLineLength:SpotBugsHtmlReport.kt$SpotBugsHtmlReport$configuration.files { dependency: Dependency -> dependency.group == "com.github.spotbugs" &amp;&amp; dependency.name == "spotbugs" }</ID>
-    <ID>MaxLineLength:SpotBugsRunnerForHybrid.kt$SpotBugsRunnerForHybrid.Companion$*</ID>
     <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$*</ID>
     <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$* Property to set the directory to generate report files. Default is {@code "$buildDir/reports/spotbugs/$taskName"}.</ID>
     <ID>MaxLineLength:SpotBugsTask.kt$SpotBugsTask$* Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.</ID>

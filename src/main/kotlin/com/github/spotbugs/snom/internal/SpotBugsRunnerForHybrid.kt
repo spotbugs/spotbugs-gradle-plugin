@@ -168,6 +168,7 @@ class SpotBugsRunnerForHybrid(
          *
          * See [Constant Field Values from javadoc of the SpotBugs](https://javadoc.io/static/com.github.spotbugs/spotbugs/4.4.2/constant-values.html#edu.umd.cs.findbugs.ExitCodes.MISSING_CLASS_FLAG)
          */
+        @Suppress("MaxLineLength")
         private const val MISSING_CLASS_FLAG = 2
     }
 }
