@@ -47,6 +47,7 @@ class SemanticVersion(version: String) : Comparable<SemanticVersion?> {
         /**
          * See [regular expressions 101](https://regex101.com/r/vkijKf/1/)
          */
+        @Suppress("MaxLineLength")
         private val PATTERN =
             Pattern.compile(
                 "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\." +
