@@ -18,7 +18,6 @@ import com.github.spotbugs.snom.SpotBugsTask
 import java.io.File
 import java.net.URI
 import java.nio.file.Path
-import java.util.stream.Collectors
 import javax.inject.Inject
 import org.gradle.api.Action
 import org.gradle.api.GradleException
@@ -113,12 +112,12 @@ class SpotBugsRunnerForHybrid(
 
             val errorMessage = buildString {
                 append("Verification failed: SpotBugs ended with exit code $exitValue.")
-                val reportPaths = parameters.getReports().get().stream()
+                val reportPaths = parameters.getReports().get().asSequence()
                     .map(RegularFile::getAsFile)
                     .map(File::toPath)
                     .map(Path::toUri)
                     .map(URI::toString)
-                    .collect(Collectors.toList())
+                    .toList()
                 if (reportPaths.isNotEmpty()) {
                     append(" See the report at: ")
                     append(reportPaths.joinToString(", "))

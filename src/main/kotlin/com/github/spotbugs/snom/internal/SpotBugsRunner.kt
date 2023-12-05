@@ -19,7 +19,6 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.StandardOpenOption
 import java.util.Locale
-import java.util.stream.Collectors
 import kotlin.String
 import kotlin.collections.ArrayList
 import org.gradle.api.GradleException
@@ -76,11 +75,11 @@ abstract class SpotBugsRunner {
         }
         if (task.visitors.isPresent && task.visitors.get().isNotEmpty()) {
             args.add("-visitors")
-            args.add(task.visitors.get().stream().collect(Collectors.joining(",")))
+            args.add(task.visitors.get().joinToString(","))
         }
         if (task.omitVisitors.isPresent && task.omitVisitors.get().isNotEmpty()) {
             args.add("-omitVisitors")
-            args.add(task.omitVisitors.get().stream().collect(Collectors.joining(",")))
+            args.add(task.omitVisitors.get().joinToString(","))
         }
         if (task.includeFilter.isPresent) {
             args.add("-include")
@@ -96,7 +95,7 @@ abstract class SpotBugsRunner {
         }
         if (task.onlyAnalyze.isPresent) {
             args.add("-onlyAnalyze")
-            args.add(task.onlyAnalyze.get().stream().collect(Collectors.joining(",")))
+            args.add(task.onlyAnalyze.get().joinToString(","))
         }
         args.add("-projectName")
         args.add(task.projectName.get())
@@ -113,9 +112,9 @@ abstract class SpotBugsRunner {
 
     private fun createFileForAuxClasspath(task: SpotBugsTask): String {
         val auxClasspath =
-            task.auxClassPaths.files.stream()
+            task.auxClassPaths.files.asSequence()
                 .map { obj: File -> obj.absolutePath }
-                .collect(Collectors.joining("\n"))
+                .joinToString("\n")
         val auxClasspathFile =
             task.auxclasspathFile.map {
                 it.asFile.toPath()
@@ -164,8 +163,8 @@ abstract class SpotBugsRunner {
     }
 
     private fun join(files: Collection<File>): String {
-        return files.stream()
+        return files.asSequence()
             .map { obj: File -> obj.absolutePath }
-            .collect(Collectors.joining(File.pathSeparator))
+            .joinToString(File.pathSeparator)
     }
 }
