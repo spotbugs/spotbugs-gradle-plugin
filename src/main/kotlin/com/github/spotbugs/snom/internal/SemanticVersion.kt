@@ -18,6 +18,7 @@ import java.util.regex.Pattern
 /**
  * See [SemVer 2.0 specification](https://semver.org/spec/v2.0.0.html)
  */
+@Suppress("MagicNumber")
 class SemanticVersion(version: String) : Comparable<SemanticVersion?> {
     val major: Int
     val minor: Int

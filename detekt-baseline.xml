@@ -4,8 +4,6 @@
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:SpotBugsRunner.kt$SpotBugsRunner$protected fun buildArguments(task: SpotBugsTask): List&lt;String></ID>
     <ID>LongMethod:SpotBugsRunner.kt$SpotBugsRunner$protected fun buildArguments(task: SpotBugsTask): List&lt;String></ID>
-    <ID>MagicNumber:SemanticVersion.kt$SemanticVersion$10</ID>
-    <ID>MagicNumber:SemanticVersion.kt$SemanticVersion$3</ID>
     <ID>MaxLineLength:SemanticVersion.kt$SemanticVersion.Companion$"(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"</ID>
     <ID>MaxLineLength:SpotBugsBasePlugin.kt$SpotBugsBasePlugin.Companion$*</ID>
     <ID>MaxLineLength:SpotBugsExtension.kt$SpotBugsExtension$*</ID>
