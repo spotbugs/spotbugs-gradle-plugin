@@ -56,7 +56,6 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
                 val errorMessage = buildString {
                     append("Verification failed: SpotBugs execution thrown exception.")
                     val reportPaths = task.getRequiredReports()
-                        .asSequence()
                         .map(SpotBugsReport::getOutputLocation)
                         .map(RegularFileProperty::getAsFile)
                         .map(Provider<File>::get)

@@ -416,5 +416,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     }
 
     @Internal
-    internal fun getRequiredReports() = reports.matching { it.required.get() }.asMap.values
+    internal fun getRequiredReports(): Sequence<SpotBugsReport> {
+        return reports.matching { it.required.get() }.asMap.values.asSequence()
+    }
 }

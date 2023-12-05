@@ -138,7 +138,8 @@ abstract class SpotBugsRunner {
     ) {
         try {
             file.bufferedWriter().use { writer ->
-                files.filter(File::exists)
+                files.asSequence()
+                    .filter(File::exists)
                     .forEach {
                         writer.write(it.absolutePath)
                         writer.newLine()
