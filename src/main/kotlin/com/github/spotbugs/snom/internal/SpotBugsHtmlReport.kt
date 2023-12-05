@@ -16,76 +16,66 @@ package com.github.spotbugs.snom.internal
 import com.github.spotbugs.snom.SpotBugsPlugin
 import com.github.spotbugs.snom.SpotBugsReport
 import com.github.spotbugs.snom.SpotBugsTask
+import javax.inject.Inject
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.artifacts.Configuration
-import org.gradle.api.artifacts.Dependency
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.resources.TextResource
 import org.gradle.api.resources.TextResourceFactory
-import javax.inject.Inject
 
-abstract class SpotBugsHtmlReport
-    @Inject
-    constructor(objects: ObjectFactory, task: SpotBugsTask) :
-    SpotBugsReport(objects, task) {
-        private val stylesheet: Property<TextResource>
+abstract class SpotBugsHtmlReport @Inject constructor(
+    objects: ObjectFactory,
+    task: SpotBugsTask,
+) : SpotBugsReport(objects, task) {
+    private val stylesheet: Property<TextResource>
 
-        init {
-            // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.html"
-            outputLocation.convention(task.reportsDir.file(task.getBaseName() + ".html"))
-            stylesheet = task.project.objects.property(TextResource::class.java)
-        }
+    init {
+        // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.html"
+        outputLocation.convention(task.reportsDir.file(task.getBaseName() + ".html"))
+        stylesheet = task.project.objects.property(TextResource::class.java)
+    }
 
-        override fun toCommandLineOption(): String {
-            return stylesheet.map {
-                "-html:" + it.asFile().absolutePath
-            }.getOrElse("-html")
-        }
+    override fun toCommandLineOption(): String {
+        return stylesheet.map {
+            "-html:" + it.asFile().absolutePath
+        }.getOrElse("-html")
+    }
 
-        override fun getStylesheet(): TextResource? = stylesheet.orNull
+    override fun getStylesheet(): TextResource? = stylesheet.orNull
 
-        private fun resolve(
-            path: String,
-            configuration: Configuration,
-            textResourceFactory: TextResourceFactory,
-        ): TextResource {
-            val spotbugsJar =
-                configuration.files { dependency: Dependency -> dependency.group == "com.github.spotbugs" && dependency.name == "spotbugs" }
-                    .find { it.isFile }
-            return if (spotbugsJar != null) {
-                textResourceFactory
-                    .fromArchiveEntry(spotbugsJar, path)
-            } else {
-                throw InvalidUserDataException(
-                    "The dependency on SpotBugs not found in 'spotbugs' configuration",
-                )
-            }
-        }
-
-        override fun setStylesheet(textResource: TextResource?) {
-            stylesheet.set(textResource)
-        }
-
-        override fun setStylesheet(path: String?) {
-            if (path == null) {
-                stylesheet.set(null as TextResource?)
-            } else {
-                val configuration =
-                    task
-                        .project
-                        .configurations
-                        .getByName(SpotBugsPlugin.CONFIG_NAME)
-                val textResourceFactory =
-                    task
-                        .project
-                        .resources
-                        .text
-                stylesheet.set(
-                    task.project.provider {
-                        resolve(path, configuration, textResourceFactory)
-                    },
-                )
-            }
+    private fun resolve(
+        path: String,
+        configuration: Configuration,
+        textResourceFactory: TextResourceFactory,
+    ): TextResource {
+        val spotbugsJar = configuration.files { dependency ->
+            dependency.group == "com.github.spotbugs" && dependency.name == "spotbugs"
+        }.find { it.isFile }
+        return if (spotbugsJar != null) {
+            textResourceFactory.fromArchiveEntry(spotbugsJar, path)
+        } else {
+            throw InvalidUserDataException(
+                "The dependency on SpotBugs not found in 'spotbugs' configuration",
+            )
         }
     }
+
+    override fun setStylesheet(textResource: TextResource?) {
+        stylesheet.set(textResource)
+    }
+
+    override fun setStylesheet(path: String?) {
+        if (path == null) {
+            stylesheet.set(null as TextResource?)
+        } else {
+            val configuration = task.project.configurations.getByName(SpotBugsPlugin.CONFIG_NAME)
+            val textResourceFactory = task.project.resources.text
+            stylesheet.set(
+                task.project.provider {
+                    resolve(path, configuration, textResourceFactory)
+                },
+            )
+        }
+    }
+}

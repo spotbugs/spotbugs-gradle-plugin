@@ -19,6 +19,7 @@ import com.github.spotbugs.snom.internal.SpotBugsRunnerForJavaExec
 import com.github.spotbugs.snom.internal.SpotBugsSarifReport
 import com.github.spotbugs.snom.internal.SpotBugsTextReport
 import com.github.spotbugs.snom.internal.SpotBugsXmlReport
+import javax.inject.Inject
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.InvalidUserDataException
@@ -49,7 +50,6 @@ import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.workers.WorkerExecutor
 import org.slf4j.LoggerFactory
-import javax.inject.Inject
 
 /**
  * The Gradle task to run the SpotBugs analysis. All properties are optional.
@@ -272,12 +272,9 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     @get:SkipWhenEmpty
     var classes: FileCollection? = null
         get() {
-            return field
-                ?: (
-                    classDirs.asFileTree.filter {
-                        it.name.endsWith(".class")
-                    }
-                )
+            return field ?: classDirs.asFileTree.filter {
+                it.name.endsWith(".class")
+            }
         }
 
     private var enableWorkerApi: Boolean = true
