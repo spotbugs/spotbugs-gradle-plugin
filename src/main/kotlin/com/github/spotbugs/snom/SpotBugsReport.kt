@@ -28,6 +28,7 @@ import org.gradle.api.resources.TextResource
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 
+@Suppress("TooManyFunctions")
 abstract class SpotBugsReport @Inject constructor(
     objects: ObjectFactory,
     @get:Internal

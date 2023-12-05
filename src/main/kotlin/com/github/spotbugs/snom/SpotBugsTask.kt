@@ -396,6 +396,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     /**
      * Function defined to keep the backward compatibility with [org.gradle.api.reporting.Reporting] interface.
      */
+    @Suppress("MaxLineLength")
     fun reports(configureAction: Action<NamedDomainObjectContainer<SpotBugsReport>>): NamedDomainObjectContainer<SpotBugsReport> {
         configureAction.execute(reports)
         return reports
