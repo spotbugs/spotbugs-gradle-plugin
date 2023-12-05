@@ -32,6 +32,7 @@ abstract class SpotBugsRunner {
 
     abstract fun run(task: SpotBugsTask)
 
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     protected fun buildArguments(task: SpotBugsTask): List<String> {
         val args: MutableList<String> = ArrayList()
         val plugins = task.pluginJarFiles

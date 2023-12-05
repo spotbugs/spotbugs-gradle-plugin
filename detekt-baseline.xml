@@ -2,8 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:SpotBugsRunner.kt$SpotBugsRunner$protected fun buildArguments(task: SpotBugsTask): List&lt;String></ID>
-    <ID>LongMethod:SpotBugsRunner.kt$SpotBugsRunner$protected fun buildArguments(task: SpotBugsTask): List&lt;String></ID>
     <ID>TooManyFunctions:SpotBugsReport.kt$SpotBugsReport : SingleFileReportCustomizableHtmlReport</ID>
   </CurrentIssues>
 </SmellBaseline>
