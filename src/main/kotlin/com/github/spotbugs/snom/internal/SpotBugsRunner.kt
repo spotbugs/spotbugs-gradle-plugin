@@ -16,10 +16,13 @@ package com.github.spotbugs.snom.internal
 import com.github.spotbugs.snom.SpotBugsTask
 import java.io.File
 import java.io.IOException
-import java.nio.file.Files
 import java.nio.file.StandardOpenOption
 import java.util.Locale
 import kotlin.String
+import kotlin.io.path.createDirectories
+import kotlin.io.path.createFile
+import kotlin.io.path.exists
+import kotlin.io.path.writeBytes
 import org.gradle.api.GradleException
 import org.gradle.api.file.FileCollection
 import org.slf4j.LoggerFactory
@@ -113,15 +116,11 @@ abstract class SpotBugsRunner {
             it.asFile.toPath()
         }.get()
         try {
-            Files.createDirectories(auxClasspathFile.parent)
-            if (!Files.exists(auxClasspathFile)) {
-                Files.createFile(auxClasspathFile)
+            auxClasspathFile.parent.createDirectories()
+            if (!auxClasspathFile.exists()) {
+                auxClasspathFile.createFile()
             }
-            Files.write(
-                auxClasspathFile,
-                auxClasspath.toByteArray(),
-                StandardOpenOption.TRUNCATE_EXISTING,
-            )
+            auxClasspathFile.writeBytes(auxClasspath.toByteArray(), StandardOpenOption.WRITE)
             return auxClasspathFile.normalize().toString()
         } catch (e: IOException) {
             throw GradleException(
