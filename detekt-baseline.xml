@@ -4,7 +4,6 @@
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:SpotBugsRunner.kt$SpotBugsRunner$protected fun buildArguments(task: SpotBugsTask): List&lt;String></ID>
     <ID>LongMethod:SpotBugsRunner.kt$SpotBugsRunner$protected fun buildArguments(task: SpotBugsTask): List&lt;String></ID>
-    <ID>MaxLineLength:SpotBugsBasePlugin.kt$SpotBugsBasePlugin.Companion$*</ID>
     <ID>MaxLineLength:SpotBugsExtension.kt$SpotBugsExtension$*</ID>
     <ID>MaxLineLength:SpotBugsExtension.kt$SpotBugsExtension$* Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.</ID>
     <ID>MaxLineLength:SpotBugsExtension.kt$SpotBugsExtension$* Property to specify the name of project. Some reporting formats use this property. Default value is the name of your Gradle project.</ID>

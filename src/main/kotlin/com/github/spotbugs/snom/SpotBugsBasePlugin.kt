@@ -161,6 +161,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
          * Supported Gradle version described at [official manual site](http://spotbugs.readthedocs.io/en/latest/gradle.html).
          * The convention API provides replacement from 7.1 and later, so we use this value as minimal required version.
          */
+        @Suppress("MaxLineLength")
         private val SUPPORTED_VERSION = GradleVersion.version("7.1")
     }
 }
