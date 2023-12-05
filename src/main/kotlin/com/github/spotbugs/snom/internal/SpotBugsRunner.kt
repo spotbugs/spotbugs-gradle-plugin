@@ -62,7 +62,7 @@ abstract class SpotBugsRunner {
             val reportFile = report.outputLocation.asFile.get()
             val dir = reportFile.parentFile
             dir.mkdirs()
-            add(report.toCommandLineOption() + "=" + reportFile.absolutePath)
+            add(report.commandLineOption + "=" + reportFile.absolutePath)
         }
         if (task.effort.isPresent) {
             add("-effort:" + task.effort.get().name.lowercase(Locale.getDefault()))

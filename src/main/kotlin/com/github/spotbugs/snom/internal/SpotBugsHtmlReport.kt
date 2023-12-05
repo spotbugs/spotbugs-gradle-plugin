@@ -36,7 +36,7 @@ abstract class SpotBugsHtmlReport @Inject constructor(
         stylesheet = task.project.objects.property(TextResource::class.java)
     }
 
-    override fun toCommandLineOption(): String {
+    override val commandLineOption: String get() {
         return stylesheet.map {
             "-html:" + it.asFile().absolutePath
         }.getOrElse("-html")

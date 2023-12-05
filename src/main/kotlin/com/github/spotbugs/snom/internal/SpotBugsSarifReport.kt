@@ -27,7 +27,5 @@ abstract class SpotBugsSarifReport @Inject constructor(
         outputLocation.convention(task.reportsDir.file(task.getBaseName() + ".sarif"))
     }
 
-    override fun toCommandLineOption(): String {
-        return "-sarif"
-    }
+    override val commandLineOption: String = "-sarif"
 }

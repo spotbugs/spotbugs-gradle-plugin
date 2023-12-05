@@ -42,7 +42,7 @@ abstract class SpotBugsReport @Inject constructor(
         isRequired = objects.property(Boolean::class.java).convention(true)
     }
 
-    abstract fun toCommandLineOption(): String
+    abstract val commandLineOption: String
 
     @Internal
     @Deprecated("use `getOutputLocation()` instead.")
