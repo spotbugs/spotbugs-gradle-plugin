@@ -17,7 +17,6 @@ import com.github.spotbugs.snom.SpotBugsReport
 import com.github.spotbugs.snom.SpotBugsTask
 import java.io.File
 import java.net.URI
-import org.gradle.api.Project
 import java.nio.file.Path
 import java.util.stream.Collectors
 import javax.inject.Inject
