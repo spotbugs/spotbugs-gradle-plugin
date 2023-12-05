@@ -44,7 +44,7 @@ abstract class SpotBugsReport @Inject constructor(
     abstract fun toCommandLineOption(): String
 
     @Internal
-    @Deprecated("use {@link #getOutputLocation()} instead.")
+    @Deprecated("use `getOutputLocation()` instead.")
     fun getDestination(): File {
         return destination.get().asFile
     }
@@ -63,26 +63,26 @@ abstract class SpotBugsReport @Inject constructor(
         return isRequired
     }
 
-    @get:Deprecated("use {@link #getRequired()} instead.")
+    @get:Deprecated("use `getRequired()` instead.")
     @get:Internal
-    @set:Deprecated("use {@code getRequired().set(value)} instead.")
+    @set:Deprecated("use `getRequired().set(value)` instead.")
     var isEnabled: Boolean
         get() = isRequired.get()
         set(b) {
             isRequired.set(b)
         }
 
-    @Deprecated("use {@code getRequired().set(provider)} instead.")
+    @Deprecated("use `getRequired().set(provider)` instead.")
     fun setEnabled(provider: Provider<Boolean>) {
         isRequired.set(provider)
     }
 
-    @Deprecated("use {@code getOutputLocation().set(file)} instead.")
+    @Deprecated("use `getOutputLocation().set(file)` instead.")
     override fun setDestination(file: File) {
         destination.set(file)
     }
 
-    @Deprecated("use {@code getOutputLocation().set(provider)} instead.")
+    @Deprecated("use `getOutputLocation().set(provider)` instead.")
     fun setDestination(provider: Provider<File?>) {
         destination.set(task.project.layout.file(provider))
     }

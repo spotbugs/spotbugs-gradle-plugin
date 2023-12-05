@@ -22,21 +22,19 @@ import org.gradle.api.tasks.Internal
  *
  * ### Usage
  *
- * Set via the {@code spotbugs} extension to configure all tasks in your project:
+ * Set via the [SpotBugsExtension] to configure all tasks in your project:
  * ```kotlin
  * // require Gradle 8.2+
- * import com.github.spotbugs.snom.Confidence
  * spotbugs {
- *     reportLevel = Confidence.LOW
+ *     reportLevel = com.github.spotbugs.snom.Confidence.LOW
  * }
  * ```
  *
  * Or via [SpotBugsTask] to configure the specific task in your project:
  * ```kotlin
  * // require Gradle 8.2+
- * import com.github.spotbugs.snom.Confidence
  * spotbugsMain { // or name of another task
- *     reportLevel = Confidence.LOW
+ *     reportLevel = com.github.spotbugs.snom.Confidence.LOW
  * }
  * ```
  *
@@ -53,7 +51,7 @@ enum class Confidence {
         override fun toCommandLineOption(): Optional<String> = Optional.of("-medium")
     },
 
-    /** The default level that provides the same feature with {@link #MEDIUM}. */
+    /** The default level that provides the same feature with [MEDIUM]. */
     DEFAULT {
         override fun toCommandLineOption(): Optional<String> = Optional.empty()
     },

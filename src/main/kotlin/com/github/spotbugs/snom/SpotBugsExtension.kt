@@ -19,8 +19,8 @@ import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 
 /**
- * The extension to configure the SpotBugs Gradle plugin. Most of properties in this extension will be used as the default property of all {@link SpotBugsTask}.
- * All properties are optional.
+ * The extension to configure the SpotBugs Gradle plugin. Most of properties in this extension will be used as
+ * the default property of all [SpotBugsTask]. All properties are optional.
  *
  * ### Usage
  * After you apply the SpotBugs Gradle plugin to project, write extension like below:
@@ -89,7 +89,7 @@ interface SpotBugsExtension {
      * Property to set the filter file to limit which bug should be reported.
      *
      * Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze,
-     * use [#onlyAnalyze] instead.
+     * use [onlyAnalyze] instead.
      * To limit the visitors (detectors) to run, use [visitors] and [omitVisitors] instead.
      *
      * See also [SpotBugs Manual about Filter file](https://spotbugs.readthedocs.io/en/stable/filter.html).
@@ -108,8 +108,8 @@ interface SpotBugsExtension {
     val excludeFilter: RegularFileProperty
 
     /**
-     * Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file will not be
-     * reported in the final output.
+     * Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file
+     * will not be reported in the final output.
      */
     val baselineFile: RegularFileProperty
 
@@ -119,7 +119,8 @@ interface SpotBugsExtension {
     val onlyAnalyze: ListProperty<String>
 
     /**
-     * Property to specify the name of project. Some reporting formats use this property. Default value is the name of your Gradle project.
+     * Property to specify the name of project. Some reporting formats use this property.
+     * Default value is the name of your Gradle project.
      */
     val projectName: Property<String>
 
@@ -136,7 +137,8 @@ interface SpotBugsExtension {
     val extraArgs: ListProperty<String>
 
     /**
-     * Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.
+     * Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get
+     * no extra argument.
      */
     val jvmArgs: ListProperty<String>
 

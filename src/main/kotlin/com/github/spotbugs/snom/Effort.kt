@@ -22,18 +22,16 @@ package com.github.spotbugs.snom
  * Set via the `spotbugs` extension to configure all tasks in your project:
  * ```kotlin
  * // require Gradle 8.2+
- * import com.github.spotbugs.snom.Effort
  * spotbugs {
- *     effort = Effort.LESS
+ *     effort = com.github.spotbugs.snom.Effort.LESS
  * }
  * ```
  *
  * Or via [SpotBugsTask] to configure the specific task in your project:
  * ```kotlin
  * // require Gradle 8.2+
- * import com.github.spotbugs.snom.Effort
  * spotbugsMain { // or name of another task
- *     effort = Effort.MAX
+ *     effort = com.github.spotbugs.snom.Effort.MAX
  * }
  * ```
  *

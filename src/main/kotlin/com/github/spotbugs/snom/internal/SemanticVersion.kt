@@ -45,7 +45,7 @@ class SemanticVersion(version: String) : Comparable<SemanticVersion?> {
 
     companion object {
         /**
-         * @see [regular expressions 101](https://regex101.com/r/vkijKf/1/)
+         * See [regular expressions 101](https://regex101.com/r/vkijKf/1/)
          */
         private val PATTERN =
             Pattern.compile(

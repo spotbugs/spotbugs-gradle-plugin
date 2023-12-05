@@ -17,6 +17,7 @@ import com.github.spotbugs.snom.SpotBugsReport
 import com.github.spotbugs.snom.SpotBugsTask
 import java.io.File
 import java.net.URI
+import org.gradle.api.Project
 import java.nio.file.Path
 import java.util.stream.Collectors
 import javax.inject.Inject
@@ -35,12 +36,11 @@ import org.gradle.workers.WorkerExecutor
 import org.slf4j.LoggerFactory
 
 /**
- * A {@link SpotBugsRunner} implementation that runs SpotBugs process from the worker process. This
- * approach enables applying benefit of both {@link org.gradle.api.Project#javaexec(Closure)} and
+ * A [SpotBugsRunner] implementation that runs SpotBugs process from the worker process. This
+ * approach enables applying benefit of both [org.gradle.api.Project.javaexec] and
  * Worker API: provide larger Java heap to SpotBugs process and shorten their lifecycle.
  *
- * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/416">The related GitHub
- *     issue</a>
+ * See [The related GitHub issue](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/416)
  */
 class SpotBugsRunnerForHybrid(
     private val workerExecutor: WorkerExecutor,
@@ -166,9 +166,7 @@ class SpotBugsRunnerForHybrid(
         /**
          * Exit code which is set when classes needed for analysis were missing.
          *
-         * @see <a
-         *     href="https://javadoc.io/static/com.github.spotbugs/spotbugs/4.4.2/constant-values.html#edu.umd.cs.findbugs.ExitCodes.MISSING_CLASS_FLAG">Constant
-         *     Field Values from javadoc of the SpotBugs</a>
+         * See [Constant Field Values from javadoc of the SpotBugs](https://javadoc.io/static/com.github.spotbugs/spotbugs/4.4.2/constant-values.html#edu.umd.cs.findbugs.ExitCodes.MISSING_CLASS_FLAG)
          */
         private const val MISSING_CLASS_FLAG = 2
     }
