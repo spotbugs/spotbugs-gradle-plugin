@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<SmellBaseline>
-  <ManuallySuppressedIssues/>
-  <CurrentIssues>
-    <ID>TooManyFunctions:SpotBugsReport.kt$SpotBugsReport : SingleFileReportCustomizableHtmlReport</ID>
-  </CurrentIssues>
-</SmellBaseline>
