@@ -25,25 +25,14 @@ class SpotBugsPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.pluginManager.apply(SpotBugsBasePlugin::class.java)
-        project
-            .pluginManager
-            .withPlugin(
-                "java-base",
-            ) {
-                log.debug(
-                    "The javaBase plugin has been applied, so making the check task depending on all of SpotBugsTask",
-                )
-                project
-                    .tasks
-                    .named(JavaBasePlugin.CHECK_TASK_NAME)
-                    .configure { task: Task ->
-                        task.dependsOn(
-                            project.tasks.withType(
-                                SpotBugsTask::class.java,
-                            ),
-                        )
-                    }
+        project.pluginManager.withPlugin("java-base") {
+            log.debug(
+                "The javaBase plugin has been applied, so making the check task depending on all of SpotBugsTask",
+            )
+            project.tasks.named(JavaBasePlugin.CHECK_TASK_NAME).configure { task: Task ->
+                task.dependsOn(project.tasks.withType(SpotBugsTask::class.java))
             }
+        }
         createTasks(project)
     }
 

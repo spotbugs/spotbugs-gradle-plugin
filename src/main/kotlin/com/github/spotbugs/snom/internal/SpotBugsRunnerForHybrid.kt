@@ -62,8 +62,7 @@ class SpotBugsRunnerForHybrid(
                 .map(SpotBugsReport::getOutputLocation)
                 .forEach(params.getReports()::add)
             if (javaLauncher.isPresent) {
-                params
-                    .getJavaToolchainExecutablePath()
+                params.getJavaToolchainExecutablePath()
                     .set(javaLauncher.get().executablePath.asFile.absolutePath)
             }
         }
@@ -95,8 +94,7 @@ class SpotBugsRunnerForHybrid(
 
         override fun execute() {
             // TODO print version of SpotBugs and Plugins
-            val exitValue =
-                execOperations.javaexec(configureJavaExec(parameters)).rethrowFailure().exitValue
+            val exitValue = execOperations.javaexec(configureJavaExec(parameters)).rethrowFailure().exitValue
             val ignoreFailures = parameters.getIgnoreFailures().getOrElse(false)
             if (ignoreMissingClassFlag(exitValue) == 0) {
                 if (stderrOutputScanner.isFailedToReport && !ignoreFailures) {

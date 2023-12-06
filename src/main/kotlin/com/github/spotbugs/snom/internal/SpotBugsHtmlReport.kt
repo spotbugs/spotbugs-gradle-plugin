@@ -55,9 +55,7 @@ abstract class SpotBugsHtmlReport @Inject constructor(
         return if (spotbugsJar != null) {
             textResourceFactory.fromArchiveEntry(spotbugsJar, path)
         } else {
-            throw InvalidUserDataException(
-                "The dependency on SpotBugs not found in 'spotbugs' configuration",
-            )
+            throw InvalidUserDataException("The dependency on SpotBugs not found in 'spotbugs' configuration")
         }
     }
 
@@ -71,11 +69,9 @@ abstract class SpotBugsHtmlReport @Inject constructor(
         } else {
             val configuration = task.project.configurations.getByName(SpotBugsPlugin.CONFIG_NAME)
             val textResourceFactory = task.project.resources.text
-            stylesheet.set(
-                task.project.provider {
-                    resolve(path, configuration, textResourceFactory)
-                },
-            )
+            task.project.provider {
+                resolve(path, configuration, textResourceFactory)
+            }.let(stylesheet::set)
         }
     }
 }

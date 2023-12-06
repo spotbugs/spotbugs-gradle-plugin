@@ -32,25 +32,13 @@ class SpotBugsBasePlugin : Plugin<Project> {
         createConfiguration(project, extension)
         createPluginConfiguration(project.configurations)
         val enableWorkerApi = getPropertyOrDefault(project, FEATURE_FLAG_WORKER_API, "true")
-        project
-            .tasks
-            .withType(SpotBugsTask::class.java)
-            .configureEach { task ->
-                task.init(
-                    extension,
-                    enableWorkerApi.toBoolean(),
-                )
-            }
+        project.tasks.withType(SpotBugsTask::class.java).configureEach { task ->
+            task.init(extension, enableWorkerApi.toBoolean())
+        }
     }
 
     private fun createExtension(project: Project): SpotBugsExtension {
-        val extension =
-            project
-                .extensions
-                .create(
-                    SpotBugsPlugin.EXTENSION_NAME,
-                    SpotBugsExtension::class.java,
-                )
+        val extension = project.extensions.create(SpotBugsPlugin.EXTENSION_NAME, SpotBugsExtension::class.java)
         extension.ignoreFailures.convention(false)
         extension.showStackTraces.convention(false)
         extension.projectName.convention(project.provider { project.name })
@@ -61,19 +49,14 @@ class SpotBugsBasePlugin : Plugin<Project> {
         )
 
         // ReportingBasePlugin should be applied before we create this SpotBugsExtension instance
-        val baseReportsDir =
-            project.extensions.getByType(
-                ReportingExtension::class.java,
-            ).baseDirectory
-        extension
-            .reportsDir
-            .convention(
-                baseReportsDir.map { directory: Directory ->
-                    directory.dir(
-                        DEFAULT_REPORTS_DIR_NAME,
-                    )
-                },
-            )
+        val baseReportsDir = project.extensions.getByType(ReportingExtension::class.java).baseDirectory
+        extension.reportsDir.convention(
+            baseReportsDir.map { directory: Directory ->
+                directory.dir(
+                    DEFAULT_REPORTS_DIR_NAME,
+                )
+            },
+        )
         extension.useAuxclasspathFile.convention(true)
         extension.useJavaToolchains.convention(true)
         return extension
@@ -92,10 +75,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
             it.setVisible(false)
             it.setTransitive(true)
             it.defaultDependencies { d ->
-                val dep =
-                    project
-                        .dependencies
-                        .create("com.github.spotbugs:spotbugs:" + extension.toolVersion.get())
+                val dep = project.dependencies.create("com.github.spotbugs:spotbugs:" + extension.toolVersion.get())
                 d.add(dep)
             }
         }
@@ -107,10 +87,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
             it.setVisible(false)
             it.setTransitive(true)
             it.defaultDependencies { d ->
-                val dep =
-                    project
-                        .dependencies
-                        .create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version"))
+                val dep = project.dependencies.create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version"))
                 d.add(dep)
             }
         }
@@ -118,8 +95,9 @@ class SpotBugsBasePlugin : Plugin<Project> {
 
     fun loadProperties(): Properties {
         val url = SpotBugsPlugin::class.java.classLoader.getResource("spotbugs-gradle-plugin.properties")
+        url ?: throw IllegalStateException("spotbugs-gradle-plugin.properties not found")
         try {
-            url!!.openStream().use { input ->
+            url.openStream().use { input ->
                 val prop = Properties()
                 prop.load(input)
                 return prop

@@ -50,19 +50,13 @@ abstract class SpotBugsReport @Inject constructor(
         return destination.get().asFile
     }
 
-    override fun getOutputLocation(): RegularFileProperty {
-        return destination
-    }
+    override fun getOutputLocation(): RegularFileProperty = destination
 
     @Internal("This property returns always same value")
-    override fun getOutputType(): Report.OutputType {
-        return Report.OutputType.FILE
-    }
+    override fun getOutputType(): Report.OutputType = Report.OutputType.FILE
 
     @Input
-    override fun getRequired(): Property<Boolean> {
-        return isRequired
-    }
+    override fun getRequired(): Property<Boolean> = isRequired
 
     @get:Deprecated("use `getRequired()` instead.")
     @get:Internal
@@ -107,9 +101,7 @@ abstract class SpotBugsReport @Inject constructor(
     }
 
     // TODO adding an @Input triggers 'cannot be serialized' exception
-    override fun getStylesheet(): TextResource? {
-        return null
-    }
+    override fun getStylesheet(): TextResource? = null
 
     override fun setStylesheet(textResource: TextResource?) {
         throw UnsupportedOperationException("stylesheet property is not available in the $name type report")

@@ -302,18 +302,15 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
     init {
         val objects = project.objects
-        this.reports =
-            objects.domainObjectContainer(
-                SpotBugsReport::class.java,
-            ) { name: String ->
-                when (name) {
-                    "html" -> objects.newInstance(SpotBugsHtmlReport::class.java, name, objects, this)
-                    "xml" -> objects.newInstance(SpotBugsXmlReport::class.java, name, objects, this)
-                    "text" -> objects.newInstance(SpotBugsTextReport::class.java, name, objects, this)
-                    "sarif" -> objects.newInstance(SpotBugsSarifReport::class.java, name, objects, this)
-                    else -> throw InvalidUserDataException("$name is invalid as the report name")
-                }
+        this.reports = objects.domainObjectContainer(SpotBugsReport::class.java) { name: String ->
+            when (name) {
+                "html" -> objects.newInstance(SpotBugsHtmlReport::class.java, name, objects, this)
+                "xml" -> objects.newInstance(SpotBugsXmlReport::class.java, name, objects, this)
+                "text" -> objects.newInstance(SpotBugsTextReport::class.java, name, objects, this)
+                "sarif" -> objects.newInstance(SpotBugsSarifReport::class.java, name, objects, this)
+                else -> throw InvalidUserDataException("$name is invalid as the report name")
             }
+        }
         description = "Run SpotBugs analysis."
         group = JavaBasePlugin.VERIFICATION_GROUP
     }
