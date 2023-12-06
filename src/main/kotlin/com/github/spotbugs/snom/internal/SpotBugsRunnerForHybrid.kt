@@ -89,7 +89,7 @@ class SpotBugsRunnerForHybrid(
     abstract class SpotBugsExecutor @Inject constructor(
         private val execOperations: ExecOperations,
     ) : WorkAction<SpotBugsWorkParameters> {
-        private val log = LoggerFactory.getLogger(this.javaClass)
+        private val log = LoggerFactory.getLogger(javaClass)
         private lateinit var stderrOutputScanner: OutputScanner
 
         override fun execute() {

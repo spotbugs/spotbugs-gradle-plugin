@@ -92,7 +92,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     abstract val workerExecutor: WorkerExecutor
 
     @Input
-    override fun getIgnoreFailures(): Boolean = this.ignoreFailures.get()
+    override fun getIgnoreFailures(): Boolean = ignoreFailures.get()
 
     override fun setIgnoreFailures(ignoreFailures: Boolean) {
         this.ignoreFailures.set(ignoreFailures)
@@ -302,7 +302,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
     init {
         val objects = project.objects
-        this.reports = objects.domainObjectContainer(SpotBugsReport::class.java) { name: String ->
+        reports = objects.domainObjectContainer(SpotBugsReport::class.java) { name: String ->
             when (name) {
                 "html" -> objects.newInstance(SpotBugsHtmlReport::class.java, name, objects, this)
                 "xml" -> objects.newInstance(SpotBugsXmlReport::class.java, name, objects, this)
@@ -325,8 +325,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
         extension: SpotBugsExtension,
         enableWorkerApi: Boolean,
     ) {
-        this.auxclasspathFile.convention(project.layout.buildDirectory.file("spotbugs/auxclasspath/$name"))
-
+        auxclasspathFile.convention(project.layout.buildDirectory.file("spotbugs/auxclasspath/$name"))
         ignoreFailures.convention(extension.ignoreFailures)
         showStackTraces.convention(extension.showStackTraces)
         showProgress.convention(extension.showProgress)
@@ -353,7 +352,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
         this.enableWorkerApi = enableWorkerApi
 
-        analyseClassFile.set(project.layout.buildDirectory.file("${this.name}-analyse-class-file.txt"))
+        analyseClassFile.set(project.layout.buildDirectory.file("$name-analyse-class-file.txt"))
 
         val pluginConfiguration = project.configurations.getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
         pluginJarFiles.from(
@@ -403,7 +402,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     fun getBaseName(): String {
         var prunedName = name.replaceFirst("spotbugs", "")
         if (prunedName.isEmpty()) {
-            prunedName = this.name
+            prunedName = name
         }
 
         return buildString {
