@@ -38,28 +38,28 @@ class SpotBugsBasePlugin : Plugin<Project> {
     }
 
     private fun createExtension(project: Project): SpotBugsExtension {
-        val extension = project.extensions.create(SpotBugsPlugin.EXTENSION_NAME, SpotBugsExtension::class.java)
-        extension.ignoreFailures.convention(false)
-        extension.showStackTraces.convention(false)
-        extension.projectName.convention(project.provider { project.name })
-        extension.release.convention(
-            project.provider {
-                project.version.toString()
-            },
-        )
+        return project.extensions.create(SpotBugsPlugin.EXTENSION_NAME, SpotBugsExtension::class.java).apply {
+            ignoreFailures.convention(false)
+            showStackTraces.convention(false)
+            projectName.convention(project.provider { project.name })
+            release.convention(
+                project.provider {
+                    project.version.toString()
+                },
+            )
 
-        // ReportingBasePlugin should be applied before we create this SpotBugsExtension instance
-        val baseReportsDir = project.extensions.getByType(ReportingExtension::class.java).baseDirectory
-        extension.reportsDir.convention(
-            baseReportsDir.map { directory: Directory ->
-                directory.dir(
-                    DEFAULT_REPORTS_DIR_NAME,
-                )
-            },
-        )
-        extension.useAuxclasspathFile.convention(true)
-        extension.useJavaToolchains.convention(true)
-        return extension
+            // ReportingBasePlugin should be applied before we create this SpotBugsExtension instance
+            val baseReportsDir = project.extensions.getByType(ReportingExtension::class.java).baseDirectory
+            reportsDir.convention(
+                baseReportsDir.map { directory: Directory ->
+                    directory.dir(
+                        DEFAULT_REPORTS_DIR_NAME,
+                    )
+                },
+            )
+            useAuxclasspathFile.convention(true)
+            useJavaToolchains.convention(true)
+        }
     }
 
     private fun createConfiguration(

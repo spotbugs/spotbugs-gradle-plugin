@@ -90,9 +90,8 @@ abstract class SpotBugsReport @Inject constructor(
     }
 
     @Suppress("MemberVisibilityCanBePrivate")
-    fun configure(action: Action<in Report>): Report {
+    fun configure(action: Action<in Report>): Report = apply {
         action.execute(this)
-        return this
     }
 
     @Internal("This property provides only a human readable name.")
