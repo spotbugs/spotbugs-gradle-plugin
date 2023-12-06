@@ -31,7 +31,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
         val extension = createExtension(project)
         createConfiguration(project, extension)
         createPluginConfiguration(project.configurations)
-        val enableWorkerApi = getPropertyOrDefault(project, FEATURE_FLAG_WORKER_API, "true")
+        val enableWorkerApi = project.providers.gradleProperty(FEATURE_FLAG_WORKER_API).getOrElse("true")
         project.tasks.withType(SpotBugsTask::class.java).configureEach { task ->
             task.init(extension, enableWorkerApi.toBoolean())
         }
@@ -115,14 +115,6 @@ class SpotBugsBasePlugin : Plugin<Project> {
         check(version >= SUPPORTED_VERSION) {
             "Gradle version $version is unsupported. Please use $SUPPORTED_VERSION or later."
         }
-    }
-
-    private fun getPropertyOrDefault(
-        project: Project,
-        propertyName: String,
-        defaultValue: String,
-    ): String {
-        return if (project.hasProperty(propertyName)) project.property(propertyName).toString() else defaultValue
     }
 
     companion object {
