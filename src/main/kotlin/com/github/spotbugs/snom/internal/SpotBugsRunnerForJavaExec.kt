@@ -46,7 +46,7 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
             if (task.getIgnoreFailures()) {
                 log.warn(
                     "SpotBugs reported failures",
-                    if (task.showStackTraces.get())e else null,
+                    if (task.showStackTraces.get()) e else null,
                 )
             } else {
                 val errorMessage = buildString {

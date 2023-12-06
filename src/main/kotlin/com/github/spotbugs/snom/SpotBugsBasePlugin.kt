@@ -52,9 +52,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
             val baseReportsDir = project.extensions.getByType(ReportingExtension::class.java).baseDirectory
             reportsDir.convention(
                 baseReportsDir.map { directory: Directory ->
-                    directory.dir(
-                        DEFAULT_REPORTS_DIR_NAME,
-                    )
+                    directory.dir(DEFAULT_REPORTS_DIR_NAME)
                 },
             )
             useAuxclasspathFile.convention(true)
@@ -80,9 +78,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
             }
         }
 
-        configs.register(
-            SpotBugsPlugin.SLF4J_CONFIG_NAME,
-        ) {
+        configs.register(SpotBugsPlugin.SLF4J_CONFIG_NAME) {
             it.description = "configuration for the SLF4J provider to run SpotBugs"
             it.setVisible(false)
             it.setTransitive(true)
@@ -108,9 +104,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
     }
 
     private fun createPluginConfiguration(configs: ConfigurationContainer) {
-        configs.register(
-            SpotBugsPlugin.PLUGINS_CONFIG_NAME,
-        ) {
+        configs.register(SpotBugsPlugin.PLUGINS_CONFIG_NAME) {
             it.setDescription("configuration for the external SpotBugs plugins")
             it.setVisible(false)
             it.setTransitive(false)

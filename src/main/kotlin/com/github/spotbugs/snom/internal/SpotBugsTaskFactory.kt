@@ -43,17 +43,16 @@ class SpotBugsTaskFactory {
 
     private fun generateForJava(project: Project) {
         project.plugins.withType(JavaBasePlugin::class.java).configureEach {
-            getSourceSetContainer(project)
-                .all { sourceSet: SourceSet ->
-                    val name = sourceSet.getTaskName("spotbugs", null)
-                    log.debug("Creating SpotBugsTask for {}", sourceSet)
-                    project.tasks.register(name, SpotBugsTask::class.java) {
-                        it.sourceDirs.setFrom(sourceSet.allSource.sourceDirectories)
-                        it.classDirs.setFrom(sourceSet.output)
-                        it.auxClassPaths.setFrom(sourceSet.compileClasspath)
-                        it.description = "Run SpotBugs analysis for the source set '${sourceSet.name}'"
-                    }
+            getSourceSetContainer(project).all { sourceSet: SourceSet ->
+                val name = sourceSet.getTaskName("spotbugs", null)
+                log.debug("Creating SpotBugsTask for {}", sourceSet)
+                project.tasks.register(name, SpotBugsTask::class.java) {
+                    it.sourceDirs.setFrom(sourceSet.allSource.sourceDirectories)
+                    it.classDirs.setFrom(sourceSet.output)
+                    it.auxClassPaths.setFrom(sourceSet.compileClasspath)
+                    it.description = "Run SpotBugs analysis for the source set '${sourceSet.name}'"
                 }
+            }
         }
     }
 
@@ -68,10 +67,7 @@ class SpotBugsTaskFactory {
             variants.all { variant: BaseVariant ->
                 val spotbugsTaskName = toLowerCamelCase("spotbugs", variant.name)
                 log.debug("Creating SpotBugsTask for {}", variant.name)
-                project.tasks.register(
-                    spotbugsTaskName,
-                    SpotBugsTask::class.java,
-                ) { spotbugsTask: SpotBugsTask ->
+                project.tasks.register(spotbugsTaskName, SpotBugsTask::class.java) { spotbugsTask: SpotBugsTask ->
                     val javaCompile = variant.javaCompileProvider.get()
                     spotbugsTask.sourceDirs.setFrom(javaCompile.source)
                     spotbugsTask.classDirs.setFrom(javaCompile.destinationDirectory)
