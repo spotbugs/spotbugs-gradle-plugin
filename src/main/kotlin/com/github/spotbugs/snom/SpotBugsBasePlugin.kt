@@ -95,7 +95,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
 
     fun loadProperties(): Properties {
         val url = SpotBugsPlugin::class.java.classLoader.getResource("spotbugs-gradle-plugin.properties")
-        url ?: throw IllegalStateException("spotbugs-gradle-plugin.properties not found")
+        url ?: error("spotbugs-gradle-plugin.properties not found")
         try {
             url.openStream().use { input ->
                 val prop = Properties()
