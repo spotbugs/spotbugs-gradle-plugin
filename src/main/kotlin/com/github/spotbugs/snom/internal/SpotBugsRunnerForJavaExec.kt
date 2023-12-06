@@ -61,7 +61,7 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
                         .toList()
                     if (reportPaths.isNotEmpty()) {
                         append("See the report at: ")
-                        append(reportPaths.joinToString(", "))
+                        append(reportPaths.joinToString())
                     }
                 }
                 throw GradleException(errorMessage, e)
