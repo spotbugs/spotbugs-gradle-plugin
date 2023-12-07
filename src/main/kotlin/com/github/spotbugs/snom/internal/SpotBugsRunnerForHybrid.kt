@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory
  *
  * See [The related GitHub issue](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/416)
  */
-class SpotBugsRunnerForHybrid(
+internal class SpotBugsRunnerForHybrid(
     private val workerExecutor: WorkerExecutor,
     private val javaLauncher: Property<JavaLauncher>,
 ) : SpotBugsRunner() {

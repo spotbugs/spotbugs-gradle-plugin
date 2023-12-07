@@ -27,7 +27,7 @@ import org.gradle.api.GradleException
 import org.gradle.api.file.FileCollection
 import org.slf4j.LoggerFactory
 
-abstract class SpotBugsRunner {
+internal abstract class SpotBugsRunner {
     private val log = LoggerFactory.getLogger(SpotBugsRunner::class.java)
 
     abstract fun run(task: SpotBugsTask)

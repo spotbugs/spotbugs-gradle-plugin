@@ -24,7 +24,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.resources.TextResource
 import org.gradle.api.resources.TextResourceFactory
 
-abstract class SpotBugsHtmlReport @Inject constructor(
+internal abstract class SpotBugsHtmlReport @Inject constructor(
     objects: ObjectFactory,
     task: SpotBugsTask,
 ) : SpotBugsReport(objects, task) {

@@ -28,7 +28,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
 import org.slf4j.LoggerFactory
 
-class SpotBugsTaskFactory {
+internal class SpotBugsTaskFactory {
     private val log = LoggerFactory.getLogger(SpotBugsTaskFactory::class.java)
 
     fun generate(project: Project) {

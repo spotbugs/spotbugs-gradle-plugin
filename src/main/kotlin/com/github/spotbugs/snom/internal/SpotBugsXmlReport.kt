@@ -18,7 +18,7 @@ import com.github.spotbugs.snom.SpotBugsTask
 import javax.inject.Inject
 import org.gradle.api.model.ObjectFactory
 
-abstract class SpotBugsXmlReport @Inject constructor(
+internal abstract class SpotBugsXmlReport @Inject constructor(
     objects: ObjectFactory,
     task: SpotBugsTask,
 ) : SpotBugsReport(objects, task) {

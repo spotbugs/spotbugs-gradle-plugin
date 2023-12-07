@@ -29,7 +29,7 @@ import org.gradle.process.JavaExecSpec
 import org.gradle.process.internal.ExecException
 import org.slf4j.LoggerFactory
 
-class SpotBugsRunnerForJavaExec @Inject constructor(
+internal class SpotBugsRunnerForJavaExec @Inject constructor(
     private val javaLauncher: Property<JavaLauncher>,
 ) : SpotBugsRunner() {
     private val log = LoggerFactory.getLogger(SpotBugsRunnerForJavaExec::class.java)
