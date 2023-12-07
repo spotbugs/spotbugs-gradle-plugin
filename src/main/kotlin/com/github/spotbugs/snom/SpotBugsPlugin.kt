@@ -43,9 +43,9 @@ class SpotBugsPlugin : Plugin<Project> {
         const val CONFIG_NAME = "spotbugs"
 
         /**
-         * The configuration contains SpotBugs plugin jar files only
+         * The configuration contains SpotBugs plugin jar files only.
          *
-         * See [GitHub issue](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/910)
+         * See [GitHub issue](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/910).
          */
         const val PLUGINS_CONFIG_NAME = "spotbugsPlugins"
         const val SLF4J_CONFIG_NAME = "spotbugsSlf4j"

@@ -34,11 +34,13 @@ import org.gradle.workers.WorkerExecutor
 import org.slf4j.LoggerFactory
 
 /**
- * A [SpotBugsRunner] implementation that runs SpotBugs process from the worker process. This
- * approach enables applying benefit of both [org.gradle.api.Project.javaexec] and
- * Worker API: provide larger Java heap to SpotBugs process and shorten their lifecycle.
+ * This class is an implementation of [SpotBugsRunner] that executes the SpotBugs process from a worker process.
+ * It leverages the benefits of both [org.gradle.api.Project.javaexec] and the Worker API to optimize
+ * SpotBugs' performance.
+ * This approach allows SpotBugs to utilize more Java heap memory and reduces its lifespan, enhancing efficiency.
  *
- * See [The related GitHub issue](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/416)
+ * For more context, refer to GitHub issue:
+ * [Issue #416](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/416).
  */
 internal class SpotBugsRunnerForHybrid(
     private val workerExecutor: WorkerExecutor,

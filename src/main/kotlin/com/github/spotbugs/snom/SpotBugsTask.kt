@@ -52,11 +52,14 @@ import org.gradle.workers.WorkerExecutor
 import org.slf4j.LoggerFactory
 
 /**
- * The Gradle task to run the SpotBugs analysis. All properties are optional.
+ * This Gradle task runs the SpotBugs analysis.
+ * All properties are optional.
  *
- * **Usage for Java project:**
- * After you apply the SpotBugs Gradle plugin to project, [SpotBugsTask] is automatically
- * generated for each sourceSet. If you want to configure generated tasks, write build scripts like below:
+ * **Usage for Java projects:**
+ * After applying the SpotBugs Gradle plugin to your project, a [SpotBugsTask] is automatically
+ * generated for each sourceSet.
+ * If you need to configure the generated tasks, use the following build script as a guide:
+ *
  * ```groovy
  * spotbugsMain {
  *     sourceSets = sourceSets.main.allSource.srcDirs
@@ -83,7 +86,6 @@ import org.slf4j.LoggerFactory
  *
  * See also [SpotBugs Manual about configuration](https://spotbugs.readthedocs.io/en/stable/running.html)
  */
-
 @CacheableTask
 abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     private val log = LoggerFactory.getLogger(SpotBugsTask::class.java)
@@ -269,7 +271,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     abstract val auxclasspathFile: RegularFileProperty
 
     /**
-     * Property to specify the target classes to analyse by SpotBugs.
+     * Property to specify the target classes to analyze by SpotBugs.
      * Default value is the all existing `.class` files in `getClassDirs`.
      */
     @get:InputFiles
@@ -295,7 +297,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     abstract val launcher: Property<JavaLauncher>
 
     /**
-     * A file that lists class files and jar files to analyse.
+     * A file that lists class files and jar files to analyze.
      */
     @get:OutputFile
     abstract val analyseClassFile: RegularFileProperty

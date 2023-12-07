@@ -16,7 +16,7 @@ package com.github.spotbugs.snom.internal
 import java.util.regex.Pattern
 
 /**
- * See [SemVer 2.0 specification](https://semver.org/spec/v2.0.0.html)
+ * See [SemVer 2.0 specification](https://semver.org/spec/v2.0.0.html).
  */
 @Suppress("MagicNumber")
 internal class SemanticVersion(version: String) : Comparable<SemanticVersion?> {
@@ -45,7 +45,7 @@ internal class SemanticVersion(version: String) : Comparable<SemanticVersion?> {
 
     companion object {
         /**
-         * See [regular expressions 101](https://regex101.com/r/vkijKf/1/)
+         * See [regular expressions 101](https://regex101.com/r/vkijKf/1/).
          */
         @Suppress("MaxLineLength")
         private val PATTERN =
