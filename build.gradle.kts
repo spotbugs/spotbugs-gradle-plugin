@@ -38,7 +38,7 @@ val signingKey: String? = providers.environmentVariable("SIGNING_KEY").orNull
 val signingPassword: String? = providers.environmentVariable("SIGNING_PASSWORD").orNull
 
 apiValidation {
-    ignoredPackages.add(
+    ignoredPackages += listOf(
         // Ignore the following packages because they are not public API.
         "com.github.spotbugs.snom.internal",
     )
