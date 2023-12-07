@@ -153,7 +153,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     /**
      * Property to set the filter file to limit which bug should be reported.
      *
-     * <p>Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze,
+     * Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze,
      * use [onlyAnalyze] instead.
      * To limit the visitors (detectors) to run, use [visitors] and [omitVisitors] instead.
      *
