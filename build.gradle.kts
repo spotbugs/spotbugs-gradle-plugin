@@ -12,6 +12,7 @@ plugins {
     id("com.github.spotbugs.test")
     id("org.sonarqube")
     id("io.gitlab.arturbosch.detekt") version "1.23.4"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
 }
 
 java {
@@ -35,6 +36,13 @@ dependencies {
 
 val signingKey: String? = providers.environmentVariable("SIGNING_KEY").orNull
 val signingPassword: String? = providers.environmentVariable("SIGNING_PASSWORD").orNull
+
+apiValidation {
+    ignoredPackages += listOf(
+        // Ignore the following packages because they are not public API.
+        "com.github.spotbugs.snom.internal",
+    )
+}
 
 signing {
     if (!signingKey.isNullOrBlank() && !signingPassword.isNullOrBlank()) {

@@ -1,0 +1,139 @@
+public abstract class com/github/spotbugs/snom/Confidence : java/lang/Enum {
+	public static final field DEFAULT Lcom/github/spotbugs/snom/Confidence;
+	public static final field HIGH Lcom/github/spotbugs/snom/Confidence;
+	public static final field LOW Lcom/github/spotbugs/snom/Confidence;
+	public static final field MEDIUM Lcom/github/spotbugs/snom/Confidence;
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public abstract fun toCommandLineOption ()Ljava/util/Optional;
+	public static fun valueOf (Ljava/lang/String;)Lcom/github/spotbugs/snom/Confidence;
+	public static fun values ()[Lcom/github/spotbugs/snom/Confidence;
+}
+
+public final class com/github/spotbugs/snom/Effort : java/lang/Enum {
+	public static final field DEFAULT Lcom/github/spotbugs/snom/Effort;
+	public static final field LESS Lcom/github/spotbugs/snom/Effort;
+	public static final field MAX Lcom/github/spotbugs/snom/Effort;
+	public static final field MIN Lcom/github/spotbugs/snom/Effort;
+	public static final field MORE Lcom/github/spotbugs/snom/Effort;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/github/spotbugs/snom/Effort;
+	public static fun values ()[Lcom/github/spotbugs/snom/Effort;
+}
+
+public final class com/github/spotbugs/snom/ExtensionsKt {
+	public static final fun assignConfidence (Lorg/gradle/api/provider/Property;Ljava/lang/String;)V
+	public static final fun assignEffort (Lorg/gradle/api/provider/Property;Ljava/lang/String;)V
+}
+
+public final class com/github/spotbugs/snom/SpotBugsBasePlugin : org/gradle/api/Plugin {
+	public static final field Companion Lcom/github/spotbugs/snom/SpotBugsBasePlugin$Companion;
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+	public final fun loadProperties ()Ljava/util/Properties;
+	public final fun verifyGradleVersion (Lorg/gradle/util/GradleVersion;)V
+}
+
+public final class com/github/spotbugs/snom/SpotBugsBasePlugin$Companion {
+}
+
+public abstract interface class com/github/spotbugs/snom/SpotBugsExtension {
+	public abstract fun getBaselineFile ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getEffort ()Lorg/gradle/api/provider/Property;
+	public abstract fun getExcludeFilter ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getExtraArgs ()Lorg/gradle/api/provider/ListProperty;
+	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
+	public abstract fun getIncludeFilter ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getJvmArgs ()Lorg/gradle/api/provider/ListProperty;
+	public abstract fun getMaxHeapSize ()Lorg/gradle/api/provider/Property;
+	public abstract fun getOmitVisitors ()Lorg/gradle/api/provider/ListProperty;
+	public abstract fun getOnlyAnalyze ()Lorg/gradle/api/provider/ListProperty;
+	public abstract fun getProjectName ()Lorg/gradle/api/provider/Property;
+	public abstract fun getRelease ()Lorg/gradle/api/provider/Property;
+	public abstract fun getReportLevel ()Lorg/gradle/api/provider/Property;
+	public abstract fun getReportsDir ()Lorg/gradle/api/file/DirectoryProperty;
+	public abstract fun getShowProgress ()Lorg/gradle/api/provider/Property;
+	public abstract fun getShowStackTraces ()Lorg/gradle/api/provider/Property;
+	public abstract fun getToolVersion ()Lorg/gradle/api/provider/Property;
+	public abstract fun getUseAuxclasspathFile ()Lorg/gradle/api/provider/Property;
+	public abstract fun getUseJavaToolchains ()Lorg/gradle/api/provider/Property;
+	public abstract fun getVisitors ()Lorg/gradle/api/provider/ListProperty;
+}
+
+public final class com/github/spotbugs/snom/SpotBugsPlugin : org/gradle/api/Plugin {
+	public static final field CONFIG_NAME Ljava/lang/String;
+	public static final field Companion Lcom/github/spotbugs/snom/SpotBugsPlugin$Companion;
+	public static final field EXTENSION_NAME Ljava/lang/String;
+	public static final field PLUGINS_CONFIG_NAME Ljava/lang/String;
+	public static final field SLF4J_CONFIG_NAME Ljava/lang/String;
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class com/github/spotbugs/snom/SpotBugsPlugin$Companion {
+}
+
+public abstract class com/github/spotbugs/snom/SpotBugsReport : org/gradle/api/reporting/CustomizableHtmlReport, org/gradle/api/reporting/SingleFileReport {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lcom/github/spotbugs/snom/SpotBugsTask;)V
+	public synthetic fun configure (Lgroovy/lang/Closure;)Ljava/lang/Object;
+	public fun configure (Lgroovy/lang/Closure;)Lorg/gradle/api/reporting/Report;
+	public final fun configure (Lorg/gradle/api/Action;)Lorg/gradle/api/reporting/Report;
+	public final fun getDestination ()Ljava/io/File;
+	public fun getDisplayName ()Ljava/lang/String;
+	public fun getOutputLocation ()Lorg/gradle/api/file/RegularFileProperty;
+	public synthetic fun getOutputLocation ()Lorg/gradle/api/provider/Property;
+	public fun getOutputType ()Lorg/gradle/api/reporting/Report$OutputType;
+	public fun getRequired ()Lorg/gradle/api/provider/Property;
+	public fun getStylesheet ()Lorg/gradle/api/resources/TextResource;
+	protected final fun getTask ()Lcom/github/spotbugs/snom/SpotBugsTask;
+	public final fun isEnabled ()Z
+	public fun setDestination (Ljava/io/File;)V
+	public final fun setDestination (Lorg/gradle/api/provider/Provider;)V
+	public final fun setEnabled (Lorg/gradle/api/provider/Provider;)V
+	public final fun setEnabled (Z)V
+	public fun setStylesheet (Ljava/lang/String;)V
+	public fun setStylesheet (Lorg/gradle/api/resources/TextResource;)V
+	public abstract fun toCommandLineOption ()Ljava/lang/String;
+}
+
+public abstract class com/github/spotbugs/snom/SpotBugsTask : org/gradle/api/DefaultTask, org/gradle/api/tasks/VerificationTask {
+	public fun <init> ()V
+	public abstract fun getAnalyseClassFile ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getAuxClassPaths ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public abstract fun getAuxclasspathFile ()Lorg/gradle/api/file/RegularFileProperty;
+	public final fun getBaseName ()Ljava/lang/String;
+	public abstract fun getBaselineFile ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getClassDirs ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public final fun getClasses ()Lorg/gradle/api/file/FileCollection;
+	public abstract fun getEffort ()Lorg/gradle/api/provider/Property;
+	public abstract fun getExcludeFilter ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getExtraArgs ()Lorg/gradle/api/provider/ListProperty;
+	public fun getIgnoreFailures ()Z
+	public abstract fun getIncludeFilter ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getJvmArgs ()Lorg/gradle/api/provider/ListProperty;
+	public abstract fun getLauncher ()Lorg/gradle/api/provider/Property;
+	public abstract fun getMaxHeapSize ()Lorg/gradle/api/provider/Property;
+	public abstract fun getOmitVisitors ()Lorg/gradle/api/provider/ListProperty;
+	public abstract fun getOnlyAnalyze ()Lorg/gradle/api/provider/ListProperty;
+	public abstract fun getPluginJarFiles ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public abstract fun getProjectName ()Lorg/gradle/api/provider/Property;
+	public abstract fun getRelease ()Lorg/gradle/api/provider/Property;
+	public abstract fun getReportLevel ()Lorg/gradle/api/provider/Property;
+	public final fun getReports ()Lorg/gradle/api/NamedDomainObjectContainer;
+	public abstract fun getReportsDir ()Lorg/gradle/api/file/DirectoryProperty;
+	public abstract fun getShowProgress ()Lorg/gradle/api/provider/Property;
+	public abstract fun getShowStackTraces ()Lorg/gradle/api/provider/Property;
+	public abstract fun getSourceDirs ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public abstract fun getSpotbugsClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public abstract fun getUseAuxclasspathFile ()Lorg/gradle/api/provider/Property;
+	public abstract fun getVisitors ()Lorg/gradle/api/provider/ListProperty;
+	public abstract fun getWorkerExecutor ()Lorg/gradle/workers/WorkerExecutor;
+	public final fun init (Lcom/github/spotbugs/snom/SpotBugsExtension;Z)V
+	public final fun reports (Lorg/gradle/api/Action;)Lorg/gradle/api/NamedDomainObjectContainer;
+	public final fun run ()V
+	public final fun setClasses (Lorg/gradle/api/file/FileCollection;)V
+	public fun setIgnoreFailures (Z)V
+}
+
