@@ -24,7 +24,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.resources.TextResource
 import org.gradle.api.resources.TextResourceFactory
 
-abstract class SpotBugsHtmlReport @Inject constructor(
+internal abstract class SpotBugsHtmlReport @Inject constructor(
     objects: ObjectFactory,
     task: SpotBugsTask,
 ) : SpotBugsReport(objects, task) {
@@ -36,7 +36,7 @@ abstract class SpotBugsHtmlReport @Inject constructor(
         stylesheet = task.project.objects.property(TextResource::class.java)
     }
 
-    override fun toCommandLineOption(): String {
+    override val commandLineOption: String get() {
         return stylesheet.map {
             "-html:" + it.asFile().absolutePath
         }.getOrElse("-html")
@@ -49,15 +49,13 @@ abstract class SpotBugsHtmlReport @Inject constructor(
         configuration: Configuration,
         textResourceFactory: TextResourceFactory,
     ): TextResource {
-        val spotbugsJar = configuration.files { dependency ->
-            dependency.group == "com.github.spotbugs" && dependency.name == "spotbugs"
+        val spotbugsJar = configuration.files {
+            it.group == "com.github.spotbugs" && it.name == "spotbugs"
         }.find { it.isFile }
         return if (spotbugsJar != null) {
             textResourceFactory.fromArchiveEntry(spotbugsJar, path)
         } else {
-            throw InvalidUserDataException(
-                "The dependency on SpotBugs not found in 'spotbugs' configuration",
-            )
+            throw InvalidUserDataException("The dependency on SpotBugs not found in 'spotbugs' configuration")
         }
     }
 
@@ -71,11 +69,9 @@ abstract class SpotBugsHtmlReport @Inject constructor(
         } else {
             val configuration = task.project.configurations.getByName(SpotBugsPlugin.CONFIG_NAME)
             val textResourceFactory = task.project.resources.text
-            stylesheet.set(
-                task.project.provider {
-                    resolve(path, configuration, textResourceFactory)
-                },
-            )
+            task.project.provider {
+                resolve(path, configuration, textResourceFactory)
+            }.let(stylesheet::set)
         }
     }
 }

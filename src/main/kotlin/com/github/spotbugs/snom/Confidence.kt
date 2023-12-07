@@ -13,7 +13,6 @@
  */
 package com.github.spotbugs.snom
 
-import java.util.Optional
 import org.gradle.api.tasks.Internal
 
 /**
@@ -22,21 +21,19 @@ import org.gradle.api.tasks.Internal
  *
  * ### Usage
  *
- * Set via the {@code spotbugs} extension to configure all tasks in your project:
+ * Set via the [SpotBugsExtension] to configure all tasks in your project:
  * ```kotlin
  * // require Gradle 8.2+
- * import com.github.spotbugs.snom.Confidence
  * spotbugs {
- *     reportLevel = Confidence.LOW
+ *     reportLevel = com.github.spotbugs.snom.Confidence.LOW
  * }
  * ```
  *
  * Or via [SpotBugsTask] to configure the specific task in your project:
  * ```kotlin
  * // require Gradle 8.2+
- * import com.github.spotbugs.snom.Confidence
  * spotbugsMain { // or name of another task
- *     reportLevel = Confidence.LOW
+ *     reportLevel = com.github.spotbugs.snom.Confidence.LOW
  * }
  * ```
  *
@@ -45,24 +42,25 @@ import org.gradle.api.tasks.Internal
 enum class Confidence {
     /** The report level to report all detected bugs in the report. */
     LOW {
-        override fun toCommandLineOption(): Optional<String> = Optional.of("-low")
+        override val commandLineOption: String = "-low"
     },
 
     /** The report level to report medium and high priority detected bugs in the report. */
     MEDIUM {
-        override fun toCommandLineOption(): Optional<String> = Optional.of("-medium")
+        override val commandLineOption: String = "-medium"
     },
 
-    /** The default level that provides the same feature with {@link #MEDIUM}. */
+    /** The default level that provides the same feature with [MEDIUM]. */
     DEFAULT {
-        override fun toCommandLineOption(): Optional<String> = Optional.empty()
+        override val commandLineOption: String? = null
     },
 
     /** The report level to report high priority detected bugs in the report. */
     HIGH {
-        override fun toCommandLineOption(): Optional<String> = Optional.of("-high")
-    }, ;
+        override val commandLineOption: String = "-high"
+    },
+    ;
 
-    @Internal("This is internally used property so no need to refer to judge out-of-date or not.")
-    abstract fun toCommandLineOption(): Optional<String>
+    @get:Internal("This is internally used property so no need to refer to judge out-of-date or not.")
+    internal abstract val commandLineOption: String?
 }

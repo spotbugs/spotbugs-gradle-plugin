@@ -18,7 +18,7 @@ import com.github.spotbugs.snom.SpotBugsTask
 import javax.inject.Inject
 import org.gradle.api.model.ObjectFactory
 
-abstract class SpotBugsSarifReport @Inject constructor(
+internal abstract class SpotBugsSarifReport @Inject constructor(
     objects: ObjectFactory,
     task: SpotBugsTask,
 ) : SpotBugsReport(objects, task) {
@@ -27,7 +27,5 @@ abstract class SpotBugsSarifReport @Inject constructor(
         outputLocation.convention(task.reportsDir.file(task.getBaseName() + ".sarif"))
     }
 
-    override fun toCommandLineOption(): String {
-        return "-sarif"
-    }
+    override val commandLineOption: String = "-sarif"
 }

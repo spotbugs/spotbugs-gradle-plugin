@@ -18,7 +18,6 @@ import com.github.spotbugs.snom.SpotBugsTask
 import java.io.File
 import java.net.URI
 import java.nio.file.Path
-import java.util.stream.Collectors
 import javax.inject.Inject
 import org.gradle.api.Action
 import org.gradle.api.GradleException
@@ -35,38 +34,37 @@ import org.gradle.workers.WorkerExecutor
 import org.slf4j.LoggerFactory
 
 /**
- * A {@link SpotBugsRunner} implementation that runs SpotBugs process from the worker process. This
- * approach enables applying benefit of both {@link org.gradle.api.Project#javaexec(Closure)} and
- * Worker API: provide larger Java heap to SpotBugs process and shorten their lifecycle.
+ * This class is an implementation of [SpotBugsRunner] that executes the SpotBugs process from a worker process.
+ * It leverages the benefits of both [org.gradle.api.Project.javaexec] and the Worker API to optimize
+ * SpotBugs' performance.
+ * This approach allows SpotBugs to utilize more Java heap memory and reduces its lifespan, enhancing efficiency.
  *
- * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/416">The related GitHub
- *     issue</a>
+ * For more context, refer to GitHub issue:
+ * [Issue #416](https://github.com/spotbugs/spotbugs-gradle-plugin/issues/416).
  */
-class SpotBugsRunnerForHybrid(
+internal class SpotBugsRunnerForHybrid(
     private val workerExecutor: WorkerExecutor,
     private val javaLauncher: Property<JavaLauncher>,
 ) : SpotBugsRunner() {
     override fun run(task: SpotBugsTask) {
-        workerExecutor.noIsolation().submit(SpotBugsExecutor::class.java) { params: SpotBugsWorkParameters ->
+        workerExecutor.noIsolation().submit(SpotBugsExecutor::class.java) {
             val args = mutableListOf<String>()
             args.add("-exitcode")
             args.addAll(buildArguments(task))
-            params.getClasspath().setFrom(task.spotbugsClasspath)
-            params.getJvmArgs().set(buildJvmArguments(task))
-            params.getArgs().set(args)
+            it.getClasspath().setFrom(task.spotbugsClasspath)
+            it.getJvmArgs().set(buildJvmArguments(task))
+            it.getArgs().set(args)
             val maxHeapSize = task.maxHeapSize.getOrNull()
             if (maxHeapSize != null) {
-                params.getMaxHeapSize().set(maxHeapSize)
+                it.getMaxHeapSize().set(maxHeapSize)
             }
-            params.getIgnoreFailures().set(task.ignoreFailures)
-            params.getShowStackTraces().set(task.showStackTraces)
+            it.getIgnoreFailures().set(task.ignoreFailures)
+            it.getShowStackTraces().set(task.showStackTraces)
             task.getRequiredReports()
                 .map(SpotBugsReport::getOutputLocation)
-                .forEach(params.getReports()::add)
+                .forEach(it.getReports()::add)
             if (javaLauncher.isPresent) {
-                params
-                    .getJavaToolchainExecutablePath()
-                    .set(javaLauncher.get().executablePath.asFile.absolutePath)
+                it.getJavaToolchainExecutablePath().set(javaLauncher.get().executablePath.asFile.absolutePath)
             }
         }
     }
@@ -92,13 +90,12 @@ class SpotBugsRunnerForHybrid(
     abstract class SpotBugsExecutor @Inject constructor(
         private val execOperations: ExecOperations,
     ) : WorkAction<SpotBugsWorkParameters> {
-        private val log = LoggerFactory.getLogger(this.javaClass)
+        private val log = LoggerFactory.getLogger(javaClass)
         private lateinit var stderrOutputScanner: OutputScanner
 
         override fun execute() {
             // TODO print version of SpotBugs and Plugins
-            val exitValue =
-                execOperations.javaexec(configureJavaExec(parameters)).rethrowFailure().exitValue
+            val exitValue = execOperations.javaexec(configureJavaExec(parameters)).rethrowFailure().exitValue
             val ignoreFailures = parameters.getIgnoreFailures().getOrElse(false)
             if (ignoreMissingClassFlag(exitValue) == 0) {
                 if (stderrOutputScanner.isFailedToReport && !ignoreFailures) {
@@ -114,15 +111,15 @@ class SpotBugsRunnerForHybrid(
 
             val errorMessage = buildString {
                 append("Verification failed: SpotBugs ended with exit code $exitValue.")
-                val reportPaths = parameters.getReports().get().stream()
+                val reportPaths = parameters.getReports().get().asSequence()
                     .map(RegularFile::getAsFile)
                     .map(File::toPath)
                     .map(Path::toUri)
                     .map(URI::toString)
-                    .collect(Collectors.toList())
+                    .toList()
                 if (reportPaths.isNotEmpty()) {
                     append(" See the report at: ")
-                    append(reportPaths.joinToString(", "))
+                    append(reportPaths.joinToString())
                 }
             }
             throw GradleException(errorMessage)
@@ -138,27 +135,25 @@ class SpotBugsRunnerForHybrid(
             return (exitValue.xor(MISSING_CLASS_FLAG))
         }
 
-        private fun configureJavaExec(params: SpotBugsWorkParameters): Action<JavaExecSpec> {
-            return Action { spec ->
-                spec.jvmArgs = params.getJvmArgs().get()
-                spec.classpath(params.getClasspath())
-                spec.setArgs(params.getArgs().get())
-                spec.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
-                val maxHeapSize = params.getMaxHeapSize().getOrNull()
-                if (maxHeapSize != null) {
-                    spec.maxHeapSize = maxHeapSize
-                }
-                if (params.getJavaToolchainExecutablePath().isPresent) {
-                    log.info(
-                        "Spotbugs will be executed using Java Toolchain configuration: {}",
-                        params.getJavaToolchainExecutablePath().get(),
-                    )
-                    spec.executable = params.getJavaToolchainExecutablePath().get()
-                }
-                spec.setIgnoreExitValue(true)
-                stderrOutputScanner = OutputScanner(System.err)
-                spec.setErrorOutput(stderrOutputScanner)
+        private fun configureJavaExec(params: SpotBugsWorkParameters) = Action<JavaExecSpec> {
+            it.jvmArgs = params.getJvmArgs().get()
+            it.classpath(params.getClasspath())
+            it.setArgs(params.getArgs().get())
+            it.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
+            val maxHeapSize = params.getMaxHeapSize().getOrNull()
+            if (maxHeapSize != null) {
+                it.maxHeapSize = maxHeapSize
             }
+            if (params.getJavaToolchainExecutablePath().isPresent) {
+                log.info(
+                    "Spotbugs will be executed using Java Toolchain configuration: {}",
+                    params.getJavaToolchainExecutablePath().get(),
+                )
+                it.executable = params.getJavaToolchainExecutablePath().get()
+            }
+            it.setIgnoreExitValue(true)
+            stderrOutputScanner = OutputScanner(System.err)
+            it.setErrorOutput(stderrOutputScanner)
         }
     }
 
@@ -166,10 +161,9 @@ class SpotBugsRunnerForHybrid(
         /**
          * Exit code which is set when classes needed for analysis were missing.
          *
-         * @see <a
-         *     href="https://javadoc.io/static/com.github.spotbugs/spotbugs/4.4.2/constant-values.html#edu.umd.cs.findbugs.ExitCodes.MISSING_CLASS_FLAG">Constant
-         *     Field Values from javadoc of the SpotBugs</a>
+         * See [Constant Field Values from javadoc of the SpotBugs](https://javadoc.io/static/com.github.spotbugs/spotbugs/4.4.2/constant-values.html#edu.umd.cs.findbugs.ExitCodes.MISSING_CLASS_FLAG)
          */
+        @Suppress("MaxLineLength")
         private const val MISSING_CLASS_FLAG = 2
     }
 }

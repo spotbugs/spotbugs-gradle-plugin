@@ -19,7 +19,6 @@ import java.util.Properties
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ConfigurationContainer
-import org.gradle.api.file.Directory
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.util.GradleVersion
@@ -31,52 +30,33 @@ class SpotBugsBasePlugin : Plugin<Project> {
         val extension = createExtension(project)
         createConfiguration(project, extension)
         createPluginConfiguration(project.configurations)
-        val enableWorkerApi = getPropertyOrDefault(project, FEATURE_FLAG_WORKER_API, "true")
-        project
-            .tasks
-            .withType(SpotBugsTask::class.java)
-            .configureEach { task ->
-                task.init(
-                    extension,
-                    enableWorkerApi.toBoolean(),
-                )
-            }
+        val enableWorkerApi = project.providers.gradleProperty(FEATURE_FLAG_WORKER_API).getOrElse("true")
+        project.tasks.withType(SpotBugsTask::class.java).configureEach {
+            it.init(extension, enableWorkerApi.toBoolean())
+        }
     }
 
     private fun createExtension(project: Project): SpotBugsExtension {
-        val extension =
-            project
-                .extensions
-                .create(
-                    SpotBugsPlugin.EXTENSION_NAME,
-                    SpotBugsExtension::class.java,
-                )
-        extension.ignoreFailures.convention(false)
-        extension.showStackTraces.convention(false)
-        extension.projectName.convention(project.provider { project.name })
-        extension.release.convention(
-            project.provider {
-                project.version.toString()
-            },
-        )
-
-        // ReportingBasePlugin should be applied before we create this SpotBugsExtension instance
-        val baseReportsDir =
-            project.extensions.getByType(
-                ReportingExtension::class.java,
-            ).baseDirectory
-        extension
-            .reportsDir
-            .convention(
-                baseReportsDir.map { directory: Directory ->
-                    directory.dir(
-                        DEFAULT_REPORTS_DIR_NAME,
-                    )
+        return project.extensions.create(SpotBugsPlugin.EXTENSION_NAME, SpotBugsExtension::class.java).apply {
+            ignoreFailures.convention(false)
+            showStackTraces.convention(false)
+            projectName.convention(project.provider { project.name })
+            release.convention(
+                project.provider {
+                    project.version.toString()
                 },
             )
-        extension.useAuxclasspathFile.convention(true)
-        extension.useJavaToolchains.convention(true)
-        return extension
+
+            // ReportingBasePlugin should be applied before we create this SpotBugsExtension instance
+            val baseReportsDir = project.extensions.getByType(ReportingExtension::class.java).baseDirectory
+            reportsDir.convention(
+                baseReportsDir.map {
+                    it.dir(DEFAULT_REPORTS_DIR_NAME)
+                },
+            )
+            useAuxclasspathFile.convention(true)
+            useJavaToolchains.convention(true)
+        }
     }
 
     private fun createConfiguration(
@@ -91,37 +71,30 @@ class SpotBugsBasePlugin : Plugin<Project> {
             it.setDescription("configuration for the SpotBugs engine")
             it.setVisible(false)
             it.setTransitive(true)
-            it.defaultDependencies { d ->
-                val dep =
-                    project
-                        .dependencies
-                        .create("com.github.spotbugs:spotbugs:" + extension.toolVersion.get())
-                d.add(dep)
+            it.defaultDependencies { deps ->
+                val dep = project.dependencies.create("com.github.spotbugs:spotbugs:" + extension.toolVersion.get())
+                deps.add(dep)
             }
         }
 
-        configs.register(
-            SpotBugsPlugin.SLF4J_CONFIG_NAME,
-        ) {
+        configs.register(SpotBugsPlugin.SLF4J_CONFIG_NAME) {
             it.description = "configuration for the SLF4J provider to run SpotBugs"
             it.setVisible(false)
             it.setTransitive(true)
-            it.defaultDependencies { d ->
-                val dep =
-                    project
-                        .dependencies
-                        .create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version"))
-                d.add(dep)
+            it.defaultDependencies { deps ->
+                val dep = project.dependencies.create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version"))
+                deps.add(dep)
             }
         }
     }
 
     fun loadProperties(): Properties {
         val url = SpotBugsPlugin::class.java.classLoader.getResource("spotbugs-gradle-plugin.properties")
+        url ?: error("spotbugs-gradle-plugin.properties not found")
         try {
-            url!!.openStream().use { input ->
+            url.openStream().use {
                 val prop = Properties()
-                prop.load(input)
+                prop.load(it)
                 return prop
             }
         } catch (e: IOException) {
@@ -130,9 +103,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
     }
 
     private fun createPluginConfiguration(configs: ConfigurationContainer) {
-        configs.register(
-            SpotBugsPlugin.PLUGINS_CONFIG_NAME,
-        ) {
+        configs.register(SpotBugsPlugin.PLUGINS_CONFIG_NAME) {
             it.setDescription("configuration for the external SpotBugs plugins")
             it.setVisible(false)
             it.setTransitive(false)
@@ -140,23 +111,9 @@ class SpotBugsBasePlugin : Plugin<Project> {
     }
 
     fun verifyGradleVersion(version: GradleVersion) {
-        if (version < SUPPORTED_VERSION) {
-            val message =
-                String.format(
-                    "Gradle version %s is unsupported. Please use %s or later.",
-                    version,
-                    SUPPORTED_VERSION,
-                )
-            throw IllegalArgumentException(message)
+        require(version >= SUPPORTED_VERSION) {
+            "Gradle version $version is unsupported. Please use $SUPPORTED_VERSION or later."
         }
-    }
-
-    private fun getPropertyOrDefault(
-        project: Project,
-        propertyName: String,
-        defaultValue: String,
-    ): String {
-        return if (project.hasProperty(propertyName)) project.property(propertyName).toString() else defaultValue
     }
 
     companion object {
@@ -167,6 +124,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
          * Supported Gradle version described at [official manual site](http://spotbugs.readthedocs.io/en/latest/gradle.html).
          * The convention API provides replacement from 7.1 and later, so we use this value as minimal required version.
          */
+        @Suppress("MaxLineLength")
         private val SUPPORTED_VERSION = GradleVersion.version("7.1")
     }
 }

@@ -5,7 +5,6 @@ public abstract class com/github/spotbugs/snom/Confidence : java/lang/Enum {
 	public static final field MEDIUM Lcom/github/spotbugs/snom/Confidence;
 	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public abstract fun toCommandLineOption ()Ljava/util/Optional;
 	public static fun valueOf (Ljava/lang/String;)Lcom/github/spotbugs/snom/Confidence;
 	public static fun values ()[Lcom/github/spotbugs/snom/Confidence;
 }
@@ -80,6 +79,7 @@ public abstract class com/github/spotbugs/snom/SpotBugsReport : org/gradle/api/r
 	public synthetic fun configure (Lgroovy/lang/Closure;)Ljava/lang/Object;
 	public fun configure (Lgroovy/lang/Closure;)Lorg/gradle/api/reporting/Report;
 	public final fun configure (Lorg/gradle/api/Action;)Lorg/gradle/api/reporting/Report;
+	public abstract fun getCommandLineOption ()Ljava/lang/String;
 	public final fun getDestination ()Ljava/io/File;
 	public fun getDisplayName ()Ljava/lang/String;
 	public fun getOutputLocation ()Lorg/gradle/api/file/RegularFileProperty;
@@ -95,7 +95,6 @@ public abstract class com/github/spotbugs/snom/SpotBugsReport : org/gradle/api/r
 	public final fun setEnabled (Z)V
 	public fun setStylesheet (Ljava/lang/String;)V
 	public fun setStylesheet (Lorg/gradle/api/resources/TextResource;)V
-	public abstract fun toCommandLineOption ()Ljava/lang/String;
 }
 
 public abstract class com/github/spotbugs/snom/SpotBugsTask : org/gradle/api/DefaultTask, org/gradle/api/tasks/VerificationTask {

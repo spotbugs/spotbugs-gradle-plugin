@@ -23,12 +23,13 @@ import org.gradle.api.Action
 import org.gradle.api.GradleException
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.process.JavaExecSpec
 import org.gradle.process.internal.ExecException
 import org.slf4j.LoggerFactory
 
-class SpotBugsRunnerForJavaExec @Inject constructor(
+internal class SpotBugsRunnerForJavaExec @Inject constructor(
     private val javaLauncher: Property<JavaLauncher>,
 ) : SpotBugsRunner() {
     private val log = LoggerFactory.getLogger(SpotBugsRunnerForJavaExec::class.java)
@@ -45,29 +46,22 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
             if (task.getIgnoreFailures()) {
                 log.warn(
                     "SpotBugs reported failures",
-                    if (task.showStackTraces.get()) {
-                        e
-                    } else {
-                        null
-                    },
+                    if (task.showStackTraces.get()) e else null,
                 )
             } else {
                 val errorMessage = buildString {
                     append("Verification failed: SpotBugs execution thrown exception.")
                     val reportPaths = task.getRequiredReports()
-                        .asSequence()
                         .map(SpotBugsReport::getOutputLocation)
                         .map(RegularFileProperty::getAsFile)
-                        .map {
-                            it.get()
-                        }
+                        .map(Provider<File>::get)
                         .map(File::toPath)
                         .map(Path::toUri)
                         .map(URI::toString)
                         .toList()
                     if (reportPaths.isNotEmpty()) {
                         append("See the report at: ")
-                        append(reportPaths.joinToString(", "))
+                        append(reportPaths.joinToString())
                     }
                 }
                 throw GradleException(errorMessage, e)
@@ -75,29 +69,27 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
         }
     }
 
-    private fun configureJavaExec(task: SpotBugsTask): Action<JavaExecSpec> {
-        return Action { spec ->
-            val args = mutableListOf<String>()
-            args.add("-exitcode")
-            args.addAll(buildArguments(task))
-            spec.classpath(task.spotbugsClasspath)
-            spec.jvmArgs = buildJvmArguments(task)
-            spec.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
-            spec.setArgs(args)
-            val maxHeapSize = task.maxHeapSize.getOrNull()
-            if (maxHeapSize != null) {
-                spec.maxHeapSize = maxHeapSize
-            }
-            stderrOutputScanner = OutputScanner(System.err)
-            spec.setErrorOutput(stderrOutputScanner)
-            if (javaLauncher.isPresent) {
-                log.info(
-                    "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
-                    javaLauncher.get().metadata.vendor,
-                    javaLauncher.get().metadata.languageVersion.asInt(),
-                )
-                spec.executable = javaLauncher.get().executablePath.asFile.absolutePath
-            }
+    private fun configureJavaExec(task: SpotBugsTask) = Action<JavaExecSpec> {
+        val args = mutableListOf<String>()
+        args.add("-exitcode")
+        args.addAll(buildArguments(task))
+        it.classpath(task.spotbugsClasspath)
+        it.jvmArgs = buildJvmArguments(task)
+        it.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
+        it.setArgs(args)
+        val maxHeapSize = task.maxHeapSize.getOrNull()
+        if (maxHeapSize != null) {
+            it.maxHeapSize = maxHeapSize
+        }
+        stderrOutputScanner = OutputScanner(System.err)
+        it.setErrorOutput(stderrOutputScanner)
+        if (javaLauncher.isPresent) {
+            log.info(
+                "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
+                javaLauncher.get().metadata.vendor,
+                javaLauncher.get().metadata.languageVersion.asInt(),
+            )
+            it.executable = javaLauncher.get().executablePath.asFile.absolutePath
         }
     }
 }

@@ -26,10 +26,9 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
-import org.gradle.api.tasks.SourceSetContainer
 import org.slf4j.LoggerFactory
 
-class SpotBugsTaskFactory {
+internal class SpotBugsTaskFactory {
     private val log = LoggerFactory.getLogger(SpotBugsTaskFactory::class.java)
 
     fun generate(project: Project) {
@@ -37,65 +36,41 @@ class SpotBugsTaskFactory {
         generateForAndroid(project)
     }
 
-    private fun getSourceSetContainer(project: Project): SourceSetContainer {
-        return project.extensions.getByType(JavaPluginExtension::class.java).sourceSets
-    }
-
     private fun generateForJava(project: Project) {
-        project
-            .plugins
-            .withType(JavaBasePlugin::class.java)
-            .configureEach {
-                getSourceSetContainer(project)
-                    .all { sourceSet: SourceSet ->
-                        val name = sourceSet.getTaskName("spotbugs", null)
-                        log.debug("Creating SpotBugsTask for {}", sourceSet)
-                        project.tasks.register(name, SpotBugsTask::class.java) {
-                            it.sourceDirs.setFrom(sourceSet.allSource.sourceDirectories)
-                            it.classDirs.setFrom(sourceSet.output)
-                            it.auxClassPaths.setFrom(sourceSet.compileClasspath)
-                            it.description = "Run SpotBugs analysis for the source set '${sourceSet.name}'"
-                        }
-                    }
+        project.plugins.withType(JavaBasePlugin::class.java).configureEach {
+            project.extensions.getByType(JavaPluginExtension::class.java).sourceSets.all { sourceSet: SourceSet ->
+                val name = sourceSet.getTaskName("spotbugs", null)
+                log.debug("Creating SpotBugsTask for {}", sourceSet)
+                project.tasks.register(name, SpotBugsTask::class.java) {
+                    it.sourceDirs.setFrom(sourceSet.allSource.sourceDirectories)
+                    it.classDirs.setFrom(sourceSet.output)
+                    it.auxClassPaths.setFrom(sourceSet.compileClasspath)
+                    it.description = "Run SpotBugs analysis for the source set '${sourceSet.name}'"
+                }
             }
+        }
     }
 
     private fun generateForAndroid(project: Project) {
-        val action: Action<in Plugin<*>?> =
-            Action {
-                val baseExtension =
-                    project.extensions.getByType(
-                        BaseExtension::class.java,
-                    )
-                val variants: DomainObjectSet<out BaseVariant> =
-                    when (baseExtension) {
-                        is AppExtension -> baseExtension.applicationVariants
-                        is LibraryExtension -> baseExtension.libraryVariants
-                        else -> throw GradleException("Unrecognized Android extension $baseExtension")
-                    }
-                variants.all { variant: BaseVariant ->
-                    val spotbugsTaskName =
-                        toLowerCamelCase(
-                            "spotbugs",
-                            variant.name,
-                        )
-                    log.debug("Creating SpotBugsTask for {}", variant.name)
-                    project
-                        .tasks
-                        .register(
-                            spotbugsTaskName,
-                            SpotBugsTask::class.java,
-                            Action { spotbugsTask: SpotBugsTask ->
-                                val javaCompile =
-                                    variant.javaCompileProvider.get()
-                                spotbugsTask.sourceDirs.setFrom(javaCompile.source)
-                                spotbugsTask.classDirs.setFrom(javaCompile.destinationDirectory)
-                                spotbugsTask.auxClassPaths.setFrom(javaCompile.classpath)
-                                spotbugsTask.dependsOn(javaCompile)
-                            },
-                        )
+        val action = Action<Plugin<*>> {
+            val variants: DomainObjectSet<out BaseVariant> =
+                when (val baseExtension = project.extensions.getByType(BaseExtension::class.java)) {
+                    is AppExtension -> baseExtension.applicationVariants
+                    is LibraryExtension -> baseExtension.libraryVariants
+                    else -> throw GradleException("Unrecognized Android extension $baseExtension")
+                }
+            variants.all { variant: BaseVariant ->
+                val spotbugsTaskName = toLowerCamelCase("spotbugs", variant.name)
+                log.debug("Creating SpotBugsTask for {}", variant.name)
+                project.tasks.register(spotbugsTaskName, SpotBugsTask::class.java) {
+                    val javaCompile = variant.javaCompileProvider.get()
+                    it.sourceDirs.setFrom(javaCompile.source)
+                    it.classDirs.setFrom(javaCompile.destinationDirectory)
+                    it.auxClassPaths.setFrom(javaCompile.classpath)
+                    it.dependsOn(javaCompile)
                 }
             }
+        }
         project.plugins.withId("com.android.application", action)
         project.plugins.withId("com.android.library", action)
     }
