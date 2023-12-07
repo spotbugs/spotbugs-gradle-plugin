@@ -26,7 +26,6 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
-import org.gradle.api.tasks.SourceSetContainer
 import org.slf4j.LoggerFactory
 
 class SpotBugsTaskFactory {
@@ -37,13 +36,9 @@ class SpotBugsTaskFactory {
         generateForAndroid(project)
     }
 
-    private fun getSourceSetContainer(project: Project): SourceSetContainer {
-        return project.extensions.getByType(JavaPluginExtension::class.java).sourceSets
-    }
-
     private fun generateForJava(project: Project) {
         project.plugins.withType(JavaBasePlugin::class.java).configureEach {
-            getSourceSetContainer(project).all { sourceSet: SourceSet ->
+            project.extensions.getByType(JavaPluginExtension::class.java).sourceSets.all { sourceSet: SourceSet ->
                 val name = sourceSet.getTaskName("spotbugs", null)
                 log.debug("Creating SpotBugsTask for {}", sourceSet)
                 project.tasks.register(name, SpotBugsTask::class.java) {
