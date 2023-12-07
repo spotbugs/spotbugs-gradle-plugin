@@ -112,7 +112,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
     }
 
     fun verifyGradleVersion(version: GradleVersion) {
-        check(version >= SUPPORTED_VERSION) {
+        require(version >= SUPPORTED_VERSION) {
             "Gradle version $version is unsupported. Please use $SUPPORTED_VERSION or later."
         }
     }

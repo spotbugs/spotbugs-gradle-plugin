@@ -18,7 +18,7 @@ class SpotBugsPluginSpec : DescribeSpec({
         }
 
         it("does not support Gradle 7.0") {
-            shouldThrow<IllegalStateException> {
+            shouldThrow<IllegalArgumentException> {
                 SpotBugsBasePlugin().verifyGradleVersion(GradleVersion.version("7.0"))
             }
         }
