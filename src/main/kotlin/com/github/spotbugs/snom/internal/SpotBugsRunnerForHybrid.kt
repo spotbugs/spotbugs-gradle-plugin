@@ -133,27 +133,25 @@ class SpotBugsRunnerForHybrid(
             return (exitValue.xor(MISSING_CLASS_FLAG))
         }
 
-        private fun configureJavaExec(params: SpotBugsWorkParameters): Action<JavaExecSpec> {
-            return Action {
-                it.jvmArgs = params.getJvmArgs().get()
-                it.classpath(params.getClasspath())
-                it.setArgs(params.getArgs().get())
-                it.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
-                val maxHeapSize = params.getMaxHeapSize().getOrNull()
-                if (maxHeapSize != null) {
-                    it.maxHeapSize = maxHeapSize
-                }
-                if (params.getJavaToolchainExecutablePath().isPresent) {
-                    log.info(
-                        "Spotbugs will be executed using Java Toolchain configuration: {}",
-                        params.getJavaToolchainExecutablePath().get(),
-                    )
-                    it.executable = params.getJavaToolchainExecutablePath().get()
-                }
-                it.setIgnoreExitValue(true)
-                stderrOutputScanner = OutputScanner(System.err)
-                it.setErrorOutput(stderrOutputScanner)
+        private fun configureJavaExec(params: SpotBugsWorkParameters): Action<JavaExecSpec> = Action {
+            it.jvmArgs = params.getJvmArgs().get()
+            it.classpath(params.getClasspath())
+            it.setArgs(params.getArgs().get())
+            it.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
+            val maxHeapSize = params.getMaxHeapSize().getOrNull()
+            if (maxHeapSize != null) {
+                it.maxHeapSize = maxHeapSize
             }
+            if (params.getJavaToolchainExecutablePath().isPresent) {
+                log.info(
+                    "Spotbugs will be executed using Java Toolchain configuration: {}",
+                    params.getJavaToolchainExecutablePath().get(),
+                )
+                it.executable = params.getJavaToolchainExecutablePath().get()
+            }
+            it.setIgnoreExitValue(true)
+            stderrOutputScanner = OutputScanner(System.err)
+            it.setErrorOutput(stderrOutputScanner)
         }
     }
 

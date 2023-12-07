@@ -69,29 +69,27 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
         }
     }
 
-    private fun configureJavaExec(task: SpotBugsTask): Action<JavaExecSpec> {
-        return Action {
-            val args = mutableListOf<String>()
-            args.add("-exitcode")
-            args.addAll(buildArguments(task))
-            it.classpath(task.spotbugsClasspath)
-            it.jvmArgs = buildJvmArguments(task)
-            it.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
-            it.setArgs(args)
-            val maxHeapSize = task.maxHeapSize.getOrNull()
-            if (maxHeapSize != null) {
-                it.maxHeapSize = maxHeapSize
-            }
-            stderrOutputScanner = OutputScanner(System.err)
-            it.setErrorOutput(stderrOutputScanner)
-            if (javaLauncher.isPresent) {
-                log.info(
-                    "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
-                    javaLauncher.get().metadata.vendor,
-                    javaLauncher.get().metadata.languageVersion.asInt(),
-                )
-                it.executable = javaLauncher.get().executablePath.asFile.absolutePath
-            }
+    private fun configureJavaExec(task: SpotBugsTask): Action<JavaExecSpec> = Action {
+        val args = mutableListOf<String>()
+        args.add("-exitcode")
+        args.addAll(buildArguments(task))
+        it.classpath(task.spotbugsClasspath)
+        it.jvmArgs = buildJvmArguments(task)
+        it.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
+        it.setArgs(args)
+        val maxHeapSize = task.maxHeapSize.getOrNull()
+        if (maxHeapSize != null) {
+            it.maxHeapSize = maxHeapSize
+        }
+        stderrOutputScanner = OutputScanner(System.err)
+        it.setErrorOutput(stderrOutputScanner)
+        if (javaLauncher.isPresent) {
+            log.info(
+                "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
+                javaLauncher.get().metadata.vendor,
+                javaLauncher.get().metadata.languageVersion.asInt(),
+            )
+            it.executable = javaLauncher.get().executablePath.asFile.absolutePath
         }
     }
 }
