@@ -133,7 +133,7 @@ class SpotBugsRunnerForHybrid(
             return (exitValue.xor(MISSING_CLASS_FLAG))
         }
 
-        private fun configureJavaExec(params: SpotBugsWorkParameters): Action<JavaExecSpec> = Action {
+        private fun configureJavaExec(params: SpotBugsWorkParameters) = Action<JavaExecSpec> {
             it.jvmArgs = params.getJvmArgs().get()
             it.classpath(params.getClasspath())
             it.setArgs(params.getArgs().get())

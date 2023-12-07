@@ -57,7 +57,7 @@ class SpotBugsTaskFactory {
     }
 
     private fun generateForAndroid(project: Project) {
-        val action: Action<in Plugin<*>?> = Action {
+        val action = Action<Plugin<*>> {
             val variants: DomainObjectSet<out BaseVariant> =
                 when (val baseExtension = project.extensions.getByType(BaseExtension::class.java)) {
                     is AppExtension -> baseExtension.applicationVariants

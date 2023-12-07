@@ -69,7 +69,7 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
         }
     }
 
-    private fun configureJavaExec(task: SpotBugsTask): Action<JavaExecSpec> = Action {
+    private fun configureJavaExec(task: SpotBugsTask) = Action<JavaExecSpec> {
         val args = mutableListOf<String>()
         args.add("-exitcode")
         args.addAll(buildArguments(task))
