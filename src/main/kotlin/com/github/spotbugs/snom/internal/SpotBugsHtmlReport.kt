@@ -49,8 +49,8 @@ abstract class SpotBugsHtmlReport @Inject constructor(
         configuration: Configuration,
         textResourceFactory: TextResourceFactory,
     ): TextResource {
-        val spotbugsJar = configuration.files { dependency ->
-            dependency.group == "com.github.spotbugs" && dependency.name == "spotbugs"
+        val spotbugsJar = configuration.files {
+            it.group == "com.github.spotbugs" && it.name == "spotbugs"
         }.find { it.isFile }
         return if (spotbugsJar != null) {
             textResourceFactory.fromArchiveEntry(spotbugsJar, path)

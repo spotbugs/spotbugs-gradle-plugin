@@ -45,25 +45,24 @@ class SpotBugsRunnerForHybrid(
     private val javaLauncher: Property<JavaLauncher>,
 ) : SpotBugsRunner() {
     override fun run(task: SpotBugsTask) {
-        workerExecutor.noIsolation().submit(SpotBugsExecutor::class.java) { params: SpotBugsWorkParameters ->
+        workerExecutor.noIsolation().submit(SpotBugsExecutor::class.java) {
             val args = mutableListOf<String>()
             args.add("-exitcode")
             args.addAll(buildArguments(task))
-            params.getClasspath().setFrom(task.spotbugsClasspath)
-            params.getJvmArgs().set(buildJvmArguments(task))
-            params.getArgs().set(args)
+            it.getClasspath().setFrom(task.spotbugsClasspath)
+            it.getJvmArgs().set(buildJvmArguments(task))
+            it.getArgs().set(args)
             val maxHeapSize = task.maxHeapSize.getOrNull()
             if (maxHeapSize != null) {
-                params.getMaxHeapSize().set(maxHeapSize)
+                it.getMaxHeapSize().set(maxHeapSize)
             }
-            params.getIgnoreFailures().set(task.ignoreFailures)
-            params.getShowStackTraces().set(task.showStackTraces)
+            it.getIgnoreFailures().set(task.ignoreFailures)
+            it.getShowStackTraces().set(task.showStackTraces)
             task.getRequiredReports()
                 .map(SpotBugsReport::getOutputLocation)
-                .forEach(params.getReports()::add)
+                .forEach(it.getReports()::add)
             if (javaLauncher.isPresent) {
-                params.getJavaToolchainExecutablePath()
-                    .set(javaLauncher.get().executablePath.asFile.absolutePath)
+                it.getJavaToolchainExecutablePath().set(javaLauncher.get().executablePath.asFile.absolutePath)
             }
         }
     }
@@ -135,25 +134,25 @@ class SpotBugsRunnerForHybrid(
         }
 
         private fun configureJavaExec(params: SpotBugsWorkParameters): Action<JavaExecSpec> {
-            return Action { spec ->
-                spec.jvmArgs = params.getJvmArgs().get()
-                spec.classpath(params.getClasspath())
-                spec.setArgs(params.getArgs().get())
-                spec.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
+            return Action {
+                it.jvmArgs = params.getJvmArgs().get()
+                it.classpath(params.getClasspath())
+                it.setArgs(params.getArgs().get())
+                it.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
                 val maxHeapSize = params.getMaxHeapSize().getOrNull()
                 if (maxHeapSize != null) {
-                    spec.maxHeapSize = maxHeapSize
+                    it.maxHeapSize = maxHeapSize
                 }
                 if (params.getJavaToolchainExecutablePath().isPresent) {
                     log.info(
                         "Spotbugs will be executed using Java Toolchain configuration: {}",
                         params.getJavaToolchainExecutablePath().get(),
                     )
-                    spec.executable = params.getJavaToolchainExecutablePath().get()
+                    it.executable = params.getJavaToolchainExecutablePath().get()
                 }
-                spec.setIgnoreExitValue(true)
+                it.setIgnoreExitValue(true)
                 stderrOutputScanner = OutputScanner(System.err)
-                spec.setErrorOutput(stderrOutputScanner)
+                it.setErrorOutput(stderrOutputScanner)
             }
         }
     }

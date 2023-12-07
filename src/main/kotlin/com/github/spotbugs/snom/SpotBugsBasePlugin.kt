@@ -19,7 +19,6 @@ import java.util.Properties
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ConfigurationContainer
-import org.gradle.api.file.Directory
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.util.GradleVersion
@@ -32,8 +31,8 @@ class SpotBugsBasePlugin : Plugin<Project> {
         createConfiguration(project, extension)
         createPluginConfiguration(project.configurations)
         val enableWorkerApi = project.providers.gradleProperty(FEATURE_FLAG_WORKER_API).getOrElse("true")
-        project.tasks.withType(SpotBugsTask::class.java).configureEach { task ->
-            task.init(extension, enableWorkerApi.toBoolean())
+        project.tasks.withType(SpotBugsTask::class.java).configureEach {
+            it.init(extension, enableWorkerApi.toBoolean())
         }
     }
 
@@ -51,8 +50,8 @@ class SpotBugsBasePlugin : Plugin<Project> {
             // ReportingBasePlugin should be applied before we create this SpotBugsExtension instance
             val baseReportsDir = project.extensions.getByType(ReportingExtension::class.java).baseDirectory
             reportsDir.convention(
-                baseReportsDir.map { directory: Directory ->
-                    directory.dir(DEFAULT_REPORTS_DIR_NAME)
+                baseReportsDir.map {
+                    it.dir(DEFAULT_REPORTS_DIR_NAME)
                 },
             )
             useAuxclasspathFile.convention(true)
@@ -72,9 +71,9 @@ class SpotBugsBasePlugin : Plugin<Project> {
             it.setDescription("configuration for the SpotBugs engine")
             it.setVisible(false)
             it.setTransitive(true)
-            it.defaultDependencies { d ->
+            it.defaultDependencies { deps ->
                 val dep = project.dependencies.create("com.github.spotbugs:spotbugs:" + extension.toolVersion.get())
-                d.add(dep)
+                deps.add(dep)
             }
         }
 
@@ -82,9 +81,9 @@ class SpotBugsBasePlugin : Plugin<Project> {
             it.description = "configuration for the SLF4J provider to run SpotBugs"
             it.setVisible(false)
             it.setTransitive(true)
-            it.defaultDependencies { d ->
+            it.defaultDependencies { deps ->
                 val dep = project.dependencies.create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version"))
-                d.add(dep)
+                deps.add(dep)
             }
         }
     }
@@ -93,9 +92,9 @@ class SpotBugsBasePlugin : Plugin<Project> {
         val url = SpotBugsPlugin::class.java.classLoader.getResource("spotbugs-gradle-plugin.properties")
         url ?: error("spotbugs-gradle-plugin.properties not found")
         try {
-            url.openStream().use { input ->
+            url.openStream().use {
                 val prop = Properties()
-                prop.load(input)
+                prop.load(it)
                 return prop
             }
         } catch (e: IOException) {

@@ -67,12 +67,12 @@ class SpotBugsTaskFactory {
             variants.all { variant: BaseVariant ->
                 val spotbugsTaskName = toLowerCamelCase("spotbugs", variant.name)
                 log.debug("Creating SpotBugsTask for {}", variant.name)
-                project.tasks.register(spotbugsTaskName, SpotBugsTask::class.java) { spotbugsTask: SpotBugsTask ->
+                project.tasks.register(spotbugsTaskName, SpotBugsTask::class.java) {
                     val javaCompile = variant.javaCompileProvider.get()
-                    spotbugsTask.sourceDirs.setFrom(javaCompile.source)
-                    spotbugsTask.classDirs.setFrom(javaCompile.destinationDirectory)
-                    spotbugsTask.auxClassPaths.setFrom(javaCompile.classpath)
-                    spotbugsTask.dependsOn(javaCompile)
+                    it.sourceDirs.setFrom(javaCompile.source)
+                    it.classDirs.setFrom(javaCompile.destinationDirectory)
+                    it.auxClassPaths.setFrom(javaCompile.classpath)
+                    it.dependsOn(javaCompile)
                 }
             }
         }

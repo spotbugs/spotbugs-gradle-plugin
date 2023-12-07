@@ -70,27 +70,27 @@ class SpotBugsRunnerForJavaExec @Inject constructor(
     }
 
     private fun configureJavaExec(task: SpotBugsTask): Action<JavaExecSpec> {
-        return Action { spec ->
+        return Action {
             val args = mutableListOf<String>()
             args.add("-exitcode")
             args.addAll(buildArguments(task))
-            spec.classpath(task.spotbugsClasspath)
-            spec.jvmArgs = buildJvmArguments(task)
-            spec.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
-            spec.setArgs(args)
+            it.classpath(task.spotbugsClasspath)
+            it.jvmArgs = buildJvmArguments(task)
+            it.mainClass.set("edu.umd.cs.findbugs.FindBugs2")
+            it.setArgs(args)
             val maxHeapSize = task.maxHeapSize.getOrNull()
             if (maxHeapSize != null) {
-                spec.maxHeapSize = maxHeapSize
+                it.maxHeapSize = maxHeapSize
             }
             stderrOutputScanner = OutputScanner(System.err)
-            spec.setErrorOutput(stderrOutputScanner)
+            it.setErrorOutput(stderrOutputScanner)
             if (javaLauncher.isPresent) {
                 log.info(
                     "Spotbugs will be executed using Java Toolchain configuration: Vendor: {} | Version: {}",
                     javaLauncher.get().metadata.vendor,
                     javaLauncher.get().metadata.languageVersion.asInt(),
                 )
-                spec.executable = javaLauncher.get().executablePath.asFile.absolutePath
+                it.executable = javaLauncher.get().executablePath.asFile.absolutePath
             }
         }
     }
