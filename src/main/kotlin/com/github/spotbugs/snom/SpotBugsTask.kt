@@ -84,7 +84,7 @@ import org.slf4j.LoggerFactory
  *     maxHeapSize = '512m'
  * ```
  *
- * See also [SpotBugs Manual about configuration](https://spotbugs.readthedocs.io/en/stable/running.html)
+ * See also [SpotBugs Manual about configuration](https://spotbugs.readthedocs.io/en/stable/running.html).
  */
 @CacheableTask
 abstract class SpotBugsTask : DefaultTask(), VerificationTask {
@@ -159,7 +159,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
      * use [onlyAnalyze] instead.
      * To limit the visitors (detectors) to run, use [visitors] and [omitVisitors] instead.
      *
-     * See also [SpotBugs Manual about Filter file](https://spotbugs.readthedocs.io/en/stable/filter.html)
+     * See also [SpotBugs Manual about Filter file](https://spotbugs.readthedocs.io/en/stable/filter.html).
      */
     @get:Optional
     @get:InputFile
@@ -173,7 +173,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
      * use [onlyAnalyze] instead.
      * To limit the visitors (detectors) to run, use [visitors] and [omitVisitors] instead.
      *
-     * See also [SpotBugs Manual about Filter file](https://spotbugs.readthedocs.io/en/stable/filter.html)
+     * See also [SpotBugs Manual about Filter file](https://spotbugs.readthedocs.io/en/stable/filter.html).
      */
     @get:Optional
     @get:InputFile

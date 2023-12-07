@@ -34,13 +34,8 @@ abstract class SpotBugsReport @Inject constructor(
     @get:Internal
     protected val task: SpotBugsTask,
 ) : SingleFileReport, CustomizableHtmlReport { // to expose CustomizableHtmlReport#setStylesheet to build script
-    private val destination: RegularFileProperty
-    private val isRequired: Property<Boolean>
-
-    init {
-        destination = objects.fileProperty()
-        isRequired = objects.property(Boolean::class.java).convention(true)
-    }
+    private val destination: RegularFileProperty = objects.fileProperty()
+    private val isRequired: Property<Boolean> = objects.property(Boolean::class.java).convention(true)
 
     abstract val commandLineOption: String
 
