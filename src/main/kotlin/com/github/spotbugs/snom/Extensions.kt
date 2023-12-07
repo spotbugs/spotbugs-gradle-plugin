@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.github.spotbugs.snom
 
 import org.gradle.api.provider.Property
