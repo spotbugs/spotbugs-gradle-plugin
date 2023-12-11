@@ -550,7 +550,7 @@ public class SimpleTest {
 
         when:
         BuildResult result = gradleRunner
-                .withArguments('--debug', "spotbugsMain", "spotbugsTest", '--parallel')
+                .withArguments('--debug', '--parallel', "spotbugsMain", "spotbugsTest")
                 .build()
 
         then:
