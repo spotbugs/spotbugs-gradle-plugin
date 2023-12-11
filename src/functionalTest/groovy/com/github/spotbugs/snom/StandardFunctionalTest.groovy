@@ -486,7 +486,7 @@ public class MyFoo {
 
         when:
         BuildResult result = gradleRunner
-                .withArguments("spotbugsMain")
+                .withArguments('--debug', "spotbugsMain")
                 .build()
 
         then:
@@ -550,7 +550,7 @@ public class SimpleTest {
 
         when:
         BuildResult result = gradleRunner
-                .withArguments("spotbugsMain", "spotbugsTest", '--parallel')
+                .withArguments('--debug', "spotbugsMain", "spotbugsTest", '--parallel')
                 .build()
 
         then:

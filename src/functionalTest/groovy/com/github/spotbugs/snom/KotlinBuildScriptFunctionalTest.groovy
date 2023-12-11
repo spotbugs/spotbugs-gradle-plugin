@@ -161,7 +161,7 @@ dependencies {
 """
         when:
         BuildResult result = gradleRunner
-                .withArguments(":spotbugsMain")
+                .withArguments('--debug', ":spotbugsMain")
                 .build()
 
         then:
