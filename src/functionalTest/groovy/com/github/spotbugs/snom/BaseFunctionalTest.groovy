@@ -29,7 +29,8 @@ abstract class BaseFunctionalTest extends Specification {
         return new TestGradleRunner()
                 .withGradleVersion(gradleVersion)
                 .withProjectDir(rootDir)
-                .withArguments('--debug', '--stacktrace')
+                .withArguments('--info', '--stacktrace', '--warning-mode=fail')
+                .withTestKitDir(testKitDir)
                 .forwardOutput()
                 .withPluginClasspath()
     }
@@ -44,5 +45,13 @@ abstract class BaseFunctionalTest extends Specification {
         DefaultGradleRunner withArguments(String... arguments) {
             return withArguments(Arrays.asList(arguments))
         }
+    }
+
+    private static File getTestKitDir() {
+        def gradleUserHome = System.getenv("GRADLE_USER_HOME")
+        if (!gradleUserHome) {
+            gradleUserHome = new File(System.getProperty("user.home"), ".gradle").absolutePath
+        }
+        return new File(gradleUserHome, "testkit")
     }
 }

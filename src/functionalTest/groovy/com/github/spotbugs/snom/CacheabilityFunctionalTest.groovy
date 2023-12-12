@@ -189,7 +189,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
 
         settingsFile << '''
             |plugins {
-            |    id "com.gradle.enterprise" version "3.6.4"
+            |    id "com.gradle.enterprise" version "3.16"
             |}
             |gradleEnterprise {
             |    buildScan {

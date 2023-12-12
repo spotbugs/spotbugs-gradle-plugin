@@ -118,7 +118,7 @@ spotbugs {
 }"""
         when:
         def result = gradleRunner
-                .withArguments('spotbugsMain')
+                .withArguments('--debug', 'spotbugsMain')
                 .build()
 
         then:
@@ -133,7 +133,7 @@ spotbugs {
 }"""
         when:
         def result = gradleRunner
-                .withArguments('spotbugsMain')
+                .withArguments('--debug', 'spotbugsMain')
                 .build()
 
         then:
@@ -148,7 +148,7 @@ spotbugs {
 }"""
         when:
         def result = gradleRunner
-                .withArguments('spotbugsMain')
+                .withArguments('--debug', 'spotbugsMain')
                 .build()
 
         then:
@@ -238,7 +238,7 @@ dependencies {
 }"""
         when:
         BuildResult result = gradleRunner
-                .withArguments(":spotbugsMain")
+                .withArguments('--debug', ":spotbugsMain")
                 .build()
 
         then:
