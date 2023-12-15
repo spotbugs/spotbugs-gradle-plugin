@@ -18,6 +18,8 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
+    - uses: webiny/action-conventional-commits@v1.1.0
+      if: github.event_name == 'pull_request'
     - name: Set up JDK
       uses: actions/setup-java@v4
       with:

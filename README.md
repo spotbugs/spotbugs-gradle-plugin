@@ -175,6 +175,7 @@ You can change SpotBugs version by [the `toolVersion` property of the spotbugs e
 
 | Gradle Plugin | SpotBugs |
 |--------------:|---------:|
+|         6.0.3 |    4.8.3 |
 |         6.0.0 |    4.8.2 |
 |         5.2.5 |    4.8.2 |
 |         5.2.3 |    4.8.1 |
@@ -209,7 +210,7 @@ dependencies {
 
 ## Development
 ### Setup
-* development requires java 11 or higher to be installed
+* development requires java 17 or higher to be installed
 * The CI server uses `ubuntu-latest` docker image, but you should be able to develop on any linux/unix based OS.
 * before creating commits
   * read https://www.conventionalcommits.org/en
