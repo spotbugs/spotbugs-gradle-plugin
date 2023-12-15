@@ -1,5 +1,6 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     groovy
@@ -54,6 +55,12 @@ signing {
 }
 
 tasks {
+    withType<JavaCompile> {
+        options.release.set(8)
+    }
+    withType<KotlinCompile>().configureEach {
+        kotlinOptions.jvmTarget = "1.8"
+    }
     named<Detekt>("detekt") {
         reports {
             sarif.required = true
