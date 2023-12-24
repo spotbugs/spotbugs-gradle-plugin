@@ -148,6 +148,7 @@ tasks.spotbugsMain {
 
 <details>
 <summary>with Groovy DSL</summary>
+    
 ```groovy
 // Example to configure HTML report
 spotbugsMain {
