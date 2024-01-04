@@ -19,6 +19,7 @@ import org.gradle.util.GradleVersion
 import spock.lang.IgnoreIf
 
 import java.nio.file.Files
+import java.time.Instant
 
 class CacheabilityFunctionalTest extends BaseFunctionalTest {
     /**
@@ -30,7 +31,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
     })
     def 'spotbugsMain task runs with configuration cache'() {
         given:
-        initializeBuildFile(rootDir)
+        initializeBuildFile(rootDir, Instant.now())
 
         when:
         BuildResult result = gradleRunner
@@ -65,9 +66,10 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
         given:
         def buildDir1 = Files.createTempDirectory(null).toFile()
         def buildDir2 = Files.createTempDirectory(null).toFile()
+        def now = Instant.now()
 
-        initializeBuildFile(buildDir1)
-        initializeBuildFile(buildDir2)
+        initializeBuildFile(buildDir1, now)
+        initializeBuildFile(buildDir2, now)
 
         when:
         BuildResult result1 = gradleRunner
@@ -78,6 +80,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
 
         then:
         hashKeyLine1
+        new File(buildDir1, "build/reports/spotbugs/main.txt").exists()
 
         when:
         BuildResult result2 = gradleRunner
@@ -89,13 +92,14 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
         then:
         hashKeyLine2
         hashKeyLine1 == hashKeyLine2
+        new File(buildDir2, "build/reports/spotbugs/main.txt").exists()
     }
 
     def 'spotbugsMain is cacheable even when no report is configured'() {
         given:
         def buildFile = new File(rootDir, "build.gradle")
 
-        initializeBuildFile(rootDir)
+        initializeBuildFile(rootDir, Instant.now())
         buildFile.write """
             |plugins {
             |    id 'java'
@@ -129,7 +133,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
         given:
         def buildFile = new File(rootDir, "build.gradle")
 
-        initializeBuildFile(rootDir)
+        initializeBuildFile(rootDir, Instant.now())
         buildFile.delete()
         new File(rootDir, "build.gradle.kts") << """
             |import com.github.spotbugs.snom.SpotBugsTask
@@ -164,7 +168,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
         return result.output.find('Build cache key for task \':spotbugsMain\' is .*')
     }
 
-    private static void initializeBuildFile(File buildDir) {
+    private static void initializeBuildFile(File buildDir, Instant now) {
         File buildFile = new File(buildDir, 'build.gradle')
         File settingsFile = new File(buildDir, 'settings.gradle')
         File propertiesFile = new File(buildDir, 'gradle.properties')
@@ -201,13 +205,13 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
         File sourceDir = buildDir.toPath().resolve('src').resolve('main').resolve('java').toFile()
         sourceDir.mkdirs()
         File sourceFile = new File(sourceDir, 'Foo.java')
-        sourceFile << '''
+        sourceFile << """
             |public class Foo {
             |    public static void main(String... args) {
-            |        System.out.println("Hello, SpotBugs!");
+            |        System.out.println("Hello, SpotBugs! ${now}");
             |    }
             |}
-            |'''.stripMargin()
+            |""".stripMargin()
 
         propertiesFile << '''
             |org.gradle.caching = true
