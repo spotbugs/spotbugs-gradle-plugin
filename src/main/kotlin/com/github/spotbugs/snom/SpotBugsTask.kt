@@ -311,6 +311,8 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
                 "text" -> objects.newInstance(SpotBugsTextReport::class.java, name, objects, this)
                 "sarif" -> objects.newInstance(SpotBugsSarifReport::class.java, name, objects, this)
                 else -> throw InvalidUserDataException("$name is invalid as the report name")
+            }.also {
+                (outputs as org.gradle.api.tasks.TaskOutputs).file(it.outputLocation)
             }
         }
         description = "Run SpotBugs analysis."
