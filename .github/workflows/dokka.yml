@@ -24,7 +24,7 @@ jobs:
           node-version-file: '.nvmrc'
           cache: npm
       - name: Generate Dokka HTML
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: dokkaHtml
       - name: Prepare to Deploy
