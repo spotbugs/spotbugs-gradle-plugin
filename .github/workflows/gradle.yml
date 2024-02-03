@@ -32,7 +32,7 @@ jobs:
         cache: npm
       if: matrix.gradle == '7.6.3' && matrix.os == 'ubuntu-latest'
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v3
       with:
         arguments: build -Psnom.test.functional.gradle=${{ matrix.gradle }} --scan
     - run: |
