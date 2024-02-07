@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         gradle: [ '7.6.3', '8.1', 'current' ]
-        os: [ ubuntu-latest, windows-latest ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
