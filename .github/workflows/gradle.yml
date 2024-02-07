@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         gradle: [ '7.6.3', '8.1', 'current' ]
-        os: [ ubuntu-latest, windows-latest ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
@@ -35,8 +35,11 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
       with:
         arguments: build -Psnom.test.functional.gradle=${{ matrix.gradle }} --scan
-    - run: |
-        echo Verifying the java version used in class files...
+    - name: Verify class files
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        echo "$PATH"
+        echo "Verifying the java version used in class files..."
         cd build/classes/kotlin/main
         javap -v com.github.spotbugs.snom.SpotBugsPlugin | grep -q 'major version: 52'
     - name: Run Semantic Release
