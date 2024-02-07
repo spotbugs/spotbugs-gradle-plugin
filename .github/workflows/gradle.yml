@@ -36,6 +36,7 @@ jobs:
       with:
         arguments: build -Psnom.test.functional.gradle=${{ matrix.gradle }} --scan
     - run: |
+        echo $PATH
         echo Verifying the java version used in class files...
         cd build/classes/kotlin/main
         javap -v com.github.spotbugs.snom.SpotBugsPlugin | grep -q 'major version: 52'
