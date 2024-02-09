@@ -12,8 +12,8 @@ plugins {
     id("com.github.spotbugs.plugin-publish")
     id("com.github.spotbugs.test")
     id("org.sonarqube")
-    id("io.gitlab.arturbosch.detekt") version "1.23.4"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
+    id("io.gitlab.arturbosch.detekt") version "1.23.5"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.14.0"
 }
 
 java {
@@ -26,7 +26,7 @@ group = "com.github.spotbugs.snom"
 
 val spotBugsVersion = "4.8.3"
 val slf4jVersion = "2.0.0"
-val androidGradlePluginVersion = "8.2.1"
+val androidGradlePluginVersion = "8.2.2"
 
 dependencies {
     compileOnly(localGroovy())

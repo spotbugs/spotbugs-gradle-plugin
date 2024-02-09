@@ -12,13 +12,13 @@ jobs:
     strategy:
       matrix:
         gradle: [ '7.6.3', '8.1', 'current' ]
-        os: [ ubuntu-latest, windows-latest ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - uses: webiny/action-conventional-commits@v1.2.0
+    - uses: webiny/action-conventional-commits@v1.3.0
       if: github.event_name == 'pull_request'
     - name: Set up JDK
       uses: actions/setup-java@v4
@@ -32,11 +32,14 @@ jobs:
         cache: npm
       if: matrix.gradle == '7.6.3' && matrix.os == 'ubuntu-latest'
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/actions/setup-gradle@v3
       with:
         arguments: build -Psnom.test.functional.gradle=${{ matrix.gradle }} --scan
-    - run: |
-        echo Verifying the java version used in class files...
+    - name: Verify class files
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        echo "$PATH"
+        echo "Verifying the java version used in class files..."
         cd build/classes/kotlin/main
         javap -v com.github.spotbugs.snom.SpotBugsPlugin | grep -q 'major version: 52'
     - name: Run Semantic Release
