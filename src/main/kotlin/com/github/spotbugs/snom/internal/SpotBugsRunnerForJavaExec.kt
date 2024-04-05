@@ -42,7 +42,7 @@ internal class SpotBugsRunnerForJavaExec @Inject constructor(
                 throw GradleException("SpotBugs analysis succeeded but report generation failed")
             }
         } catch (
-            // TODO: remove this internal API usage.
+            // TODO remove this internal API usage.
             @Suppress("InternalGradleApiUsage") e: org.gradle.process.internal.ExecException,
         ) {
             if (task.getIgnoreFailures()) {
