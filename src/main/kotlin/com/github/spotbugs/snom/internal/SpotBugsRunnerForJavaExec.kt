@@ -26,7 +26,6 @@ import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.process.JavaExecSpec
-import org.gradle.process.internal.ExecException
 import org.slf4j.LoggerFactory
 
 internal class SpotBugsRunnerForJavaExec @Inject constructor(
@@ -42,7 +41,10 @@ internal class SpotBugsRunnerForJavaExec @Inject constructor(
             if (stderrOutputScanner.isFailedToReport && !task.getIgnoreFailures()) {
                 throw GradleException("SpotBugs analysis succeeded but report generation failed")
             }
-        } catch (e: ExecException) {
+        } catch (
+            // TODO: remove this internal API usage.
+            @Suppress("InternalGradleApiUsage") e: org.gradle.process.internal.ExecException,
+        ) {
             if (task.getIgnoreFailures()) {
                 log.warn(
                     "SpotBugs reported failures",
