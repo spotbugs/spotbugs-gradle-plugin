@@ -7,6 +7,7 @@ plugins {
     jacoco
     signing
     kotlin("jvm") version "1.9.23"
+    id("com.android.lint") version "8.3.1"
     id("org.jetbrains.dokka") version "1.9.20"
     id("com.github.spotbugs.gradle-plugin")
     id("com.github.spotbugs.plugin-publish")
@@ -33,6 +34,7 @@ dependencies {
     compileOnly("com.github.spotbugs:spotbugs:$spotBugsVersion")
     compileOnly("com.android.tools.build:gradle:$androidGradlePluginVersion")
     testImplementation("com.tngtech.archunit:archunit:1.2.1")
+    lintChecks("androidx.lint:lint-gradle:1.0.0-alpha01")
 }
 
 val signingKey: String? = providers.environmentVariable("SIGNING_KEY").orNull
