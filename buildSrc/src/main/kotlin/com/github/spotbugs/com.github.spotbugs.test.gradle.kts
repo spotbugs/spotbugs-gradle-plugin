@@ -21,7 +21,7 @@ testing {
         val test by getting(JvmTestSuite::class) {
             useJUnitJupiter()
             dependencies {
-                val kotestVersion = "5.8.1"
+                val kotestVersion = "5.9.0"
                 implementation(gradleTestKit())
                 implementation("io.kotest:kotest-runner-junit5:$kotestVersion")
                 implementation("io.kotest:kotest-assertions-core:$kotestVersion")
