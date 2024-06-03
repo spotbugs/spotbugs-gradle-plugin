@@ -19,6 +19,7 @@ import com.github.spotbugs.snom.SpotBugsTask
 import javax.inject.Inject
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.artifacts.component.ModuleComponentIdentifier
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.resources.TextResource
@@ -49,9 +50,15 @@ internal abstract class SpotBugsHtmlReport @Inject constructor(
         configuration: Configuration,
         textResourceFactory: TextResourceFactory,
     ): TextResource {
-        val spotbugsJar = configuration.files {
-            it.group == "com.github.spotbugs" && it.name == "spotbugs"
-        }.find { it.isFile }
+        val spotbugsJar = configuration.incoming.artifactView {
+            it.componentFilter { identifier ->
+                when (identifier) {
+                    is ModuleComponentIdentifier ->
+                        identifier.group == "com.github.spotbugs" && identifier.module == "spotbugs"
+                    else -> false
+                }
+            }
+        }.files
         return if (spotbugsJar != null) {
             textResourceFactory.fromArchiveEntry(spotbugsJar, path)
         } else {
