@@ -27,7 +27,7 @@ group = "com.github.spotbugs.snom"
 
 val spotBugsVersion = "4.8.5"
 val slf4jVersion = "2.0.0"
-val androidGradlePluginVersion = "8.4.2"
+val androidGradlePluginVersion = "8.5.0"
 
 dependencies {
     compileOnly(localGroovy())
