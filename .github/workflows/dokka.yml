@@ -23,16 +23,16 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
-      - name: Generate Dokka HTML
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: dokkaHtml
+      - name: Generate Dokka HTML
+        run: ./gradlew dokkaHtml
       - name: Prepare to Deploy
         run: |
           npm ci
           rm -f .git/hooks/commit-msg
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
