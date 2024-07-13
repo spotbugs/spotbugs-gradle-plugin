@@ -34,7 +34,7 @@ jobs:
     - name: Build with Gradle
       uses: gradle/actions/setup-gradle@v3
     - name: Build the project
-      run: ./gradlew build -Psnom.test.functional.gradle=${{ matrix.gradle }} --scan
+      run: ./gradlew build -P"snom.test.functional.gradle=${{ matrix.gradle }}" --scan
     - name: Verify class files
       if: matrix.os == 'ubuntu-latest'
       run: |
