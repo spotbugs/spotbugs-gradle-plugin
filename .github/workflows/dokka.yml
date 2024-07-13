@@ -23,10 +23,10 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: npm
-      - name: Generate Dokka HTML
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: dokkaHtml
+      - name: Generate Dokka HTML
+        run: ./dradlew dokkaHtml
       - name: Prepare to Deploy
         run: |
           npm ci

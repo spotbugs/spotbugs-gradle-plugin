@@ -28,7 +28,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version-file: .java-version
-      - name: Build with Gradle
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - name: Scan the project
         run: ./gradlew detekt --scan
