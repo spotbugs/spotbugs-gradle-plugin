@@ -29,7 +29,7 @@ jobs:
           distribution: 'temurin'
           java-version-file: .java-version
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Scan the project
         run: ./gradlew detekt --scan
       - name: Upload SARIF file
