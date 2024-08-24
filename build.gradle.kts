@@ -6,15 +6,15 @@ plugins {
     groovy
     jacoco
     signing
-    kotlin("jvm") version "2.0.0"
-    id("com.android.lint") version "8.5.1"
+    kotlin("jvm") version "2.0.20"
+    id("com.android.lint") version "8.5.2"
     id("org.jetbrains.dokka") version "1.9.20"
     id("com.github.spotbugs.gradle-plugin")
     id("com.github.spotbugs.plugin-publish")
     id("com.github.spotbugs.test")
     id("org.sonarqube")
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.15.1"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.16.3"
 }
 
 java {
@@ -27,7 +27,7 @@ group = "com.github.spotbugs.snom"
 
 val spotBugsVersion = "4.8.6"
 val slf4jVersion = "2.0.0"
-val androidGradlePluginVersion = "8.5.1"
+val androidGradlePluginVersion = "8.5.2"
 
 dependencies {
     compileOnly(localGroovy())
