@@ -108,7 +108,6 @@ dependencies {
         !result.output.contains("Trying to add already registered factory")
     }
 
-    @IgnoreIf({ !jvm.java11 })
     def "can use the specified SpotBugs version"() {
         setup:
         buildFile << """
@@ -150,7 +149,6 @@ tasks.spotbugsMain {
         report.isFile()
     }
 
-    @IgnoreIf({ !jvm.java11 })
     def "can use toolVersion to get the SpotBugs version"() {
         setup:
         buildFile << """
