@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         gradle: [ '7.6.3', '8.1', 'current' ]
         os: [ ubuntu-latest, windows-latest, macos-latest ]
