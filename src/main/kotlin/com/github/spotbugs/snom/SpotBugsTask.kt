@@ -48,6 +48,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
 import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService
+import org.gradle.process.ExecOperations
 import org.gradle.workers.WorkerExecutor
 import org.slf4j.LoggerFactory
 
@@ -92,6 +93,9 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
     @get:Inject
     abstract val workerExecutor: WorkerExecutor
+
+    @get:Inject
+    abstract val execOps: ExecOperations
 
     @Input
     override fun getIgnoreFailures(): Boolean = ignoreFailures.get()
@@ -389,7 +393,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
             SpotBugsRunnerForHybrid(workerExecutor, launcher).run(this)
         } else {
             log.info("Running SpotBugs by JavaExec...")
-            SpotBugsRunnerForJavaExec(launcher).run(this)
+            SpotBugsRunnerForJavaExec(execOps, launcher).run(this)
         }
     }
 

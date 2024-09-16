@@ -108,6 +108,7 @@ public abstract class com/github/spotbugs/snom/SpotBugsTask : org/gradle/api/Def
 	public final fun getClasses ()Lorg/gradle/api/file/FileCollection;
 	public abstract fun getEffort ()Lorg/gradle/api/provider/Property;
 	public abstract fun getExcludeFilter ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getExecOps ()Lorg/gradle/process/ExecOperations;
 	public abstract fun getExtraArgs ()Lorg/gradle/api/provider/ListProperty;
 	public fun getIgnoreFailures ()Z
 	public abstract fun getIncludeFilter ()Lorg/gradle/api/file/RegularFileProperty;

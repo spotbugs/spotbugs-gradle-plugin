@@ -35,7 +35,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
 
         when:
         BuildResult result = gradleRunner
-                .withArguments(':spotbugsMain', '--configuration-cache')
+                .withArguments(':spotbugsMain')
                 .build()
 
         then:
@@ -44,7 +44,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
 
         when:
         BuildResult resultOfCachedBuild = gradleRunner
-                .withArguments(':spotbugsMain', '--configuration-cache')
+                .withArguments(':spotbugsMain')
                 .build()
         then:
         resultOfCachedBuild.task(":spotbugsMain").outcome == TaskOutcome.UP_TO_DATE
@@ -115,7 +115,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
 
         when:
         gradleRunner
-                .withArguments(':spotbugsMain', '--build-cache')
+                .withArguments(':spotbugsMain', '--no-configuration-cache', '--build-cache')
                 .build()
         BuildResult result = gradleRunner
                 .withArguments(':spotbugsMain', '--build-cache')
@@ -156,7 +156,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
 
         when:
         def result = gradleRunner
-                .withArguments(':spotbugsMain', '--configuration-cache')
+                .withArguments(':spotbugsMain')
                 .build()
 
         then:
