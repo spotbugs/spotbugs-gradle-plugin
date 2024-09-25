@@ -218,7 +218,7 @@ dependencies {
 * The CI server uses `ubuntu-latest` docker image, but you should be able to develop on any linux/unix based OS.
 * before creating commits
   * read https://www.conventionalcommits.org/en
-  * Optionally create the following script in your .git/hooks directory and name it commit.msg. This will ensure that your commits follow the covential commits pattern.
+  * Optionally create the following script in your .git/hooks directory and name it commit.msg. This will ensure that your commits follow the conventional commits pattern.
 ```python
 #!/usr/bin/env python
 import re, sys, os
