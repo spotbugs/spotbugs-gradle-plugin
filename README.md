@@ -6,7 +6,7 @@ This is the official Gradle Plugin to run SpotBugs on Java and Android project.
 [![Coverage Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.spotbugs.gradle&metric=coverage)](https://sonarcloud.io/component_measures?id=com.github.spotbugs.gradle&metric=coverage)
 [![Debt](https://sonarcloud.io/api/project_badges/measure?project=com.github.spotbugs.gradle&metric=sqale_index)](https://sonarcloud.io/component_measures/domain/Maintainability?id=com.github.spotbugs.gradle)
 [![Gradle Plugin Portal](https://img.shields.io/maven-metadata/v?label=Plugin+Portal&metadataUrl=https%3A%2F%2Fplugins.gradle.org%2Fm2%2Fcom%2Fgithub%2Fspotbugs%2Fcom.github.spotbugs.gradle.plugin%2Fmaven-metadata.xml)](https://plugins.gradle.org/plugin/com.github.spotbugs)
-[![](https://img.shields.io/badge/groovydoc-latest-blightgreen?logo=groovy)](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/package-summary.html)
+[![](https://img.shields.io/badge/groovydoc-latest-blightgreen?logo=groovy)](https://spotbugs.github.io/spotbugs-gradle-plugin/spotbugs-gradle-plugin/com.github.spotbugs.snom/index.html)
 
 ## Goal
 
@@ -122,7 +122,7 @@ dependencies {
 ### Apply to Java project
 
 Apply this plugin with [the `java` plugin](https://docs.gradle.org/current/userguide/java_plugin.html) to your project,
-then [`SpotBugsTask`](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/spotbugstask) will be generated for each existing sourceSet.
+then [`SpotBugsTask`](https://spotbugs.github.io/spotbugs-gradle-plugin/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/index.html) will be generated for each existing sourceSet.
 
 If you want to create and configure `SpotBugsTask` by own, apply the base plugin (`com.github.spotbugs-base`) instead, then it won't create tasks automatically.
 
@@ -132,7 +132,7 @@ TBU
 
 ### Configure the SpotBugsTask
 
-Configure [`SpotBugsTask`](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/spotbugstask) directly,
+Configure [`SpotBugsTask`](https://spotbugs.github.io/spotbugs-gradle-plugin/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/index.html) directly,
 to set task-specific properties.
 
 ```kotlin
@@ -172,7 +172,7 @@ spotbugsMain {
 
 By default, this Gradle Plugin uses the SpotBugs version listed in the following table.
 
-You can change SpotBugs version by [the `toolVersion` property of the spotbugs extension](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/spotbugsextension#toolVersion) or the `spotbugs` configuration.
+You can change SpotBugs version by [the `toolVersion` property of the spotbugs extension](https://spotbugs.github.io/spotbugs-gradle-plugin/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/index.html#674051637%2FProperties%2F769193423) or the `spotbugs` configuration.
 
 | Gradle Plugin | SpotBugs |
 |--------------:|---------:|
