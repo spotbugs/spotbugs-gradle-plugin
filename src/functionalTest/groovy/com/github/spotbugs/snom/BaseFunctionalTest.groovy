@@ -29,7 +29,7 @@ abstract class BaseFunctionalTest extends Specification {
         return new TestGradleRunner()
                 .withGradleVersion(gradleVersion)
                 .withProjectDir(rootDir)
-                .withArguments('--info', '--stacktrace', '--warning-mode=fail')
+                .withArguments('--configuration-cache', '--info', '--stacktrace', '--warning-mode=fail')
                 .withTestKitDir(testKitDir)
                 .forwardOutput()
                 .withPluginClasspath()
