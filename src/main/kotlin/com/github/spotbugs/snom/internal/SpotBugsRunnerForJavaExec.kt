@@ -25,10 +25,12 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.jvm.toolchain.JavaLauncher
+import org.gradle.process.ExecOperations
 import org.gradle.process.JavaExecSpec
 import org.slf4j.LoggerFactory
 
 internal class SpotBugsRunnerForJavaExec @Inject constructor(
+    private val execOps: ExecOperations,
     private val javaLauncher: Property<JavaLauncher>,
 ) : SpotBugsRunner() {
     private val log = LoggerFactory.getLogger(SpotBugsRunnerForJavaExec::class.java)
@@ -37,14 +39,11 @@ internal class SpotBugsRunnerForJavaExec @Inject constructor(
     override fun run(task: SpotBugsTask) {
         // TODO print version of SpotBugs and Plugins
         try {
-            task.project.javaexec(configureJavaExec(task)).rethrowFailure().assertNormalExitValue()
+            execOps.javaexec(configureJavaExec(task)).rethrowFailure().assertNormalExitValue()
             if (stderrOutputScanner.isFailedToReport && !task.getIgnoreFailures()) {
                 throw GradleException("SpotBugs analysis succeeded but report generation failed")
             }
-        } catch (
-            // TODO remove this internal API usage.
-            @Suppress("InternalGradleApiUsage") e: org.gradle.process.internal.ExecException,
-        ) {
+        } catch (e: GradleException) {
             if (task.getIgnoreFailures()) {
                 log.warn(
                     "SpotBugs reported failures",
