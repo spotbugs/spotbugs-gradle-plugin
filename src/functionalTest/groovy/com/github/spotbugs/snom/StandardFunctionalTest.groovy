@@ -159,7 +159,7 @@ spotbugsMain {
 
         when:
         gradleRunner
-                .withArguments(":spotbugsMain", "--no-configuration-cache")
+                .withArguments(":spotbugsMain")
                 .build()
         def result = gradleRunner
                 .withArguments(":spotbugsMain")
@@ -486,7 +486,7 @@ public class MyFoo {
 
         when:
         BuildResult result = gradleRunner
-                .withArguments('--debug', "--no-configuration-cache", "spotbugsMain")
+                .withArguments('--debug', "spotbugsMain")
                 .build()
 
         then:

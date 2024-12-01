@@ -24,6 +24,7 @@ import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.NamedDomainObjectFactory
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
@@ -308,17 +309,26 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
     init {
         val objects = project.objects
-        reports = objects.domainObjectContainer(SpotBugsReport::class.java) { name: String ->
-            when (name) {
-                "html" -> objects.newInstance(SpotBugsHtmlReport::class.java, name, objects, this)
-                "xml" -> objects.newInstance(SpotBugsXmlReport::class.java, name, objects, this)
-                "text" -> objects.newInstance(SpotBugsTextReport::class.java, name, objects, this)
-                "sarif" -> objects.newInstance(SpotBugsSarifReport::class.java, name, objects, this)
-                else -> throw InvalidUserDataException("$name is invalid as the report name")
-            }.also {
-                (outputs as org.gradle.api.tasks.TaskOutputs).file(it.outputLocation)
-            }
-        }
+        val taskRef = this
+        reports = objects.domainObjectContainer(
+            SpotBugsReport::class.java,
+            // This anonymous object is necessary
+            // Otherwise the serialization of this lambda is broken with config-cache on Gradle 7
+            @Suppress("ObjectLiteralToLambda")
+            object : NamedDomainObjectFactory<SpotBugsReport> {
+                override fun create(name: String): SpotBugsReport {
+                    return when (name) {
+                        "html" -> objects.newInstance(SpotBugsHtmlReport::class.java, name, objects, taskRef)
+                        "xml" -> objects.newInstance(SpotBugsXmlReport::class.java, name, objects, taskRef)
+                        "text" -> objects.newInstance(SpotBugsTextReport::class.java, name, objects, taskRef)
+                        "sarif" -> objects.newInstance(SpotBugsSarifReport::class.java, name, objects, taskRef)
+                        else -> throw InvalidUserDataException("$name is invalid as the report name")
+                    }.also {
+                        (outputs as org.gradle.api.tasks.TaskOutputs).file(it.outputLocation)
+                    }
+                }
+            },
+        )
         description = "Run SpotBugs analysis."
         group = JavaBasePlugin.VERIFICATION_GROUP
     }

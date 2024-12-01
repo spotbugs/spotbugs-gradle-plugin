@@ -115,7 +115,7 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
 
         when:
         gradleRunner
-                .withArguments(':spotbugsMain', '--no-configuration-cache', '--build-cache')
+                .withArguments(':spotbugsMain', '--build-cache')
                 .build()
         BuildResult result = gradleRunner
                 .withArguments(':spotbugsMain', '--build-cache')
