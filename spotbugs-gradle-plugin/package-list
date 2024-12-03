@@ -82,6 +82,7 @@ $dokka.location:com.github.spotbugs.snom/SpotBugsTask/classDirs/#/PointingToDecl
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/classes/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/classes.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/effort/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/effort.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/excludeFilter/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/exclude-filter.html
+$dokka.location:com.github.spotbugs.snom/SpotBugsTask/execOps/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/exec-ops.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/extraArgs/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/extra-args.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/getBaseName/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/get-base-name.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/getIgnoreFailures/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/get-ignore-failures.html
