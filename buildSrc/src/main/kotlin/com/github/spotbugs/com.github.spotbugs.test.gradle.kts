@@ -39,7 +39,7 @@ testing {
         val functionalTest by registering(JvmTestSuite::class) {
             testType = TestSuiteType.FUNCTIONAL_TEST
             dependencies {
-                implementation("org.spockframework:spock-core:2.3-groovy-4.0") {
+                implementation("org.spockframework:spock-core:2.3-groovy-3.0") {
                     exclude(group = "org.codehaus.groovy", module = "groovy-all")
                 }
             }
