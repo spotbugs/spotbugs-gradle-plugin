@@ -37,8 +37,12 @@ testing {
         }
         @Suppress("UNUSED_VARIABLE")
         val functionalTest by registering(JvmTestSuite::class) {
-            useSpock()
             testType = TestSuiteType.FUNCTIONAL_TEST
+            dependencies {
+                testImplementation('org.spockframework:spock-core:2.3-groovy-4.0') {
+                    exclude group: 'org.codehaus.groovy'
+                }
+            }
             targets {
                 all {
                     testTask.configure {
