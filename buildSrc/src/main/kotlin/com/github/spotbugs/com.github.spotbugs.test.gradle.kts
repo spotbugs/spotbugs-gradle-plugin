@@ -40,7 +40,7 @@ testing {
             testType = TestSuiteType.FUNCTIONAL_TEST
             dependencies {
                 testImplementation("org.spockframework:spock-core:2.3-groovy-4.0") {
-                    exclude(group = "org.codehaus.groovy")
+                    exclude(group = "org.codehaus.groovy", module = "groovy-all")
                 }
             }
             targets {
