@@ -110,4 +110,3 @@ $dokka.location:com.github.spotbugs.snom/SpotBugsTask/useAuxclasspathFile/#/Poin
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/visitors/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/visitors.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/workerExecutor/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/worker-executor.html
 com.github.spotbugs.snom
-
