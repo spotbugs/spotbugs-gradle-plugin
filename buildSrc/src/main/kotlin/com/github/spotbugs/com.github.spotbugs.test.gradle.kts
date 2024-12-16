@@ -7,7 +7,7 @@ plugins {
     id("org.sonarqube")
 }
 
-val junitVersion = "5.11.3"
+val junitVersion = "5.11.4"
 dependencies {
     testImplementation(gradleTestKit())
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
