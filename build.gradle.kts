@@ -15,7 +15,7 @@ plugins {
     id("com.github.spotbugs.test")
     id("org.sonarqube")
     id("io.gitlab.arturbosch.detekt") version "1.23.7"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.16.3"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.17.0"
 }
 
 java {
