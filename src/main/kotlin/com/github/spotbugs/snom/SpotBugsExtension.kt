@@ -43,6 +43,7 @@ import org.gradle.api.provider.Property
  *     maxHeapSize = "1g"
  *     extraArgs = listOf("-nested:false")
  *     jvmArgs = listOf("-Duser.language=ja")
+ *     runOnCheck = true
  * }
  * ```
  *
@@ -152,4 +153,10 @@ interface SpotBugsExtension {
     val useAuxclasspathFile: Property<Boolean>
 
     val useJavaToolchains: Property<Boolean>
+
+    /**
+     * Property to specify if the SpotBugs tasks should automatically be marked as dependencies of the
+     * check task. Defaults to true.
+     */
+    val runOnCheck: Property<Boolean>
 }
