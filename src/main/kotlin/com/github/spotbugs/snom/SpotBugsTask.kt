@@ -89,7 +89,9 @@ import org.slf4j.LoggerFactory
  * See also [SpotBugs Manual about configuration](https://spotbugs.readthedocs.io/en/stable/running.html).
  */
 @CacheableTask
-abstract class SpotBugsTask : DefaultTask(), VerificationTask {
+abstract class SpotBugsTask :
+    DefaultTask(),
+    VerificationTask {
     private val log = LoggerFactory.getLogger(SpotBugsTask::class.java)
 
     @get:Inject
@@ -316,16 +318,14 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
             // Otherwise the serialization of this lambda is broken with config-cache on Gradle 7
             @Suppress("ObjectLiteralToLambda")
             object : NamedDomainObjectFactory<SpotBugsReport> {
-                override fun create(name: String): SpotBugsReport {
-                    return when (name) {
-                        "html" -> objects.newInstance(SpotBugsHtmlReport::class.java, name, objects, taskRef)
-                        "xml" -> objects.newInstance(SpotBugsXmlReport::class.java, name, objects, taskRef)
-                        "text" -> objects.newInstance(SpotBugsTextReport::class.java, name, objects, taskRef)
-                        "sarif" -> objects.newInstance(SpotBugsSarifReport::class.java, name, objects, taskRef)
-                        else -> throw InvalidUserDataException("$name is invalid as the report name")
-                    }.also {
-                        (outputs as org.gradle.api.tasks.TaskOutputs).file(it.outputLocation)
-                    }
+                override fun create(name: String): SpotBugsReport = when (name) {
+                    "html" -> objects.newInstance(SpotBugsHtmlReport::class.java, name, objects, taskRef)
+                    "xml" -> objects.newInstance(SpotBugsXmlReport::class.java, name, objects, taskRef)
+                    "text" -> objects.newInstance(SpotBugsTextReport::class.java, name, objects, taskRef)
+                    "sarif" -> objects.newInstance(SpotBugsSarifReport::class.java, name, objects, taskRef)
+                    else -> throw InvalidUserDataException("$name is invalid as the report name")
+                }.also {
+                    (outputs as org.gradle.api.tasks.TaskOutputs).file(it.outputLocation)
                 }
             },
         )
@@ -339,10 +339,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
      *
      * @param extension the source extension to copy the properties.
      */
-    fun init(
-        extension: SpotBugsExtension,
-        enableWorkerApi: Boolean,
-    ) {
+    fun init(extension: SpotBugsExtension, enableWorkerApi: Boolean) {
         auxclasspathFile.convention(project.layout.buildDirectory.file("spotbugs/auxclasspath/$name"))
         ignoreFailures.convention(extension.ignoreFailures)
         showStackTraces.convention(extension.showStackTraces)
@@ -403,8 +400,9 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     /**
      * Function defined to keep the backward compatibility with [org.gradle.api.reporting.Reporting] interface.
      */
-    @Suppress("MaxLineLength")
-    fun reports(configureAction: Action<NamedDomainObjectContainer<SpotBugsReport>>): NamedDomainObjectContainer<SpotBugsReport> {
+    fun reports(
+        configureAction: Action<NamedDomainObjectContainer<SpotBugsReport>>,
+    ): NamedDomainObjectContainer<SpotBugsReport> {
         configureAction.execute(reports)
         return reports
     }
@@ -423,7 +421,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     }
 
     @Internal
-    internal fun getRequiredReports(): Sequence<SpotBugsReport> {
-        return reports.matching { it.required.get() }.asMap.values.asSequence()
-    }
+    internal fun getRequiredReports(): Sequence<SpotBugsReport> = reports.matching {
+        it.required.get()
+    }.asMap.values.asSequence()
 }

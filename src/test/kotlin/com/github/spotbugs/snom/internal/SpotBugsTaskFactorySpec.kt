@@ -4,13 +4,14 @@ import com.github.spotbugs.snom.internal.SpotBugsTaskFactory.Companion.toLowerCa
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
-class SpotBugsTaskFactorySpec : DescribeSpec({
-    describe("SpotBugsTaskFactory") {
-        it("converts task name to lowerCamelCase") {
-            toLowerCamelCase("spotbugs", null) shouldBe "spotbugs"
-            toLowerCamelCase("spotbugs", "") shouldBe "spotbugs"
-            toLowerCamelCase("spotbugs", "main") shouldBe "spotbugsMain"
-            toLowerCamelCase("spotbugs", "mainCode") shouldBe "spotbugsMainCode"
+class SpotBugsTaskFactorySpec :
+    DescribeSpec({
+        describe("SpotBugsTaskFactory") {
+            it("converts task name to lowerCamelCase") {
+                toLowerCamelCase("spotbugs", null) shouldBe "spotbugs"
+                toLowerCamelCase("spotbugs", "") shouldBe "spotbugs"
+                toLowerCamelCase("spotbugs", "main") shouldBe "spotbugsMain"
+                toLowerCamelCase("spotbugs", "mainCode") shouldBe "spotbugsMainCode"
+            }
         }
-    }
-})
+    })
