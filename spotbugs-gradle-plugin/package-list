@@ -41,6 +41,7 @@ $dokka.location:com.github.spotbugs.snom/SpotBugsExtension/projectName/#/Pointin
 $dokka.location:com.github.spotbugs.snom/SpotBugsExtension/release/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/release.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsExtension/reportLevel/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/report-level.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsExtension/reportsDir/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/reports-dir.html
+$dokka.location:com.github.spotbugs.snom/SpotBugsExtension/runOnCheck/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/run-on-check.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsExtension/showProgress/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/show-progress.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsExtension/showStackTraces/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/show-stack-traces.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsExtension/toolVersion/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/tool-version.html
