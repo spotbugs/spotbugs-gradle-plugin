@@ -56,6 +56,7 @@ class SpotBugsBasePlugin : Plugin<Project> {
             )
             useAuxclasspathFile.convention(true)
             useJavaToolchains.convention(true)
+            runOnCheck.convention(true)
         }
     }
 

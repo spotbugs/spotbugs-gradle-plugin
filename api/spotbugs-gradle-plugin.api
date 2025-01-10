@@ -52,6 +52,7 @@ public abstract interface class com/github/spotbugs/snom/SpotBugsExtension {
 	public abstract fun getRelease ()Lorg/gradle/api/provider/Property;
 	public abstract fun getReportLevel ()Lorg/gradle/api/provider/Property;
 	public abstract fun getReportsDir ()Lorg/gradle/api/file/DirectoryProperty;
+	public abstract fun getRunOnCheck ()Lorg/gradle/api/provider/Property;
 	public abstract fun getShowProgress ()Lorg/gradle/api/provider/Property;
 	public abstract fun getShowStackTraces ()Lorg/gradle/api/provider/Property;
 	public abstract fun getToolVersion ()Lorg/gradle/api/provider/Property;

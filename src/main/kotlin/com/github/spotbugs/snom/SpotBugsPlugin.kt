@@ -29,7 +29,10 @@ class SpotBugsPlugin : Plugin<Project> {
                 "The javaBase plugin has been applied, so making the check task depending on all of SpotBugsTask",
             )
             project.tasks.named(JavaBasePlugin.CHECK_TASK_NAME).configure {
-                it.dependsOn(project.tasks.withType(SpotBugsTask::class.java))
+                val runOnCheck = project.extensions.getByType(SpotBugsExtension::class.java).runOnCheck
+                if (runOnCheck.get()) {
+                    it.dependsOn(project.tasks.withType(SpotBugsTask::class.java))
+                }
             }
         }
         createTasks(project)

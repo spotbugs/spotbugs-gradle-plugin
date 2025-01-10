@@ -245,4 +245,54 @@ dependencies {
         result.task(":spotbugsMain").outcome == SUCCESS
         result.output.contains("com.github.spotbugs:spotbugs-annotations:4.0.2")
     }
+
+    def "default behaviour runs spotbugs tasks as part of check"() {
+        setup:
+        buildFile << """
+spotbugs {
+}
+"""
+
+        when:
+        BuildResult result = gradleRunner
+                .withArguments('--debug', ":check")
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+    }
+
+    def "can set runOnCheck to false to disable automatic check dependency"() {
+        setup:
+        buildFile << """
+spotbugs {
+    runOnCheck = false
+}
+"""
+
+        when:
+        BuildResult result = gradleRunner
+                .withArguments('--debug', ":check")
+                .build()
+
+        then:
+        result.task(":spotbugsMain") == null
+    }
+
+    def "can still run spotbugs tasks without automatic check dependency"() {
+        setup:
+        buildFile << """
+spotbugs {
+    runOnCheck = false
+}
+"""
+
+        when:
+        BuildResult result = gradleRunner
+                .withArguments('--debug', ":spotbugsMain")
+                .build()
+
+        then:
+        result.task(":spotbugsMain").outcome == SUCCESS
+    }
 }
