@@ -7,7 +7,7 @@ spotless {
         licenseHeaderFile(rootProject.file("gradle/HEADER.txt"))
         target("**/*.groovy")
         greclipse()
-        indentWithSpaces()
+        leadingTabsToSpaces()
     }
     kotlin {
         ktlint()
