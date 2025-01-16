@@ -294,7 +294,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
     @get:Classpath
     abstract val pluginJarFiles: ConfigurableFileCollection
 
-    @get:Internal
+    @get:Classpath
     abstract val spotbugsClasspath: ConfigurableFileCollection
 
     @get:Nested
@@ -374,14 +374,9 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
         val pluginConfiguration = project.configurations.named(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
         pluginJarFiles.from(pluginConfiguration)
-        val configuration = project.configurations.getByName(SpotBugsPlugin.CONFIG_NAME)
-        val spotbugsSlf4j = project.configurations.getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
-        spotbugsClasspath.from(
-            project.layout.files(
-                project.provider { spotbugsSlf4j.files },
-                project.provider { configuration.files },
-            ),
-        )
+        val configuration = project.configurations.named(SpotBugsPlugin.CONFIG_NAME)
+        val spotbugsSlf4j = project.configurations.named(SpotBugsPlugin.SLF4J_CONFIG_NAME)
+        spotbugsClasspath.from(configuration, spotbugsSlf4j)
     }
 
     /**
