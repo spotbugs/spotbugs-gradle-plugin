@@ -291,7 +291,7 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
     private var enableWorkerApi: Boolean = true
 
-    @get:Internal
+    @get:Classpath
     abstract val pluginJarFiles: ConfigurableFileCollection
 
     @get:Internal
@@ -372,10 +372,8 @@ abstract class SpotBugsTask : DefaultTask(), VerificationTask {
 
         analyseClassFile.set(project.layout.buildDirectory.file("$name-analyse-class-file.txt"))
 
-        val pluginConfiguration = project.configurations.getByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
-        pluginJarFiles.from(
-            project.provider { pluginConfiguration.files },
-        )
+        val pluginConfiguration = project.configurations.named(SpotBugsPlugin.PLUGINS_CONFIG_NAME)
+        pluginJarFiles.from(pluginConfiguration)
         val configuration = project.configurations.getByName(SpotBugsPlugin.CONFIG_NAME)
         val spotbugsSlf4j = project.configurations.getByName(SpotBugsPlugin.SLF4J_CONFIG_NAME)
         spotbugsClasspath.from(
