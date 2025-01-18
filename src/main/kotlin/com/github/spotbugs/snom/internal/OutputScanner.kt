@@ -25,11 +25,7 @@ internal class OutputScanner(out: OutputStream) : FilterOutputStream(out) {
     private val builder = ByteArrayOutputStream()
     var isFailedToReport = false
 
-    override fun write(
-        b: ByteArray,
-        off: Int,
-        len: Int,
-    ) {
+    override fun write(b: ByteArray, off: Int, len: Int) {
         super.write(b, off, len)
         builder.write(b, off, len)
     }
