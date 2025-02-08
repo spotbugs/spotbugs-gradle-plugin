@@ -76,10 +76,7 @@ internal class SpotBugsTaskFactory {
     }
 
     companion object {
-        fun toLowerCamelCase(
-            head: String,
-            tail: String?,
-        ): String {
+        fun toLowerCamelCase(head: String, tail: String?): String {
             if (tail.isNullOrEmpty()) {
                 return head
             }
