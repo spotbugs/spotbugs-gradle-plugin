@@ -2,7 +2,7 @@
 
 ## How to hack this project
 
-Make sure you have Java 17+, Node.js 12+ and NPM on your `PATH`.
+Make sure you have Java 17+, Node.js 22+ and NPM on your `PATH`.
 
 Before you start hacking, run `npm install` once to install development toolchain
 to follow [the Conventional Commits](https://conventionalcommits.org/).
