@@ -35,7 +35,7 @@ dependencies {
     compileOnly("com.github.spotbugs:spotbugs:$spotBugsVersion")
     compileOnly("com.android.tools.build:gradle:$androidGradlePluginVersion")
     testImplementation("com.tngtech.archunit:archunit:1.4.0")
-    lintChecks("androidx.lint:lint-gradle:1.0.0-alpha03")
+    lintChecks("androidx.lint:lint-gradle:1.0.0-alpha04")
 }
 
 val signingKey: String? = providers.environmentVariable("SIGNING_KEY").orNull
