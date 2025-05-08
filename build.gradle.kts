@@ -8,7 +8,7 @@ plugins {
     jacoco
     signing
     kotlin("jvm") version "2.0.21"
-    id("com.android.lint") version "8.9.2"
+    id("com.android.lint") version "8.10.0"
     id("org.jetbrains.dokka") version "2.0.0"
     id("com.github.spotbugs.gradle-plugin")
     id("com.github.spotbugs.plugin-publish")
