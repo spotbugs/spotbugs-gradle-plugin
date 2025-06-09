@@ -38,7 +38,6 @@ testing {
         @Suppress("UNUSED_VARIABLE")
         val functionalTest by registering(JvmTestSuite::class) {
             useSpock()
-            testType = TestSuiteType.FUNCTIONAL_TEST
             targets {
                 all {
                     testTask.configure {
