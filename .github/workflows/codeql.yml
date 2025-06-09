@@ -7,7 +7,8 @@ on:
       - master
   pull_request: {}
 
-permissions: read-all
+permissions:
+  contents: write
 
 jobs:
   CodeQL-Build:
