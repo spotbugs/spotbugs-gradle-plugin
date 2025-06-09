@@ -26,7 +26,7 @@ java {
 group = "com.github.spotbugs.snom"
 
 val spotBugsVersion = "4.9.3"
-val slf4jVersion = "2.0.0"
+val slf4jVersion = "2.0.17"
 val androidGradlePluginVersion = "8.10.1"
 
 dependencies {
@@ -51,11 +51,11 @@ signing {
 
 tasks {
     withType<JavaCompile> {
-        options.release.set(8)
+        options.release.set(11)
     }
     withType<KotlinCompile>().configureEach {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_1_8
+            jvmTarget = JvmTarget.JVM_11
         }
     }
     named<Detekt>("detekt") {
