@@ -7,6 +7,8 @@ on:
       - master
   pull_request: {}
 
+permissions: read-all
+
 jobs:
   CodeQL-Build:
     runs-on: ubuntu-latest

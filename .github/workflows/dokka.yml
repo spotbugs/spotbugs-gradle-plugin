@@ -4,6 +4,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+
 jobs:
   javadoc:
     runs-on: ubuntu-latest
