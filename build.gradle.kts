@@ -76,9 +76,6 @@ tasks {
     withType<Jar>().configureEach {
         dependsOn(processResources)
     }
-    withType<DokkaTask>().configureEach {
-        notCompatibleWithConfigurationCache("https://github.com/Kotlin/dokka/issues/2231")
-    }
     javadoc {
         enabled = false
     }
