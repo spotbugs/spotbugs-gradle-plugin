@@ -50,7 +50,7 @@
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
                 <button class="platform-tag platform-selector jvm-like" data-active=""
-                        data-filter=":dokkaHtml/main">jvm</button>
+                        data-filter=":/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
                         data-role="dropdown-toggle"
@@ -67,8 +67,8 @@
                     </div>
                         <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
                             <label class="checkbox">
-                                <input type="checkbox" class="checkbox--input" id=":dokkaHtml/main"
-                                       data-filter=":dokkaHtml/main"/>
+                                <input type="checkbox" class="checkbox--input" id=":/main"
+                                       data-filter=":/main"/>
                                 <span class="checkbox--icon"></span>
                                 jvm
                             </label>
@@ -104,328 +104,328 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="classlike" id="content" pageIds="spotbugs-gradle-plugin::com.github.spotbugs.snom/SpotBugsExtension///PointingToDeclaration//769193423">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="spotbugs-gradle-plugin::com.github.spotbugs.snom/SpotBugsExtension///PointingToDeclaration//-251573632">
   <div class="breadcrumbs"><a href="../../../index.html">spotbugs-gradle-plugin</a><span class="delimiter">/</span><a href="../index.html">com.github.spotbugs.snom</a><span class="delimiter">/</span><span class="current">SpotBugsExtension</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Spot</span><wbr></wbr><span>Bugs</span><wbr></wbr><span><span>Extension</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">SpotBugsExtension</a></div><p class="paragraph"><a href="index.html">SpotBugsExtension</a> is an extension used to set up the SpotBugs Gradle plugin. All properties in this extension act as default properties for all instances of <a href="../-spot-bugs-task/index.html">SpotBugsTask</a> are optional.</p><h3 class="">Usage</h3><p class="paragraph">Once you've applied the SpotBugs Gradle plugin to your project, configure it as shown below:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">// Required: Gradle 8.2 or higher<br>spotbugs {<br>    ignoreFailures = false<br>    showStackTraces = true<br>    showProgress = true<br>    effort = com.github.spotbugs.snom.Effort.DEFAULT<br>    reportLevel = com.github.spotbugs.snom.Confidence.DEFAULT<br>    visitors = listOf(&quot;FindSqlInjection&quot;, &quot;SwitchFallthrough&quot;)<br>    omitVisitors = listOf(&quot;FindNonShortCircuit&quot;)<br>    reportsDir = file(&quot;$buildDir/spotbugs&quot;)<br>    includeFilter = file(&quot;include.xml&quot;)<br>    excludeFilter = file(&quot;exclude.xml&quot;)<br>    baselineFile = file(&quot;baseline.xml&quot;)<br>    onlyAnalyze = listOf(&quot;com.foobar.MyClass&quot;, &quot;com.foobar.mypkg.*&quot;)<br>    maxHeapSize = &quot;1g&quot;<br>    extraArgs = listOf(&quot;-nested:false&quot;)<br>    jvmArgs = listOf(&quot;-Duser.language=ja&quot;)<br>    runOnCheck = true<br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">SpotBugsExtension</a></div><p class="paragraph"><a href="index.html">SpotBugsExtension</a> is an extension used to set up the SpotBugs Gradle plugin. All properties in this extension act as default properties for all instances of <a href="../-spot-bugs-task/index.html">SpotBugsTask</a> are optional.</p><h3 class="">Usage</h3><p class="paragraph">Once you've applied the SpotBugs Gradle plugin to your project, configure it as shown below:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">// Required: Gradle 8.2 or higher<br>spotbugs {<br>    ignoreFailures = false<br>    showStackTraces = true<br>    showProgress = true<br>    effort = com.github.spotbugs.snom.Effort.DEFAULT<br>    reportLevel = com.github.spotbugs.snom.Confidence.DEFAULT<br>    visitors = listOf(&quot;FindSqlInjection&quot;, &quot;SwitchFallthrough&quot;)<br>    omitVisitors = listOf(&quot;FindNonShortCircuit&quot;)<br>    reportsDir = file(&quot;$buildDir/spotbugs&quot;)<br>    includeFilter = file(&quot;include.xml&quot;)<br>    excludeFilter = file(&quot;exclude.xml&quot;)<br>    baselineFile = file(&quot;baseline.xml&quot;)<br>    onlyAnalyze = listOf(&quot;com.foobar.MyClass&quot;, &quot;com.foobar.mypkg.*&quot;)<br>    maxHeapSize = &quot;1g&quot;<br>    extraArgs = listOf(&quot;-nested:false&quot;)<br>    jvmArgs = listOf(&quot;-Duser.language=ja&quot;)<br>    runOnCheck = true<br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
-        <div class="table"><a data-name="704049636%2FProperties%2F769193423" anchor-label="baselineFile" id="704049636%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+        <div class="table"><a data-name="704049636%2FProperties%2F-251573632" anchor-label="baselineFile" id="704049636%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="baseline-file.html"><span>baseline</span><wbr></wbr><span><span>File</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="704049636%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="704049636%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="baseline-file.html">baselineFile</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.file/RegularFileProperty///PointingToDeclaration/">RegularFileProperty</span></div><div class="brief "><p class="paragraph">Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file will not be reported in the final output.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="baseline-file.html">baselineFile</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.file/RegularFileProperty///PointingToDeclaration/">RegularFileProperty</span></div><div class="brief "><p class="paragraph">Property to set the baseline file. This file is a Spotbugs result file, and all bugs reported in this file will not be reported in the final output.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1757652665%2FProperties%2F769193423" anchor-label="effort" id="1757652665%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="1757652665%2FProperties%2F-251573632" anchor-label="effort" id="1757652665%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="effort.html"><span><span>effort</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1757652665%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1757652665%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="effort.html">effort</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="../-effort/index.html">Effort</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to adjust SpotBugs detectors. Default value is <a href="../-effort/-d-e-f-a-u-l-t/index.html">Effort.DEFAULT</a>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="effort.html">effort</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="../-effort/index.html">Effort</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to adjust SpotBugs detectors. Default value is <a href="../-effort/-d-e-f-a-u-l-t/index.html">Effort.DEFAULT</a>.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1569113763%2FProperties%2F769193423" anchor-label="excludeFilter" id="1569113763%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="1569113763%2FProperties%2F-251573632" anchor-label="excludeFilter" id="1569113763%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="exclude-filter.html"><span>exclude</span><wbr></wbr><span><span>Filter</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1569113763%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1569113763%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="exclude-filter.html">excludeFilter</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.file/RegularFileProperty///PointingToDeclaration/">RegularFileProperty</span></div><div class="brief "><p class="paragraph">Property to set the filter file to limit which bug should be reported.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="exclude-filter.html">excludeFilter</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.file/RegularFileProperty///PointingToDeclaration/">RegularFileProperty</span></div><div class="brief "><p class="paragraph">Property to set the filter file to limit which bug should be reported.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1245802472%2FProperties%2F769193423" anchor-label="extraArgs" id="1245802472%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="1245802472%2FProperties%2F-251573632" anchor-label="extraArgs" id="1245802472%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="extra-args.html"><span>extra</span><wbr></wbr><span><span>Args</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1245802472%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1245802472%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="extra-args.html">extraArgs</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/ListProperty///PointingToDeclaration/">ListProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the extra arguments for SpotBugs. Default value is empty so SpotBugs will get no extra argument.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="extra-args.html">extraArgs</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/ListProperty///PointingToDeclaration/">ListProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the extra arguments for SpotBugs. Default value is empty so SpotBugs will get no extra argument.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="914641514%2FProperties%2F769193423" anchor-label="ignoreFailures" id="914641514%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="914641514%2FProperties%2F-251573632" anchor-label="ignoreFailures" id="914641514%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="ignore-failures.html"><span>ignore</span><wbr></wbr><span><span>Failures</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="914641514%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="914641514%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="ignore-failures.html">ignoreFailures</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="ignore-failures.html">ignoreFailures</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="507704853%2FProperties%2F769193423" anchor-label="includeFilter" id="507704853%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="507704853%2FProperties%2F-251573632" anchor-label="includeFilter" id="507704853%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="include-filter.html"><span>include</span><wbr></wbr><span><span>Filter</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="507704853%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="507704853%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="include-filter.html">includeFilter</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.file/RegularFileProperty///PointingToDeclaration/">RegularFileProperty</span></div><div class="brief "><p class="paragraph">Property to set the filter file to limit which bug should be reported.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="include-filter.html">includeFilter</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.file/RegularFileProperty///PointingToDeclaration/">RegularFileProperty</span></div><div class="brief "><p class="paragraph">Property to set the filter file to limit which bug should be reported.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1278614793%2FProperties%2F769193423" anchor-label="jvmArgs" id="-1278614793%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="-1278614793%2FProperties%2F-251573632" anchor-label="jvmArgs" id="-1278614793%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="jvm-args.html"><span>jvm</span><wbr></wbr><span><span>Args</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1278614793%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1278614793%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="jvm-args.html">jvmArgs</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/ListProperty///PointingToDeclaration/">ListProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="jvm-args.html">jvmArgs</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/ListProperty///PointingToDeclaration/">ListProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the extra arguments for JVM process. Default value is empty so JVM process will get no extra argument.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1340987932%2FProperties%2F769193423" anchor-label="maxHeapSize" id="-1340987932%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="-1340987932%2FProperties%2F-251573632" anchor-label="maxHeapSize" id="-1340987932%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="max-heap-size.html"><span>max</span><wbr></wbr><span>Heap</span><wbr></wbr><span><span>Size</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1340987932%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1340987932%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="max-heap-size.html">maxHeapSize</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the max heap size (<code class="lang-kotlin">-Xmx</code> option) of JVM process. Default value is empty so the default configuration made by Gradle will be used.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="max-heap-size.html">maxHeapSize</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the max heap size (<code class="lang-kotlin">-Xmx</code> option) of JVM process. Default value is empty so the default configuration made by Gradle will be used.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1251405687%2FProperties%2F769193423" anchor-label="omitVisitors" id="1251405687%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="1251405687%2FProperties%2F-251573632" anchor-label="omitVisitors" id="1251405687%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="omit-visitors.html"><span>omit</span><wbr></wbr><span><span>Visitors</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1251405687%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1251405687%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="omit-visitors.html">omitVisitors</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/ListProperty///PointingToDeclaration/">ListProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to disable visitors (detectors) for analysis. Default is empty that means SpotBugs omits no visitor.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="omit-visitors.html">omitVisitors</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/ListProperty///PointingToDeclaration/">ListProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to disable visitors (detectors) for analysis. Default is empty that means SpotBugs omits no visitor.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-14088619%2FProperties%2F769193423" anchor-label="onlyAnalyze" id="-14088619%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="-14088619%2FProperties%2F-251573632" anchor-label="onlyAnalyze" id="-14088619%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="only-analyze.html"><span>only</span><wbr></wbr><span><span>Analyze</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-14088619%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-14088619%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="only-analyze.html">onlyAnalyze</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/ListProperty///PointingToDeclaration/">ListProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="only-analyze.html">onlyAnalyze</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/ListProperty///PointingToDeclaration/">ListProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the target classes for analysis. Default value is empty that means all classes are analyzed.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1611420049%2FProperties%2F769193423" anchor-label="projectName" id="1611420049%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="1611420049%2FProperties%2F-251573632" anchor-label="projectName" id="1611420049%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="project-name.html"><span>project</span><wbr></wbr><span><span>Name</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1611420049%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1611420049%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="project-name.html">projectName</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the name of project. Some reporting formats use this property. Default value is the name of your Gradle project.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="project-name.html">projectName</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the name of project. Some reporting formats use this property. Default value is the name of your Gradle project.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-126956498%2FProperties%2F769193423" anchor-label="release" id="-126956498%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="-126956498%2FProperties%2F-251573632" anchor-label="release" id="-126956498%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="release.html"><span><span>release</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-126956498%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-126956498%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="release.html">release</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the release identifier of project. Some reporting formats use this property. Default value is the version of your Gradle project.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="release.html">release</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the release identifier of project. Some reporting formats use this property. Default value is the version of your Gradle project.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1366748763%2FProperties%2F769193423" anchor-label="reportLevel" id="-1366748763%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="-1366748763%2FProperties%2F-251573632" anchor-label="reportLevel" id="-1366748763%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="report-level.html"><span>report</span><wbr></wbr><span><span>Level</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1366748763%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1366748763%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="report-level.html">reportLevel</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="../-confidence/index.html">Confidence</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the level to report bugs. Default value is <a href="../-confidence/-d-e-f-a-u-l-t/index.html">Confidence.DEFAULT</a>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="report-level.html">reportLevel</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="../-confidence/index.html">Confidence</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify the level to report bugs. Default value is <a href="../-confidence/-d-e-f-a-u-l-t/index.html">Confidence.DEFAULT</a>.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-24012905%2FProperties%2F769193423" anchor-label="reportsDir" id="-24012905%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="-24012905%2FProperties%2F-251573632" anchor-label="reportsDir" id="-24012905%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="reports-dir.html"><span>reports</span><wbr></wbr><span><span>Dir</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-24012905%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-24012905%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="reports-dir.html">reportsDir</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.file/DirectoryProperty///PointingToDeclaration/">DirectoryProperty</span></div><div class="brief "><p class="paragraph">Property to set the directory to generate report files. Default is <code class="lang-kotlin">&quot;$buildDir/reports/spotbugs&quot;</code>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="reports-dir.html">reportsDir</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.file/DirectoryProperty///PointingToDeclaration/">DirectoryProperty</span></div><div class="brief "><p class="paragraph">Property to set the directory to generate report files. Default is <code class="lang-kotlin">&quot;$buildDir/reports/spotbugs&quot;</code>.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="970056327%2FProperties%2F769193423" anchor-label="runOnCheck" id="970056327%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="970056327%2FProperties%2F-251573632" anchor-label="runOnCheck" id="970056327%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="run-on-check.html"><span>run</span><wbr></wbr><span>On</span><wbr></wbr><span><span>Check</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="970056327%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="970056327%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="run-on-check.html">runOnCheck</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify if the SpotBugs tasks should automatically be marked as dependencies of the check task. Defaults to true.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="run-on-check.html">runOnCheck</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to specify if the SpotBugs tasks should automatically be marked as dependencies of the check task. Defaults to true.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1956399899%2FProperties%2F769193423" anchor-label="showProgress" id="1956399899%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="1956399899%2FProperties%2F-251573632" anchor-label="showProgress" id="1956399899%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="show-progress.html"><span>show</span><wbr></wbr><span><span>Progress</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1956399899%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1956399899%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="show-progress.html">showProgress</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to enable progress reporting during the analysis. Default value is <code class="lang-kotlin">false</code>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="show-progress.html">showProgress</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to enable progress reporting during the analysis. Default value is <code class="lang-kotlin">false</code>.</p></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-581182660%2FProperties%2F769193423" anchor-label="showStackTraces" id="-581182660%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="-581182660%2FProperties%2F-251573632" anchor-label="showStackTraces" id="-581182660%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="show-stack-traces.html"><span>show</span><wbr></wbr><span>Stack</span><wbr></wbr><span><span>Traces</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-581182660%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-581182660%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="show-stack-traces.html">showStackTraces</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="show-stack-traces.html">showStackTraces</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="674051637%2FProperties%2F769193423" anchor-label="toolVersion" id="674051637%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="674051637%2FProperties%2F-251573632" anchor-label="toolVersion" id="674051637%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="tool-version.html"><span>tool</span><wbr></wbr><span><span>Version</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="674051637%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="674051637%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="tool-version.html">toolVersion</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="tool-version.html">toolVersion</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1044185671%2FProperties%2F769193423" anchor-label="useAuxclasspathFile" id="-1044185671%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="-1044185671%2FProperties%2F-251573632" anchor-label="useAuxclasspathFile" id="-1044185671%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="use-auxclasspath-file.html"><span>use</span><wbr></wbr><span>Auxclasspath</span><wbr></wbr><span><span>File</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1044185671%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1044185671%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="use-auxclasspath-file.html">useAuxclasspathFile</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="use-auxclasspath-file.html">useAuxclasspathFile</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="2080199970%2FProperties%2F769193423" anchor-label="useJavaToolchains" id="2080199970%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="2080199970%2FProperties%2F-251573632" anchor-label="useJavaToolchains" id="2080199970%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="use-java-toolchains.html"><span>use</span><wbr></wbr><span>Java</span><wbr></wbr><span><span>Toolchains</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2080199970%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2080199970%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="use-java-toolchains.html">useJavaToolchains</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="use-java-toolchains.html">useJavaToolchains</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/Property///PointingToDeclaration/">Property</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1455270400%2FProperties%2F769193423" anchor-label="visitors" id="1455270400%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
-          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+<a data-name="1455270400%2FProperties%2F-251573632" anchor-label="visitors" id="1455270400%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="visitors.html"><span><span>visitors</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1455270400%2FProperties%2F769193423"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1455270400%2FProperties%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="visitors.html">visitors</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/ListProperty///PointingToDeclaration/">ListProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to enable visitors (detectors) for analysis. Default is empty that means all visitors run analysis.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="visitors.html">visitors</a><span class="token operator">: </span><span data-unresolved-link="org.gradle.api.provider/ListProperty///PointingToDeclaration/">ListProperty</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Property to enable visitors (detectors) for analysis. Default is empty that means all visitors run analysis.</p></div></div></div>
                 </div>
               </div>
             </div>
