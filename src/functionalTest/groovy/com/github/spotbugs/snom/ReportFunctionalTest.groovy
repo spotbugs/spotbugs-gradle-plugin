@@ -200,7 +200,7 @@ rootProject.name = 'sample-project'
         buildFile << """
 // https://github.com/spotbugs/spotbugs-gradle-plugin/issues/107#issue-408724750
 version = '1.2.3'
-configurations { spotbugsStylesheets { transitive false } }
+configurations { spotbugsStylesheets { transitive = false } }
 dependencies { spotbugsStylesheets 'com.github.spotbugs:spotbugs:3.1.10' }
 
 spotbugsMain {
@@ -378,7 +378,7 @@ spotbugsMain {
     }
 }
 reporting {
-    baseDir "\$buildDir/our-reports"
+    baseDirectory = file("\$buildDir/our-reports")
 }"""
         when:
         def result = gradleRunner
