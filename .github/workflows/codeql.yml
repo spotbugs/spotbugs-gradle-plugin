@@ -26,6 +26,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
+          cache: gradle
           distribution: 'temurin'
           java-version-file: .java-version
       - name: Setup Gradle
