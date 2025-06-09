@@ -129,10 +129,7 @@ internal abstract class SpotBugsRunner {
         }
     }
 
-    private fun generateFile(
-        files: FileCollection,
-        file: File,
-    ) {
+    private fun generateFile(files: FileCollection, file: File) {
         try {
             file.bufferedWriter().use { writer ->
                 files.asSequence()
@@ -153,9 +150,7 @@ internal abstract class SpotBugsRunner {
         return args
     }
 
-    private fun join(files: Collection<File>): String {
-        return files.asSequence()
-            .map { obj: File -> obj.absolutePath }
-            .joinToString(File.pathSeparator)
-    }
+    private fun join(files: Collection<File>): String = files.asSequence()
+        .map { obj: File -> obj.absolutePath }
+        .joinToString(File.pathSeparator)
 }

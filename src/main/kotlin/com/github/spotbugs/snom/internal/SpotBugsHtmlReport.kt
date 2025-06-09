@@ -25,10 +25,8 @@ import org.gradle.api.provider.Property
 import org.gradle.api.resources.TextResource
 import org.gradle.api.resources.TextResourceFactory
 
-internal abstract class SpotBugsHtmlReport @Inject constructor(
-    objects: ObjectFactory,
-    task: SpotBugsTask,
-) : SpotBugsReport(objects, task) {
+internal abstract class SpotBugsHtmlReport @Inject constructor(objects: ObjectFactory, task: SpotBugsTask) :
+    SpotBugsReport(objects, task) {
     private val stylesheet: Property<TextResource>
 
     init {

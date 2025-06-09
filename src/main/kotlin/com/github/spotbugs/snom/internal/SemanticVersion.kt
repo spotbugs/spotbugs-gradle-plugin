@@ -32,16 +32,14 @@ internal class SemanticVersion(version: String) : Comparable<SemanticVersion?> {
         patch = matcher.group(3).toInt(10)
     }
 
-    override operator fun compareTo(other: SemanticVersion?): Int {
-        return Comparator.comparingInt { obj: SemanticVersion -> obj.major }
-            .thenComparingInt { obj: SemanticVersion -> obj.minor }
-            .thenComparingInt { obj: SemanticVersion -> obj.patch }
-            .compare(this, other)
+    override operator fun compareTo(other: SemanticVersion?): Int = Comparator.comparingInt { obj: SemanticVersion ->
+        obj.major
     }
+        .thenComparingInt { obj: SemanticVersion -> obj.minor }
+        .thenComparingInt { obj: SemanticVersion -> obj.patch }
+        .compare(this, other)
 
-    override fun toString(): String {
-        return "SemanticVersion($major.$minor.$patch)"
-    }
+    override fun toString(): String = "SemanticVersion($major.$minor.$patch)"
 
     companion object {
         /**

@@ -18,10 +18,8 @@ import com.github.spotbugs.snom.SpotBugsTask
 import javax.inject.Inject
 import org.gradle.api.model.ObjectFactory
 
-internal abstract class SpotBugsSarifReport @Inject constructor(
-    objects: ObjectFactory,
-    task: SpotBugsTask,
-) : SpotBugsReport(objects, task) {
+internal abstract class SpotBugsSarifReport @Inject constructor(objects: ObjectFactory, task: SpotBugsTask) :
+    SpotBugsReport(objects, task) {
     init {
         // the default reportsDir is "$buildDir/reports/spotbugs/${baseName}.sarif"
         outputLocation.convention(task.reportsDir.file(task.getBaseName() + ".sarif"))

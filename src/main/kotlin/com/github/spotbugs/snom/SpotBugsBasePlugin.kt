@@ -36,8 +36,8 @@ class SpotBugsBasePlugin : Plugin<Project> {
         }
     }
 
-    private fun createExtension(project: Project): SpotBugsExtension {
-        return project.extensions.create(SpotBugsPlugin.EXTENSION_NAME, SpotBugsExtension::class.java).apply {
+    private fun createExtension(project: Project): SpotBugsExtension =
+        project.extensions.create(SpotBugsPlugin.EXTENSION_NAME, SpotBugsExtension::class.java).apply {
             ignoreFailures.convention(false)
             showStackTraces.convention(false)
             projectName.convention(project.provider { project.name })
@@ -58,12 +58,8 @@ class SpotBugsBasePlugin : Plugin<Project> {
             useJavaToolchains.convention(true)
             runOnCheck.convention(true)
         }
-    }
 
-    private fun createConfiguration(
-        project: Project,
-        extension: SpotBugsExtension,
-    ) {
+    private fun createConfiguration(project: Project, extension: SpotBugsExtension) {
         val props = loadProperties()
         extension.toolVersion.convention(props.getProperty("spotbugs-version"))
         val configs = project.configurations

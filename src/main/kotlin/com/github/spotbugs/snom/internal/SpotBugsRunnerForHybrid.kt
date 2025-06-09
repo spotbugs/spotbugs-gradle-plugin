@@ -87,9 +87,8 @@ internal class SpotBugsRunnerForHybrid(
         fun getReports(): ListProperty<RegularFile>
     }
 
-    abstract class SpotBugsExecutor @Inject constructor(
-        private val execOperations: ExecOperations,
-    ) : WorkAction<SpotBugsWorkParameters> {
+    abstract class SpotBugsExecutor @Inject constructor(private val execOperations: ExecOperations) :
+        WorkAction<SpotBugsWorkParameters> {
         private val log = LoggerFactory.getLogger(javaClass)
         private lateinit var stderrOutputScanner: OutputScanner
 
