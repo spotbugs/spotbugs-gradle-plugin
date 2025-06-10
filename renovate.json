@@ -3,10 +3,5 @@
   "extends": [
     "config:recommended"
   ],
-  "packageRules": [
-    {
-      "matchUpdateTypes": ["minor", "patch", "major"],
-      "pinVersions": true
-    }
-  ]
+  "rangeStrategy": "pin"
 }
