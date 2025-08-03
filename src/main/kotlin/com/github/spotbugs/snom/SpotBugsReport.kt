@@ -14,7 +14,6 @@
 package com.github.spotbugs.snom
 
 import groovy.lang.Closure
-import java.io.File
 import javax.inject.Inject
 import org.gradle.api.Action
 import org.gradle.api.file.RegularFileProperty
