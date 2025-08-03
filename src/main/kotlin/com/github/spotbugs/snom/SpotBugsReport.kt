@@ -19,7 +19,6 @@ import org.gradle.api.Action
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
-import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.CustomizableHtmlReport
 import org.gradle.api.reporting.Report
 import org.gradle.api.reporting.SingleFileReport
@@ -47,20 +46,6 @@ abstract class SpotBugsReport @Inject constructor(
 
     @Input
     override fun getRequired(): Property<Boolean> = isRequired
-
-    @get:Deprecated("use `getRequired()` instead.")
-    @get:Internal
-    @set:Deprecated("use `getRequired().set(value)` instead.")
-    var isEnabled: Boolean
-        get() = isRequired.get()
-        set(b) {
-            isRequired.set(b)
-        }
-
-    @Deprecated("use `getRequired().set(provider)` instead.")
-    fun setEnabled(provider: Provider<Boolean>) {
-        isRequired.set(provider)
-    }
 
     override fun configure(closure: Closure<in Report>): Report = configure { report ->
         closure.delegate = report
