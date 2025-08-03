@@ -108,7 +108,7 @@ subprojects {
         setup:
         subBuildFile << """
 spotbugs {
-    toolVersion = '4.0.0-RC1'
+    toolVersion = '4.9.0'
 }
 """
 
@@ -119,6 +119,6 @@ spotbugs {
 
         then:
         SUCCESS == result.task(":sub:spotbugsMain").outcome
-        result.output.contains("spotbugs-4.0.0-RC1.jar")
+        result.output.contains("spotbugs-4.9.0.jar")
     }
 }

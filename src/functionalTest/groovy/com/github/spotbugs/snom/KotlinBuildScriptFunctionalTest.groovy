@@ -106,7 +106,7 @@ dependencies {
         setup:
         buildFile << """
 dependencies {
-    spotbugs("com.github.spotbugs:spotbugs:4.0.0-beta4")
+    spotbugs("com.github.spotbugs:spotbugs:4.9.0")
 }"""
         when:
         BuildResult result = gradleRunner
@@ -115,7 +115,7 @@ dependencies {
 
         then:
         result.task(":classes").outcome == SUCCESS
-        result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
+        result.output.contains("SpotBugs 4.9.0") || result.output.contains("spotbugs-4.9.0.jar")
     }
 
     def "can generate spotbugs.html in configured outputLocation"() {
@@ -143,7 +143,7 @@ tasks.spotbugsMain {
         setup:
         buildFile << """
 dependencies {
-    spotbugs("com.github.spotbugs:spotbugs:4.0.2")
+    spotbugs("com.github.spotbugs:spotbugs:4.9.0")
     compileOnly("com.github.spotbugs:spotbugs-annotations:\${spotbugs.toolVersion.get()}")
 }
 """
@@ -154,6 +154,6 @@ dependencies {
 
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
-        result.output.contains("com.github.spotbugs:spotbugs-annotations:4.0.2")
+        result.output.contains("com.github.spotbugs:spotbugs-annotations:4.9.0")
     }
 }
