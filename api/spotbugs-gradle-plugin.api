@@ -81,7 +81,6 @@ public abstract class com/github/spotbugs/snom/SpotBugsReport : org/gradle/api/r
 	public fun configure (Lgroovy/lang/Closure;)Lorg/gradle/api/reporting/Report;
 	public final fun configure (Lorg/gradle/api/Action;)Lorg/gradle/api/reporting/Report;
 	public abstract fun getCommandLineOption ()Ljava/lang/String;
-	public final fun getDestination ()Ljava/io/File;
 	public fun getDisplayName ()Ljava/lang/String;
 	public fun getOutputLocation ()Lorg/gradle/api/file/RegularFileProperty;
 	public synthetic fun getOutputLocation ()Lorg/gradle/api/provider/Property;
@@ -89,11 +88,6 @@ public abstract class com/github/spotbugs/snom/SpotBugsReport : org/gradle/api/r
 	public fun getRequired ()Lorg/gradle/api/provider/Property;
 	public fun getStylesheet ()Lorg/gradle/api/resources/TextResource;
 	protected final fun getTask ()Lcom/github/spotbugs/snom/SpotBugsTask;
-	public final fun isEnabled ()Z
-	public fun setDestination (Ljava/io/File;)V
-	public final fun setDestination (Lorg/gradle/api/provider/Provider;)V
-	public final fun setEnabled (Lorg/gradle/api/provider/Provider;)V
-	public final fun setEnabled (Z)V
 	public fun setStylesheet (Ljava/lang/String;)V
 	public fun setStylesheet (Lorg/gradle/api/resources/TextResource;)V
 }
