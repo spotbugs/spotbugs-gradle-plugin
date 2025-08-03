@@ -1,5 +1,5 @@
 plugins {
-    id("com.diffplug.spotless")
+    alias(libs.plugins.spotless)
 }
 
 spotless {

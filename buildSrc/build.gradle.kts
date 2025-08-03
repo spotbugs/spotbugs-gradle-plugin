@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    id("com.diffplug.spotless") version "7.2.1"
+    alias(libs.plugins.spotless)
 }
 
 repositories {
@@ -9,10 +9,10 @@ repositories {
 }
 
 dependencies {
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:7.2.1")
-    implementation("net.ltgt.gradle:gradle-errorprone-plugin:4.3.0")
-    implementation("com.gradle.publish:plugin-publish-plugin:1.3.1")
-    implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:6.2.0.5505")
+    implementation(libs.spotless.plugin.gradle)
+    implementation(libs.gradle.errorprone.plugin)
+    implementation(libs.plugin.publish.plugin)
+    implementation(libs.sonarqube.gradle.plugin)
 }
 
 spotless {

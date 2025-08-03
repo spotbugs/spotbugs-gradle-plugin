@@ -6,15 +6,15 @@ plugins {
     groovy
     jacoco
     signing
-    kotlin("jvm") version "2.0.21"
-    id("com.android.lint") version "8.12.0"
-    id("org.jetbrains.dokka") version "2.0.0"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.android.lint)
+    alias(libs.plugins.dokka)
     id("com.github.spotbugs.gradle-plugin")
     id("com.github.spotbugs.plugin-publish")
     id("com.github.spotbugs.test")
     id("org.sonarqube")
-    id("io.gitlab.arturbosch.detekt") version "1.23.8"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.binary.compatibility.validator)
 }
 
 java {
@@ -25,16 +25,12 @@ java {
 
 group = "com.github.spotbugs.snom"
 
-val spotBugsVersion = "4.9.3"
-val slf4jVersion = "2.0.17"
-val androidGradlePluginVersion = "8.12.0"
-
 dependencies {
     compileOnly(localGroovy())
-    compileOnly("com.github.spotbugs:spotbugs:$spotBugsVersion")
-    compileOnly("com.android.tools.build:gradle:$androidGradlePluginVersion")
-    testImplementation("com.tngtech.archunit:archunit:1.4.1")
-    lintChecks("androidx.lint:lint-gradle:1.0.0-alpha05")
+    compileOnly(libs.spotbugs)
+    compileOnly(libs.android.gradle.plugin)
+    testImplementation(libs.archunit)
+    lintChecks(libs.androidx.lint.gradle)
 }
 
 val signingKey: String? = providers.environmentVariable("SIGNING_KEY").orNull
@@ -66,8 +62,8 @@ tasks {
     val processVersionFile by registering(WriteProperties::class) {
         destinationFile = file("src/main/resources/spotbugs-gradle-plugin.properties")
 
-        property("slf4j-version", slf4jVersion)
-        property("spotbugs-version", spotBugsVersion)
+        property("slf4j-version", libs.versions.slf4j.get())
+        property("spotbugs-version", libs.versions.spotbugs.get())
     }
     processResources {
         dependsOn(processVersionFile)

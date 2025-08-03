@@ -1,5 +1,5 @@
 plugins {
-    id("com.gradle.plugin-publish")
+    alias(libs.plugins.plugin.publish)
     `java-gradle-plugin`
     `maven-publish`
 }
