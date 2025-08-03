@@ -14,9 +14,7 @@
 package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.Ignore
-import spock.lang.IgnoreIf
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
@@ -106,7 +104,6 @@ subprojects {
         result.output.contains("spotbugs-4.0.0-RC1.jar")
     }
 
-    @IgnoreIf({ !jvm.java11 })
     def "can use toolVersion in the subproject"() {
         setup:
         subBuildFile << """

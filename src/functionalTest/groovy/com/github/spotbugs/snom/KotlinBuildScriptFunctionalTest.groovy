@@ -14,9 +14,7 @@
 package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.util.GradleVersion
 import spock.lang.Ignore
-import spock.lang.IgnoreIf
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
@@ -50,10 +48,6 @@ public class Foo {
 """
     }
 
-    @IgnoreIf({
-        def current = System.getProperty('gradleVersion', GradleVersion.current().version)
-        return GradleVersion.version(current) < GradleVersion.version("8.2")
-    })
     def "can set params to SpotBugsExtension"() {
         setup:
         buildFile << """
@@ -108,7 +102,6 @@ dependencies {
         !result.output.contains("Trying to add already registered factory")
     }
 
-    @IgnoreIf({ !jvm.java11 })
     def "can use the specified SpotBugs version"() {
         setup:
         buildFile << """
@@ -125,10 +118,6 @@ dependencies {
         result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
     }
 
-    @IgnoreIf({
-        def current = System.getProperty('gradleVersion', GradleVersion.current().version)
-        return GradleVersion.version(current) < GradleVersion.version("8.2")
-    })
     def "can generate spotbugs.html in configured outputLocation"() {
         buildFile << """
 tasks.spotbugsMain {
@@ -150,7 +139,6 @@ tasks.spotbugsMain {
         report.isFile()
     }
 
-    @IgnoreIf({ !jvm.java11 })
     def "can use toolVersion to get the SpotBugs version"() {
         setup:
         buildFile << """

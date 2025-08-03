@@ -15,8 +15,6 @@ package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.util.GradleVersion
-import spock.lang.IgnoreIf
 
 import java.nio.file.Files
 import java.time.Instant
@@ -25,10 +23,6 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
     /**
      * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/662">GitHub Issues</a>
      */
-    @IgnoreIf({
-        def current = System.getProperty('gradleVersion', GradleVersion.current().version)
-        return GradleVersion.version(current) < GradleVersion.version("8.1")
-    })
     def 'spotbugsMain task runs with configuration cache'() {
         given:
         initializeBuildFile(rootDir, Instant.now())
@@ -128,7 +122,6 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
     /**
      * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/914">GitHub Issues</a>
      */
-    @IgnoreIf({ !jvm.java11 })
     def 'spotbugsMain is cacheable even if a stylesheet is set as String for the HTML report'() {
         given:
         def buildFile = new File(rootDir, "build.gradle")
