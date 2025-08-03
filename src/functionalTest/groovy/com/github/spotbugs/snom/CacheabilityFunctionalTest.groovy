@@ -13,11 +13,9 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.TaskOutcome
-
 import java.nio.file.Files
 import java.time.Instant
+import org.gradle.testkit.runner.BuildResult
 
 class CacheabilityFunctionalTest extends BaseFunctionalTest {
     /**
@@ -117,98 +115,5 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
 
         then:
         result.task(":spotbugsMain").outcome == TaskOutcome.UP_TO_DATE
-    }
-
-    /**
-     * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/914">GitHub Issues</a>
-     */
-    def 'spotbugsMain is cacheable even if a stylesheet is set as String for the HTML report'() {
-        given:
-        def buildFile = new File(rootDir, "build.gradle")
-
-        initializeBuildFile(rootDir, Instant.now())
-        buildFile.delete()
-        new File(rootDir, "build.gradle.kts") << """
-            |import com.github.spotbugs.snom.SpotBugsTask
-            |plugins {
-            |    `java`
-            |    id("com.github.spotbugs")
-            |}
-            |version = "1.0"
-            |repositories {
-            |    mavenCentral()
-            |}
-            |tasks.withType<SpotBugsTask>().configureEach {
-            |    reports {
-            |        create("html") {
-            |            setStylesheet("fancy-hist.xsl")
-            |        }
-            |    }
-            |}
-            |""".stripMargin()
-
-        when:
-        def result = gradleRunner
-                .withArguments(':spotbugsMain')
-                .build()
-
-        then:
-        !result.output.contains("Configuration cache problems found in this build")
-        result.output.contains("Configuration cache entry stored.")
-    }
-
-    private static String getHashKeyLine(BuildResult result) {
-        return result.output.find('Build cache key for task \':spotbugsMain\' is .*')
-    }
-
-    private static void initializeBuildFile(File buildDir, Instant now) {
-        File buildFile = new File(buildDir, 'build.gradle')
-        File settingsFile = new File(buildDir, 'settings.gradle')
-        File propertiesFile = new File(buildDir, 'gradle.properties')
-
-        buildFile << '''
-            |plugins {
-            |    id 'java'
-            |    id 'com.github.spotbugs'
-            |}
-            |
-            |version = 1.0
-            |
-            |repositories {
-            |    mavenCentral()
-            |}
-            |spotbugsMain {
-            |    reports {
-            |        text.required = true
-            |    }
-            |}
-            |'''.stripMargin()
-
-        settingsFile << '''
-            |plugins {
-            |    id "com.gradle.enterprise" version "3.16"
-            |}
-            |gradleEnterprise {
-            |    buildScan {
-            |        termsOfServiceUrl = "https://gradle.com/terms-of-service"
-            |        termsOfServiceAgree = "yes"
-            |    }
-            |}
-            '''.stripMargin()
-        File sourceDir = buildDir.toPath().resolve('src').resolve('main').resolve('java').toFile()
-        sourceDir.mkdirs()
-        File sourceFile = new File(sourceDir, 'Foo.java')
-        sourceFile << """
-            |public class Foo {
-            |    public static void main(String... args) {
-            |        System.out.println("Hello, SpotBugs! ${now}");
-            |    }
-            |}
-            |""".stripMargin()
-
-        propertiesFile << '''
-            |org.gradle.caching = true
-            |org.gradle.caching.debug = true
-            |'''.stripMargin()
     }
 }

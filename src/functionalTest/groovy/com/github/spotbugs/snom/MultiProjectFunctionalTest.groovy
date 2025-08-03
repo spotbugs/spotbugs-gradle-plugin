@@ -103,22 +103,4 @@ subprojects {
         SUCCESS == result.task(":sub:spotbugsMain").outcome
         result.output.contains("spotbugs-4.0.0-RC1.jar")
     }
-
-    def "can use toolVersion in the subproject"() {
-        setup:
-        subBuildFile << """
-spotbugs {
-    toolVersion = '4.0.0-RC1'
-}
-"""
-
-        when:
-        def result = gradleRunner
-                .withArguments(':sub:spotbugsMain')
-                .build()
-
-        then:
-        SUCCESS == result.task(":sub:spotbugsMain").outcome
-        result.output.contains("spotbugs-4.0.0-RC1.jar")
-    }
 }

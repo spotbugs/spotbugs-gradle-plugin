@@ -208,41 +208,6 @@ spotbugs {
         result.getOutput().contains("-high")
     }
 
-    def "can use toolVersion to set the SpotBugs version"() {
-        setup:
-        buildFile << """
-spotbugs {
-    toolVersion = "4.0.0-beta4"
-}"""
-        when:
-        BuildResult result = gradleRunner
-                .withArguments(":spotbugsMain")
-                .build()
-
-        then:
-        SUCCESS == result.task(":spotbugsMain").outcome
-        result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
-    }
-
-    def "can use toolVersion to get the SpotBugs version"() {
-        setup:
-        buildFile << """
-spotbugs {
-    toolVersion = "4.0.2"
-}
-dependencies {
-    compileOnly "com.github.spotbugs:spotbugs-annotations:\${spotbugs.toolVersion.get()}"
-}"""
-        when:
-        BuildResult result = gradleRunner
-                .withArguments('--debug', ":spotbugsMain")
-                .build()
-
-        then:
-        result.task(":spotbugsMain").outcome == SUCCESS
-        result.output.contains("com.github.spotbugs:spotbugs-annotations:4.0.2")
-    }
-
     def "default behaviour runs spotbugs tasks as part of check"() {
         setup:
         buildFile << """

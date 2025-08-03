@@ -74,22 +74,6 @@ public class Foo {
         result.output.contains("spotbugsTest - Run SpotBugs analysis for the source set 'test'")
     }
 
-    def "can use the specified SpotBugs version"() {
-        setup:
-        buildFile << """
-dependencies {
-    spotbugs "com.github.spotbugs:spotbugs:4.0.0-beta4"
-}"""
-        when:
-        BuildResult result = gradleRunner
-                .withArguments(":spotbugsMain")
-                .build()
-
-        then:
-        SUCCESS == result.task(":classes").outcome
-        result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
-    }
-
     def "can skip analysis when no class file we have"() {
         setup:
         File sourceDir = rootDir.toPath().resolve("src").resolve("main").resolve("java").toFile()

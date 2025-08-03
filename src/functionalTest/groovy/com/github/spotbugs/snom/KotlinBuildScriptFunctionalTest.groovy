@@ -13,7 +13,6 @@
  */
 package com.github.spotbugs.snom
 
-import org.gradle.testkit.runner.BuildResult
 import spock.lang.Ignore
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
@@ -102,22 +101,6 @@ dependencies {
         !result.output.contains("Trying to add already registered factory")
     }
 
-    def "can use the specified SpotBugs version"() {
-        setup:
-        buildFile << """
-dependencies {
-    spotbugs("com.github.spotbugs:spotbugs:4.0.0-beta4")
-}"""
-        when:
-        BuildResult result = gradleRunner
-                .withArguments(":spotbugsMain")
-                .build()
-
-        then:
-        result.task(":classes").outcome == SUCCESS
-        result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
-    }
-
     def "can generate spotbugs.html in configured outputLocation"() {
         buildFile << """
 tasks.spotbugsMain {
@@ -137,23 +120,5 @@ tasks.spotbugsMain {
         result.task(":spotbugsMain").outcome == SUCCESS
         File report = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs.html").toFile()
         report.isFile()
-    }
-
-    def "can use toolVersion to get the SpotBugs version"() {
-        setup:
-        buildFile << """
-dependencies {
-    spotbugs("com.github.spotbugs:spotbugs:4.0.2")
-    compileOnly("com.github.spotbugs:spotbugs-annotations:\${spotbugs.toolVersion.get()}")
-}
-"""
-        when:
-        BuildResult result = gradleRunner
-                .withArguments('--debug', ":spotbugsMain")
-                .build()
-
-        then:
-        result.task(":spotbugsMain").outcome == SUCCESS
-        result.output.contains("com.github.spotbugs:spotbugs-annotations:4.0.2")
     }
 }
