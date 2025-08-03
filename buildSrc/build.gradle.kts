@@ -20,3 +20,5 @@ spotless {
         ktlint()
     }
 }
+
+enableFeaturePreview("VERSION_CATALOGS")
