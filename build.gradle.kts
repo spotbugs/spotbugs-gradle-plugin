@@ -51,11 +51,11 @@ signing {
 
 tasks {
     withType<JavaCompile> {
-        options.release.set(11)
+        options.release.set(17)
     }
     withType<KotlinCompile>().configureEach {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
+            jvmTarget = JvmTarget.JVM_17
         }
     }
     named<Detekt>("detekt") {

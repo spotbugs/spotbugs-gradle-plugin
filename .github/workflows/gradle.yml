@@ -45,7 +45,7 @@ jobs:
         echo "$PATH"
         echo "Verifying the java version used in class files..."
         cd build/classes/kotlin/main
-        javap -v com.github.spotbugs.snom.SpotBugsPlugin | grep -q 'major version: 55'
+        javap -v com.github.spotbugs.snom.SpotBugsPlugin | grep -q 'major version: 61'
     - name: Run Semantic Release
       run: |
         echo "gradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY }}" > ~/.gradle/gradle.properties
