@@ -41,10 +41,6 @@ abstract class SpotBugsReport @Inject constructor(
 
     abstract val commandLineOption: String
 
-    @Internal
-    @Deprecated("use `getOutputLocation()` instead.")
-    fun getDestination(): File = destination.get().asFile
-
     override fun getOutputLocation(): RegularFileProperty = destination
 
     @Internal("This property returns always same value")
@@ -65,16 +61,6 @@ abstract class SpotBugsReport @Inject constructor(
     @Deprecated("use `getRequired().set(provider)` instead.")
     fun setEnabled(provider: Provider<Boolean>) {
         isRequired.set(provider)
-    }
-
-    @Deprecated("use `getOutputLocation().set(file)` instead.")
-    override fun setDestination(file: File) {
-        destination.set(file)
-    }
-
-    @Deprecated("use `getOutputLocation().set(provider)` instead.")
-    fun setDestination(provider: Provider<File?>) {
-        destination.set(task.project.layout.file(provider))
     }
 
     override fun configure(closure: Closure<in Report>): Report = configure { report ->
