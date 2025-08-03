@@ -13,10 +13,9 @@
  */
 package com.github.spotbugs.snom
 
-import static org.gradle.testkit.runner.TaskOutcome.FAILED
-
 import java.nio.file.Path
 
+import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class ReportFunctionalTest extends BaseFunctionalTest {
