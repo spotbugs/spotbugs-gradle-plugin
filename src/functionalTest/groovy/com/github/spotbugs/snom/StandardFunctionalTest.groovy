@@ -16,7 +16,6 @@ package com.github.spotbugs.snom
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
 import spock.lang.Ignore
-import spock.lang.IgnoreIf
 import spock.lang.Unroll
 
 import java.nio.file.Paths
@@ -75,12 +74,11 @@ public class Foo {
         result.output.contains("spotbugsTest - Run SpotBugs analysis for the source set 'test'")
     }
 
-    @IgnoreIf({ !jvm.java11 })
     def "can use the specified SpotBugs version"() {
         setup:
         buildFile << """
 dependencies {
-    spotbugs "com.github.spotbugs:spotbugs:4.0.0-beta4"
+    spotbugs "com.github.spotbugs:spotbugs:4.9.0"
 }"""
         when:
         BuildResult result = gradleRunner
@@ -89,7 +87,7 @@ dependencies {
 
         then:
         SUCCESS == result.task(":classes").outcome
-        result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
+        result.output.contains("SpotBugs 4.9.0") || result.output.contains("spotbugs-4.9.0.jar")
     }
 
     def "can skip analysis when no class file we have"() {

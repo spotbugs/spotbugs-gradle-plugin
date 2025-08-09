@@ -14,9 +14,7 @@
 package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.util.GradleVersion
 import spock.lang.Ignore
-import spock.lang.IgnoreIf
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
@@ -50,10 +48,6 @@ public class Foo {
 """
     }
 
-    @IgnoreIf({
-        def current = System.getProperty('gradleVersion', GradleVersion.current().version)
-        return GradleVersion.version(current) < GradleVersion.version("8.2")
-    })
     def "can set params to SpotBugsExtension"() {
         setup:
         buildFile << """
@@ -108,12 +102,11 @@ dependencies {
         !result.output.contains("Trying to add already registered factory")
     }
 
-    @IgnoreIf({ !jvm.java11 })
     def "can use the specified SpotBugs version"() {
         setup:
         buildFile << """
 dependencies {
-    spotbugs("com.github.spotbugs:spotbugs:4.0.0-beta4")
+    spotbugs("com.github.spotbugs:spotbugs:4.9.0")
 }"""
         when:
         BuildResult result = gradleRunner
@@ -122,13 +115,9 @@ dependencies {
 
         then:
         result.task(":classes").outcome == SUCCESS
-        result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
+        result.output.contains("SpotBugs 4.9.0") || result.output.contains("spotbugs-4.9.0.jar")
     }
 
-    @IgnoreIf({
-        def current = System.getProperty('gradleVersion', GradleVersion.current().version)
-        return GradleVersion.version(current) < GradleVersion.version("8.2")
-    })
     def "can generate spotbugs.html in configured outputLocation"() {
         buildFile << """
 tasks.spotbugsMain {
@@ -150,12 +139,11 @@ tasks.spotbugsMain {
         report.isFile()
     }
 
-    @IgnoreIf({ !jvm.java11 })
     def "can use toolVersion to get the SpotBugs version"() {
         setup:
         buildFile << """
 dependencies {
-    spotbugs("com.github.spotbugs:spotbugs:4.0.2")
+    spotbugs("com.github.spotbugs:spotbugs:4.9.0")
     compileOnly("com.github.spotbugs:spotbugs-annotations:\${spotbugs.toolVersion.get()}")
 }
 """
@@ -166,6 +154,6 @@ dependencies {
 
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
-        result.output.contains("com.github.spotbugs:spotbugs-annotations:4.0.2")
+        result.output.contains("com.github.spotbugs:spotbugs-annotations:4.9.0")
     }
 }

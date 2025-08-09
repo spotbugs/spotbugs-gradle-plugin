@@ -6,7 +6,7 @@ plugins {
     groovy
     jacoco
     signing
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm") version "2.2.0"
     id("com.android.lint") version "8.12.0"
     id("org.jetbrains.dokka") version "2.0.0"
     id("com.github.spotbugs.gradle-plugin")
@@ -51,11 +51,11 @@ signing {
 
 tasks {
     withType<JavaCompile> {
-        options.release.set(11)
+        options.release.set(17)
     }
     withType<KotlinCompile>().configureEach {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
+            jvmTarget = JvmTarget.JVM_17
         }
     }
     named<Detekt>("detekt") {
