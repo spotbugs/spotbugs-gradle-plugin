@@ -7,7 +7,7 @@ plugins {
     jacoco
     signing
     kotlin("jvm") version "2.2.0"
-    id("com.android.lint") version "8.12.0"
+    id("com.android.lint") version "8.12.1"
     id("org.jetbrains.dokka") version "2.0.0"
     id("com.github.spotbugs.gradle-plugin")
     id("com.github.spotbugs.plugin-publish")
@@ -25,9 +25,9 @@ java {
 
 group = "com.github.spotbugs.snom"
 
-val spotBugsVersion = "4.9.3"
+val spotBugsVersion = "4.9.4"
 val slf4jVersion = "2.0.17"
-val androidGradlePluginVersion = "8.12.0"
+val androidGradlePluginVersion = "8.12.1"
 
 dependencies {
     compileOnly(localGroovy())
