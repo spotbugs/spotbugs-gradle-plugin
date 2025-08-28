@@ -14,7 +14,6 @@
 package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
-import spock.lang.IgnoreIf
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
@@ -209,12 +208,11 @@ spotbugs {
         result.getOutput().contains("-high")
     }
 
-    @IgnoreIf({ !jvm.java11 })
     def "can use toolVersion to set the SpotBugs version"() {
         setup:
         buildFile << """
 spotbugs {
-    toolVersion = "4.0.0-beta4"
+    toolVersion = "4.9.0"
 }"""
         when:
         BuildResult result = gradleRunner
@@ -223,15 +221,14 @@ spotbugs {
 
         then:
         SUCCESS == result.task(":spotbugsMain").outcome
-        result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
+        result.output.contains("SpotBugs 4.9.0") || result.output.contains("spotbugs-4.9.0.jar")
     }
 
-    @IgnoreIf({ !jvm.java11 })
     def "can use toolVersion to get the SpotBugs version"() {
         setup:
         buildFile << """
 spotbugs {
-    toolVersion = "4.0.2"
+    toolVersion = "4.9.0"
 }
 dependencies {
     compileOnly "com.github.spotbugs:spotbugs-annotations:\${spotbugs.toolVersion.get()}"
@@ -243,7 +240,7 @@ dependencies {
 
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
-        result.output.contains("com.github.spotbugs:spotbugs-annotations:4.0.2")
+        result.output.contains("com.github.spotbugs:spotbugs-annotations:4.9.0")
     }
 
     def "default behaviour runs spotbugs tasks as part of check"() {
