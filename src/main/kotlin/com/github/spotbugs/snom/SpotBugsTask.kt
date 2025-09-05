@@ -74,6 +74,7 @@ import org.slf4j.LoggerFactory
  *     effort = 'default'
  *     visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
  *     omitVisitors = [ 'FindNonShortCircuit' ]
+ *     chooseVisitors = [ '-FindNonShortCircuit', '+TestASM' ]
  *     reportsDir = file("$buildDir/reports/spotbugs")
  *     includeFilter = file('spotbugs-include.xml')
  *     excludeFilter = file('spotbugs-exclude.xml')
@@ -146,6 +147,14 @@ abstract class SpotBugsTask :
     abstract val omitVisitors: ListProperty<String>
 
     /**
+     * Property to selectively enable/disable visitors (detectors) for analysis.
+     * Default is empty that means SpotBugs those visitors run which are enabled by default.
+     * This is a list with "+" or "-" before each detectors' name indicating enabling or disabling.
+     */
+    @get:Input
+    abstract val chooseVisitors: ListProperty<String>
+
+    /**
      * Property to set the directory to generate report files. Default is `"$buildDir/reports/spotbugs/$taskName"}`.
      */
     @get:Internal("Refer the destination of each report instead.")
@@ -164,7 +173,7 @@ abstract class SpotBugsTask :
      *
      * Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze,
      * use [onlyAnalyze] instead.
-     * To limit the visitors (detectors) to run, use [visitors] and [omitVisitors] instead.
+     * To limit the visitors (detectors) to run, use [visitors], [omitVisitors] or [chooseVisitors] instead.
      *
      * See also [SpotBugs Manual about Filter file](https://spotbugs.readthedocs.io/en/stable/filter.html).
      */
@@ -178,7 +187,7 @@ abstract class SpotBugsTask :
      *
      * Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze,
      * use [onlyAnalyze] instead.
-     * To limit the visitors (detectors) to run, use [visitors] and [omitVisitors] instead.
+     * To limit the visitors (detectors) to run, use [visitors], [omitVisitors] or [chooseVisitors] instead.
      *
      * See also [SpotBugs Manual about Filter file](https://spotbugs.readthedocs.io/en/stable/filter.html).
      */
@@ -348,6 +357,7 @@ abstract class SpotBugsTask :
         effort.convention(extension.effort)
         visitors.convention(extension.visitors)
         omitVisitors.convention(extension.omitVisitors)
+        chooseVisitors.convention(extension.chooseVisitors)
         // the default reportsDir is "$buildDir/reports/spotbugs/"
         reportsDir.convention(extension.reportsDir)
         includeFilter.convention(extension.includeFilter)

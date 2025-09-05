@@ -35,6 +35,7 @@ import org.gradle.api.provider.Property
  *     reportLevel = com.github.spotbugs.snom.Confidence.DEFAULT
  *     visitors = listOf("FindSqlInjection", "SwitchFallthrough")
  *     omitVisitors = listOf("FindNonShortCircuit")
+ *     chooseVisitors = listOf("-FindNonShortCircuit", "+TestASM")
  *     reportsDir = file("$buildDir/spotbugs")
  *     includeFilter = file("include.xml")
  *     excludeFilter = file("exclude.xml")
@@ -79,6 +80,13 @@ interface SpotBugsExtension {
     val omitVisitors: ListProperty<String>
 
     /**
+     * Property to selectively enable/disable visitors (detectors) for analysis.
+     * Default is empty that means SpotBugs those visitors run which are enabled by default.
+     * This is a list with "+" or "-" before each detectors' name indicating enabling or disabling.
+     */
+    val chooseVisitors: ListProperty<String>
+
+    /**
      * Property to set the directory to generate report files. Default is `"$buildDir/reports/spotbugs"`.
      *
      * Note that each [SpotBugsTask] creates own subdirectory in this directory.
@@ -90,7 +98,7 @@ interface SpotBugsExtension {
      *
      * Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze,
      * use [onlyAnalyze] instead.
-     * To limit the visitors (detectors) to run, use [visitors] and [omitVisitors] instead.
+     * To limit the visitors (detectors) to run, use [visitors], [omitVisitors] or [chooseVisitors] instead.
      *
      * See also [SpotBugs Manual about Filter file](https://spotbugs.readthedocs.io/en/stable/filter.html).
      */
@@ -101,7 +109,7 @@ interface SpotBugsExtension {
      *
      * Note that this property will NOT limit which bug should be detected. To limit the target classes to analyze,
      * use [onlyAnalyze] instead.
-     * To limit the visitors (detectors) to run, use [visitors] and [omitVisitors] instead.
+     * To limit the visitors (detectors) to run, use [visitors], [omitVisitors] or [chooseVisitors] instead.
      *
      * See also [SpotBugs Manual about Filter file](https://spotbugs.readthedocs.io/en/stable/filter.html).
      */

@@ -39,6 +39,7 @@ public final class com/github/spotbugs/snom/SpotBugsBasePlugin$Companion {
 
 public abstract interface class com/github/spotbugs/snom/SpotBugsExtension {
 	public abstract fun getBaselineFile ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getChooseVisitors ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getEffort ()Lorg/gradle/api/provider/Property;
 	public abstract fun getExcludeFilter ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getExtraArgs ()Lorg/gradle/api/provider/ListProperty;
@@ -105,6 +106,7 @@ public abstract class com/github/spotbugs/snom/SpotBugsTask : org/gradle/api/Def
 	public abstract fun getAuxclasspathFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public final fun getBaseName ()Ljava/lang/String;
 	public abstract fun getBaselineFile ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getChooseVisitors ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getClassDirs ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public final fun getClasses ()Lorg/gradle/api/file/FileCollection;
 	public abstract fun getEffort ()Lorg/gradle/api/provider/Property;
