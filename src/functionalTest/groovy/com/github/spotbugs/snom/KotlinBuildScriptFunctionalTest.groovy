@@ -65,6 +65,7 @@ spotbugs {
     reportLevel = "DEFAULT"
     visitors = listOf("FindSqlInjection", "SwitchFallthrough")
     omitVisitors = listOf("FindNonShortCircuit")
+    chooseVisitors = listOf("-FindNonShortCircuit", "+TestASM")
     reportsDir = file("\$buildDir/spotbugs")
     includeFilter = file("include.xml")
     excludeFilter = file("exclude.xml")

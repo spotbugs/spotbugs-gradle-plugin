@@ -78,6 +78,10 @@ internal abstract class SpotBugsRunner {
             add("-omitVisitors")
             add(task.omitVisitors.get().joinToString(","))
         }
+        if (task.chooseVisitors.isPresent && task.chooseVisitors.get().isNotEmpty()) {
+            add("-chooseVisitors")
+            add(task.chooseVisitors.get().joinToString(","))
+        }
         if (task.includeFilter.isPresent) {
             add("-include")
             add(task.includeFilter.get().asFile.absolutePath)

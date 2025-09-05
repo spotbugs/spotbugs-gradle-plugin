@@ -141,6 +141,21 @@ spotbugs {
         result.getOutput().contains("-omitVisitors, FindSqlInjection,SwitchFallthrough,")
     }
 
+    def "can use chooseVisitors"() {
+        buildFile << """
+spotbugs {
+    chooseVisitors = [ '-FindSqlInjection', '+TestASM' ]
+}"""
+        when:
+        def result = gradleRunner
+                .withArguments('--debug', 'spotbugsMain')
+                .build()
+
+        then:
+        SUCCESS == result.task(":spotbugsMain").outcome
+        result.getOutput().contains("-chooseVisitors, -FindSqlInjection,+TestASM,")
+    }
+
     def "can use onlyAnalyze"() {
         buildFile << """
 spotbugs {

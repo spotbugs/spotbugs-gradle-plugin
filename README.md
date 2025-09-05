@@ -41,6 +41,7 @@ spotbugs {
     reportLevel = Confidence.DEFAULT
     visitors = listOf("FindSqlInjection", "SwitchFallthrough")
     omitVisitors = listOf("FindNonShortCircuit")
+    chooseVisitors = listOf("-FindNonShortCircuit", "+TestASM")
     reportsDir = file("$buildDir/spotbugs")
     includeFilter = file("include.xml")
     excludeFilter = file("exclude.xml")
@@ -70,6 +71,7 @@ spotbugs {
 
     visitors = [ 'FindSqlInjection', 'SwitchFallthrough' ]
     omitVisitors = [ 'FindNonShortCircuit' ]
+    chooseVisitors = [ '-FindNonShortCircuit', '+TestASM' ]
     reportsDir = file("$buildDir/spotbugs")
     includeFilter = file("include.xml")
     excludeFilter = file("exclude.xml")
