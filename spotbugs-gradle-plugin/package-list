@@ -28,6 +28,7 @@ $dokka.location:com.github.spotbugs.snom/SpotBugsBasePlugin/loadProperties/#/Poi
 $dokka.location:com.github.spotbugs.snom/SpotBugsBasePlugin/verifyGradleVersion/#org.gradle.util.GradleVersion/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-base-plugin/verify-gradle-version.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsExtension///PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/index.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsExtension/baselineFile/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/baseline-file.html
+$dokka.location:com.github.spotbugs.snom/SpotBugsExtension/chooseVisitors/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/choose-visitors.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsExtension/effort/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/effort.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsExtension/excludeFilter/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/exclude-filter.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsExtension/extraArgs/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-extension/extra-args.html
@@ -79,6 +80,7 @@ $dokka.location:com.github.spotbugs.snom/SpotBugsTask/analyseClassFile/#/Pointin
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/auxClassPaths/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/aux-class-paths.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/auxclasspathFile/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/auxclasspath-file.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/baselineFile/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/baseline-file.html
+$dokka.location:com.github.spotbugs.snom/SpotBugsTask/chooseVisitors/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/choose-visitors.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/classDirs/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/class-dirs.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/classes/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/classes.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/effort/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/effort.html
