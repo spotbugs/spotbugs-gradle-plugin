@@ -178,6 +178,7 @@ You can change SpotBugs version by [the `toolVersion` property of the spotbugs e
 
 | Gradle Plugin | SpotBugs |
 |--------------:|---------:|
+|        6.2.4  |    4.9.4 |
 |        6.2.0  |    4.9.3 |
 |        6.1.13 |    4.8.6 |
 |        6.0.18 |    4.8.6 |
