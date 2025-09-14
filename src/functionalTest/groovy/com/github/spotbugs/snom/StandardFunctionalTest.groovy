@@ -416,7 +416,7 @@ public class Foo {
         given:
         buildFile << """
 dependencies{
-  spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'
+  spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0'
 }"""
         when:
         BuildResult result = gradleRunner
@@ -437,7 +437,7 @@ spotbugs {
   ignoreFailures = true
 }
 dependencies {
-  spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0'
+  spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0'
 }"""
 
         File testDir = rootDir.toPath().resolve(Paths.get("src", "test", "java")).toFile()
