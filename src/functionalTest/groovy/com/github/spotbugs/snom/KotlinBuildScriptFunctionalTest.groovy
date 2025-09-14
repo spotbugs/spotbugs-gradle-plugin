@@ -14,7 +14,6 @@
 package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.util.GradleVersion
 import spock.lang.Ignore
 import spock.lang.IgnoreIf
 
@@ -50,10 +49,6 @@ public class Foo {
 """
     }
 
-    @IgnoreIf({
-        def current = System.getProperty('gradleVersion', GradleVersion.current().version)
-        return GradleVersion.version(current) < GradleVersion.version("8.2")
-    })
     def "can set params to SpotBugsExtension"() {
         setup:
         buildFile << """
@@ -126,10 +121,6 @@ dependencies {
         result.output.contains("SpotBugs 4.9.4") || result.output.contains("spotbugs-4.9.4.jar")
     }
 
-    @IgnoreIf({
-        def current = System.getProperty('gradleVersion', GradleVersion.current().version)
-        return GradleVersion.version(current) < GradleVersion.version("8.2")
-    })
     def "can generate spotbugs.html in configured outputLocation"() {
         buildFile << """
 tasks.spotbugsMain {

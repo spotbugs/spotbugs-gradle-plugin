@@ -15,7 +15,6 @@ package com.github.spotbugs.snom
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.TaskOutcome
-import org.gradle.util.GradleVersion
 import spock.lang.IgnoreIf
 
 import java.nio.file.Files
@@ -25,10 +24,6 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
     /**
      * @see <a href="https://github.com/spotbugs/spotbugs-gradle-plugin/issues/662">GitHub Issues</a>
      */
-    @IgnoreIf({
-        def current = System.getProperty('gradleVersion', GradleVersion.current().version)
-        return GradleVersion.version(current) < GradleVersion.version("8.1")
-    })
     def 'spotbugsMain task runs with configuration cache'() {
         given:
         initializeBuildFile(rootDir, Instant.now())
