@@ -31,7 +31,7 @@ repositories {
   mavenCentral()
 }
 dependencies {
-  spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.0")
+  spotbugsPlugins("com.mebigfatguy.sb-contrib:sb-contrib:7.6.14")
 }
         """
         Path sourceDir = rootDir.toPath().resolve("src").resolve("main").resolve("java")
@@ -46,7 +46,7 @@ public class Foo {
 """
     }
 
-    def "can build with the sb-contrib 7-6-0"() {
+    def "can build with the sb-contrib 7-6-14"() {
         when:
         BuildResult result = gradleRunner
                 .withArguments("check")
