@@ -80,7 +80,7 @@ public class Foo {
         setup:
         buildFile << """
 dependencies {
-    spotbugs "com.github.spotbugs:spotbugs:4.0.0-beta4"
+    spotbugs "com.github.spotbugs:spotbugs:4.9.4"
 }"""
         when:
         BuildResult result = gradleRunner
@@ -89,7 +89,7 @@ dependencies {
 
         then:
         SUCCESS == result.task(":classes").outcome
-        result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
+        result.output.contains("SpotBugs 4.9.4") || result.output.contains("spotbugs-4.9.4.jar")
     }
 
     def "can skip analysis when no class file we have"() {
