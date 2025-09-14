@@ -1,2 +1,10 @@
-gradle/spotless.sh
+# Cross-platform Spotless hook
+if [ "$(uname | grep -i 'mingw\|cygwin\|msys')" ]; then
+  # Windows (Git Bash, Cygwin, MSYS)
+  exec gradle/spotless.bat
+else
+  # Unix-like
+  exec gradle/spotless.sh
+fi
+
 npx --no-install lint-staged
