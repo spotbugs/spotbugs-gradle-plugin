@@ -229,7 +229,7 @@ spotbugs {
         setup:
         buildFile << """
 spotbugs {
-    toolVersion = "4.0.0-beta4"
+    toolVersion = "4.9.4"
 }"""
         when:
         BuildResult result = gradleRunner
@@ -238,7 +238,7 @@ spotbugs {
 
         then:
         SUCCESS == result.task(":spotbugsMain").outcome
-        result.output.contains("SpotBugs 4.0.0-beta4") || result.output.contains("spotbugs-4.0.0-beta4.jar")
+        result.output.contains("SpotBugs 4.9.4") || result.output.contains("spotbugs-4.9.4.jar")
     }
 
     @IgnoreIf({ !jvm.java11 })
@@ -246,7 +246,7 @@ spotbugs {
         setup:
         buildFile << """
 spotbugs {
-    toolVersion = "4.0.2"
+    toolVersion = "4.9.4"
 }
 dependencies {
     compileOnly "com.github.spotbugs:spotbugs-annotations:\${spotbugs.toolVersion.get()}"
@@ -258,7 +258,7 @@ dependencies {
 
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
-        result.output.contains("com.github.spotbugs:spotbugs-annotations:4.0.2")
+        result.output.contains("com.github.spotbugs:spotbugs-annotations:4.9.4")
     }
 
     def "default behaviour runs spotbugs tasks as part of check"() {
