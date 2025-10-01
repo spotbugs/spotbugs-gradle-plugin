@@ -39,7 +39,7 @@ jobs:
           distribution: 'temurin'
           java-version-file: .java-version
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
+        uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4
       - name: Scan the project
         run: ./gradlew detekt --scan
       - name: Upload SARIF file
