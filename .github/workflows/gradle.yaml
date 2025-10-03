@@ -41,7 +41,7 @@ jobs:
         cache: npm
       if: matrix.gradle == '8.14.3' && matrix.os == 'ubuntu-latest'
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@748248ddd2a24f49513d8f472f81c3a07d4d50e1 # v4
+      uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
     - name: Build the project
       run: ./gradlew build -P"snom.test.functional.gradle=${{ matrix.gradle }}" --scan
     - name: Verify class files
