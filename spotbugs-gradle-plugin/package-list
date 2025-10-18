@@ -62,6 +62,7 @@ $dokka.location:com.github.spotbugs.snom/SpotBugsReport/SpotBugsReport/#org.grad
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/commandLineOption/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/command-line-option.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/configure/#groovy.lang.Closure[org.gradle.api.reporting.Report]/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/configure.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/configure/#org.gradle.api.Action[org.gradle.api.reporting.Report]/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/configure.html
+$dokka.location:com.github.spotbugs.snom/SpotBugsReport/displayName/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/display-name.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/getDestination/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/get-destination.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/getDisplayName/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/get-display-name.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/getOutputLocation/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/get-output-location.html
@@ -69,11 +70,15 @@ $dokka.location:com.github.spotbugs.snom/SpotBugsReport/getOutputType/#/Pointing
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/getRequired/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/get-required.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/getStylesheet/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/get-stylesheet.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/isEnabled/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/is-enabled.html
+$dokka.location:com.github.spotbugs.snom/SpotBugsReport/outputLocation/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/output-location.html
+$dokka.location:com.github.spotbugs.snom/SpotBugsReport/outputType/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/output-type.html
+$dokka.location:com.github.spotbugs.snom/SpotBugsReport/required/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/required.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/setDestination/#java.io.File/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/set-destination.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/setDestination/#org.gradle.api.provider.Provider[java.io.File?]/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/set-destination.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/setEnabled/#org.gradle.api.provider.Provider[kotlin.Boolean]/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/set-enabled.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/setStylesheet/#kotlin.String?/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/set-stylesheet.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsReport/setStylesheet/#org.gradle.api.resources.TextResource?/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/set-stylesheet.html
+$dokka.location:com.github.spotbugs.snom/SpotBugsReport/stylesheet/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-report/stylesheet.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask///PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/index.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/SpotBugsTask/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/-spot-bugs-task.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/analyseClassFile/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/analyse-class-file.html
@@ -89,6 +94,7 @@ $dokka.location:com.github.spotbugs.snom/SpotBugsTask/execOps/#/PointingToDeclar
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/extraArgs/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/extra-args.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/getBaseName/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/get-base-name.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/getIgnoreFailures/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/get-ignore-failures.html
+$dokka.location:com.github.spotbugs.snom/SpotBugsTask/ignoreFailures/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/ignore-failures.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/includeFilter/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/include-filter.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/init/#com.github.spotbugs.snom.SpotBugsExtension#kotlin.Boolean/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/init.html
 $dokka.location:com.github.spotbugs.snom/SpotBugsTask/jvmArgs/#/PointingToDeclaration/spotbugs-gradle-plugin/com.github.spotbugs.snom/-spot-bugs-task/jvm-args.html

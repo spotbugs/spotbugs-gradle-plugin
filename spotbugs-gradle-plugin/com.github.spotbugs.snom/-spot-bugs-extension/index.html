@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>SpotBugsExtension</title>
     <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
-    <script>var pathToRoot = "../../../";</script>
-    <script>document.documentElement.classList.replace("no-js","js");</script>
+        <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
-    if (storage == null) {
+      if (storage == null) {
         const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
         if (osDarkSchemePreferred === true) {
-            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
-    } else {
+      } else {
         const savedDarkMode = JSON.parse(storage)
-        if(savedDarkMode === true) {
-            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
-    }
+      }
     </script>
 <script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
 <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
@@ -25,20 +25,18 @@
 <link href="../../../styles/main.css" rel="Stylesheet">
 <link href="../../../styles/prism.css" rel="Stylesheet">
 <link href="../../../styles/logo-styles.css" rel="Stylesheet">
-<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
 <link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
-<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
 <script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
 <script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
 <script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
 <script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
 <script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer="defer"></script>
-<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
 </head>
 <body>
-    <div class="root">
-    <nav class="navigation theme-dark" id="navigation-wrapper">
-            <a class="library-name--link" href="../../../index.html">
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../../index.html" tabindex="1">
                     spotbugs-gradle-plugin
             </a>
         <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
@@ -48,8 +46,8 @@
         <div class="library-version" id="library-version">
         </div>
         <div class="navigation-controls">
-        <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active=""
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
                         data-filter=":/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
@@ -59,9 +57,9 @@
                         aria-expanded="false"
                         aria-label="Toggle source sets"
                 ></button>
-                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
-                    <div class="dropdown--header"><span>Platform filter</span>
-                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
                             <i class="ui-kit-icon ui-kit-icon_cross"></i>
                         </button>
                     </div>
@@ -76,7 +74,7 @@
                 </ul>
                 <div class="dropdown--overlay"></div>
             </div>
-        </div>
+        </ul>
             <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
                     type="button">Switch theme
             </button>
@@ -84,39 +82,41 @@
                 API
             </div>
         </div>
-    </nav>
-        <div id="container">
-            <div class="sidebar" id="leftColumn">
-                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
-                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
-                        data-role="dropdown-listbox">
-                        <div class="dropdown--header">
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
                             <span>
                                     spotbugs-gradle-plugin
                             </span>
-                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
-                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
-                            </button>
-                        </div>
-                        <div class="sidebar--inner" id="sideMenu"></div>
-                    </ul>
-                    <div class="dropdown--overlay"></div>
-                </div>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
             </div>
-            <div id="main">
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
 <div class="main-content" data-page-type="classlike" id="content" pageIds="spotbugs-gradle-plugin::com.github.spotbugs.snom/SpotBugsExtension///PointingToDeclaration//-251573632">
   <div class="breadcrumbs"><a href="../../../index.html">spotbugs-gradle-plugin</a><span class="delimiter">/</span><a href="../index.html">com.github.spotbugs.snom</a><span class="delimiter">/</span><span class="current">SpotBugsExtension</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Spot</span><wbr></wbr><span>Bugs</span><wbr></wbr><span><span>Extension</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">SpotBugsExtension</a></div><p class="paragraph"><a href="index.html">SpotBugsExtension</a> is an extension used to set up the SpotBugs Gradle plugin. All properties in this extension act as default properties for all instances of <a href="../-spot-bugs-task/index.html">SpotBugsTask</a> are optional.</p><h3 class="">Usage</h3><p class="paragraph">Once you've applied the SpotBugs Gradle plugin to your project, configure it as shown below:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">// Required: Gradle 8.2 or higher<br>spotbugs {<br>    ignoreFailures = false<br>    showStackTraces = true<br>    showProgress = true<br>    effort = com.github.spotbugs.snom.Effort.DEFAULT<br>    reportLevel = com.github.spotbugs.snom.Confidence.DEFAULT<br>    visitors = listOf(&quot;FindSqlInjection&quot;, &quot;SwitchFallthrough&quot;)<br>    omitVisitors = listOf(&quot;FindNonShortCircuit&quot;)<br>    chooseVisitors = listOf(&quot;-FindNonShortCircuit&quot;, &quot;+TestASM&quot;)<br>    reportsDir = file(&quot;$buildDir/spotbugs&quot;)<br>    includeFilter = file(&quot;include.xml&quot;)<br>    excludeFilter = file(&quot;exclude.xml&quot;)<br>    baselineFile = file(&quot;baseline.xml&quot;)<br>    onlyAnalyze = listOf(&quot;com.foobar.MyClass&quot;, &quot;com.foobar.mypkg.*&quot;)<br>    maxHeapSize = &quot;1g&quot;<br>    extraArgs = listOf(&quot;-nested:false&quot;)<br>    jvmArgs = listOf(&quot;-Duser.language=ja&quot;)<br>    runOnCheck = true<br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">SpotBugsExtension</a></div><p class="paragraph"><a href="index.html">SpotBugsExtension</a> is an extension used to set up the SpotBugs Gradle plugin. All properties in this extension act as default properties for all instances of <a href="../-spot-bugs-task/index.html">SpotBugsTask</a> are optional.</p><h3 class="">Usage</h3><p class="paragraph">Once you've applied the SpotBugs Gradle plugin to your project, configure it as shown below:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">// Required: Gradle 8.2 or higher<br>spotbugs {<br>    ignoreFailures = false<br>    showStackTraces = true<br>    showProgress = true<br>    effort = com.github.spotbugs.snom.Effort.DEFAULT<br>    reportLevel = com.github.spotbugs.snom.Confidence.DEFAULT<br>    visitors = listOf(&quot;FindSqlInjection&quot;, &quot;SwitchFallthrough&quot;)<br>    omitVisitors = listOf(&quot;FindNonShortCircuit&quot;)<br>    chooseVisitors = listOf(&quot;-FindNonShortCircuit&quot;, &quot;+TestASM&quot;)<br>    reportsDir = file(&quot;$buildDir/spotbugs&quot;)<br>    includeFilter = file(&quot;include.xml&quot;)<br>    excludeFilter = file(&quot;exclude.xml&quot;)<br>    baselineFile = file(&quot;baseline.xml&quot;)<br>    onlyAnalyze = listOf(&quot;com.foobar.MyClass&quot;, &quot;com.foobar.mypkg.*&quot;)<br>    maxHeapSize = &quot;1g&quot;<br>    extraArgs = listOf(&quot;-nested:false&quot;)<br>    jvmArgs = listOf(&quot;-Duser.language=ja&quot;)<br>    runOnCheck = true<br>}</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><p class="paragraph">See also <a href="https://spotbugs.readthedocs.io/en/stable/running.html">SpotBugs Manual about configuration</a>.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="PROPERTY">
-        <h2 class="">Properties</h2>
+        <h2 class="tableheader">Properties</h2>
         <div class="table"><a data-name="704049636%2FProperties%2F-251573632" anchor-label="baselineFile" id="704049636%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="baseline-file.html"><span>baseline</span><wbr></wbr><span><span>File</span></span></a></div>
@@ -131,7 +131,7 @@
             </div>
           </div>
 <a data-name="935077033%2FProperties%2F-251573632" anchor-label="chooseVisitors" id="935077033%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="choose-visitors.html"><span>choose</span><wbr></wbr><span><span>Visitors</span></span></a></div>
@@ -146,7 +146,7 @@
             </div>
           </div>
 <a data-name="1757652665%2FProperties%2F-251573632" anchor-label="effort" id="1757652665%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="effort.html"><span><span>effort</span></span></a></div>
@@ -161,7 +161,7 @@
             </div>
           </div>
 <a data-name="1569113763%2FProperties%2F-251573632" anchor-label="excludeFilter" id="1569113763%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="exclude-filter.html"><span>exclude</span><wbr></wbr><span><span>Filter</span></span></a></div>
@@ -176,7 +176,7 @@
             </div>
           </div>
 <a data-name="1245802472%2FProperties%2F-251573632" anchor-label="extraArgs" id="1245802472%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="extra-args.html"><span>extra</span><wbr></wbr><span><span>Args</span></span></a></div>
@@ -191,7 +191,7 @@
             </div>
           </div>
 <a data-name="914641514%2FProperties%2F-251573632" anchor-label="ignoreFailures" id="914641514%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="ignore-failures.html"><span>ignore</span><wbr></wbr><span><span>Failures</span></span></a></div>
@@ -206,7 +206,7 @@
             </div>
           </div>
 <a data-name="507704853%2FProperties%2F-251573632" anchor-label="includeFilter" id="507704853%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="include-filter.html"><span>include</span><wbr></wbr><span><span>Filter</span></span></a></div>
@@ -221,7 +221,7 @@
             </div>
           </div>
 <a data-name="-1278614793%2FProperties%2F-251573632" anchor-label="jvmArgs" id="-1278614793%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="jvm-args.html"><span>jvm</span><wbr></wbr><span><span>Args</span></span></a></div>
@@ -236,7 +236,7 @@
             </div>
           </div>
 <a data-name="-1340987932%2FProperties%2F-251573632" anchor-label="maxHeapSize" id="-1340987932%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="max-heap-size.html"><span>max</span><wbr></wbr><span>Heap</span><wbr></wbr><span><span>Size</span></span></a></div>
@@ -251,7 +251,7 @@
             </div>
           </div>
 <a data-name="1251405687%2FProperties%2F-251573632" anchor-label="omitVisitors" id="1251405687%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="omit-visitors.html"><span>omit</span><wbr></wbr><span><span>Visitors</span></span></a></div>
@@ -266,7 +266,7 @@
             </div>
           </div>
 <a data-name="-14088619%2FProperties%2F-251573632" anchor-label="onlyAnalyze" id="-14088619%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="only-analyze.html"><span>only</span><wbr></wbr><span><span>Analyze</span></span></a></div>
@@ -281,7 +281,7 @@
             </div>
           </div>
 <a data-name="1611420049%2FProperties%2F-251573632" anchor-label="projectName" id="1611420049%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="project-name.html"><span>project</span><wbr></wbr><span><span>Name</span></span></a></div>
@@ -296,7 +296,7 @@
             </div>
           </div>
 <a data-name="-126956498%2FProperties%2F-251573632" anchor-label="release" id="-126956498%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="release.html"><span><span>release</span></span></a></div>
@@ -311,7 +311,7 @@
             </div>
           </div>
 <a data-name="-1366748763%2FProperties%2F-251573632" anchor-label="reportLevel" id="-1366748763%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="report-level.html"><span>report</span><wbr></wbr><span><span>Level</span></span></a></div>
@@ -326,7 +326,7 @@
             </div>
           </div>
 <a data-name="-24012905%2FProperties%2F-251573632" anchor-label="reportsDir" id="-24012905%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="reports-dir.html"><span>reports</span><wbr></wbr><span><span>Dir</span></span></a></div>
@@ -341,7 +341,7 @@
             </div>
           </div>
 <a data-name="970056327%2FProperties%2F-251573632" anchor-label="runOnCheck" id="970056327%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="run-on-check.html"><span>run</span><wbr></wbr><span>On</span><wbr></wbr><span><span>Check</span></span></a></div>
@@ -356,7 +356,7 @@
             </div>
           </div>
 <a data-name="1956399899%2FProperties%2F-251573632" anchor-label="showProgress" id="1956399899%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="show-progress.html"><span>show</span><wbr></wbr><span><span>Progress</span></span></a></div>
@@ -371,7 +371,7 @@
             </div>
           </div>
 <a data-name="-581182660%2FProperties%2F-251573632" anchor-label="showStackTraces" id="-581182660%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="show-stack-traces.html"><span>show</span><wbr></wbr><span>Stack</span><wbr></wbr><span><span>Traces</span></span></a></div>
@@ -386,7 +386,7 @@
             </div>
           </div>
 <a data-name="674051637%2FProperties%2F-251573632" anchor-label="toolVersion" id="674051637%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="tool-version.html"><span>tool</span><wbr></wbr><span><span>Version</span></span></a></div>
@@ -401,7 +401,7 @@
             </div>
           </div>
 <a data-name="-1044185671%2FProperties%2F-251573632" anchor-label="useAuxclasspathFile" id="-1044185671%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="use-auxclasspath-file.html"><span>use</span><wbr></wbr><span>Auxclasspath</span><wbr></wbr><span><span>File</span></span></a></div>
@@ -416,7 +416,7 @@
             </div>
           </div>
 <a data-name="2080199970%2FProperties%2F-251573632" anchor-label="useJavaToolchains" id="2080199970%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="use-java-toolchains.html"><span>use</span><wbr></wbr><span>Java</span><wbr></wbr><span><span>Toolchains</span></span></a></div>
@@ -431,7 +431,7 @@
             </div>
           </div>
 <a data-name="1455270400%2FProperties%2F-251573632" anchor-label="visitors" id="1455270400%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row" data-filterable-current=":/main" data-filterable-set=":/main">
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="visitors.html"><span><span>visitors</span></span></a></div>
@@ -451,17 +451,21 @@
   </div>
 </div>
     <div class="footer">
-        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
-        <span>© 2025 Copyright</span>
-        <span class="pull-right">
-            <span>Generated by </span>
-            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
-                <span>dokka</span>
-            </a>
-        </span>
-    </div>
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2025 Copyright</div>
+                </div>
             </div>
         </div>
     </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
