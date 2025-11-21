@@ -94,7 +94,7 @@ internal abstract class SpotBugsRunner {
             add("-excludeBugs")
             add(task.baselineFile.get().asFile.absolutePath)
         }
-        if (task.onlyAnalyze.isPresent) {
+        if (task.onlyAnalyze.isPresent && task.onlyAnalyze.get().isNotEmpty()) {
             add("-onlyAnalyze")
             add(task.onlyAnalyze.get().joinToString(","))
         }

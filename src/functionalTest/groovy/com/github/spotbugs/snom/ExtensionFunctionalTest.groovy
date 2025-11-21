@@ -307,4 +307,19 @@ spotbugs {
         then:
         result.task(":spotbugsMain").outcome == SUCCESS
     }
+
+    def "issue1432: onlyAnalyze is empty"() {
+        buildFile << """
+spotbugs {
+    onlyAnalyze = []
+}"""
+        when:
+        def result = gradleRunner
+                .withArguments('--debug', 'spotbugsMain')
+                .build()
+
+        then:
+        SUCCESS == result.task(":spotbugsMain").outcome
+        !result.getOutput().contains("-onlyAnalyze")
+    }
 }
