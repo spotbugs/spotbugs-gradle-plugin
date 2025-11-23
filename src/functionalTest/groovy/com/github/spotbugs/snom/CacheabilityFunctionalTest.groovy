@@ -157,6 +157,50 @@ class CacheabilityFunctionalTest extends BaseFunctionalTest {
         result.output.contains("Configuration cache entry stored.")
     }
 
+    def "toolVersion is used as input for up-to-date checks"() {
+        setup:
+        given:
+        def buildFile = new File(rootDir, "build.gradle")
+
+        initializeBuildFile(rootDir, Instant.now())
+        buildFile.write """
+            |plugins {
+            |    id 'java'
+            |    id 'com.github.spotbugs'
+            |}
+            |
+            |version = 1.0
+            |
+            |repositories {
+            |    mavenCentral()
+            |}
+            |
+            |spotbugs {
+            |    toolVersion = project.property('toolVersion').toString()
+            |}
+            |""".stripMargin()
+
+        when:
+        def versionFirstRun = "4.8.2"
+        BuildResult firstRun = gradleRunner
+                .withArguments(":spotbugsMain", "-PtoolVersion=$versionFirstRun")
+                .build()
+
+        then:
+        TaskOutcome.SUCCESS == firstRun.task(":spotbugsMain").outcome
+        firstRun.output.contains("spotbugs/$versionFirstRun")
+
+        when:
+        def versionSecondRun = "4.8.3"
+        BuildResult secondRun = gradleRunner
+                .withArguments(":spotbugsMain", "-PtoolVersion=$versionSecondRun")
+                .build()
+
+        then:
+        TaskOutcome.SUCCESS == secondRun.task(":spotbugsMain").outcome
+        secondRun.output.contains("spotbugs/$versionSecondRun")
+    }
+
     private static String getHashKeyLine(BuildResult result) {
         return result.output.find('Build cache key for task \':spotbugsMain\' is .*')
     }
