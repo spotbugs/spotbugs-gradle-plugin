@@ -410,6 +410,7 @@ abstract class SpotBugsTask :
     /**
      * Function defined to keep the backward compatibility with [org.gradle.api.reporting.Reporting] interface.
      */
+    @Suppress("unused")
     fun reports(
         configureAction: Action<NamedDomainObjectContainer<SpotBugsReport>>,
     ): NamedDomainObjectContainer<SpotBugsReport> {
@@ -433,5 +434,5 @@ abstract class SpotBugsTask :
     @Internal
     internal fun getRequiredReports(): Sequence<SpotBugsReport> = reports.matching {
         it.required.get()
-    }.asMap.values.asSequence()
+    }.asSequence()
 }

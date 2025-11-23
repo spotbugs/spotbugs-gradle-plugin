@@ -473,4 +473,25 @@ spotbugsMain {
         Path reportDir = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs")
         !reportDir.resolve("main.xml").toFile().isFile()
     }
+
+    def "can lazily register report"() {
+        buildFile << """
+spotbugsMain {
+    reports {
+        register('xml') {
+            required = true
+        }
+    }
+}"""
+        when:
+        def result = gradleRunner
+                .withArguments('spotbugsMain')
+                .build()
+
+        then:
+        SUCCESS == result.task(":spotbugsMain").outcome
+
+        Path reportDir = rootDir.toPath().resolve("build").resolve("reports").resolve("spotbugs")
+        reportDir.resolve("main.xml").toFile().isFile()
+    }
 }
