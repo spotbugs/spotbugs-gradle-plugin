@@ -4,7 +4,7 @@
     "@commitlint/cli": "20.1.0",
     "@commitlint/config-conventional": "20.0.0",
     "conventional-changelog-conventionalcommits": "9.1.0",
-    "gradle-semantic-release-plugin": "1.10.1",
+    "gradle-semantic-release-plugin": "1.10.2",
     "husky": "9.1.7",
     "lint-staged": "16.2.7",
     "pinst": "3.0.0",
