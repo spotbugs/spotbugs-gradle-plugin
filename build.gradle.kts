@@ -6,7 +6,7 @@ plugins {
     groovy
     jacoco
     signing
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm") version "2.3.0"
     id("com.android.lint") version "8.13.2"
     id("org.jetbrains.dokka") version "2.1.0"
     id("com.github.spotbugs.gradle-plugin")
