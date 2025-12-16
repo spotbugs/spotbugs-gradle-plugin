@@ -43,7 +43,7 @@ jobs:
       - name: Scan the project
         run: ./gradlew detekt --scan
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@1b168cd39490f61582a9beae412bb7057a6b2c4e # v4
+        uses: github/codeql-action/upload-sarif@5d4e8d1aca955e8d8589aabd499c5cae939e33c7 # v4
         with:
           # Path to SARIF file relative to the root of the repository
           sarif_file: build/reports/detekt/detekt.sarif
