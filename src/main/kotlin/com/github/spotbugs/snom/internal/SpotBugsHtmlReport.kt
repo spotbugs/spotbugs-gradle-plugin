@@ -53,6 +53,7 @@ internal abstract class SpotBugsHtmlReport @Inject constructor(objects: ObjectFa
                 when (identifier) {
                     is ModuleComponentIdentifier ->
                         identifier.group == "com.github.spotbugs" && identifier.module == "spotbugs"
+
                     else -> false
                 }
             }
