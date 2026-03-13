@@ -333,9 +333,18 @@ abstract class SpotBugsTask :
                     "text" -> objects.newInstance(SpotBugsTextReport::class.java, name, objects, taskRef)
                     "sarif" -> objects.newInstance(SpotBugsSarifReport::class.java, name, objects, taskRef)
                     else -> throw InvalidUserDataException("$name is invalid as the report name")
-                }.also {
-                    (outputs as org.gradle.api.tasks.TaskOutputs).file(it.outputLocation)
                 }
+            },
+        )
+        // Register report output files lazily via a provider so that outputs are resolved at
+        // task-graph finalization time (before execution), not inside the task action.
+        // This fixes the "Cannot call TaskOutputs.file() after task has started execution" error
+        // that occurred when using reports.register() which realizes the domain objects lazily.
+        // The provider is only evaluated when Gradle needs to know the task's output files
+        // (i.e., when computing the up-to-date status), which is before execution begins.
+        outputs.files(
+            project.provider {
+                reports.filter { it.required.get() }.map { it.outputLocation.get().asFile }
             },
         )
         description = "Run SpotBugs analysis."
