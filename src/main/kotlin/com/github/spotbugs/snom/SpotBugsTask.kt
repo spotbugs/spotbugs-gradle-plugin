@@ -336,16 +336,29 @@ abstract class SpotBugsTask :
                 }
             },
         )
-        // Register report output files lazily via a provider so that outputs are resolved at
-        // task-graph finalization time (before execution), not inside the task action.
-        // This fixes the "Cannot call TaskOutputs.file() after task has started execution" error
-        // that occurred when using reports.register() which realizes the domain objects lazily.
-        // The provider is only evaluated when Gradle needs to know the task's output files
-        // (i.e., when computing the up-to-date status), which is before execution begins.
-        outputs.files(
-            project.provider {
-                reports.filter { it.required.get() }.map { it.outputLocation.get().asFile }
-            },
+        // Register report output files lazily so that they are resolved only when Gradle needs the
+        // task's output file list (UP-TO-DATE checks, build-cache fingerprinting).
+        //
+        // The explicit cast to the public TaskOutputs interface is required: without it, Kotlin
+        // infers the return type of getOutputs() as the internal TaskOutputsInternal, which would
+        // introduce a dependency on Gradle's internal API (caught by the ArchUnit check).
+        //
+        // reports.matching { } is used instead of reports.filter { } because Gradle's matching()
+        // realizes any pending (lazily-registered) domain objects when the resulting collection is
+        // iterated, whereas Kotlin's Collection.filter only iterates already-realized items.
+        // This is the key fix for reports.register(): the factory is called during output
+        // resolution rather than during the task action, and — because outputs.file() is no longer
+        // called from the factory — this is now safe at any point in the task lifecycle.
+        //
+        // An anonymous Callable object is used (rather than a lambda) for the same reason the
+        // NamedDomainObjectFactory above uses an anonymous object: lambda serialization can be
+        // broken with Gradle's configuration cache.
+        (outputs as org.gradle.api.tasks.TaskOutputs).files(
+            project.files(
+                object : java.util.concurrent.Callable<List<RegularFileProperty>> {
+                    override fun call() = reports.matching { it.required.get() }.map { it.outputLocation }
+                },
+            ),
         )
         description = "Run SpotBugs analysis."
         group = JavaBasePlugin.VERIFICATION_GROUP
