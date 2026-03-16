@@ -350,13 +350,16 @@ abstract class SpotBugsTask :
         // resolution rather than during the task action, and — because outputs.file() is no longer
         // called from the factory — this is now safe at any point in the task lifecycle.
         //
+        // The Callable returns resolved File objects (not lazy providers) so that Gradle can
+        // snapshot the declared outputs as concrete paths rather than as pending provider chains.
+        //
         // An anonymous Callable object is used (rather than a lambda) for the same reason the
         // NamedDomainObjectFactory above uses an anonymous object: lambda serialization can be
         // broken with Gradle's configuration cache.
         (outputs as org.gradle.api.tasks.TaskOutputs).files(
             project.files(
-                object : java.util.concurrent.Callable<List<RegularFileProperty>> {
-                    override fun call() = reports.matching { it.required.get() }.map { it.outputLocation }
+                object : java.util.concurrent.Callable<List<java.io.File>> {
+                    override fun call() = reports.matching { it.required.get() }.map { it.outputLocation.get().asFile }
                 },
             ),
         )
