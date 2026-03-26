@@ -343,12 +343,14 @@ abstract class SpotBugsTask :
         // infers the return type of getOutputs() as the internal TaskOutputsInternal, which would
         // introduce a dependency on Gradle's internal API (caught by the ArchUnit check).
         //
-        // reports.matching { } is used instead of reports.filter { } because Gradle's matching()
-        // realizes any pending (lazily-registered) domain objects when the resulting collection is
-        // iterated, whereas Kotlin's Collection.filter only iterates already-realized items.
-        // This is the key fix for reports.register(): the factory is called during output
-        // resolution rather than during the task action, and — because outputs.file() is no longer
-        // called from the factory — this is now safe at any point in the task lifecycle.
+        // reports.matching { } is used to include both eagerly-created and lazily-registered
+        // reports.  Lazily-registered items (added via reports.register()) stay in the container's
+        // internal "pending map" until they are first accessed; reports.matching() iterates that
+        // pending map and realizes those items at resolution time.  All items registered through
+        // the reports { } DSL block are pre-realized by the reports(Action) method below before
+        // Gradle's configuration-cache serializer visits the container, which prevents the
+        // ConcurrentModificationException that would otherwise occur when the serializer iterates
+        // the pending map at the same time the Callable below would realize items from it.
         //
         // The Callable returns resolved File objects (not lazy providers) so that Gradle can
         // snapshot the declared outputs as concrete paths rather than as pending provider chains.
@@ -440,6 +442,12 @@ abstract class SpotBugsTask :
         configureAction: Action<NamedDomainObjectContainer<SpotBugsReport>>,
     ): NamedDomainObjectContainer<SpotBugsReport> {
         configureAction.execute(reports)
+        // Force-realize any items that were registered with register() inside configureAction.
+        // This empties the container's internal pending map before Gradle's configuration-cache
+        // serializer visits it, preventing a ConcurrentModificationException that would otherwise
+        // occur because the serializer iterates the pending map while the output Callable below
+        // simultaneously tries to realize items from it.
+        reports.toList()
         return reports
     }
 
