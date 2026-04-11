@@ -72,6 +72,17 @@ class SpotBugsBasePlugin : Plugin<Project> {
                 val dep = project.dependencies.create("com.github.spotbugs:spotbugs:" + extension.toolVersion.get())
                 deps.add(dep)
             }
+            // Prevent external dependency management (e.g. Spring BOM) from downgrading
+            // spotbugs-annotations in the engine classpath. A mismatch causes
+            // ClassNotFoundException for classes introduced in newer versions (see #1436).
+            it.resolutionStrategy.eachDependency { details ->
+                if (details.requested.group == "com.github.spotbugs" &&
+                    details.requested.name == "spotbugs-annotations"
+                ) {
+                    details.useVersion(extension.toolVersion.get())
+                    details.because("spotbugs-annotations must match the configured SpotBugs tool version (see issue #1436)")
+                }
+            }
         }
 
         configs.register(SpotBugsPlugin.SLF4J_CONFIG_NAME) {
