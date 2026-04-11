@@ -333,10 +333,37 @@ abstract class SpotBugsTask :
                     "text" -> objects.newInstance(SpotBugsTextReport::class.java, name, objects, taskRef)
                     "sarif" -> objects.newInstance(SpotBugsSarifReport::class.java, name, objects, taskRef)
                     else -> throw InvalidUserDataException("$name is invalid as the report name")
-                }.also {
-                    (outputs as org.gradle.api.tasks.TaskOutputs).file(it.outputLocation)
                 }
             },
+        )
+        // Register report output files lazily so that they are resolved only when Gradle needs the
+        // task's output file list (UP-TO-DATE checks, build-cache fingerprinting).
+        //
+        // The explicit cast to the public TaskOutputs interface is required: without it, Kotlin
+        // infers the return type of getOutputs() as the internal TaskOutputsInternal, which would
+        // introduce a dependency on Gradle's internal API (caught by the ArchUnit check).
+        //
+        // reports.matching { } is used to include both eagerly-created and lazily-registered
+        // reports.  Lazily-registered items (added via reports.register()) stay in the container's
+        // internal "pending map" until they are first accessed; reports.matching() iterates that
+        // pending map and realizes those items at resolution time.  All items registered through
+        // the reports { } DSL block are pre-realized by the reports(Action) method below before
+        // Gradle's configuration-cache serializer visits the container, which prevents the
+        // ConcurrentModificationException that would otherwise occur when the serializer iterates
+        // the pending map at the same time the Callable below would realize items from it.
+        //
+        // The Callable returns resolved File objects (not lazy providers) so that Gradle can
+        // snapshot the declared outputs as concrete paths rather than as pending provider chains.
+        //
+        // An anonymous Callable object is used (rather than a lambda) for the same reason the
+        // NamedDomainObjectFactory above uses an anonymous object: lambda serialization can be
+        // broken with Gradle's configuration cache.
+        (outputs as org.gradle.api.tasks.TaskOutputs).files(
+            project.files(
+                object : java.util.concurrent.Callable<List<java.io.File>> {
+                    override fun call() = reports.matching { it.required.get() }.map { it.outputLocation.get().asFile }
+                },
+            ),
         )
         description = "Run SpotBugs analysis."
         group = JavaBasePlugin.VERIFICATION_GROUP
@@ -415,6 +442,12 @@ abstract class SpotBugsTask :
         configureAction: Action<NamedDomainObjectContainer<SpotBugsReport>>,
     ): NamedDomainObjectContainer<SpotBugsReport> {
         configureAction.execute(reports)
+        // Force-realize any items that were registered with register() inside configureAction.
+        // This empties the container's internal pending map before Gradle's configuration-cache
+        // serializer visits it, preventing a ConcurrentModificationException that would otherwise
+        // occur because the serializer iterates the pending map while the output Callable below
+        // simultaneously tries to realize items from it.
+        reports.toList()
         return reports
     }
 
