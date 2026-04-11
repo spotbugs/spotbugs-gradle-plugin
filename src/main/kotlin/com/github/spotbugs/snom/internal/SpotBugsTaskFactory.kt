@@ -13,16 +13,12 @@
  */
 package com.github.spotbugs.snom.internal
 
-import com.android.build.gradle.AppExtension
-import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.api.BaseVariant
+import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.github.spotbugs.snom.SpotBugsTask
-import org.gradle.api.Action
-import org.gradle.api.DomainObjectSet
-import org.gradle.api.GradleException
-import org.gradle.api.Plugin
+import java.util.Locale
 import org.gradle.api.Project
+import org.gradle.api.UnknownDomainObjectException
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.compile.JavaCompile
@@ -52,27 +48,62 @@ internal class SpotBugsTaskFactory {
     }
 
     private fun generateForAndroid(project: Project) {
-        val action = Action<Plugin<*>> {
-            val variants: DomainObjectSet<out BaseVariant> =
-                when (val baseExtension = project.extensions.getByType(BaseExtension::class.java)) {
-                    is AppExtension -> baseExtension.applicationVariants
-                    is LibraryExtension -> baseExtension.libraryVariants
-                    else -> throw GradleException("Unrecognized Android extension $baseExtension")
-                }
-            variants.configureEach { variant: BaseVariant ->
-                val spotbugsTaskName = toLowerCamelCase("spotbugs", variant.name)
-                log.debug("Creating SpotBugsTask for {}", variant.name)
-                project.tasks.register(spotbugsTaskName, SpotBugsTask::class.java) {
-                    val javaCompile = variant.javaCompileProvider
-                    it.sourceDirs.setFrom(javaCompile.map(JavaCompile::getSource))
-                    it.classDirs.setFrom(javaCompile.map(JavaCompile::getDestinationDirectory))
-                    it.auxClassPaths.setFrom(javaCompile.map(JavaCompile::getClasspath))
-                    it.dependsOn(javaCompile)
-                }
+        project.plugins.withId("com.android.application") {
+            val components =
+                project.extensions.findByType(ApplicationAndroidComponentsExtension::class.java)
+            if (components == null) {
+                log.warn(
+                    "ApplicationAndroidComponentsExtension not found; " +
+                        "SpotBugs tasks will not be generated for Android application variants",
+                )
+                return@withId
+            }
+            components.onVariants { variant ->
+                registerSpotBugsTaskForAndroid(project, variant.name)
             }
         }
-        project.plugins.withId("com.android.application", action)
-        project.plugins.withId("com.android.library", action)
+        project.plugins.withId("com.android.library") {
+            val components =
+                project.extensions.findByType(LibraryAndroidComponentsExtension::class.java)
+            if (components == null) {
+                log.warn(
+                    "LibraryAndroidComponentsExtension not found; " +
+                        "SpotBugs tasks will not be generated for Android library variants",
+                )
+                return@withId
+            }
+            components.onVariants { variant ->
+                registerSpotBugsTaskForAndroid(project, variant.name)
+            }
+        }
+    }
+
+    private fun registerSpotBugsTaskForAndroid(project: Project, variantName: String) {
+        val spotbugsTaskName = toLowerCamelCase("spotbugs", variantName)
+        log.debug("Creating SpotBugsTask for {}", variantName)
+        // AGP uses the naming convention compile${VariantName}JavaWithJavac for the Java compile task
+        val capitalizedVariantName =
+            variantName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+        val javaCompileTaskName = "compile${capitalizedVariantName}JavaWithJavac"
+        project.tasks.register(spotbugsTaskName, SpotBugsTask::class.java) { task ->
+            val javaCompile =
+                try {
+                    project.tasks.named(javaCompileTaskName, JavaCompile::class.java)
+                } catch (e: UnknownDomainObjectException) {
+                    log.warn(
+                        "JavaCompile task '{}' not found; " +
+                            "SpotBugs task '{}' will have no sources or classes configured",
+                        javaCompileTaskName,
+                        spotbugsTaskName,
+                        e,
+                    )
+                    return@register
+                }
+            task.sourceDirs.setFrom(javaCompile.map(JavaCompile::getSource))
+            task.classDirs.setFrom(javaCompile.map(JavaCompile::getDestinationDirectory))
+            task.auxClassPaths.setFrom(javaCompile.map(JavaCompile::getClasspath))
+            task.dependsOn(javaCompile)
+        }
     }
 
     companion object {
