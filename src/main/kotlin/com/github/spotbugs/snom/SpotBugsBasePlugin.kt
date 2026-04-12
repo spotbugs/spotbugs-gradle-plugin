@@ -80,7 +80,9 @@ class SpotBugsBasePlugin : Plugin<Project> {
                     details.requested.name == "spotbugs-annotations"
                 ) {
                     details.useVersion(extension.toolVersion.get())
-                    details.because("spotbugs-annotations must match the configured SpotBugs tool version (see issue #1436)")
+                    details.because(
+                        "spotbugs-annotations must match the configured SpotBugs tool version (see issue #1436)",
+                    )
                 }
             }
         }
