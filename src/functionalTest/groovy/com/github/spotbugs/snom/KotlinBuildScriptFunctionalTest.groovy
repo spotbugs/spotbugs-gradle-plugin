@@ -143,6 +143,9 @@ tasks.spotbugsMain {
     def "can use toolVersion to get the SpotBugs version"() {
         setup:
         buildFile << """
+spotbugs {
+    toolVersion = "4.9.4"
+}
 dependencies {
     spotbugs("com.github.spotbugs:spotbugs:4.9.4")
     compileOnly("com.github.spotbugs:spotbugs-annotations:\${spotbugs.toolVersion.get()}")
