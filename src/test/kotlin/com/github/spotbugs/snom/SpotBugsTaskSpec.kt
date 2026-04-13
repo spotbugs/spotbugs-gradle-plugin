@@ -15,9 +15,9 @@ package com.github.spotbugs.snom
 
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import java.io.File
 import org.gradle.api.reporting.Report
 import org.gradle.testfixtures.ProjectBuilder
-import java.io.File
 
 class SpotBugsTaskSpec :
     DescribeSpec({
