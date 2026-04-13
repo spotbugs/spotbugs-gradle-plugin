@@ -30,19 +30,19 @@ class SpotBugsBasePluginApplicationSpec :
             it("creates the '${SpotBugsPlugin.CONFIG_NAME}' configuration") {
                 val project = ProjectBuilder.builder().build()
                 project.plugins.apply(SpotBugsBasePlugin::class.java)
-                project.configurations.findByName(SpotBugsPlugin.CONFIG_NAME) shouldNotBe null
+                project.configurations.names.contains(SpotBugsPlugin.CONFIG_NAME) shouldBe true
             }
 
             it("creates the '${SpotBugsPlugin.PLUGINS_CONFIG_NAME}' configuration") {
                 val project = ProjectBuilder.builder().build()
                 project.plugins.apply(SpotBugsBasePlugin::class.java)
-                project.configurations.findByName(SpotBugsPlugin.PLUGINS_CONFIG_NAME) shouldNotBe null
+                project.configurations.names.contains(SpotBugsPlugin.PLUGINS_CONFIG_NAME) shouldBe true
             }
 
             it("creates the '${SpotBugsPlugin.SLF4J_CONFIG_NAME}' configuration") {
                 val project = ProjectBuilder.builder().build()
                 project.plugins.apply(SpotBugsBasePlugin::class.java)
-                project.configurations.findByName(SpotBugsPlugin.SLF4J_CONFIG_NAME) shouldNotBe null
+                project.configurations.names.contains(SpotBugsPlugin.SLF4J_CONFIG_NAME) shouldBe true
             }
 
             it("sets ignoreFailures default to false") {
