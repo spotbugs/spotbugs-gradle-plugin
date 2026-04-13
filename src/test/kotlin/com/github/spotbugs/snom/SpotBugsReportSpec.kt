@@ -111,7 +111,7 @@ class SpotBugsReportSpec :
                     report.getStylesheet() shouldBe null
                 }
 
-                it("throws UnsupportedOperationException when setStylesheet(TextResource) is called on non-html reports") {
+                it("throws UnsupportedOperationException when setStylesheet(TextResource) is called on non-html") {
                     val project = ProjectBuilder.builder().build()
                     project.plugins.apply(SpotBugsBasePlugin::class.java)
                     project.extensions.getByType(SpotBugsExtension::class.java).useJavaToolchains.set(false)
