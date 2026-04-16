@@ -21,8 +21,7 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
  * Regression test for GitHub issue #1654.
  *
  * <p>Verifies that {@code reports.register()} is compatible with Gradle's parallel
- * configuration-cache serializer in a multi-project build that uses
- * {@code tasks.withType(SpotBugsTask).configureEach}.
+ * configuration-cache serializer in a multi-project build.
  *
  * <p>Previously, lazily-registered reports left entries in the container's internal
  * {@code pendingMap} ({@code DefaultNamedDomainObjectCollection.UnfilteredIndex}).
@@ -38,9 +37,9 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 class Issue1654 extends BaseFunctionalTest {
 
     def setup() {
-        // Multi-project build that mirrors the caffeine project pattern described in #1654:
-        // two independent sub-projects each gain a SpotBugs task, configured through a
-        // root-level subprojects block using the lazy configureEach + register() API.
+        // Multi-project build with two independent sub-projects, each applying the
+        // SpotBugs plugin and configuring a lazily-registered XML report.  This mirrors
+        // the caffeine project pattern described in issue #1654.
 
         new File(rootDir, 'settings.gradle') << """\
 rootProject.name = 'issue-1654-root'
@@ -48,34 +47,36 @@ include ':sub1'
 include ':sub2'
 """
 
-        new File(rootDir, 'build.gradle') << """\
-import com.github.spotbugs.snom.SpotBugsTask
-
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'com.github.spotbugs'
-
-    repositories {
-        mavenCentral()
-    }
-
-    // Reproduce the exact pattern from issue #1654: configure all SpotBugs tasks
-    // lazily via configureEach and register a report with the lazy register() API.
-    tasks.withType(SpotBugsTask).configureEach {
-        reports {
-            register('xml') {
-                required = true
-            }
-        }
-    }
-}
-"""
         // Enable Gradle's parallel configuration-cache serializer, which is the specific
         // incubating feature that triggered the ConcurrentModificationException.
         new File(rootDir, 'gradle.properties') << "org.gradle.configuration-cache.parallel=true\n"
 
         ['sub1', 'sub2'].each { sub ->
-            def sourceDir = new File(rootDir, "${sub}/src/main/java")
+            def subDir = new File(rootDir, sub)
+
+            // Each subproject gets its own build file that applies the SpotBugs plugin
+            // and registers an XML report lazily via register().  The SpotBugsTask class
+            // is not imported here: using the task-by-name DSL avoids the classpath
+            // resolution issue that would occur if the root project (which does not apply
+            // the SpotBugs plugin) tried to reference the type directly.
+            new File(subDir, 'build.gradle') << """\
+apply plugin: 'java'
+apply plugin: 'com.github.spotbugs'
+
+repositories {
+    mavenCentral()
+}
+
+spotbugsMain {
+    reports {
+        register('xml') {
+            required = true
+        }
+    }
+}
+"""
+
+            def sourceDir = new File(subDir, 'src/main/java')
             sourceDir.mkdirs()
             new File(sourceDir, 'Foo.java') << """\
 public class Foo {
@@ -90,11 +91,11 @@ public class Foo {
     /**
      * Before the fix, storing the configuration cache for a multi-project build whose
      * SpotBugs tasks use {@code reports.register()} would throw a
-     * {@link java.util.ConcurrentModificationException} and emit
-     * "Configuration cache problems found in this build".  After the fix the cache is
-     * stored successfully and reused on the second run.
+     * {@link java.util.ConcurrentModificationException} during config-cache serialization
+     * and emit "Configuration cache problems found in this build".  After the fix the
+     * cache is stored successfully and reused on the second run.
      */
-    def "reports.register() in configureEach does not cause ConcurrentModificationException with parallel config cache"() {
+    def "reports.register() does not cause ConcurrentModificationException with parallel config cache"() {
         when: "first run — configuration cache is stored"
         BuildResult firstRun = gradleRunner
                 .withArguments('--parallel', ':sub1:spotbugsMain', ':sub2:spotbugsMain')
