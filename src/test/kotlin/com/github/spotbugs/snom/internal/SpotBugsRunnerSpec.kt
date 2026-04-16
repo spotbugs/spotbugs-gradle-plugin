@@ -30,6 +30,170 @@ import org.gradle.testfixtures.ProjectBuilder
 class SpotBugsRunnerSpec :
     DescribeSpec({
         describe("SpotBugsRunner") {
+            it("produces only required arguments when no optional task properties are set") {
+                val project = ProjectBuilder.builder().build()
+                project.plugins.apply(SpotBugsBasePlugin::class.java)
+                project.extensions.getByType(SpotBugsExtension::class.java).useJavaToolchains.set(false)
+                val task = project.tasks.register("spotbugsMain", SpotBugsTask::class.java).get()
+                val runner = TestSpotBugsRunner()
+
+                task.projectName.set("my-project")
+                task.release.set("unspecified")
+                task.classes = project.files()
+
+                val args = runner.buildArgumentsFor(task)
+
+                args shouldContain "-timestampNow"
+                args shouldContain "-projectName"
+                args shouldContain "my-project"
+                args shouldContain "-release"
+                args shouldContain "unspecified"
+                args shouldContain "-analyzeFromFile"
+                args shouldNotContain "-pluginList"
+                args shouldNotContain "-auxclasspath"
+                args shouldNotContain "-auxclasspathFromFile"
+                args shouldNotContain "-sourcepath"
+                args shouldNotContain "-progress"
+                args shouldNotContain "-effort:default"
+                args shouldNotContain "-visitors"
+                args shouldNotContain "-omitVisitors"
+                args shouldNotContain "-chooseVisitors"
+                args shouldNotContain "-include"
+                args shouldNotContain "-exclude"
+                args shouldNotContain "-excludeBugs"
+                args shouldNotContain "-onlyAnalyze"
+            }
+
+            it("does not add a confidence flag for Confidence.DEFAULT") {
+                val project = ProjectBuilder.builder().build()
+                project.plugins.apply(SpotBugsBasePlugin::class.java)
+                project.extensions.getByType(SpotBugsExtension::class.java).useJavaToolchains.set(false)
+                val task = project.tasks.register("spotbugsMain", SpotBugsTask::class.java).get()
+                val runner = TestSpotBugsRunner()
+
+                task.reportLevel.set(Confidence.DEFAULT)
+                task.projectName.set("demo")
+                task.release.set("1.0")
+                task.classes = project.files()
+
+                val args = runner.buildArgumentsFor(task)
+
+                args shouldNotContain "-low"
+                args shouldNotContain "-medium"
+                args shouldNotContain "-high"
+            }
+
+            it("adds -low for Confidence.LOW and -medium for Confidence.MEDIUM") {
+                val project = ProjectBuilder.builder().build()
+                project.plugins.apply(SpotBugsBasePlugin::class.java)
+                project.extensions.getByType(SpotBugsExtension::class.java).useJavaToolchains.set(false)
+                val runner = TestSpotBugsRunner()
+
+                val taskLow = project.tasks.register("spotbugsLow", SpotBugsTask::class.java).get()
+                taskLow.reportLevel.set(Confidence.LOW)
+                taskLow.projectName.set("demo")
+                taskLow.release.set("1.0")
+                taskLow.classes = project.files()
+                runner.buildArgumentsFor(taskLow) shouldContain "-low"
+
+                val taskMedium = project.tasks.register("spotbugsMedium", SpotBugsTask::class.java).get()
+                taskMedium.reportLevel.set(Confidence.MEDIUM)
+                taskMedium.projectName.set("demo")
+                taskMedium.release.set("1.0")
+                taskMedium.classes = project.files()
+                runner.buildArgumentsFor(taskMedium) shouldContain "-medium"
+
+                val taskHigh = project.tasks.register("spotbugsHigh", SpotBugsTask::class.java).get()
+                taskHigh.reportLevel.set(Confidence.HIGH)
+                taskHigh.projectName.set("demo")
+                taskHigh.release.set("1.0")
+                taskHigh.classes = project.files()
+                runner.buildArgumentsFor(taskHigh) shouldContain "-high"
+            }
+
+            it("does not add -effort flag when effort is not set") {
+                val project = ProjectBuilder.builder().build()
+                project.plugins.apply(SpotBugsBasePlugin::class.java)
+                project.extensions.getByType(SpotBugsExtension::class.java).useJavaToolchains.set(false)
+                val task = project.tasks.register("spotbugsMain", SpotBugsTask::class.java).get()
+                val runner = TestSpotBugsRunner()
+
+                task.projectName.set("demo")
+                task.release.set("1.0")
+                task.classes = project.files()
+                // effort is not set
+
+                val args = runner.buildArgumentsFor(task)
+                args.none { it.startsWith("-effort:") } shouldBe true
+            }
+
+            it("adds the correct effort flag for each Effort value") {
+                val project = ProjectBuilder.builder().build()
+                project.plugins.apply(SpotBugsBasePlugin::class.java)
+                project.extensions.getByType(SpotBugsExtension::class.java).useJavaToolchains.set(false)
+                val runner = TestSpotBugsRunner()
+
+                for (effort in Effort.entries) {
+                    val task = project.tasks.register("spotbugs${effort.name}", SpotBugsTask::class.java).get()
+                    task.effort.set(effort)
+                    task.projectName.set("demo")
+                    task.release.set("1.0")
+                    task.classes = project.files()
+                    runner.buildArgumentsFor(task) shouldContain "-effort:${effort.name.lowercase()}"
+                }
+            }
+
+            it("does not add -visitors/-omitVisitors/-chooseVisitors when the lists are empty") {
+                val project = ProjectBuilder.builder().build()
+                project.plugins.apply(SpotBugsBasePlugin::class.java)
+                project.extensions.getByType(SpotBugsExtension::class.java).useJavaToolchains.set(false)
+                val task = project.tasks.register("spotbugsMain", SpotBugsTask::class.java).get()
+                val runner = TestSpotBugsRunner()
+
+                task.visitors.set(emptyList())
+                task.omitVisitors.set(emptyList())
+                task.chooseVisitors.set(emptyList())
+                task.projectName.set("demo")
+                task.release.set("1.0")
+                task.classes = project.files()
+
+                val args = runner.buildArgumentsFor(task)
+
+                args shouldNotContain "-visitors"
+                args shouldNotContain "-omitVisitors"
+                args shouldNotContain "-chooseVisitors"
+            }
+
+            it("does not add -onlyAnalyze when the list is empty") {
+                val project = ProjectBuilder.builder().build()
+                project.plugins.apply(SpotBugsBasePlugin::class.java)
+                project.extensions.getByType(SpotBugsExtension::class.java).useJavaToolchains.set(false)
+                val task = project.tasks.register("spotbugsMain", SpotBugsTask::class.java).get()
+                val runner = TestSpotBugsRunner()
+
+                task.onlyAnalyze.set(emptyList())
+                task.projectName.set("demo")
+                task.release.set("1.0")
+                task.classes = project.files()
+
+                val args = runner.buildArgumentsFor(task)
+                args shouldNotContain "-onlyAnalyze"
+            }
+
+            it("returns empty jvmArgs when not configured") {
+                val project = ProjectBuilder.builder().build()
+                project.plugins.apply(SpotBugsBasePlugin::class.java)
+                project.extensions.getByType(SpotBugsExtension::class.java).useJavaToolchains.set(false)
+                val task = project.tasks.register("spotbugsMain", SpotBugsTask::class.java).get()
+                val runner = TestSpotBugsRunner()
+
+                task.projectName.set("demo")
+                task.release.set("1.0")
+                task.classes = project.files()
+
+                runner.buildJvmArgumentsFor(task) shouldBe emptyList()
+            }
+
             it("builds arguments for configured task options and writes helper files") {
                 val project = ProjectBuilder.builder().build()
                 project.plugins.apply(SpotBugsBasePlugin::class.java)
