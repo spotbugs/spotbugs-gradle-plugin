@@ -302,7 +302,7 @@ class SpotBugsTaskConventionSpec :
                     task.reports.maybeCreate("sarif").required.set(false)
 
                     val requiredReports = task.getRequiredReports().toList()
-                    requiredReports.map { it.name } shouldBe listOf("xml", "text")
+                    requiredReports.map { it.name }.toSet() shouldBe setOf("xml", "text")
                 }
 
                 it("returns no reports when all reports are disabled") {

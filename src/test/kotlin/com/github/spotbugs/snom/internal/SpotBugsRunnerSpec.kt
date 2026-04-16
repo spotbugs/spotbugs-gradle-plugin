@@ -40,6 +40,7 @@ class SpotBugsRunnerSpec :
                 task.projectName.set("my-project")
                 task.release.set("unspecified")
                 task.classes = project.files()
+                project.layout.buildDirectory.get().asFile.mkdirs()
 
                 val args = runner.buildArgumentsFor(task)
 
@@ -75,6 +76,7 @@ class SpotBugsRunnerSpec :
                 task.projectName.set("demo")
                 task.release.set("1.0")
                 task.classes = project.files()
+                project.layout.buildDirectory.get().asFile.mkdirs()
 
                 val args = runner.buildArgumentsFor(task)
 
@@ -88,6 +90,7 @@ class SpotBugsRunnerSpec :
                 project.plugins.apply(SpotBugsBasePlugin::class.java)
                 project.extensions.getByType(SpotBugsExtension::class.java).useJavaToolchains.set(false)
                 val runner = TestSpotBugsRunner()
+                project.layout.buildDirectory.get().asFile.mkdirs()
 
                 val taskLow = project.tasks.register("spotbugsLow", SpotBugsTask::class.java).get()
                 taskLow.reportLevel.set(Confidence.LOW)
@@ -122,6 +125,7 @@ class SpotBugsRunnerSpec :
                 task.release.set("1.0")
                 task.classes = project.files()
                 // effort is not set
+                project.layout.buildDirectory.get().asFile.mkdirs()
 
                 val args = runner.buildArgumentsFor(task)
                 args.none { it.startsWith("-effort:") } shouldBe true
@@ -132,6 +136,7 @@ class SpotBugsRunnerSpec :
                 project.plugins.apply(SpotBugsBasePlugin::class.java)
                 project.extensions.getByType(SpotBugsExtension::class.java).useJavaToolchains.set(false)
                 val runner = TestSpotBugsRunner()
+                project.layout.buildDirectory.get().asFile.mkdirs()
 
                 for (effort in Effort.entries) {
                     val task = project.tasks.register("spotbugs${effort.name}", SpotBugsTask::class.java).get()
@@ -156,6 +161,7 @@ class SpotBugsRunnerSpec :
                 task.projectName.set("demo")
                 task.release.set("1.0")
                 task.classes = project.files()
+                project.layout.buildDirectory.get().asFile.mkdirs()
 
                 val args = runner.buildArgumentsFor(task)
 
@@ -175,6 +181,7 @@ class SpotBugsRunnerSpec :
                 task.projectName.set("demo")
                 task.release.set("1.0")
                 task.classes = project.files()
+                project.layout.buildDirectory.get().asFile.mkdirs()
 
                 val args = runner.buildArgumentsFor(task)
                 args shouldNotContain "-onlyAnalyze"
@@ -296,6 +303,7 @@ class SpotBugsRunnerSpec :
                 task.projectName.set("demo-project")
                 task.release.set("1.0")
                 task.classes = project.files()
+                project.layout.buildDirectory.get().asFile.mkdirs()
 
                 val args = runner.buildArgumentsFor(task)
 
