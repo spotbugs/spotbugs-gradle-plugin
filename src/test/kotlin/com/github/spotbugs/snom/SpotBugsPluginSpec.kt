@@ -30,9 +30,15 @@ class SpotBugsPluginSpec :
                 SpotBugsBasePlugin().verifyGradleVersion(GradleVersion.version("7.1"))
             }
 
-            it("supports Gradle versions older than but not equal to 7.1") {
+            it("rejects Gradle versions older than 7.1") {
                 shouldThrow<IllegalArgumentException> {
                     SpotBugsBasePlugin().verifyGradleVersion(GradleVersion.version("6.9"))
+                }
+            }
+
+            it("rejects Gradle 7.0") {
+                shouldThrow<IllegalArgumentException> {
+                    SpotBugsBasePlugin().verifyGradleVersion(GradleVersion.version("7.0"))
                 }
             }
 
