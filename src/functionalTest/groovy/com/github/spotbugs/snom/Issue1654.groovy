@@ -53,6 +53,7 @@ include ':sub2'
 
         ['sub1', 'sub2'].each { sub ->
             def subDir = new File(rootDir, sub)
+            subDir.mkdirs()
 
             // Each subproject gets its own build file that applies the SpotBugs plugin
             // and registers an XML report lazily via register().  The SpotBugsTask class
