@@ -33,7 +33,7 @@ dependencies {
     compileOnly(localGroovy())
     compileOnly("com.github.spotbugs:spotbugs:$spotBugsVersion")
     compileOnly("com.android.tools.build:gradle:$androidGradlePluginVersion")
-    testImplementation("com.tngtech.archunit:archunit:1.4.1")
+    testImplementation("com.tngtech.archunit:archunit:1.4.2")
     lintChecks("androidx.lint:lint-gradle:1.0.0-alpha06")
 }
 
