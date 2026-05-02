@@ -47,6 +47,15 @@ include ':sub1'
 include ':sub2'
 """
 
+        // Root build file that applies the SpotBugs plugin.  This is required so that
+        // TestKit's withPluginClasspath() injection loads the plugin into the shared
+        // classloader hierarchy before the subprojects try to use 'apply plugin:'.
+        new File(rootDir, 'build.gradle') << """\
+plugins {
+    id 'com.github.spotbugs'
+}
+"""
+
         // Enable Gradle's parallel configuration-cache serializer, which is the specific
         // incubating feature that triggered the ConcurrentModificationException.
         new File(rootDir, 'gradle.properties') << "org.gradle.configuration-cache.parallel=true\n"
