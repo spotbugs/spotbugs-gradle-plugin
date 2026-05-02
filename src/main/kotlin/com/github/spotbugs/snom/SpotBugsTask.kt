@@ -366,6 +366,24 @@ abstract class SpotBugsTask :
                 },
             ),
         )
+
+        // Drain the reports container's internal "pendingMap" after every configureEach block
+        // has run for this task (including ones registered by the user that add reports via
+        // reports.register() directly, bypassing the reports(Action) method above).
+        //
+        // taskGraph.whenReady fires after the full task graph has been built – meaning all lazy
+        // task configurations have executed – but before Gradle's configuration-cache serializer
+        // visits the task's fields.  At that point the pendingMap is guaranteed to be empty,
+        // so the parallel serializer cannot encounter a concurrent modification when it iterates
+        // the map to write its entries.
+        //
+        // The reports(Action) method below performs the same drain inline for items registered
+        // inside a reports { } block; this hook is the safety net for items registered outside
+        // that DSL block (e.g. via tasks.withType<SpotBugsTask>().configureEach { reports.register(...) }).
+        project.gradle.taskGraph.whenReady {
+            reports.matching { true }.toList()
+        }
+
         description = "Run SpotBugs analysis."
         group = JavaBasePlugin.VERIFICATION_GROUP
     }
