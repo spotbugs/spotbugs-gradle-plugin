@@ -345,12 +345,13 @@ abstract class SpotBugsTask :
         //
         // reports.matching { } is used to include both eagerly-created and lazily-registered
         // reports.  Lazily-registered items (added via reports.register()) stay in the container's
-        // internal "pending map" until they are first accessed; reports.matching() iterates that
+        // internal "pendingMap" until they are first accessed; reports.matching() iterates that
         // pending map and realizes those items at resolution time.  All items registered through
-        // the reports { } DSL block are pre-realized by the reports(Action) method below before
-        // Gradle's configuration-cache serializer visits the container, which prevents the
-        // ConcurrentModificationException that would otherwise occur when the serializer iterates
-        // the pending map at the same time the Callable below would realize items from it.
+        // the reports { } DSL block are pre-realized by the reports(Action) method below (via
+        // reports.matching { true }.toList()) before Gradle's configuration-cache serializer
+        // visits the container, which prevents the ConcurrentModificationException that would
+        // otherwise occur when the parallel serializer iterates the pending map while provider
+        // realization simultaneously removes entries from it (see issue #1654).
         //
         // The Callable returns resolved File objects (not lazy providers) so that Gradle can
         // snapshot the declared outputs as concrete paths rather than as pending provider chains.
@@ -442,12 +443,28 @@ abstract class SpotBugsTask :
         configureAction: Action<NamedDomainObjectContainer<SpotBugsReport>>,
     ): NamedDomainObjectContainer<SpotBugsReport> {
         configureAction.execute(reports)
-        // Force-realize any items that were registered with register() inside configureAction.
-        // This empties the container's internal pending map before Gradle's configuration-cache
-        // serializer visits it, preventing a ConcurrentModificationException that would otherwise
-        // occur because the serializer iterates the pending map while the output Callable below
-        // simultaneously tries to realize items from it.
-        reports.toList()
+        // Force-realize every item that was registered with register() inside configureAction so
+        // that the container's internal "pendingMap" (DefaultNamedDomainObjectCollection.
+        // UnfilteredIndex) is completely drained before Gradle's configuration-cache serializer
+        // visits the container.
+        //
+        // Why matching { true } and not plain toList()?
+        //   toList() delegates to DefaultDomainObjectCollection.iterator(), which iterates only
+        //   the *already-realized* element source – it does NOT call realizePending() and therefore
+        //   leaves lazily-registered items in the pendingMap.
+        //   matching { true } creates a FilteredElementSource whose iterator() calls
+        //   realizePending() first, which removes every pending provider from the map and
+        //   materialises the corresponding object.  After this call the pendingMap is empty.
+        //
+        // Why does an empty pendingMap matter?
+        //   Gradle's parallel configuration-cache serializer (enabled via
+        //   org.gradle.configuration-cache.parallel=true) writes the container's fields across
+        //   multiple threads.  If the pendingMap is non-empty when serialisation starts, the
+        //   serialiser iterates it to write each pending provider.  Writing a provider value
+        //   triggers its realization, which simultaneously removes the entry from the
+        //   LinkedHashMap – modifying it while it is being iterated – and raises a
+        //   ConcurrentModificationException (see issue #1654).
+        reports.matching { true }.toList()
         return reports
     }
 
