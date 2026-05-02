@@ -21,7 +21,8 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
  * Regression test for GitHub issue #1654.
  *
  * <p>Verifies that {@code reports.register()} is compatible with Gradle's parallel
- * configuration-cache serializer in a multi-project build.
+ * configuration-cache serializer in a multi-project build, regardless of whether the
+ * report is registered inside a {@code reports { }} block or directly on the container.
  *
  * <p>Previously, lazily-registered reports left entries in the container's internal
  * {@code pendingMap} ({@code DefaultNamedDomainObjectCollection.UnfilteredIndex}).
@@ -36,11 +37,15 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
  */
 class Issue1654 extends BaseFunctionalTest {
 
-    def setup() {
-        // Multi-project build with two independent sub-projects, each applying the
-        // SpotBugs plugin and configuring a lazily-registered XML report.  This mirrors
-        // the caffeine project pattern described in issue #1654.
-
+    /**
+     * Creates the shared multi-project scaffolding (settings, root build, gradle.properties,
+     * and Java source files) and writes {@code subprojectBuildContent} into each sub-project's
+     * {@code build.gradle}.
+     *
+     * @param subprojectBuildContent the Groovy DSL to write into sub1/build.gradle and
+     *     sub2/build.gradle
+     */
+    private void setupMultiProjectBuild(String subprojectBuildContent) {
         new File(rootDir, 'settings.gradle') << """\
 rootProject.name = 'issue-1654-root'
 include ':sub1'
@@ -63,28 +68,7 @@ plugins {
         ['sub1', 'sub2'].each { sub ->
             def subDir = new File(rootDir, sub)
             subDir.mkdirs()
-
-            // Each subproject gets its own build file that applies the SpotBugs plugin
-            // and registers an XML report lazily via register().  The SpotBugsTask class
-            // is not imported here: using the task-by-name DSL avoids the classpath
-            // resolution issue that would occur if the root project (which does not apply
-            // the SpotBugs plugin) tried to reference the type directly.
-            new File(subDir, 'build.gradle') << """\
-apply plugin: 'java'
-apply plugin: 'com.github.spotbugs'
-
-repositories {
-    mavenCentral()
-}
-
-spotbugsMain {
-    reports {
-        register('xml') {
-            required = true
-        }
-    }
-}
-"""
+            new File(subDir, 'build.gradle') << subprojectBuildContent
 
             def sourceDir = new File(subDir, 'src/main/java')
             sourceDir.mkdirs()
@@ -100,12 +84,80 @@ public class Foo {
 
     /**
      * Before the fix, storing the configuration cache for a multi-project build whose
-     * SpotBugs tasks use {@code reports.register()} would throw a
-     * {@link java.util.ConcurrentModificationException} during config-cache serialization
-     * and emit "Configuration cache problems found in this build".  After the fix the
-     * cache is stored successfully and reused on the second run.
+     * SpotBugs tasks use {@code reports { register() }} (the {@code reports(Action)} DSL)
+     * would throw a {@link java.util.ConcurrentModificationException} during config-cache
+     * serialization.  After the fix the cache is stored successfully and reused.
      */
-    def "reports.register() does not cause ConcurrentModificationException with parallel config cache"() {
+    def "reports.register() inside reports{} does not cause ConcurrentModificationException with parallel config cache"() {
+        given: "each subproject registers an XML report via the reports { } DSL block"
+        // The SpotBugsTask class is not imported here: using the task-by-name DSL avoids the
+        // classpath resolution issue that would occur if the root project tried to reference
+        // the type directly.
+        setupMultiProjectBuild("""\
+apply plugin: 'java'
+apply plugin: 'com.github.spotbugs'
+
+repositories {
+    mavenCentral()
+}
+
+spotbugsMain {
+    reports {
+        register('xml') {
+            required = true
+        }
+    }
+}
+""")
+
+        when: "first run — configuration cache is stored"
+        BuildResult firstRun = gradleRunner
+                .withArguments('--parallel', ':sub1:spotbugsMain', ':sub2:spotbugsMain')
+                .build()
+
+        then:
+        firstRun.task(":sub1:spotbugsMain").outcome == SUCCESS
+        firstRun.task(":sub2:spotbugsMain").outcome == SUCCESS
+        !firstRun.output.contains("Configuration cache problems found in this build")
+        firstRun.output.contains("Configuration cache entry stored.")
+
+        when: "second run — configuration cache must be reused without errors"
+        BuildResult secondRun = gradleRunner
+                .withArguments('--parallel', ':sub1:spotbugsMain', ':sub2:spotbugsMain')
+                .build()
+
+        then:
+        secondRun.output.contains("Configuration cache entry reused.")
+    }
+
+    /**
+     * Follow-up regression test: verifies that calling {@code reports.register()} directly on
+     * the task's {@code reports} property (i.e., bypassing the {@code reports(Action)} method)
+     * also works correctly with the parallel configuration cache.
+     *
+     * <p>This pattern — {@code tasks.withType(SpotBugsTask).configureEach { task -> task.reports.register(...) }}
+     * — was not covered by the original fix, which only drained {@code pendingMap} inside the
+     * {@code reports(Action)} method.  The additional {@code taskGraph.whenReady} drain added
+     * as a follow-up to issue #1654 ensures that {@code pendingMap} is always empty before
+     * the configuration-cache serializer visits the container.
+     */
+    def "reports.register() directly on the container does not cause ConcurrentModificationException with parallel config cache"() {
+        given: "each subproject registers an XML report directly via configureEach, bypassing reports(Action)"
+        setupMultiProjectBuild("""\
+apply plugin: 'java'
+apply plugin: 'com.github.spotbugs'
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask).configureEach { task ->
+    task.reports.register('xml') {
+        required = true
+    }
+}
+""")
+
         when: "first run — configuration cache is stored"
         BuildResult firstRun = gradleRunner
                 .withArguments('--parallel', ':sub1:spotbugsMain', ':sub2:spotbugsMain')
