@@ -64,7 +64,7 @@ tasks.jacocoTestReport {
     }
 }
 
-sonarqube {
+sonar {
     properties {
         property("sonar.projectKey", "com.github.spotbugs.gradle")
         property("sonar.organization", "spotbugs")
