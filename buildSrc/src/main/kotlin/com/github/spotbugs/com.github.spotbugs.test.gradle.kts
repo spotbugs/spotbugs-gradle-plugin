@@ -74,7 +74,7 @@ sonar {
 }
 
 tasks {
-    named("sonarqube") {
+    named("sonar") {
         mustRunAfter(jacocoTestReport)
     }
 }
