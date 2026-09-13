@@ -15,7 +15,7 @@ This Gradle plugin is designed to solve the following problems in the legacy plu
 - [x] Remove any dependency on the Gradle's internal API
 - [x] Solve mutability problem for the build contains multiple projects and/or sourceSet
 - [x] Native Support for [the Parallel Build](https://guides.gradle.org/using-the-worker-api/)
-- [ ] Native Support for [the Android project](https://developer.android.com/studio/build/gradle-tips)
+- [x] Native Support for [the Android project](https://developer.android.com/studio/build/gradle-tips)
 - [x] Missing user document about how to use extension and task
 
 ## Usage
@@ -130,7 +130,10 @@ If you want to create and configure `SpotBugsTask` by own, apply the base plugin
 
 ### Apply to Android project
 
-TBU
+Apply this plugin with the `com.android.application` plugin or `com.android.library` plugin to your project,
+then [`SpotBugsTask`](https://spotbugs-gradle-plugin.netlify.com/com/github/spotbugs/snom/spotbugstask) will be generated for each existing variant.
+
+If you want to create and configure `SpotBugsTask` by own, apply the base plugin (`com.github.spotbugs-base`) instead, then it won't create tasks automatically.
 
 ### Configure the SpotBugsTask
 
