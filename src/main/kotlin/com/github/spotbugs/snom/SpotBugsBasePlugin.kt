@@ -66,7 +66,6 @@ class SpotBugsBasePlugin : Plugin<Project> {
 
         configs.register(SpotBugsPlugin.CONFIG_NAME) {
             it.setDescription("configuration for the SpotBugs engine")
-            it.setVisible(false)
             it.setTransitive(true)
             it.defaultDependencies { deps ->
                 val dep = project.dependencies.create("com.github.spotbugs:spotbugs:" + extension.toolVersion.get())
@@ -89,7 +88,6 @@ class SpotBugsBasePlugin : Plugin<Project> {
 
         configs.register(SpotBugsPlugin.SLF4J_CONFIG_NAME) {
             it.description = "configuration for the SLF4J provider to run SpotBugs"
-            it.setVisible(false)
             it.setTransitive(true)
             it.defaultDependencies { deps ->
                 val dep = project.dependencies.create("org.slf4j:slf4j-simple:" + props.getProperty("slf4j-version"))
@@ -115,7 +113,6 @@ class SpotBugsBasePlugin : Plugin<Project> {
     private fun createPluginConfiguration(configs: ConfigurationContainer) {
         configs.register(SpotBugsPlugin.PLUGINS_CONFIG_NAME) {
             it.setDescription("configuration for the external SpotBugs plugins")
-            it.setVisible(false)
             it.setTransitive(false)
         }
     }
