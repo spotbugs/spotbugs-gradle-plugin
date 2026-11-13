@@ -12,7 +12,7 @@ dependencies {
     implementation("com.diffplug.spotless:spotless-plugin-gradle:8.11.0")
     implementation("net.ltgt.gradle:gradle-errorprone-plugin:5.2.0")
     implementation("com.gradle.publish:plugin-publish-plugin:2.2.1")
-    implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:7.5.0.8588")
+    implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:7.6.0.18749")
 }
 
 spotless {
