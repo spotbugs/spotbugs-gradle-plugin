@@ -15,8 +15,8 @@ gradlePlugin {
             implementationClass = "com.github.spotbugs.snom.SpotBugsBasePlugin"
             tags = listOf(
                 "spotbugs",
-                "static analysis",
-                "code quality"
+                "static-analysis",
+                "code-quality"
             )
         }
         create("spotbugsGradlePlugin") {
@@ -26,8 +26,8 @@ gradlePlugin {
             implementationClass = "com.github.spotbugs.snom.SpotBugsPlugin"
             tags = listOf(
                 "spotbugs",
-                "static analysis",
-                "code quality"
+                "static-analysis",
+                "code-quality"
             )
         }
     }
